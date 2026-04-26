@@ -24,6 +24,61 @@
 
 ## Entries
 
+## 2026-04-26 — NT8 export shape forced data-boundary fallback for continuous contract
+
+**Phase:** 1
+**Context:** M2 continuous-contract construction. Planned roll methodology was
+volume crossover (next-contract daily volume > current contract for N=3 consecutive
+days within the overlap window, then roll the next calendar day). This is the
+standard convention in futures research and matches NT8's default.
+
+**Finding:** The methodology never triggers on the present NT8 MNQ dataset,
+because the export's data shape doesn't carry the signal:
+
+- 2020 - mid-2024 contracts: each adjacent pair has exactly 5 calendar days of
+  overlap. During those 5 days the current contract still dominates by 50-1000x
+  for days 1-4, then crashes ~90% on day 5 (the unwind day) while the next
+  contract's volume picks up. So next-contract dominance occurs at most for the
+  single last day of overlap, never for 3 consecutive days.
+- Mid-2024 onward: contracts are 0- or 1-day-contiguous (no overlap). Plus two
+  documented gaps: Jun 18 - Jul 31 2024 (-44 days) and Feb 3 - Mar 11 2026
+  (-37 days), where adjacent contracts don't even touch.
+- Net: zero of the 25 inter-contract rolls trigger volume crossover; all fall
+  through to the implemented data-boundary fallback (roll at current.last_ts +
+  1 microsecond).
+
+The fallback isn't a degraded answer — the data boundary is exactly where NT8
+chose to stop one contract and start the next, which is itself a roll
+heuristic baked into the export.
+
+**Implication:**
+1. **Methodology decision**: continuous-contract module supports both methods.
+   Default behavior on this dataset is data_boundary; the volume_crossover code
+   path is preserved and tested for the case where we acquire fuller data
+   (institutional vendors typically export each contract over its full
+   lifecycle, not just its dominant period).
+2. **Diagnostic**: a real-data test (`test_real_continuous_contract_methods_breakdown`)
+   asserts `n_data_boundary >= 20` so that a future data-source upgrade
+   producing real volume_crossover rolls is visible (good signal — more
+   information for indicator/regime work).
+3. **Back-adjustment deferred**: continuous output keeps raw prices. Roll-day
+   discontinuities are visible via the `contract_symbol` column. M4 backtest
+   engine will handle position rolls explicitly; if research downstream needs
+   a back-adjusted series for indicator computation, add as a separate
+   transform.
+4. **Process lesson** (operator-flagged as the most valuable part of this entry
+   for future work): I committed to the volume-crossover methodology before
+   inspecting the data shape. A 5-minute exploratory query before designing
+   the core algorithm would have surfaced this earlier. **Apply going forward
+   for any data-shape-dependent algorithm — particularly relevant during M3
+   indicator design and M5 module ports, where indicator/strategy assumptions
+   can collide with the actual data shape (session boundaries, gap patterns,
+   roll discontinuities, holiday handling). Run a daily-aggregate inspection
+   of the relevant data before writing the algorithm, not after.**
+
+**Artifact:** Commit `ce56bd6` ("M2(continue): continuous contract construction
+with documented roll methodology"). Module: `src/quant_research/data/continuous_contract.py`.
+
 ## 2026-04-26 — NT8 export contains DST-gap timestamps; loader must handle gracefully
 
 **Phase:** 1
