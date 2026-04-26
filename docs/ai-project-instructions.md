@@ -71,7 +71,7 @@ repo_root/
 │   ├── lessons-log.md
 │   └── ai-project-instructions.md
 ├── src/                                # Production Python modules
-│   └── flux_research/
+│   └── quant_research/
 │       ├── data/                       # Data loading and pipeline
 │       ├── indicators/                 # Indicator library
 │       ├── backtest/                   # Backtest engine
@@ -232,7 +232,7 @@ Agents should not add lessons log entries silently. The operator should see and 
 - MNQ data format: semicolon-delimited `YYYYMMDD HHMMSS;Open;High;Low;Close;Volume`
 - Source timezone: assumed to be CME native timing (America/Chicago)
 - Known gaps: Jun 18 – Jul 31 2024, Feb 3 – Mar 11 2026
-- Contract files: `MNQ_MM-YY_Last.txt` where MM-YY is contract expiration (03/06/09/12 quarterly)
+- Contract files: `MNQ MM-YY.Last.txt` (NT8 default export format: space between symbol and contract code, dot before "Last") where MM-YY is contract expiration code (03/06/09/12 quarterly + 2-digit year). Files live under `data/raw/`. Loader code should accept arbitrary filenames matching this glob rather than hardcoding the list.
 
 ### Flux Architecture Constraints
 

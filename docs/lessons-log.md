@@ -24,6 +24,14 @@
 
 ## Entries
 
+## 2026-04-26 — Renamed Python package: flux_research → quant_research
+
+**Phase:** 1
+**Context:** M1 environment scaffold was committed earlier in the day with the Python package named `flux_research` (after the Flux strategy generation). On review before starting M2, decided the package should match the repo (`quant-research-lab`) and reflect the durable cross-generation scope of the research infrastructure rather than a single strategy family.
+**Finding:** Naming the research package after one strategy generation is short-sighted given the program's multi-generation scope per the charter (Flux V1/V2/V3, Onyx V1, future generations). The Python import package and PEP 503 distribution name should both reflect the long-term scope of the infrastructure, not the first strategy that uses it.
+**Implication:** Renamed `src/flux_research/` to `src/quant_research/` via `git mv` (preserves history). Distribution name in `pyproject.toml` also changed from `flux-research` to `quant-research` for consistency between import name and dist name. All doc references updated. Done while the package was still effectively empty (only `__init__.py` files) — zero import-refactoring cost. Lesson for future: name infrastructure assets after the program scope they serve, not the first consumer.
+**Artifact:** Commit "refactor(M1): rename package flux_research → quant_research; relocate raw data".
+
 ## 2026-04-26 — Deferred WSL2 in favor of Windows-native Python for Phase 1
 
 **Phase:** 1
