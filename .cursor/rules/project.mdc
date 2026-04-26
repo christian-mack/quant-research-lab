@@ -1,0 +1,24 @@
+---
+description: Flux research project rules and conventions
+alwaysApply: true
+---
+
+At the start of any session, read these files in order:
+1. docs/ai-project-instructions.md (full conventions)
+2. docs/current-working-plan.md (active scope)
+3. docs/lessons-log.md (recent entries, skim)
+
+Follow all rules in docs/ai-project-instructions.md without exception.
+Reference docs/program-charter.md and docs/phase-1-detailed-plan.md when proposing approaches.
+
+Document maintenance:
+- When completing a milestone, update docs/current-working-plan.md
+- When making a decision not in the plan, propose a docs/lessons-log.md entry before adding it
+- When a finding changes future phase plans, flag it and propose charter or phase plan revisions (do not silently edit)
+- Lessons log entries are append-only
+
+Session continuity:
+- At end of each session, append a brief note to SESSION_NOTES.md (gitignored) summarizing what was done and what's next
+- At start of each session, read SESSION_NOTES.md to recover context
+
+Be direct about uncertainty. Push back on decisions that seem wrong. Don't oversell intermediate progress — "done" means tested and validated.
