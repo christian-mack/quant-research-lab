@@ -3,7 +3,7 @@
 **Plan period:** Days 1-30 of Phase 1
 **Phase:** 1 — Python Research Infrastructure
 **Status:** Active
-**Last updated:** April 20, 2026
+**Last updated:** April 26, 2026
 **Next review:** Weekly; full plan refresh at day 30
 **Related documents:** `program-charter.md`, `phase-1-detailed-plan.md`, `ai-project-instructions.md`, `lessons-log.md`
 
@@ -67,12 +67,12 @@ Update this document weekly. Add entries to the lessons log ad hoc. Refer to the
 **Primary focus:** M2 complete, M3 begun
 
 ### Development tasks
-- [ ] M2: Extend loader to all 24 MNQ contract files
+- [x] M2: Extend loader to all 26 MNQ contract files (`load_contracts`, `load_all_contracts`); dataset = 2,196,750 bars (1 DST-gap drop on 2025-03-09; see lessons-log 2026-04-26)
 - [ ] M2: Implement continuous contract construction with documented roll methodology
-- [ ] M2: Timezone normalization; verify session boundaries correct
+- [~] M2: Timezone normalization; verify session boundaries correct — DST gap/overlap handled in loader (`non_existent="null"`, `ambiguous="earliest"`); session-boundary validation pending
 - [ ] M2: Session classification (RTH / ETH / Break / Holiday)
 - [ ] M2: Known gap detection and flagging (Jun-Jul 2024, Feb-Mar 2026)
-- [ ] M2: Validation — total bar count ~2.1M, trading days ~1,580, OHLC spot-checked against TradingView for 5 random dates
+- [~] M2: Validation — total bar count ~2.1M ✓ (2.20M actual); trading days ~1,580 pending; OHLC spot-check vs TradingView for 5 random dates pending
 - [ ] M3: Begin indicator library — ATR (1m, 15m, daily) first
 - [ ] M3: Unit tests for ATR against pandas-ta reference
 

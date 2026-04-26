@@ -15,6 +15,7 @@ those is layered on top of the per-file loader returned here.
 
 from __future__ import annotations
 
+from collections.abc import Iterable
 from pathlib import Path
 
 import polars as pl
@@ -108,6 +109,25 @@ def load_contract_file(
     *localized* to ``timezone`` (no wall-clock conversion is performed — the
     source is treated as already being in the target timezone).
 
+    DST handling
+        Daylight-saving transitions are handled defensively rather than
+        raising:
+
+        - **Spring-forward (non-existent timestamps).** On the second Sunday
+          of March, 02:00-02:59 does not exist in ``America/Chicago``. NT8
+          exports occasionally contain a near-empty bar in this window
+          (observed: a single 1-tick bar on 2025-03-09). Such rows are
+          dropped by the loader (timestamp localized to null, then filtered)
+          on the basis that CME Globex is closed during this Sunday window
+          anyway.
+        - **Fall-back (ambiguous timestamps).** On the first Sunday of
+          November, 01:00-01:59 occurs twice. The earlier occurrence is
+          chosen (``ambiguous='earliest'``). In practice the dataset has
+          no bars in this window either (CME Globex closed), so this
+          choice is mostly defensive.
+
+        See ``docs/lessons-log.md`` 2026-04-26 entry on DST handling.
+
     Args:
         path: Path to the contract ``.txt`` file.
         timezone: IANA timezone name to attach to the parsed timestamps.
@@ -118,6 +138,7 @@ def load_contract_file(
         DataFrame with the columns listed in :data:`CANONICAL_COLUMNS`,
         in that order. ``timestamp`` is a tz-aware ``Datetime("us", tz)``.
         Numeric columns are ``Float64`` for prices and ``Int64`` for volume.
+        Rows with non-existent (DST-gap) source timestamps are dropped.
 
     Raises:
         FileNotFoundError: If ``path`` does not point to an existing file.
@@ -143,10 +164,96 @@ def load_contract_file(
         },
     )
 
-    return raw.with_columns(
-        pl.col("raw_timestamp")
-        .str.strptime(pl.Datetime, "%Y%m%d %H%M%S")
-        .dt.replace_time_zone(timezone)
-        .alias("timestamp"),
-        pl.lit(_contract_symbol_from_filename(p)).alias("contract_symbol"),
-    ).select(*CANONICAL_COLUMNS)
+    return (
+        raw.with_columns(
+            pl.col("raw_timestamp")
+            .str.strptime(pl.Datetime, "%Y%m%d %H%M%S")
+            .dt.replace_time_zone(
+                timezone,
+                non_existent="null",
+                ambiguous="earliest",
+            )
+            .alias("timestamp"),
+            pl.lit(_contract_symbol_from_filename(p)).alias("contract_symbol"),
+        )
+        .filter(pl.col("timestamp").is_not_null())
+        .select(*CANONICAL_COLUMNS)
+    )
+
+
+def _empty_canonical_dataframe(timezone: str) -> pl.DataFrame:
+    """Return a zero-row DataFrame with the canonical schema."""
+    return pl.DataFrame(
+        schema={
+            "timestamp": pl.Datetime("us", timezone),
+            "open": pl.Float64,
+            "high": pl.Float64,
+            "low": pl.Float64,
+            "close": pl.Float64,
+            "volume": pl.Int64,
+            "contract_symbol": pl.String,
+        }
+    )
+
+
+def load_contracts(
+    paths: Iterable[str | Path],
+    *,
+    timezone: str = CME_TIMEZONE,
+) -> pl.DataFrame:
+    """Load multiple contract files and concatenate into one canonical DataFrame.
+
+    Each path is handed to :func:`load_contract_file` individually; the per-file
+    DataFrames are then stacked vertically. Rows from the first path appear
+    first; within each path the original file order is preserved. The result
+    is **not** chronologically sorted across files — adjacent quarterly
+    contracts overlap in time during the roll window. Callers that need
+    chronological order should ``sort("timestamp")`` after loading, or
+    delegate to a continuous-contract builder (forthcoming in M2).
+
+    Args:
+        paths: Iterable of paths to contract ``.txt`` files. Order matters:
+            output row order follows input path order.
+        timezone: IANA timezone name; propagated to every per-file call.
+
+    Returns:
+        DataFrame with the :data:`CANONICAL_COLUMNS` schema. Distinct
+        contracts are distinguishable via ``contract_symbol``. Empty input
+        returns a zero-row DataFrame with the same schema rather than
+        raising.
+    """
+    paths_list = list(paths)
+    if not paths_list:
+        return _empty_canonical_dataframe(timezone)
+    return pl.concat(
+        [load_contract_file(p, timezone=timezone) for p in paths_list],
+        how="vertical",
+    )
+
+
+def load_all_contracts(
+    data_root: str | Path | None = None,
+    *,
+    pattern: str = DEFAULT_CONTRACT_GLOB,
+    timezone: str = CME_TIMEZONE,
+) -> pl.DataFrame:
+    """Discover and load every matching contract file under ``data_root``.
+
+    Convenience wrapper composing :func:`discover_contract_files` with
+    :func:`load_contracts`. Equivalent to::
+
+        load_contracts(discover_contract_files(data_root, pattern=pattern),
+                       timezone=timezone)
+
+    Args:
+        data_root: Directory to search. ``None`` uses :func:`default_data_root`.
+        pattern: Glob pattern, relative to ``data_root``. Defaults to
+            :data:`DEFAULT_CONTRACT_GLOB`.
+        timezone: IANA timezone name.
+
+    Returns:
+        DataFrame with the :data:`CANONICAL_COLUMNS` schema. Empty if no
+        files match.
+    """
+    paths = discover_contract_files(data_root, pattern=pattern)
+    return load_contracts(paths, timezone=timezone)
