@@ -42,8 +42,8 @@ Update this document weekly. Add entries to the lessons log ad hoc. Refer to the
 - [ ] M1: Initialize Python project with pyproject.toml; pin polars, numpy, scipy, matplotlib, plotly, pytest, jupyter, pandas-ta (for validation reference)
 - [ ] M1: Set up .gitignore for Python + Jupyter + data artifacts
 - [ ] M1: Smoke test — notebook runs, polars loads sample data, commit to git
-- [ ] M2: Begin data loader — read one MNQ .txt file, produce polars DataFrame with parsed timestamps
-- [ ] M2: Validate single-file load matches raw file contents (bar count, first/last timestamp)
+- [x] M2: Begin data loader — read one MNQ .txt file, produce polars DataFrame with parsed timestamps (`src/quant_research/data/data_loader.py::load_contract_file`)
+- [x] M2: Validate single-file load matches raw file contents (bar count, first/last timestamp) — see `tests/data/test_data_loader.py::test_real_mnq_03_26_*`
 
 ### Parallel tracks this week
 - [ ] PT1: Monitor live Flux V1 accounts daily
