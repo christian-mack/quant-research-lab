@@ -24,6 +24,19 @@
 
 ## Entries
 
+## 2026-04-26 — NT8 export contains DST-gap timestamps; loader must handle gracefully
+
+**Phase:** 1
+**Context:** M2 multi-file loader. Initial `load_contract_file` localized timestamps with `pl.Expr.dt.replace_time_zone("America/Chicago")` using polars defaults (`non_existent="raise"`, `ambiguous="raise"`). Real-data load of the full 26-contract MNQ dataset crashed.
+**Finding:** The dataset contains a single bar at `2025-03-09 02:14:00` — a wall-clock time that does not exist in `America/Chicago` because of the spring-forward DST gap (clocks jumped 02:00 → 03:00 that morning). The bar has `volume=1`, almost certainly a stray adjustment or NT8 export artifact: CME Globex is closed Sunday early morning (the trading session reopens 17:00 CT Sunday), so no bona fide bars are expected in the gap. The fall-back analog (1:00-1:59 CT occurring twice on November 3, 2024) shows zero bars in the dataset. This single phantom bar is the only DST-gap row across the full 6-year dataset.
+**Implication:**
+1. Source data IS in `America/Chicago` as documented; NT8 does not insulate against DST and the responsibility falls on the loader.
+2. Loader updated to `replace_time_zone(non_existent="null", ambiguous="earliest")` + filter null timestamps. Net: 1 row dropped from 2,196,751 raw rows. Result: 2,196,750 canonical bars.
+3. Multi-file real-data test asserts `loaded_count == raw_count` modulo a 50-row DST tolerance, so the test stays meaningful as data is added without re-implementing DST logic.
+4. Synthetic DST-gap regression test (`test_load_contract_file_drops_dst_gap_phantom_bars`) added.
+5. Same caution applies to forthcoming M2 work: session classification must understand DST, since RTH/ETH boundaries shift wall-clock time twice a year. Continuous contract construction is unaffected (it operates on already-localized timestamps).
+**Artifact:** Commit `7ec8e35` ("M2(continue): multi-file loader + DST-gap handling").
+
 ## 2026-04-26 — Renamed Python package: flux_research → quant_research
 
 **Phase:** 1
