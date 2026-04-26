@@ -2,15 +2,33 @@
 __pycache__/
 *.py[cod]
 *.egg-info/
+*.egg
 .venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Jupyter
 .ipynb_checkpoints/
 
-# Data and results (large, local-only)
-data/
-results/
+# Build artifacts
+build/
+dist/
+*.whl
+
+# Data and results at repo root (large, local-only).
+# Leading slash anchors to root so src/flux_research/data/ etc. are NOT ignored.
+/data/
+/results/
 
 # Session notes (local-only)
 SESSION_NOTES.md
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
 
 # IDE
 .vscode/
