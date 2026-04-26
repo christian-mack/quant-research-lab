@@ -68,10 +68,10 @@ Update this document weekly. Add entries to the lessons log ad hoc. Refer to the
 
 ### Development tasks
 - [x] M2: Extend loader to all 26 MNQ contract files (`load_contracts`, `load_all_contracts`); dataset = 2,196,750 bars (1 DST-gap drop on 2025-03-09; see lessons-log 2026-04-26)
-- [ ] M2: Implement continuous contract construction with documented roll methodology
+- [x] M2: Continuous contract construction with documented roll methodology (`continuous_contract.build_continuous_contract`); volume-crossover with `data_boundary` fallback. Empirical: NT8 export gives ~5-day overlap with current contract dominant through day 4 → all 25 rolls fall through to data-boundary. See lessons-log entry pending operator approval (NT8 export shape).
 - [~] M2: Timezone normalization; verify session boundaries correct — DST gap/overlap handled in loader (`non_existent="null"`, `ambiguous="earliest"`); session-boundary validation pending
 - [ ] M2: Session classification (RTH / ETH / Break / Holiday)
-- [ ] M2: Known gap detection and flagging (Jun-Jul 2024, Feb-Mar 2026)
+- [ ] M2: Known gap detection and flagging (Jun-Jul 2024, Feb-Mar 2026) — observed via continuous contract build (no bars between 2024-06-17 and 2024-08-01; no bars between 2026-02-02 and 2026-03-12)
 - [~] M2: Validation — total bar count ~2.1M ✓ (2.20M actual); trading days ~1,580 pending; OHLC spot-check vs TradingView for 5 random dates pending
 - [ ] M3: Begin indicator library — ATR (1m, 15m, daily) first
 - [ ] M3: Unit tests for ATR against pandas-ta reference
