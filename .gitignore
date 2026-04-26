@@ -17,10 +17,22 @@ build/
 dist/
 *.whl
 
-# Data and results at repo root (large, local-only).
-# Leading slash anchors to root so src/flux_research/data/ etc. are NOT ignored.
+# ---------------------------------------------------------------------------
+# Market data and backtest results
+# ---------------------------------------------------------------------------
+# Top-level data and results directories (anchored to repo root).
 /data/
 /results/
+
+# Defensive: raw market-data files anywhere in the tree. Catches accidents
+# where vendor exports get dropped inside src/, notebooks/, or scratch dirs.
+**/MNQ*.txt
+**/MNQ*.Last.txt
+**/MNQ_*.txt
+**/MES*.txt
+**/MES_*.txt
+**/NQ*.Last.txt
+**/ES*.Last.txt
 
 # Session notes (local-only)
 SESSION_NOTES.md
