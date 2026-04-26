@@ -57,7 +57,8 @@ Confirmed decisions from program design:
 | Statistics | scipy.stats + arch + statsmodels | Core stats, financial econometrics, regression |
 | Package management | uv | Fast, modern replacement for pip + venv |
 | Version control | git + GitHub | Standard |
-| Development environment | VS Code + WSL2 on Windows | Avoids Windows-specific Python headaches |
+| IDE | Cursor (VS Code fork with agentic AI) on Windows | Standardized across the program; inherits VS Code extension ecosystem (Python, Jupyter) |
+| Runtime host | Windows-native Python 3.13 (no WSL2) | Polars/uv/numpy/scipy ship native Windows wheels in 2026; original "WSL avoids Python pain" rationale no longer holds for this stack. See lessons-log 2026-04-26. |
 | Research workflow | Jupyter notebooks for exploration; Python modules for production code | Notebooks rot; modules don't |
 
 ---
@@ -71,14 +72,15 @@ Phase 1 is organized into nine milestones (M1-M9). Milestones are sequential in 
 **Goal:** Functional Python development environment with all tooling in place.
 
 **Deliverables:**
-- WSL2 installed and configured on Windows dev machine
-- VS Code configured with Python, Jupyter, and remote WSL extensions
-- uv installed and working
+- Cursor IDE configured with Python and Jupyter extensions on Windows
+- uv installed and working (Windows-native)
 - Git installed; GitHub repo created for the research project (private)
-- Python 3.11+ installed via uv; project-local virtual environment created
+- Python 3.11+ available; project-local virtual environment created via uv
 - Initial `pyproject.toml` with pinned dependency versions
 - `.gitignore` appropriate for Python + Jupyter + data files
 - `README.md` scaffold in the repo root
+
+> Note: WSL2 was originally planned but deferred for Phase 1 (see lessons-log 2026-04-26). All Phase 1 development runs in Windows-native Python.
 
 **Validation:** Able to create a test Jupyter notebook, run a polars operation on sample data, and commit the notebook to git. End-to-end smoke test.
 

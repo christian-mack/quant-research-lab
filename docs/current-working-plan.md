@@ -37,9 +37,8 @@ Update this document weekly. Add entries to the lessons log ad hoc. Refer to the
 **Primary focus:** M1 complete, M2 begun
 
 ### Development tasks
-- [ ] M1: Install WSL2 on Windows dev machine; verify Ubuntu running cleanly
-- [ ] M1: Install VS Code + Python/Jupyter/Remote-WSL extensions
-- [ ] M1: Install uv; create project repo on GitHub (private)
+- [x] M1: Cursor IDE in use on Windows (Python/Jupyter extensions); WSL2 deferred per lessons-log 2026-04-26
+- [ ] M1: Install uv; project repo already on GitHub (private)
 - [ ] M1: Initialize Python project with pyproject.toml; pin polars, numpy, scipy, matplotlib, plotly, pytest, jupyter, pandas-ta (for validation reference)
 - [ ] M1: Set up .gitignore for Python + Jupyter + data artifacts
 - [ ] M1: Smoke test — notebook runs, polars loads sample data, commit to git
@@ -181,7 +180,7 @@ At day 30, review the following:
 
 | Risk | Watch for | Response |
 |---|---|---|
-| Environment setup takes >1 week | WSL/VS Code/polars friction | Budget extra time in Week 2; don't push to Week 3 if Week 1 slipping badly |
+| Environment setup takes >1 week | Cursor/uv/polars friction on Windows | Budget extra time in Week 2; don't push to Week 3 if Week 1 slipping badly |
 | Data pipeline edge cases emerge | Unexpected bar count discrepancies, timezone issues | Log findings in lessons log; investigate before proceeding to indicators |
 | Backtest engine design takes multiple iterations | Unsure about best architecture | Document design decisions as they're made; M4 is the foundation for everything after |
 | Live Flux operational issues | Account requires attention beyond daily monitoring | Pause development; charter's operational load principles apply |

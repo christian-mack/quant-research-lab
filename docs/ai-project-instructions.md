@@ -40,6 +40,11 @@ Agents MUST confirm with the human operator before:
 
 ## Section 3: Code Conventions
 
+### IDE and Runtime
+
+- **IDE:** Cursor (a VS Code fork with built-in agentic AI). All editor operations and agent sessions run inside Cursor. Do not suggest or assume VS Code; the VS Code extension ecosystem (Python, Jupyter) is reachable from Cursor unchanged.
+- **Runtime host:** Windows-native Python 3.13 with `uv`. WSL2 is not used for Phase 1 (see lessons-log 2026-04-26 for rationale). If a future phase needs Linux-only tooling, revisit then.
+
 ### Language and Style
 
 - Python 3.11+ only
@@ -310,3 +315,4 @@ When an agent is assisting with work in this project:
 | Date | Revision | Rationale |
 |---|---|---|
 | 2026-04-20 | Initial instructions | Program formalization; guidance needed before AI-assisted development begins |
+| 2026-04-26 | Added IDE/runtime conventions (Section 3) | Codified Cursor as the IDE and Windows-native Python as Phase 1 runtime; see lessons-log 2026-04-26 |

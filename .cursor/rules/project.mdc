@@ -3,6 +3,9 @@ description: Flux research project rules and conventions
 alwaysApply: true
 ---
 
+This project uses Cursor as the IDE. Do not suggest or attempt to
+launch VS Code. All editor operations happen within Cursor.
+
 At the start of any session, read these files in order:
 1. docs/ai-project-instructions.md (full conventions)
 2. docs/current-working-plan.md (active scope)
