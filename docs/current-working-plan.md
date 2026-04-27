@@ -3,7 +3,7 @@
 **Plan period:** Days 1-30 of Phase 1
 **Phase:** 1 — Python Research Infrastructure
 **Status:** Active
-**Last updated:** April 27, 2026
+**Last updated:** April 27, 2026 (later — M2 closed pending operator OHLC verification)
 **Next review:** Weekly; full plan refresh at day 30
 **Related documents:** `program-charter.md`, `phase-1-detailed-plan.md`, `ai-project-instructions.md`, `lessons-log.md`
 
@@ -70,9 +70,9 @@ Update this document weekly. Add entries to the lessons log ad hoc. Refer to the
 - [x] M2: Extend loader to all 26 MNQ contract files (`load_contracts`, `load_all_contracts`); dataset = 2,196,751 bars (no rows dropped after UTC discovery + load-time conversion to CT; see lessons-log 2026-04-27 entries on UTC discovery and DST correction)
 - [x] M2: Continuous contract construction with documented roll methodology (`continuous_contract.build_continuous_contract`); volume-crossover with `data_boundary` fallback. Empirical: NT8 export gives ~5-day overlap with current contract dominant through day 4 → all 25 rolls fall through to data-boundary. See lessons-log 2026-04-26 (NT8 export shape).
 - [x] M2: Timezone normalization — source confirmed UTC by inspection (Friday close, daily maintenance gap, DST shifts all consistent only with UTC); loader now does `replace_time_zone("UTC").convert_time_zone("America/Chicago")`. Last bar of dataset lands at 16:00 CT, matching CME's daily maintenance-break boundary.
-- [ ] M2: Session classification (RTH / ETH / Break / Holiday)
-- [ ] M2: Known gap detection and flagging (Jun-Jul 2024, Feb-Mar 2026) — observed via continuous contract build (no bars between 2024-06-17 and 2024-08-01; no bars between 2026-02-02 and 2026-03-12)
-- [~] M2: Validation — total bar count ~2.1M ✓ (2.20M actual); trading days ~1,580 pending; OHLC spot-check vs TradingView for 5 random dates pending
+- [x] M2: Session classification (`src/quant_research/data/session.py::classify_sessions`) — RTH / ETH / BREAK / WEEKEND / HOLIDAY, backed by `pandas_market_calendars` `CME_Equity` for holiday and early-close lookup. Half-open `[market_open, market_close)` convention; BREAK is Mon-Thu only.
+- [x] M2: Known gap detection and flagging (`src/quant_research/data/quality.py`) — `KNOWN_GAPS` registry (4 entries: Good Friday 2024, Jun-Jul 2024, Good Friday 2025, Feb-Mar 2026; 61 missing trading days total). `find_unexpected_missing_days` returns `[]` on the current dataset.
+- [x] M2: Validation — total bar count 2,196,751 raw / 2,140,532 continuous ✓ (phase plan ~2.1M); 1,630 PMC trading days in range (phase plan ~1,580 was an estimate, PMC is exact); OHLC spot-check values dumped in `SESSION_NOTES` for operator vs TradingView verification.
 - [ ] M3: Begin indicator library — ATR (1m, 15m, daily) first
 - [ ] M3: Unit tests for ATR against pandas-ta reference
 
