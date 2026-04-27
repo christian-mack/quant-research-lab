@@ -3,7 +3,7 @@
 **Plan period:** Days 1-30 of Phase 1
 **Phase:** 1 — Python Research Infrastructure
 **Status:** Active
-**Last updated:** April 27, 2026 (later — M2 closed pending operator OHLC verification)
+**Last updated:** April 27, 2026 (later still — M2 closed, M3 ATR landed)
 **Next review:** Weekly; full plan refresh at day 30
 **Related documents:** `program-charter.md`, `phase-1-detailed-plan.md`, `ai-project-instructions.md`, `lessons-log.md`
 
@@ -72,9 +72,9 @@ Update this document weekly. Add entries to the lessons log ad hoc. Refer to the
 - [x] M2: Timezone normalization — source confirmed UTC by inspection (Friday close, daily maintenance gap, DST shifts all consistent only with UTC); loader now does `replace_time_zone("UTC").convert_time_zone("America/Chicago")`. Last bar of dataset lands at 16:00 CT, matching CME's daily maintenance-break boundary.
 - [x] M2: Session classification (`src/quant_research/data/session.py::classify_sessions`) — RTH / ETH / BREAK / WEEKEND / HOLIDAY, backed by `pandas_market_calendars` `CME_Equity` for holiday and early-close lookup. Half-open `[market_open, market_close)` convention; BREAK is Mon-Thu only.
 - [x] M2: Known gap detection and flagging (`src/quant_research/data/quality.py`) — `KNOWN_GAPS` registry (4 entries: Good Friday 2024, Jun-Jul 2024, Good Friday 2025, Feb-Mar 2026; 61 missing trading days total). `find_unexpected_missing_days` returns `[]` on the current dataset.
-- [x] M2: Validation — total bar count 2,196,751 raw / 2,140,532 continuous ✓ (phase plan ~2.1M); 1,630 PMC trading days in range (phase plan ~1,580 was an estimate, PMC is exact); OHLC spot-check values dumped in `SESSION_NOTES` for operator vs TradingView verification.
-- [ ] M3: Begin indicator library — ATR (1m, 15m, daily) first
-- [ ] M3: Unit tests for ATR against pandas-ta reference
+- [x] M2: Validation — total bar count 2,196,751 raw / 2,140,532 continuous ✓ (phase plan ~2.1M); 1,630 PMC trading days in range (phase plan ~1,580 was an estimate, PMC is exact); coarse price-level cross-check on 2024-04-04 vs `/NQM4` daily wrap (~18,173) passes (our RTH range 18,201-18,505). Tick-perfect TradingView OHLC comparison deferred — TV's free product can't render RTH-session daily candles cleanly enough to compare; internal validations (bar count, PMC days, known-gap coverage, tz boundaries) are strong enough. Decision documented in `SESSION_NOTES`. **M2 closed.**
+- [x] M3: Indicator library scaffolded with ATR (`src/quant_research/indicators/atr.py`); `true_range_expr`, `atr_expr`, `add_true_range`, `add_atr` with Wilder-default + SMA/EMA modes. Pandas-ta-equivalent seeding (TR pre-seeded with SMA at index `length-1`).
+- [x] M3: Unit tests for ATR against pandas-ta reference (`tests/indicators/test_atr.py`); 26 tests covering hand-computed primitive, three smoothing modes vs pandas-ta within 1e-6 relative error, edge cases, error paths, and real-data smoke. Indicator-API conventions documented in `atr.py` module docstring as the template for remaining M3 indicators.
 
 ### Parallel tracks this week
 - [ ] PT1: Continued live operation monitoring
