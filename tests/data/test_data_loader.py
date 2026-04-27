@@ -11,6 +11,7 @@ on-disk file. They are skipped automatically when the raw data is absent
 
 from __future__ import annotations
 
+import datetime as dt
 from pathlib import Path
 
 import polars as pl
@@ -70,13 +71,24 @@ def test_load_contract_file_alternate_timezone(tiny_contract_file: Path) -> None
     assert df.schema["timestamp"] == pl.Datetime("us", "UTC")
 
 
-def test_load_contract_file_drops_dst_gap_phantom_bars(tmp_path: Path) -> None:
-    """Bars whose timestamps fall in the spring-forward DST gap are dropped.
+def test_load_contract_file_converts_utc_source_to_ct(tmp_path: Path) -> None:
+    """Source timestamps are UTC; loader converts to CT before returning.
 
-    On 2025-03-09 in America/Chicago the clock skipped 02:00-02:59. A bar
-    timestamped 02:14 in that window is non-existent; the loader localizes
-    it to null and filters it out. The flanking 01:14 and 03:14 bars must
-    survive intact.
+    Three UTC bars on 2025-03-09 (the day the 02:00 CST DST spring-forward
+    happens). The loader must:
+
+    1. Treat the naive source values as UTC (not CT — see lessons-log
+       2026-04-26 UTC discovery entry).
+    2. Convert to America/Chicago. Since the source is UTC there is no
+       DST gap to handle: every UTC instant has exactly one CT
+       wall-clock representation.
+    3. Retain all input rows; out-of-trading-hours filtering is the
+       responsibility of session classification, not the loader.
+
+    Expected CT wall-clocks:
+      - 01:14 UTC -> 19:14 CST on 2025-03-08 (Saturday before DST starts)
+      - 02:14 UTC -> 20:14 CST on 2025-03-08 (no longer in any "DST gap")
+      - 03:14 UTC -> 21:14 CST on 2025-03-08
     """
     path = tmp_path / "DST 01-25.Last.txt"
     path.write_text(
@@ -91,12 +103,16 @@ def test_load_contract_file_drops_dst_gap_phantom_bars(tmp_path: Path) -> None:
         encoding="ascii",
     )
     df = data_loader.load_contract_file(path)
-    assert df.height == 2
-    rows = df.iter_rows(named=True)
-    survivors = [(r["timestamp"].hour, r["timestamp"].minute) for r in rows]
-    assert (2, 14) not in survivors
-    assert (1, 14) in survivors
-    assert (3, 14) in survivors
+    assert df.height == 3
+
+    rows = list(df.iter_rows(named=True))
+    ct_wall_clocks = [(r["timestamp"].date(), r["timestamp"].time()) for r in rows]
+    saturday = dt.date(2025, 3, 8)
+    assert ct_wall_clocks == [
+        (saturday, dt.time(19, 14)),
+        (saturday, dt.time(20, 14)),
+        (saturday, dt.time(21, 14)),
+    ]
 
 
 def test_load_contract_file_missing_path_raises(tmp_path: Path) -> None:
@@ -139,8 +155,7 @@ def test_discover_contract_files_returns_empty_for_missing_dir(tmp_path: Path) -
 _REAL_DATA_FILE = data_loader.default_data_root() / "MNQ 03-26.Last.txt"
 _REAL_DATA_AVAILABLE = _REAL_DATA_FILE.is_file()
 _REAL_DATA_SKIP_REASON = (
-    f"Raw MNQ data not present at {_REAL_DATA_FILE}; "
-    "skipping real-data validation tests."
+    f"Raw MNQ data not present at {_REAL_DATA_FILE}; skipping real-data validation tests."
 )
 
 
@@ -148,25 +163,27 @@ _REAL_DATA_SKIP_REASON = (
 def test_real_mnq_03_26_bar_count_matches_raw_file() -> None:
     """Loader's row count equals the count of non-empty lines in the file."""
     df = data_loader.load_contract_file(_REAL_DATA_FILE)
-    expected = sum(
-        1 for line in _REAL_DATA_FILE.read_text().splitlines() if line.strip()
-    )
+    expected = sum(1 for line in _REAL_DATA_FILE.read_text().splitlines() if line.strip())
     assert df.height == expected
 
 
 @pytest.mark.skipif(not _REAL_DATA_AVAILABLE, reason=_REAL_DATA_SKIP_REASON)
-def test_real_mnq_03_26_endpoints_match_raw_file() -> None:
-    """First and last timestamps in the loaded DataFrame match the raw file."""
+def test_real_mnq_03_26_endpoints_match_raw_file_after_utc_round_trip() -> None:
+    """First/last timestamps round-trip back to the raw file's UTC strings.
+
+    The loader converts the source UTC timestamps to CT for the canonical
+    DataFrame. To verify the underlying instant in time is preserved (no
+    parsing or rounding error), convert the loaded CT timestamp BACK to
+    UTC and compare strings to the raw file.
+    """
     df = data_loader.load_contract_file(_REAL_DATA_FILE)
-    raw_lines = [
-        line for line in _REAL_DATA_FILE.read_text().splitlines() if line.strip()
-    ]
+    raw_lines = [line for line in _REAL_DATA_FILE.read_text().splitlines() if line.strip()]
     raw_first_ts_str = raw_lines[0].split(";", 1)[0]
     raw_last_ts_str = raw_lines[-1].split(";", 1)[0]
-    first_ts = df.row(0, named=True)["timestamp"]
-    last_ts = df.row(-1, named=True)["timestamp"]
-    assert first_ts.strftime("%Y%m%d %H%M%S") == raw_first_ts_str
-    assert last_ts.strftime("%Y%m%d %H%M%S") == raw_last_ts_str
+    first_ts_utc = df.row(0, named=True)["timestamp"].astimezone(dt.UTC)
+    last_ts_utc = df.row(-1, named=True)["timestamp"].astimezone(dt.UTC)
+    assert first_ts_utc.strftime("%Y%m%d %H%M%S") == raw_first_ts_str
+    assert last_ts_utc.strftime("%Y%m%d %H%M%S") == raw_last_ts_str
 
 
 @pytest.mark.skipif(not _REAL_DATA_AVAILABLE, reason=_REAL_DATA_SKIP_REASON)
@@ -202,10 +219,7 @@ def test_load_contracts_concatenates_two_files(two_synthetic_files: list[Path]) 
 def test_load_contracts_preserves_per_file_order(two_synthetic_files: list[Path]) -> None:
     df = data_loader.load_contracts(two_synthetic_files)
     symbols_in_order = df["contract_symbol"].to_list()
-    expected = (
-        ["SAMPLE 01-26"] * len(_SAMPLE_LINES)
-        + ["SAMPLE 02-26"] * len(_SECOND_SAMPLE_LINES)
-    )
+    expected = ["SAMPLE 01-26"] * len(_SAMPLE_LINES) + ["SAMPLE 02-26"] * len(_SECOND_SAMPLE_LINES)
     assert symbols_in_order == expected
 
 
@@ -253,28 +267,19 @@ def test_load_all_contracts_empty_dir_returns_empty(tmp_path: Path) -> None:
 
 @pytest.mark.skipif(not _REAL_DATA_AVAILABLE, reason=_REAL_DATA_SKIP_REASON)
 def test_real_load_all_contracts_total_bar_count_matches_raw_files() -> None:
-    """Loaded row count matches raw file line count, modulo DST-gap drops.
+    """Loaded row count equals raw file line count exactly.
 
-    The loader drops bars whose timestamps fall in the spring-forward DST
-    gap (these are stray near-empty ticks; CME Globex is closed during the
-    Sunday-morning window where they appear). Allow a small tolerance so
-    the test remains a meaningful regression check without re-implementing
-    the DST logic.
-
-    Empirical baseline (2026-04-26 dataset): 1 bar drop in 2,196,751 raw
-    rows (the 2025-03-09 02:14 phantom in MNQ 03-25). Tolerance set to
-    50 to give headroom as more contracts are added.
+    With the loader treating source as UTC and converting to CT, no rows
+    are dropped. The previous DST-gap drop logic was based on a wrong
+    premise about the source timezone (see lessons-log 2026-04-26 UTC
+    discovery + DST correction entries). Every raw line maps 1:1 to a
+    canonical bar.
     """
     df = data_loader.load_all_contracts()
     paths = data_loader.discover_contract_files()
-    raw_total = sum(
-        sum(1 for line in p.read_text().splitlines() if line.strip())
-        for p in paths
-    )
-    drops = raw_total - df.height
-    assert 0 <= drops <= 50, (
-        f"loader dropped {drops} of {raw_total:,} raw rows; "
-        "expected 0-50 due to DST-gap filtering"
+    raw_total = sum(sum(1 for line in p.read_text().splitlines() if line.strip()) for p in paths)
+    assert df.height == raw_total, (
+        f"row mismatch: loader returned {df.height:,}, raw files have {raw_total:,} non-empty lines"
     )
 
 
@@ -299,8 +304,6 @@ def test_real_load_all_contracts_distinct_contract_count() -> None:
     """All discovered contracts are present in the output exactly once."""
     df = data_loader.load_all_contracts()
     discovered = data_loader.discover_contract_files()
-    expected_symbols = {
-        data_loader._contract_symbol_from_filename(p) for p in discovered
-    }
+    expected_symbols = {data_loader._contract_symbol_from_filename(p) for p in discovered}
     actual_symbols = set(df["contract_symbol"].unique().to_list())
     assert actual_symbols == expected_symbols

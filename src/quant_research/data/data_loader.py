@@ -4,13 +4,17 @@ Reads NT8-style semicolon-delimited per-contract files (e.g. ``MNQ 03-26.Last.tx
 into polars DataFrames in a canonical schema.
 
 The source format is documented in ``docs/ai-project-instructions.md`` Section 7:
-``YYYYMMDD HHMMSS;Open;High;Low;Close;Volume``, no header, in CME local time
-(America/Chicago).
+``YYYYMMDD HHMMSS;Open;High;Low;Close;Volume``, no header. Empirically the
+timestamps are in **UTC** (despite earlier documentation that assumed CME
+native time — see lessons-log 2026-04-26 entry on the UTC discovery for the
+investigation that established this). The loader parses timestamps as naive,
+labels them as UTC, then converts to ``America/Chicago`` so downstream code
+can reason in CME-native wall-clock time without per-call tz conversion.
 
 This module is the entry point for the M2 data pipeline. It deliberately does
-not yet handle: continuous-contract construction (M2 deliverable), session
-classification (M2 deliverable), or gap detection (M2 deliverable). Each of
-those is layered on top of the per-file loader returned here.
+not yet handle: session classification (M2 deliverable, builds on the
+CT-converted timestamps from this module) or gap detection (M2 deliverable).
+Continuous-contract construction is in :mod:`quant_research.data.continuous_contract`.
 """
 
 from __future__ import annotations
@@ -20,8 +24,23 @@ from pathlib import Path
 
 import polars as pl
 
+SOURCE_TIMEZONE = "UTC"
+"""Empirical timezone the NT8 export uses for its naive wall-clock numbers.
+
+Established by inspection (see lessons-log 2026-04-26 UTC discovery entry):
+the export's friday-close hour shifts between 21:00 (CDT) and 22:00 (CST) in
+labeled-CT view, and the daily maintenance gap shifts in lockstep — both
+patterns require the underlying values to be UTC, not CT.
+"""
+
 CME_TIMEZONE = "America/Chicago"
-"""Canonical timezone of the source NT8 exports (CME native time)."""
+"""Canonical user-facing timezone for loaded data.
+
+Loaded timestamps are converted from :data:`SOURCE_TIMEZONE` to this
+timezone so downstream code reasons in CME native wall-clock (RTH 08:30-15:00
+CT, daily maintenance break 16:00-17:00 CT, weekly close Friday 16:00 CT).
+DST is handled by polars' ``convert_time_zone``.
+"""
 
 DEFAULT_CONTRACT_GLOB = "MNQ *.Last.txt"
 """Default glob pattern matching the NT8-exported MNQ contract files.
@@ -104,41 +123,28 @@ def load_contract_file(
     """Load a single vendor-exported contract file into a polars DataFrame.
 
     The source format is NT8 default: semicolon-delimited
-    ``YYYYMMDD HHMMSS;Open;High;Low;Close;Volume`` with no header row, assumed
-    to already be in CME native time. Timestamps are parsed naive and then
-    *localized* to ``timezone`` (no wall-clock conversion is performed — the
-    source is treated as already being in the target timezone).
-
-    DST handling
-        Daylight-saving transitions are handled defensively rather than
-        raising:
-
-        - **Spring-forward (non-existent timestamps).** On the second Sunday
-          of March, 02:00-02:59 does not exist in ``America/Chicago``. NT8
-          exports occasionally contain a near-empty bar in this window
-          (observed: a single 1-tick bar on 2025-03-09). Such rows are
-          dropped by the loader (timestamp localized to null, then filtered)
-          on the basis that CME Globex is closed during this Sunday window
-          anyway.
-        - **Fall-back (ambiguous timestamps).** On the first Sunday of
-          November, 01:00-01:59 occurs twice. The earlier occurrence is
-          chosen (``ambiguous='earliest'``). In practice the dataset has
-          no bars in this window either (CME Globex closed), so this
-          choice is mostly defensive.
-
-        See ``docs/lessons-log.md`` 2026-04-26 entry on DST handling.
+    ``YYYYMMDD HHMMSS;Open;High;Low;Close;Volume`` with no header row.
+    Timestamps in the source file are **UTC** (see lessons-log 2026-04-26
+    UTC discovery entry). The loader parses them naive, labels as UTC,
+    then converts to ``timezone`` (defaulting to :data:`CME_TIMEZONE`),
+    so rows in the returned DataFrame have CME-native wall-clock by
+    default. DST is handled by polars' ``convert_time_zone`` —
+    transitions are unambiguous since the source is UTC.
 
     Args:
         path: Path to the contract ``.txt`` file.
-        timezone: IANA timezone name to attach to the parsed timestamps.
-            Defaults to :data:`CME_TIMEZONE` to match the documented source
-            convention.
+        timezone: Target IANA timezone name. The conversion source is
+            always :data:`SOURCE_TIMEZONE` (UTC); this parameter chooses
+            the wall-clock the caller wants to see. Defaults to
+            :data:`CME_TIMEZONE` for the standard CME-aligned analysis flow.
 
     Returns:
         DataFrame with the columns listed in :data:`CANONICAL_COLUMNS`,
-        in that order. ``timestamp`` is a tz-aware ``Datetime("us", tz)``.
-        Numeric columns are ``Float64`` for prices and ``Int64`` for volume.
-        Rows with non-existent (DST-gap) source timestamps are dropped.
+        in that order. ``timestamp`` is a tz-aware ``Datetime("us", tz)``
+        in the requested ``timezone``. Numeric columns are ``Float64``
+        for prices and ``Int64`` for volume. No rows are dropped by the
+        loader — out-of-trading-hours filtering, if needed, is the
+        responsibility of session-classification code downstream.
 
     Raises:
         FileNotFoundError: If ``path`` does not point to an existing file.
@@ -164,21 +170,14 @@ def load_contract_file(
         },
     )
 
-    return (
-        raw.with_columns(
-            pl.col("raw_timestamp")
-            .str.strptime(pl.Datetime, "%Y%m%d %H%M%S")
-            .dt.replace_time_zone(
-                timezone,
-                non_existent="null",
-                ambiguous="earliest",
-            )
-            .alias("timestamp"),
-            pl.lit(_contract_symbol_from_filename(p)).alias("contract_symbol"),
-        )
-        .filter(pl.col("timestamp").is_not_null())
-        .select(*CANONICAL_COLUMNS)
-    )
+    return raw.with_columns(
+        pl.col("raw_timestamp")
+        .str.strptime(pl.Datetime, "%Y%m%d %H%M%S")
+        .dt.replace_time_zone(SOURCE_TIMEZONE)
+        .dt.convert_time_zone(timezone)
+        .alias("timestamp"),
+        pl.lit(_contract_symbol_from_filename(p)).alias("contract_symbol"),
+    ).select(*CANONICAL_COLUMNS)
 
 
 def _empty_canonical_dataframe(timezone: str) -> pl.DataFrame:

@@ -129,9 +129,7 @@ def test_find_roll_dates_no_dominance_falls_back_to_data_boundary() -> None:
     event = rolls[0]
     assert event.method == "data_boundary"
     assert event.trigger_date is None
-    assert event.roll_at > df.filter(
-        pl.col("contract_symbol") == "MNQ 03-25"
-    )["timestamp"].max()
+    assert event.roll_at > df.filter(pl.col("contract_symbol") == "MNQ 03-25")["timestamp"].max()
 
 
 def test_find_roll_dates_intermittent_dominance_falls_back_to_data_boundary() -> None:
@@ -205,7 +203,17 @@ def test_build_continuous_contract_three_contracts_two_rolls() -> None:
 
     a_volumes = [100, 95, 80, 60, 40, 20, 10, 5, 2, 1, 1]
     b_volumes = [30, 50, 90, 100, 120, 130, 140, 150, 160, 170] + [
-        200, 180, 160, 100, 80, 60, 40, 20, 10, 5, 2,
+        200,
+        180,
+        160,
+        100,
+        80,
+        60,
+        40,
+        20,
+        10,
+        5,
+        2,
     ]
     c_volumes = [50, 70, 90, 110, 130, 150, 170, 190, 210, 230, 250, 270, 290, 310, 330]
 
@@ -270,9 +278,7 @@ def test_build_continuous_contract_no_overlap_falls_back_to_data_boundary() -> N
     assert cont["timestamp"].n_unique() == 10
 
 
-_REAL_DATA_AVAILABLE = (
-    data_loader.default_data_root() / "MNQ 03-26.Last.txt"
-).is_file()
+_REAL_DATA_AVAILABLE = (data_loader.default_data_root() / "MNQ 03-26.Last.txt").is_file()
 _REAL_DATA_SKIP_REASON = "data/raw/ not present; skipping continuous-contract real-data tests."
 
 
@@ -316,13 +322,8 @@ def test_real_continuous_contract_roll_dates_plausible(
 
     for event in rolls:
         from_code = cc.parse_contract_code(event.from_contract)
-        from_expiry_month_first = dt.date(
-            from_code.expiry_year, from_code.expiry_month, 1
-        )
-        roll_date = (
-            event.trigger_date if event.trigger_date is not None
-            else event.roll_at.date()
-        )
+        from_expiry_month_first = dt.date(from_code.expiry_year, from_code.expiry_month, 1)
+        roll_date = event.trigger_date if event.trigger_date is not None else event.roll_at.date()
         days_diff = (roll_date - from_expiry_month_first).days
         assert -60 <= days_diff <= 60, (
             f"implausible roll {event.from_contract}->{event.to_contract} "

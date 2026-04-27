@@ -24,6 +24,182 @@
 
 ## Entries
 
+## 2026-04-27 — Source NT8 export timestamps are UTC, not CME local time
+
+**Phase:** 1
+**Context:** Starting M2 session classification. Before writing the
+classifier I applied the process lesson from the 2026-04-26 NT8-export-shape
+entry — inspect the data shape before designing a data-shape-dependent
+algorithm. Specifically, I dumped hour-of-day distributions of the
+CT-labeled timestamps and looked at where the CME daily maintenance break
+falls.
+
+**Finding:** The data is **not** in `America/Chicago` despite the
+documentation (and the loader, until now) treating it as such. Three
+independent observations all reconcile only under the hypothesis that
+the source timestamps are UTC:
+
+1. **Daily maintenance gap location.** CME Globex closes daily for
+   maintenance at 16:00-17:00 CT. Under the old "source is CT"
+   assumption the gap landed at 21:00-22:00 in the labeled CT data —
+   five hours late. Under "source is UTC, convert to CT" the gap lands
+   at exactly 16:00-17:00 CT.
+2. **Seasonal shift in gap location.** Across a fixed-tz interpretation
+   the gap's wall-clock position shifts by exactly one hour between
+   DST-on (CDT, UTC-5) and DST-off (CST, UTC-6) months — exactly what
+   you'd expect if the underlying timestamps are UTC and being viewed
+   in a DST-observing zone, and exactly *not* what you'd expect if the
+   source were already CT.
+3. **Friday weekly close and Sunday weekly open.** CME's weekly close
+   is Friday 16:00 CT and the weekly reopen is Sunday 17:00 CT. The
+   raw labels show Friday close at 21:00 (DST-on) or 22:00 (DST-off)
+   and Sunday open at 22:00/23:00 — again, off by 5 or 6 hours
+   depending on season, exactly the UTC↔CT offset.
+
+The "1 phantom bar at 02:14 on 2025-03-09 in the DST gap" finding from
+the prior DST entry is now explainable: 02:14 in the source file is
+02:14 UTC = 20:14 CST on 2025-03-08 (Saturday evening, well before
+Sunday's CME reopen). It's a stray pre-open tick, not a real DST
+artifact at all.
+
+**Implication:**
+1. **Loader fix (Path A — convert at load time).** Source treated as
+   UTC and converted to CT inside `load_contract_file`:
+   `replace_time_zone("UTC").convert_time_zone("America/Chicago")`.
+   Downstream code keeps reasoning in CT wall-clock as before. New
+   constant `SOURCE_TIMEZONE = "UTC"` documents the actual source
+   timezone alongside the existing `CME_TIMEZONE`. Reasons for Path A
+   over Path B (carry UTC end-to-end): operator mental model is CT,
+   downstream code (session classification, RTH/ETH boundaries,
+   indicators with daily timeframes) expects CT, and a single
+   conversion at the data boundary eliminates per-call conversion
+   risk in dozens of downstream call sites.
+2. **No rows dropped now.** The previous DST-gap drop was based on a
+   wrong premise. With the source correctly tagged as UTC, every UTC
+   instant has exactly one CT representation, so no row is non-existent
+   under the conversion. Raw rows = 2,196,751, all retained. Continuous
+   contract = 2,140,532 (was 2,140,530 — the +2 is from previously-
+   dropped phantom bars now correctly included, plus a small change
+   in the data-boundary roll instant for one pair where the boundary
+   shifted by an integer-microsecond amount).
+3. **Tests updated.**
+   - `test_load_contract_file_converts_utc_source_to_ct` (replaces
+     the deleted DST-gap-drop test): asserts the loader converts
+     UTC source to CT correctly across a former-DST-gap window.
+   - `test_real_load_all_contracts_total_bar_count_matches_raw_files`:
+     now asserts exact equality (`loaded_height == raw_count`),
+     no DST-tolerance window.
+   - `test_real_mnq_03_26_endpoints_match_raw_file_after_utc_round_trip`:
+     compares the loaded CT timestamp converted *back* to UTC against
+     the raw file's UTC string, verifying instant-in-time preservation
+     across the conversion.
+   - 43/43 tests pass.
+4. **Documentation correction-by-append.** Per the append-only
+   lessons-log rule, the prior DST entry stays as committed. A
+   correction entry (next in this file) references it explicitly,
+   preserving the historical record.
+5. **Process amendment.** The 2026-04-26 process lesson said "inspect
+   data shape before designing data-shape-dependent algorithms." A
+   companion entry (also in this file) adds **timezone and time-of-day
+   sanity checks** to the list of things that "data-shape inspection"
+   covers. The current finding is the canonical example: had I run a
+   maintenance-gap-by-hour query on day 1 of M2, I would have spotted
+   the 21:00 vs 16:00 CT discrepancy immediately and avoided this
+   sequence of fix-then-rediscover.
+
+**Artifact:** This commit ("M2(fix): UTC source timezone for NT8
+export; convert to CT at load time"). Module:
+`src/quant_research/data/data_loader.py`. Empirical verification:
+post-fix, last bar of dataset lands at 16:00 CT — exactly the CME
+daily-maintenance-break boundary.
+
+## 2026-04-27 — Correction to the 2026-04-26 DST entry: rationale was wrong
+
+**Phase:** 1
+**Context:** Append-only correction (per the lessons-log convention) of
+the 2026-04-26 entry "NT8 export contains DST-gap timestamps; loader
+must handle gracefully."
+
+**Finding:** That entry's *result* — drop the 2025-03-09 02:14 phantom
+bar — was the right action, but its *rationale* was wrong. The rationale
+asserted "Source data IS in `America/Chicago` as documented; NT8 does
+not insulate against DST and the responsibility falls on the loader."
+This is incorrect. The source data is in **UTC**, not `America/Chicago`
+(see the 2026-04-27 UTC discovery entry above for the full investigation).
+Once the source is correctly treated as UTC and converted to CT, the
+"phantom bar" is not in any DST gap at all — `2025-03-09 02:14 UTC`
+becomes `2025-03-08 20:14 CST`, a Saturday-evening pre-open tick that
+the loader retains rather than drops.
+
+**Implication:**
+1. The original entry's items 1 ("Source data IS in America/Chicago"),
+   2 (the row-drop count), 3 (DST-tolerance test), and 4 (the
+   `test_load_contract_file_drops_dst_gap_phantom_bars` test name)
+   are all superseded.
+2. Replacement state, post-2026-04-27 fix:
+   - Loader: `replace_time_zone("UTC").convert_time_zone("America/Chicago")`,
+     no `non_existent`/`ambiguous` flags needed (UTC is unambiguous).
+   - Row count: 2,196,751 raw, 0 dropped (was 2,196,750 with 1 dropped).
+   - Test assertion: exact equality between loader rows and raw line
+     count, no tolerance window.
+   - DST-gap synthetic test replaced with a UTC→CT conversion test
+     covering the same date.
+3. Item 5 of the original entry — "session classification must
+   understand DST, since RTH/ETH boundaries shift wall-clock time
+   twice a year" — remains correct and still applies. RTH wall-clock
+   times are stable (08:30-15:00 CT) but the underlying UTC offset
+   shifts twice a year, which the polars-attached `America/Chicago`
+   tz handles automatically.
+4. The original entry stays as committed; this correction does not
+   edit it. Future readers should follow this entry up to find the
+   current state.
+
+**Artifact:** Same commit as the 2026-04-27 UTC discovery entry above.
+The original DST entry references commit `7ec8e35`; this correction
+supersedes that commit's loader logic.
+
+## 2026-04-27 — Amendment to the 2026-04-26 process-lesson: data-shape inspection includes timezone
+
+**Phase:** 1 (process)
+**Context:** Append-only amendment (per the lessons-log convention) of
+item 4 ("Process lesson") of the 2026-04-26 entry "NT8 export shape
+forced data-boundary fallback for continuous contract."
+
+**Finding:** That process lesson said: "Run a daily-aggregate inspection
+of the relevant data before writing the algorithm, not after." The
+intent was correct but the scope was incomplete. The 2026-04-27 UTC
+discovery (above) is a case where the algorithm being written was
+*timezone handling itself*, and the inspection that would have caught
+the bug was a different shape of inspection — hour-of-day distributions
+across DST-on and DST-off months, not daily aggregates.
+
+**Implication:** The "inspect data shape before designing
+data-shape-dependent algorithms" lesson should be read as covering at
+least these three sub-checks, applied to *any* dataset entering the
+pipeline:
+
+1. **Distributional shape (the original intent).** Daily aggregates,
+   per-contract overlap windows, gap patterns, holiday behavior — what
+   the 2026-04-26 lesson originally addressed.
+2. **Timezone and time-of-day sanity checks (new).** Hour-of-day
+   distributions; location of known reference events (daily maintenance
+   break, weekly open/close, RTH boundaries) under the assumed
+   timezone; comparison across DST-on and DST-off months to detect
+   misinterpreted-as-fixed-offset data.
+3. **Calendar-and-DST sanity checks (implied by 2 but worth calling out).**
+   Verify the dataset behaves as expected across at least one DST
+   spring-forward, one fall-back, and one major US holiday before
+   trusting the loader output for downstream code.
+
+**Implication for future work:** Apply this expanded checklist when
+loading any new dataset (M3 alternative-instrument data, M5 module
+ports, M6 NT8 backtest comparisons, future Onyx data sources). The
+hour-of-day check is the single highest-leverage item — five minutes
+of wall-clock time saved hours of fix-then-rediscover here.
+
+**Artifact:** Same commit as the 2026-04-27 UTC discovery and DST
+correction entries above.
+
 ## 2026-04-26 — NT8 export shape forced data-boundary fallback for continuous contract
 
 **Phase:** 1

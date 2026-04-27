@@ -94,9 +94,7 @@ from quant_research.data.data_loader import CANONICAL_COLUMNS, CME_TIMEZONE
 DEFAULT_CROSSOVER_WINDOW = 3
 """Default N for the volume-crossover roll rule (consecutive days)."""
 
-_CONTRACT_CODE_RE = re.compile(
-    r"^(?P<symbol>[A-Z]+)\s(?P<month>\d{2})-(?P<year>\d{2})$"
-)
+_CONTRACT_CODE_RE = re.compile(r"^(?P<symbol>[A-Z]+)\s(?P<month>\d{2})-(?P<year>\d{2})$")
 """Parses NT8 contract symbols like ``"MNQ 03-26"``."""
 
 
@@ -236,9 +234,11 @@ def find_roll_dates(
 def _localize_naive(naive: dt.datetime, timezone: str) -> dt.datetime | None:
     """Localize a naive datetime to ``timezone`` via polars.
 
-    Uses ``non_existent="null"`` and ``ambiguous="earliest"`` to match the
-    loader's DST handling. Returns ``None`` if the timestamp is in the
-    spring-forward gap (caller decides what to do).
+    The naive value is treated as wall-clock in ``timezone``. All call
+    sites in this module construct midnight-aligned datetimes, which are
+    always unambiguous, so DST gaps/overlaps cannot happen in practice;
+    we still pass ``non_existent="null"`` defensively so a future caller
+    that builds a non-midnight boundary doesn't crash.
     """
     return (
         pl.Series([naive])
@@ -288,9 +288,7 @@ def _detect_roll_for_pair(
     triggers = overlap.filter(pl.col("consecutive_dominance") >= crossover_window).head(1)
     if triggers.height > 0:
         trigger_date: dt.date = triggers["date"][0]
-        roll_at_naive = dt.datetime.combine(
-            trigger_date + dt.timedelta(days=1), dt.time(0, 0)
-        )
+        roll_at_naive = dt.datetime.combine(trigger_date + dt.timedelta(days=1), dt.time(0, 0))
         roll_at = _localize_naive(roll_at_naive, timezone)
         if roll_at is not None:
             return RollEvent(
@@ -301,9 +299,7 @@ def _detect_roll_for_pair(
                 trigger_date=trigger_date,
             )
 
-    current_last_ts = (
-        df.filter(pl.col("contract_symbol") == current_sym)["timestamp"].max()
-    )
+    current_last_ts = df.filter(pl.col("contract_symbol") == current_sym)["timestamp"].max()
     if current_last_ts is None:
         return None
     roll_at = current_last_ts + dt.timedelta(microseconds=1)
