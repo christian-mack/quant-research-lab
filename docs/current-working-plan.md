@@ -3,7 +3,7 @@
 **Plan period:** Days 1-30 of Phase 1
 **Phase:** 1 — Python Research Infrastructure
 **Status:** Active
-**Last updated:** April 27, 2026 (later still — M2 closed, M3 ATR landed)
+**Last updated:** April 28, 2026 — M3 indicators complete; PT3 slotted as M4 prerequisite
 **Next review:** Weekly; full plan refresh at day 30
 **Related documents:** `program-charter.md`, `phase-1-detailed-plan.md`, `ai-project-instructions.md`, `lessons-log.md`
 
@@ -48,7 +48,7 @@ Update this document weekly. Add entries to the lessons log ad hoc. Refer to the
 ### Parallel tracks this week
 - [ ] PT1: Monitor live Flux V1 accounts daily
 - [ ] PT2: Track status of in-progress eval account; decide on next eval purchase timing
-- [ ] PT3: Begin documenting current NT8 backtest methodology — which date ranges used, what configurations, what commission/fill settings
+- [ ] PT3: Start NT8 backtest methodology doc (finish as M3 closeout before M4 — see Week 3)
 - [ ] PT4: Acquire Lopez de Prado *Advances in Financial Machine Learning* (if not already owned)
 - [ ] PT7 (Phase 1b): Contact Apex support to confirm whether Tradovate API access is permitted for their funded accounts. One email or support ticket. Document the answer regardless of outcome.
 
@@ -79,7 +79,7 @@ Update this document weekly. Add entries to the lessons log ad hoc. Refer to the
 ### Parallel tracks this week
 - [ ] PT1: Continued live operation monitoring
 - [ ] PT2: Log in-progress eval status; purchase next eval if appropriate per cadence
-- [ ] PT3: Complete NT8 backtest methodology documentation
+- [ ] PT3: **M3 closeout / M4 gate —** complete NT8 backtest methodology documentation (see Week 3 ``M3 closeout`` section)
 - [ ] PT4: Begin Lopez de Prado reading — start with chapters on backtest overfitting (likely Ch. 11) and deflated Sharpe (likely Ch. 14)
 - [ ] PT7 (Phase 1b): Based on Apex response, commit to platform direction. If API route is available, begin API research. If not, start Sierra Chart trial (~$26/month rental). Install locally (not on VPS) for initial evaluation.
 
@@ -98,9 +98,11 @@ Update this document weekly. Add entries to the lessons log ad hoc. Refer to the
 **Primary focus:** M3 complete, M4 begun
 
 ### Development tasks
-- [ ] M3: Implement remaining indicators — Williams %R, VWAP (session-anchored), EMA/SMA, opening range construction
-- [ ] M3: Unit tests for each against reference implementations
-- [ ] M3: Basic volume profile / volume-at-price for future use
+- [x] M3: Williams %R (`indicators/williams_r.py`), EMA/SMA (`indicators/moving_average.py`), session-anchored VWAP (`indicators/vwap.py` + `session.assign_cme_session_date`), opening range (`indicators/opening_range.py`), basic volume profile (`indicators/volume_profile.py`). Session cumulative / grouped outputs document template deviations in-module (see `vwap.py`, `opening_range.py`, `volume_profile.py`).
+- [x] M3: Unit tests for each (`tests/indicators/`); pandas-ta cross-checks where applicable (Williams %R ``talib=False``, SMA/EMA ``talib=False``); VWAP vs hand arithmetic + per-session numpy cumsum on real data.
+
+### M3 closeout / M4 gate (before starting the backtest engine)
+- [ ] **PT3: NT8 backtest methodology documentation** — data ranges, fill model, commissions, slippage, per-module NT8 settings. **Prerequisite for M4:** the Python backtest engine's default execution assumptions must trace to this document so M6 NT8 comparison is apples-to-apples. Complete PT3 immediately after M3 code lands, before M4 design work.
 - [ ] M4: Design backtest engine architecture — document design decisions before implementing
 - [ ] M4: Implement core event loop — bar-by-bar iteration with strategy callbacks
 - [ ] M4: Implement order management — market orders first, then limit and stop

@@ -284,6 +284,78 @@ def classify_sessions(
     ).select(*df.columns, "session")
 
 
+def assign_cme_session_date(
+    df: pl.DataFrame,
+    *,
+    calendar_name: str = CME_EQUITY_CALENDAR,
+    output: str = "cme_session_date",
+) -> pl.DataFrame:
+    """Attach the PMC ``session_date`` key for each bar's active trading session.
+
+    Uses the same backward ``join_asof`` on ``market_open`` as
+    :func:`classify_sessions`, but emits the calendar ``session_date``
+    from the matched schedule row **only** when the bar timestamp falls
+    in the half-open session window
+    ``[market_open, market_close)``. Bars in the maintenance break,
+    weekend, or holiday closures get a null ``session_date`` — they are
+    not part of an open CME equity-index session.
+
+    This column is the natural grouping key for session-anchored
+    indicators (VWAP, opening-range bucketing, per-session volume
+    profiles). It matches the session key implied by PMC's
+    ``CME_Equity`` calendar (close-date labeling).
+
+    Args:
+        df: Bars with a tz-aware ``timestamp`` column (same rules as
+            :func:`classify_sessions`).
+        calendar_name: PMC calendar identifier.
+        output: Name of the appended ``Date`` column.
+
+    Returns:
+        ``df`` sorted by ``timestamp``, with ``output`` appended.
+
+    Raises:
+        ValueError: If ``timestamp`` is missing, naive, or not a
+            ``Datetime`` column.
+    """
+    if "timestamp" not in df.columns:
+        raise ValueError("`df` must have a `timestamp` column")
+    ts_dtype = df.schema["timestamp"]
+    if not isinstance(ts_dtype, pl.Datetime):
+        raise ValueError(f"`timestamp` must be a Datetime column; got {ts_dtype}")
+    if ts_dtype.time_zone is None:
+        raise ValueError("`timestamp` must be tz-aware before assigning a CME session date.")
+
+    if df.is_empty():
+        return df.with_columns(pl.lit(None, dtype=pl.Date).alias(output))
+
+    sorted_df = df.sort("timestamp")
+    min_ts = sorted_df["timestamp"].min()
+    max_ts = sorted_df["timestamp"].max()
+    assert min_ts is not None and max_ts is not None
+    schedule = get_cme_schedule(
+        min_ts.date() - dt.timedelta(days=2),
+        max_ts.date() + dt.timedelta(days=2),
+        calendar_name=calendar_name,
+        timezone=ts_dtype.time_zone,
+    )
+
+    joined = sorted_df.join_asof(
+        schedule.select("session_date", "market_open", "market_close"),
+        left_on="timestamp",
+        right_on="market_open",
+        strategy="backward",
+    )
+    in_session = (
+        pl.col("market_open").is_not_null()
+        & (pl.col("timestamp") >= pl.col("market_open"))
+        & (pl.col("timestamp") < pl.col("market_close"))
+    )
+    return joined.with_columns(
+        pl.when(in_session).then(pl.col("session_date")).otherwise(None).alias(output)
+    ).select(*df.columns, output)
+
+
 def count_trading_days(
     start_date: dt.date,
     end_date: dt.date,

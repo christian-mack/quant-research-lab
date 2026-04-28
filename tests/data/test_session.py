@@ -255,6 +255,19 @@ def test_get_cme_schedule_columns_and_tz() -> None:
     assert sched.height >= 5
 
 
+def test_assign_cme_session_date_set_only_when_in_session() -> None:
+    """``cme_session_date`` is null during maintenance break; non-null in RTH."""
+    z = ZoneInfo("America/Chicago")
+    rows = [
+        dt.datetime(2024, 3, 4, 9, 0, tzinfo=z),
+        dt.datetime(2024, 3, 4, 16, 30, tzinfo=z),
+    ]
+    df = pl.DataFrame({"timestamp": rows})
+    out = session.assign_cme_session_date(df)
+    assert out["cme_session_date"][0] == dt.date(2024, 3, 4)
+    assert out["cme_session_date"][1] is None
+
+
 _REAL_DATA_FILE = data_loader.default_data_root() / "MNQ 03-26.Last.txt"
 _REAL_DATA_AVAILABLE = _REAL_DATA_FILE.is_file()
 _REAL_DATA_SKIP_REASON = (
