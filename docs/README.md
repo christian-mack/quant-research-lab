@@ -36,6 +36,8 @@ Documents in the `docs/` directory are organized by purpose:
 
 - **`lessons-log.md`** — Append-only record of findings, surprises, invalidated assumptions, and post-mortems. Read this before starting major work to benefit from prior learnings.
 - **`ai-project-instructions.md`** — Rules and conventions for AI coding agents and human collaborators working in this project. Code style, correctness requirements, research methodology, lessons log rules.
+- **`nt8-backtest-methodology.md`** — NinjaTrader 8 backtest settings baseline for Flux V1 (commissions, slippage, fills, sessions). **Operator-maintained** checklist; required input for M4 defaults and M6 NT8 comparison.
+- **`m4-backtest-engine-design.md`** — Pre-implementation design for the Python backtest engine: configuration knobs (mapped from PT3), event loop, and trade log schema. **Operator approval required** before M4 coding starts.
 
 ---
 
@@ -49,6 +51,7 @@ If you're an AI agent, new collaborator, or future-self returning to this projec
 4. **AI Project Instructions** — understand the conventions
 5. **Lessons Log** — skim recent entries for relevant findings
 6. **Phase Plan** — reference when working on specific milestones
+7. **NT8 methodology** (`nt8-backtest-methodology.md`) and **M4 engine design** (`m4-backtest-engine-design.md`) — when working on backtest / execution assumptions
 
 ---
 

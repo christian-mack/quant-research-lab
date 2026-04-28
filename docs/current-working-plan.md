@@ -3,7 +3,7 @@
 **Plan period:** Days 1-30 of Phase 1
 **Phase:** 1 — Python Research Infrastructure
 **Status:** Active
-**Last updated:** April 28, 2026 — M3 indicators complete; PT3 slotted as M4 prerequisite
+**Last updated:** April 28, 2026 — PT3 scaffold + M4 design docs; operator fill-in and design approval gate before M4 code
 **Next review:** Weekly; full plan refresh at day 30
 **Related documents:** `program-charter.md`, `phase-1-detailed-plan.md`, `ai-project-instructions.md`, `lessons-log.md`
 
@@ -102,8 +102,9 @@ Update this document weekly. Add entries to the lessons log ad hoc. Refer to the
 - [x] M3: Unit tests for each (`tests/indicators/`); pandas-ta cross-checks where applicable (Williams %R ``talib=False``, SMA/EMA ``talib=False``); VWAP vs hand arithmetic + per-session numpy cumsum on real data.
 
 ### M3 closeout / M4 gate (before starting the backtest engine)
-- [ ] **PT3: NT8 backtest methodology documentation** — data ranges, fill model, commissions, slippage, per-module NT8 settings. **Prerequisite for M4:** the Python backtest engine's default execution assumptions must trace to this document so M6 NT8 comparison is apples-to-apples. Complete PT3 immediately after M3 code lands, before M4 design work.
-- [ ] M4: Design backtest engine architecture — document design decisions before implementing
+- [~] **PT3: NT8 backtest methodology** — scaffold + checklist in `docs/nt8-backtest-methodology.md` (2026-04-28). **Operator must fill OPERATOR REQUIRED sections** from NT8 exports/screenshots before M4 defaults are frozen.
+- [~] **M4: Backtest engine design** — `docs/m4-backtest-engine-design.md` (pre-implementation). **Operator review required** before any M4 implementation PR.
+- [ ] M4: Design approval recorded in `m4-backtest-engine-design.md` §9; then implementation begins (`Design backtest engine architecture` → done when code lands)
 - [ ] M4: Implement core event loop — bar-by-bar iteration with strategy callbacks
 - [ ] M4: Implement order management — market orders first, then limit and stop
 - [ ] M4: Implement position tracking and P&L calculation
