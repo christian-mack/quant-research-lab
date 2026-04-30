@@ -24,6 +24,43 @@
 
 ## Entries
 
+## 2026-04-28 — Income target is the constraint; architecture is empirical
+
+**Phase:** Program-wide (charter / roadmap framing)
+**Context:** Reviewing program documentation after a production configuration change and clarifying what actually gates progress toward the stated financial goal.
+**Finding:** The **$500K–$1M/yr net income target** is the hard constraint. **System shape** (single- vs multi-module, which execution stack, whether a regime overlay exists, Flux vs Onyx, etc.) is **means**, not **ends**. Strategy **generations** (Flux V1/V2/V3, Onyx V1, …) should be read as the **current best-understood path** to that income goal — a structured way to sequence **investigations** — not as a fixed ladder where each step is “the next architecture we must build.” Phase boundaries stay useful for scoping work, but their **justification** shifts from “predetermined next build” to **“next empirical investigation toward income.”** What advances the goal is decided by evidence, not by the table order in the charter.
+**Implication:** Charter, roadmap exit criteria, and Phase 2 narrative should **not** treat multi-module expansion or specific follow-on generations as assumed successes. Documentation should describe phases as **hypothesis tests** toward income, with explicit room to prefer simpler live configurations if they perform better on **both** backtest-like metrics and **live correspondence**. Downstream edits: program charter (program structure + principles), Phase 2 scope/exit language, any “V2 starter” / README summaries that still frame Phase 2 only as “replace broken modules.”
+**Artifact:** Operator decision (production config + program reframing); pending coordinated doc updates (`program-charter.md`, roadmap/README Phase 2 wording).
+
+---
+
+## 2026-04-28 — Backtest-to-live alignment is first-class validation
+
+**Phase:** Program-wide (research and gates)
+**Context:** Aligning research and phase gates with how live capital is actually risked: backtests are necessary but not sufficient when execution, feeds, and runtime behavior diverge from research assumptions.
+**Finding:** **Backtest-to-live alignment** must be treated as a **first-class research goal**, not an afterthought or operational nicety. A configuration is **not** validated by **backtest performance alone**. Evidence needs **both** (a) acceptable risk-adjusted / income outcomes under the research backtest protocol and (b) **demonstrated correspondence** (or explainable, bounded gaps) between that backtest and live/SIM behavior over defined windows. Gates that only reference paper performance risk **overfitting the simulator** and shipping structure that fails under real constraints.
+**Implication:** Phase milestone wording, working-plan checks, and future “minimum edge” definitions should explicitly require **live-alignment evidence** alongside backtest stats. Research prioritization may favor simpler systems that **calibrate cleanly** to live over complex stacks that **only** look good in backtest. Ties directly to NT8 methodology documentation, port-fidelity checks, and Phase 1b side-by-side validation themes.
+**Artifact:** Charter principle (pending); existing/pending methodology artifacts (`nt8-backtest-methodology.md`, divergence analyses).
+
+---
+
+## 2026-04-28 — Production cut to ORB+Opt3; tri-module economics invalidated on 6-year data
+
+**Phase:** Live operations / research framing
+**Context:** Extended 6-year backtest validation and Apex eval pass-rate testing drove a production configuration decision; tri-module ROI projections in the charter were tied to an obsolete baseline.
+**Finding:** Production was changed from the quad-module config (Momentum/ORB/Range/AfternoonMR) at Config E sizing (0/16/16/20) to ORB-only with the LatestEntryHourET=11 optimization (referred to as ORB+Opt3 in operator notes). Current sizing: qty=10 for $50K EOD eval phase, qty=3 for funded phase (currently running on a $50K PA at $49,418 balance, $1,418 from liquidation). Decision was driven by 6-year backtest results (2020-2026) showing:
+- ORB+Opt3 alone: $10,885/yr per contract, 63.8% WR, 7/7 positive years, MaxDD -$17,880
+- V1 production tri-module (no Opt3): $3,060/yr, 58.5% WR, 5/7 positive years, MaxDD -$44,490
+The non-ORB modules collectively destroyed ~$45K of ORB's value across the 6-year period. Momentum specifically was net-negative through displacement — its presence cost ORB more in lost trades than Momentum produced from its own entries. The earlier 18-month analysis that concluded the tri-module config was profitable was invalidated by extended validation, providing concrete evidence for the broader meta-lesson about validation methodology (entry 2 above).
+
+For prop firm scenarios specifically, ORB+Opt3 at qty=10 produced the best Apex 4.0 eval pass rate (~35.5% in ~9 days average) of all configurations tested. Multi-module configs at meaningful sizing blew more often than they passed. The slower trade frequency of ORB-only is a feature for prop firm survival, not a bug.
+
+**Implication:** ROI projections in the charter and roadmap based on tri-module baseline P&L (~$32K/yr) are obsolete. New baseline for improvement targets is ORB+Opt3 performance. Per-account funded income realistic projection (~$8K/yr at qty=3 funded sizing) significantly trails the program's $65K-$100K per-account target — this gap is now an explicit research priority, not an assumption. The charter's program structure should reframe phase justifications toward "investigations that close the per-account income gap" rather than "predetermined architectural progressions." Production code now has ORBLatestEntryHourET=11 set; this configuration value should be captured in nt8-backtest-methodology.md when PT3 completes.
+
+**Artifact:** Six-year NT8 backtest comparison (2020–2026); Apex 4.0 eval pass-rate study; live PA snapshot at decision; production `ORBLatestEntryHourET=11`.
+
+---
+
 ## 2026-04-27 — Source NT8 export timestamps are UTC, not CME local time
 
 **Phase:** 1
