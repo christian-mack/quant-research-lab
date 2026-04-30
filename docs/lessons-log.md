@@ -24,6 +24,16 @@
 
 ## Entries
 
+## 2026-04-30 — Phase 1b after Phase 1; Python-first port spec to Sierra
+
+**Phase:** 1 / program infrastructure  
+**Context:** Production was cut to ORB+Opt3 with explicit validation and income-gap lessons (2026-04-28 entries); program docs were reframed around income as constraint and backtest-to-live alignment. That cascade raised how **execution migration** should relate to **research**: still necessary for NT8 feed integrity, but not in a way that competes with completing validated Python strategy logic first.  
+**Finding:** **Sierra Chart migration remains the plan** — **not** deferred in the sense of "maybe later / maybe never" — but **sequenced after Phase 1 completes**, not **in parallel** with it. Phase 1 produces **validated Python strategy logic** (especially **M5** implementations and **M6** NT8 parity); that **Python is the primary specification** for ACSIL (or chosen platform) porting; **NT8 C# is secondary reference** for cross-check and implementation detail. **NT8 → Sierra directly** would skip the validated research chain and keep spec ambiguity in band. The **M1–M9 research track is the same** whether live runs on NT8 or eventually on Sierra; only **when Phase 1b port work begins** is gated on Phase 1 completion. **NT8 remains production** for all of Phase 1 and until Phase 1b passes **side-by-side SIM validation** against NT8. Separately, **Apex/Tradovate API** access for funded execution is **already understood to be restricted** — a dedicated "email Apex / PT7" task in the working plan was **redundant** and is removed.  
+**Implication:** Charter **Phase 1** parallel tracks must **not** imply Phase 1b during Phase 1. **Phase 1b** entry is **Phase 1 milestone gate passed** plus trial access; scope encodes **Python-first** port, **chart/platform route** (not API-first), and **live deployment** continuity on NT8 until validation. **`current-working-plan.md`**: drop **PT7** lines; note Phase 1b sits after the 30-day Phase 1 window. **`phase-1-detailed-plan.md`** §PT7 aligned so "parallel PT7 weeks" don't reappear.  
+**Artifact:** Pending commit (`program-charter.md`, `current-working-plan.md`, `phase-1-detailed-plan.md`); this entry pending approval.
+
+---
+
 ## 2026-04-28 — Income target is the constraint; architecture is empirical
 
 **Phase:** Program-wide (charter / roadmap framing)

@@ -348,18 +348,18 @@ These items do not block Phase 1 milestones but should progress alongside them:
 - Priority: Jun-Jul 2024 first (falls in likely OOS windows)
 - Not a blocker for Phase 1 — gaps are documented and handled — but preferred completed before M6 runs
 
-### PT7: Execution Platform Migration (Phase 1b)
-- Objective: replace NT8 as execution platform to resolve data feed stability issues
-- Full scope defined in charter Phase 1b section
-- Key milestones within PT7:
-  - Confirm prop firm API access policy (Week 1)
-  - Platform selection and trial environment setup (Week 2)
-  - Proof-of-concept: port one Flux V1 module (Week 3)
-  - Complete porting remaining modules (Weeks 4-6)
+### PT7: Execution Platform Migration (Phase 1b) — **after Phase 1**
+- **Timing:** Phase 1b **begins after** the Phase 1 milestone gate passes — **not** in parallel with M1–M9. Full scope: `program-charter.md` Phase 1b.
+- **Rationale:** Validated **Python** module logic (M5, M6 parity) is the **primary specification** for the port; NT8 C# is **secondary**. Sierra Chart (ACSIL) remains the leading target.
+- **Research path:** M1–M9 proceed **identically** regardless of live execution stack; only the **start** of porting work waits on Phase 1 completion.
+- **Milestones within Phase 1b (high level):**
+  - Sierra Chart (or selected alternative) trial / setup **after** Phase 1 gate
+  - Proof-of-concept port from **Python spec** (production path e.g. ORB+Opt3 first)
+  - Remaining module port scope per live/research needs
   - Side-by-side SIM validation vs. NT8 (30+ trading days)
   - Funded account migration plan (draft before migration begins)
-- Estimated effort: 60-100 hours over 8-12 weeks (runs longer than Phase 1a research infrastructure)
-- Runs independently of M1-M9 — does not block primary development path
+- **Apex / Tradovate API** for funded execution — **not** pursued as a gate; treated as restricted / non-viable for this program’s live path (no redundant “confirm API” task).
+- Estimated effort: 60–100 hours in a **post–Phase 1** block (not overlapping primary Phase 1 research capacity).
 
 ---
 

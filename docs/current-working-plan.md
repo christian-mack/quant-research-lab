@@ -3,7 +3,7 @@
 **Plan period:** Days 1-30 of Phase 1
 **Phase:** 1 — Python Research Infrastructure
 **Status:** Active
-**Last updated:** April 29, 2026 — PT3 screenshot handoff path (`docs/nt8-screenshots/`); **no M4 implementation** until methodology *Complete* + M4 design §9 signed; Week 1 M1 checkboxes synced to actuals
+**Last updated:** April 30, 2026 — Phase 1b (Sierra migration) clarified in charter as **after Phase 1**, not parallel; **PT7 removed** (Apex API inquiry redundant — access restricted)
 **Next review:** Weekly; full plan refresh at day 30
 **Related documents:** `program-charter.md`, `phase-1-detailed-plan.md`, `ai-project-instructions.md`, `lessons-log.md`
 
@@ -21,7 +21,7 @@ Update this document weekly. Add entries to the lessons log ad hoc. Refer to the
 
 **Primary development goal:** Complete M1-M5 of Phase 1 (environment through module implementations) and begin M6 (NT8 validation). At 20 hours/week of focused development, this is 80 hours of capacity covering an estimated 57-85 hours of primary-path work with buffer for the start of M6.
 
-**Parallel tracks:** PT1-PT4 active throughout. PT5 and PT6 fit in as time allows.
+**Parallel tracks:** PT1–PT4 active throughout. PT5 and PT6 fit in as time allows. **Phase 1b / Sierra Chart** porting is **not** in this 30-day window — it starts after the **Phase 1** milestone gate passes (see `program-charter.md` Phase 1b).
 
 **Explicitly out of scope for this 30 days:**
 - M6 completion (spans into next 30-day window)
@@ -50,8 +50,6 @@ Update this document weekly. Add entries to the lessons log ad hoc. Refer to the
 - [ ] PT2: Track status of in-progress eval account; decide on next eval purchase timing
 - [~] PT3: NT8 methodology — scaffold in `docs/nt8-backtest-methodology.md`; **operator commits screenshots to `docs/nt8-screenshots/`** then doc merge to *Complete*
 - [ ] PT4: Acquire Lopez de Prado *Advances in Financial Machine Learning* (if not already owned)
-- [ ] PT7 (Phase 1b): Contact Apex support to confirm whether Tradovate API access is permitted for their funded accounts. One email or support ticket. Document the answer regardless of outcome.
-
 ### Week 1 success criteria
 - Environment runs a Jupyter notebook with polars operations
 - At least one MNQ contract file loaded and inspected in Python
@@ -81,8 +79,6 @@ Update this document weekly. Add entries to the lessons log ad hoc. Refer to the
 - [ ] PT2: Log in-progress eval status; purchase next eval if appropriate per cadence
 - [ ] PT3: **M3 closeout / M4 gate —** complete NT8 backtest methodology documentation (see Week 3 ``M3 closeout`` section)
 - [ ] PT4: Begin Lopez de Prado reading — start with chapters on backtest overfitting (likely Ch. 11) and deflated Sharpe (likely Ch. 14)
-- [ ] PT7 (Phase 1b): Based on Apex response, commit to platform direction. If API route is available, begin API research. If not, start Sierra Chart trial (~$26/month rental). Install locally (not on VPS) for initial evaluation.
-
 ### Week 2 success criteria
 - Full 6-year MNQ dataset loaded into polars with validated bar count and session labels
 - ATR indicator implemented and passing unit tests
@@ -114,8 +110,6 @@ Update this document weekly. Add entries to the lessons log ad hoc. Refer to the
 - [ ] PT2: Review eval progress; note any pattern emerging in pass rate data
 - [ ] PT4: Continue Lopez de Prado reading
 - [ ] PT5: Scope instrumentation work for live Flux V1 (per-module trade frequency logging) — estimate effort
-- [ ] PT7 (Phase 1b): Platform proof-of-concept. Port one Flux V1 module (start with simplest — likely Momentum or ORB) to the chosen platform. Assess development experience, toolchain quality, and stability during the port. This is a go/no-go decision point — if the platform feels wrong here, pivot before committing more time.
-
 ### Week 3 success criteria
 - All required indicators implemented and validated
 - Backtest engine can run a trivial strategy end-to-end without crashing
@@ -143,8 +137,6 @@ Update this document weekly. Add entries to the lessons log ad hoc. Refer to the
 - [ ] PT2: Eval sample tracking
 - [ ] PT4: Continue reading
 - [ ] PT6: Begin investigation of data gap backfill sources — cost and feasibility
-- [ ] PT7 (Phase 1b): Continue module porting. Target: two modules ported by end of Week 4. Begin planning side-by-side SIM validation setup (how to run both platforms concurrently, where, with what logging).
-
 ### Week 4 success criteria
 - Backtest engine complete and validated
 - ORB and Momentum modules implemented with passing unit tests

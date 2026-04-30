@@ -86,7 +86,8 @@ Phases are the unit of work. Each phase has entry criteria, defined scope, a mil
 - Documentation of current NT8 backtest methodology for validation reference
 - Preparatory reading: Lopez de Prado *Advances in Financial Machine Learning*, specifically chapters on backtest overfitting, deflated Sharpe ratio, purged cross-validation
 - Instrumentation of live system to log per-module trade frequency for regime analysis
-- **Phase 1b: Execution platform migration** (see below)
+
+**Phase 1b (execution platform migration)** is **not** a parallel track during Phase 1 — it **begins after** the Phase 1 milestone gate passes (see Phase 1b below).
 
 ---
 
@@ -96,14 +97,24 @@ Phases are the unit of work. Each phase has entry criteria, defined scope, a mil
 
 **Problem statement:** NT8 data feed stalls 2-3 times daily for variable durations on live accounts. This creates periods where modules operate on stale state, corrupting the relationship between live results and backtest expectations. Running funded accounts in this state is both an integrity risk and a pollution of the live pass-rate data being collected.
 
-**Scope:** Evaluate and migrate to a more stable execution platform. Current leading candidate: Sierra Chart (ACSIL-based strategy development, Apex-approved, stronger stability reputation than NT8). Alternatives considered: MotiveWave, Quantower, direct Tradovate API (ruled out if prop firm API access is prohibited). Final choice contingent on verification of prop firm compatibility and successful proof-of-concept port.
+**Sequencing — after Phase 1, not parallel:** Phase 1b **starts after** the **Phase 1 milestone gate passes**. It does **not** run in parallel with building the Python research infrastructure. **Sierra Chart** (ACSIL) remains the **leading target** platform (Apex-compatible, stronger stability reputation than NT8); alternatives (MotiveWave, Quantower, etc.) remain available if trial evidence warrants.
+
+**Rationale for sequencing:** Phase 1 produces **validated strategy logic in Python** — unit-tested module implementations (M5) and NT8-parity validation (M6) — before any port begins. That **Python is the primary specification** for the execution platform port; **NT8 C# is secondary reference** (cross-check and fills/infra detail only). Porting **directly from NT8 to Sierra** would inherit NT8’s specification ambiguity and skip the validated research artifact chain; **Python-first** is cleaner and matches the program’s **backtest-to-live** discipline.
+
+**Research vs execution (independence):** The Python **research environment** and the **M1–M9 milestone path** are **independent of which platform runs live** — the same research work proceeds regardless. Only the **start** of Phase 1b port work is gated on Phase 1 completion; the **content** of Phase 1 does not change based on execution stack.
+
+**Production continuity:** **NT8 remains** the live execution platform for the full Phase 1 period and until Phase 1b achieves **side-by-side SIM validation** against NT8 on the new stack (then phased migration per plan).
+
+**Scope:** Evaluate and migrate to the selected platform. **Direct prop-firm / Tradovate API execution** is **not** treated as a viable path for funded accounts (access effectively restricted); plan assumes a **chart/platform** execution route (e.g. Sierra ACSIL), not API-first. Final platform choice still contingent on compatibility and proof-of-concept port.
+
+**Port specification:** Implement on the new platform from **Phase 1 Python module logic** as the source of truth; use NT8/C# where needed for reconciliation. Port **scope** follows the **live deployment plan** (e.g. production ORB+Opt3 first; additional modules as required for parity or research).
 
 **Entry Criteria:**
-- Prop firm API access policy confirmed (determines whether direct API is viable)
+- **Phase 1 milestone gate passed** (Python research infrastructure complete per charter Phase 1 exit criteria)
 - Sierra Chart (or selected alternative) trial environment accessible
 
 **Exit Criteria:**
-- All Flux V1 modules ported to new platform with unit-test-verified correctness
+- **Strategy logic from Phase 1 Python implementations** ported to the new platform with correctness verified (unit tests / deterministic checks as appropriate; NT8 as secondary cross-check)
 - Side-by-side SIM validation against NT8 for 30+ trading days showing fill quality, trade timing, and P&L within acceptable divergence
 - Platform operational on dev machine or VPS with documented reliability over the validation window
 - Migration plan for funded accounts drafted (one account at a time, starting with smallest)
@@ -112,10 +123,10 @@ Phases are the unit of work. Each phase has entry criteria, defined scope, a mil
 - Selected platform reveals stability problems comparable to NT8 during validation → return to evaluation, consider alternative candidate
 - Port effort exceeds 6 weeks without completion → reassess whether platform choice is correct
 
-**Relationship to Phase 1a:** Phase 1b runs in parallel with Phase 1a (Python research infrastructure). Both tracks are active concurrently. They are independent — Phase 1b progress does not block Phase 1a milestones and vice versa. However, the Python research environment built in Phase 1a will eventually inform how strategies are developed and ported in future phases, so coordination matters.
+**Relationship to Phase 1:** Phase 1b is **sequenced after** Phase 1. Phase 1 owes **no** porting or Sierra trial work to clear its gate; Phase 1b owes its **spec** to Phase 1’s Python artifacts.
 
 **Parallel Tracks (during Phase 1b):**
-- Continued NT8 operation until migration is validated (accept ongoing integrity cost as the price of deliberate migration)
+- Continued **NT8** live operation until migration is validated (accept ongoing integrity cost until side-by-side validation passes)
 - Live comparison logging during side-by-side validation
 
 ---
@@ -382,3 +393,4 @@ The program itself has stop conditions, not just individual phases. If any of th
 | 2026-04-20 | Initial charter | Program formalization after Flux V1 deployment and V2 scoping |
 | 2026-04-21 | Added Phase 1b: Execution Platform Migration | NT8 data feed stability compromising live integrity; migration treated as parallel infrastructure track rather than deferred work |
 | 2026-04-28 | Income constraint & empirical architecture; ORB+Opt3 baseline; Phase 2 relative gates; conditional Onyx / future framing | Production cut + lessons log: architecture serves income target; tri-module dollar gates obsolete; leading-candidate wording for late phases |
+| 2026-04-30 | Phase 1b sequenced **after** Phase 1; Python-first port spec; Sierra Chart remains target | Validated Python (M5/M6) is primary port specification; NT8 C# secondary; M1–M9 independent of live stack; NT8 production until side-by-side SIM passes |
