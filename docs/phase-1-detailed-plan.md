@@ -391,4 +391,4 @@ When Phase 1 completes, the following artifacts exist and are committed to the r
 - Regime detection scaffolding with basic rule-based classifier
 - Lessons log entries for all significant findings and decisions
 
-Exit gate review: confirm each of the seven milestone gate criteria is met with supporting artifact evidence. If yes, Phase 1 closes and Phase 2 (Flux V2 module research) begins.
+Exit gate review: confirm each of the seven milestone gate criteria is met with supporting artifact evidence. If yes, Phase 1 closes and Phase 2 begins — **Flux V2 configuration research** vs. the **ORB+Opt3** frozen baseline (new modules optional; see charter and `flux-v2-module-search-starter.md`).

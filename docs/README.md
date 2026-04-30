@@ -9,11 +9,11 @@
 
 A multi-year program to build a portfolio of systematic trading strategies, progressing from retail-level systematic trading to quant-level edge sources. The program spans multiple strategy generations:
 
-- **Flux V1** (deployed) — NT8-based intraday NQ/MNQ module system
-- **Flux V2** (planned) — Data-informed systematic with Python research environment
-- **Flux V3** (planned) — Regime-overlay meta-strategy with ML components
-- **Onyx V1** (planned) — Multi-instrument systematic (first bonafide quant-level system)
-- **Future generations** (placeholder) — Direction determined by what earlier generations teach
+- **Flux V1** (deployed) — NT8 intraday NQ/MNQ; **live: ORB+Opt3** (see `lessons-log.md`; historical quad-module stack for repro only)
+- **Flux V2** (planned) — Python research: **configuration investigations** vs ORB+Opt3 baseline (modules optional; see `flux-v2-module-search-starter.md`)
+- **Flux V3** (leading candidate) — Regime-overlay / meta-gating **if** Phase 2 warrants
+- **Onyx-class V1** (leading candidate) — Multi-instrument systematic **if** economics justify after Flux phases; not “next” by default
+- **Future generations** (placeholder) — Leading candidates only after major-phase evidence
 
 Long-term income target: $500K-$1M/year net across multiple funded prop firm accounts.
 
@@ -61,9 +61,9 @@ If you're an AI agent, new collaborator, or future-self returning to this projec
 
 **What's being built:** Python-based research environment using polars, numpy, custom event-driven backtest engine. Replaces NT8 as research platform. NT8 remains the execution platform.
 
-**What's running live:** Flux V1 on Apex EOD eval accounts. Quad-module architecture (Momentum, ORB, Range, AfternoonMR) with Config E (0/16/16/20) tri-module sizing in production.
+**What's running live:** Flux V1 on Apex — **ORB+Opt3** (LatestEntryHourET=11). **Eval:** qty 10 on $50K EOD. **Funded:** qty 3 on $50K PA (see `lessons-log.md` for economics and validation).
 
-**What's next after Phase 1:** Phase 2 — Flux V2 module research and deployment. Replacing AfternoonMR and Range with new modules validated on 6-year data with proper statistical rigor.
+**What's next after Phase 1:** Phase 2 — **investigate configurations that improve income vs ORB+Opt3** (6-year protocol, statistical rigor, **backtest-to-live** alignment). New modules are optional; sizing, filters, and other approaches are in scope.
 
 ---
 
@@ -71,8 +71,11 @@ If you're an AI agent, new collaborator, or future-self returning to this projec
 
 ```
 repo_root/
-├── README.md                  # This file
-├── docs/                      # All project documentation
+├── README.md                  # Repo entry; links to docs/
+├── flux-v2-module-search-starter.md  # Phase 2 scope primer (TODO: consider moving under docs/)
+├── docs/
+│   ├── README.md              # Program overview (this file)
+│   └── …
 ├── src/                       # Production Python modules
 ├── tests/                     # Unit tests (pytest)
 ├── notebooks/                 # Jupyter notebooks for research
@@ -97,6 +100,7 @@ These principles guide all work in this project:
 5. **Infrastructure investments compound** — Build research infrastructure properly once; it serves every subsequent strategy.
 6. **Document as a habit** — Weekly working plan updates, ad hoc lessons log entries. Documentation decay is silent and costly.
 7. **Prop firm compliance is non-negotiable** — All strategies must respect Apex constraints.
+8. **Backtest-to-live alignment** — Configurations are validated by research backtests **and** demonstrated live/SIM correspondence, not paper metrics alone.
 
 ---
 
