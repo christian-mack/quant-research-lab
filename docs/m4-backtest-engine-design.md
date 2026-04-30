@@ -1,6 +1,6 @@
 # M4 Backtest Engine — Design (pre-implementation)
 
-**Status:** *Design for operator review.* No implementation until this document and `docs/nt8-backtest-methodology.md` are aligned on defaults and TBDs are resolved or explicitly flagged as “Python-only assumption.”
+**Status:** *Design for operator review.* **No M4 implementation work** until **`docs/nt8-backtest-methodology.md`** is *Complete* (PT3) **and** **§9** below is signed off.
 
 **Related:** `docs/nt8-backtest-methodology.md` (PT3), `docs/phase-1-detailed-plan.md` (M4/M5/M6).
 

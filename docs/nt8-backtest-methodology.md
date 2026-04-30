@@ -2,7 +2,7 @@
 
 **Document type:** Reference (not a lessons-log entry).  
 **Purpose:** Single source of truth for how Flux V1 strategies were (or are) backtested in NinjaTrader 8, so the Python engine (M4) and M6 validation can mirror or consciously diverge from NT8.  
-**Status:** *Scaffold* — structure and Python/research-repo context are filled in. **Sections marked “OPERATOR REQUIRED” must be completed from your live NT8 workspace** (Strategy Analyzer settings, order handling, commissions UI, instrument properties, screenshots or exported summaries acceptable).
+**Status:** *Scaffold* — structure and Python/research-repo context are filled in. **Sections marked “OPERATOR REQUIRED” must be completed from your live NT8 workspace** (Strategy Analyzer settings, order handling, commissions UI, instrument properties, screenshots or exported summaries acceptable). **Screenshot drop zone:** `docs/nt8-screenshots/` (see that folder’s `README.md`). After images are committed, an agent pass merges extracted values into §§2–9 and updates §11.
 
 **Sequencing (approved):** PT3 (this document) → M4 design → operator review → M4 implementation.
 
@@ -128,14 +128,18 @@ For **each** module in scope for M6 (ORB, Momentum, Range, AfternoonMR — adjus
 
 ## 11. Operator input checklist (gather before locking M4 defaults)
 
-Paste or attach to this task (does not need to live in git if sensitive):
+**Staging:** Commit evidence under **`docs/nt8-screenshots/`** (see `docs/nt8-screenshots/README.md` for suggested filenames). Plain-text sidecars (e.g. session template name) are welcome.
 
-1. [ ] Strategy Analyzer **screenshots** (general + **Order handling** / **slippage** / **historical fill** pages if separate).
-2. [ ] **Commission** template definition (text export ok).
-3. [ ] **Instrument** MNQ (and any alternate series) properties: tick size, point value, margin (optional).
-4. [ ] Per-module **strategy parameters** (screenshot or serialized settings).
-5. [ ] **Date range(s)** used for “official” baseline backtests per module.
-6. [ ] One **sample trade list** or Summary snippet for sanity-checking fill timestamps vs bar index.
+**After artifacts are on `main`:** Request a doc pass to transcribe **concrete values** into §§2–9 (replacing OPERATOR REQUIRED placeholders), tick the boxes below, set **Status** at document top to **Complete** with date, add **Revision history**, then proceed to **`docs/m4-backtest-engine-design.md` §9** approval.
+
+Paste or attach to this task (sensitive items may stay out of git; then summarize numbers here only):
+
+1. [ ] Strategy Analyzer **screenshots** in `docs/nt8-screenshots/` (general + **Order handling** / **slippage** / **historical fill** pages if separate).
+2. [ ] **Commission** template definition (screenshot, text export, or values typed into §5).
+3. [ ] **Instrument** MNQ (and any alternate series) properties in `docs/nt8-screenshots/` or §2: tick size, point value, margin (optional).
+4. [ ] Per-module **strategy parameters** (screenshot in `docs/nt8-screenshots/` or table in §8).
+5. [ ] **Date range(s)** used for “official” baseline backtests per module (typed into §3 / §8).
+6. [ ] One **sample trade list** or Summary snippet for sanity-checking fill timestamps vs bar index (screenshot, CSV path note, or §9).
 
 When the checklist is complete, update §§2–9 by replacing tables with finalized values and bump **Status** at the top from *Scaffold* to *Complete* with date.
 
@@ -146,3 +150,4 @@ When the checklist is complete, update §§2–9 by replacing tables with finali
 | Date | Change |
 |------|--------|
 | 2026-04-28 | Initial scaffold; operator checklist; data/session context from research repo. |
+| 2026-04-29 | §11: screenshot staging under `docs/nt8-screenshots/`; merge workflow after operator commit. |

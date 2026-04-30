@@ -3,7 +3,7 @@
 **Plan period:** Days 1-30 of Phase 1
 **Phase:** 1 — Python Research Infrastructure
 **Status:** Active
-**Last updated:** April 28, 2026 — PT3 scaffold + M4 design docs; operator fill-in and design approval gate before M4 code
+**Last updated:** April 29, 2026 — PT3 screenshot handoff path (`docs/nt8-screenshots/`); **no M4 implementation** until methodology *Complete* + M4 design §9 signed; Week 1 M1 checkboxes synced to actuals
 **Next review:** Weekly; full plan refresh at day 30
 **Related documents:** `program-charter.md`, `phase-1-detailed-plan.md`, `ai-project-instructions.md`, `lessons-log.md`
 
@@ -38,17 +38,17 @@ Update this document weekly. Add entries to the lessons log ad hoc. Refer to the
 
 ### Development tasks
 - [x] M1: Cursor IDE in use on Windows (Python/Jupyter extensions); WSL2 deferred per lessons-log 2026-04-26
-- [ ] M1: Install uv; project repo already on GitHub (private)
-- [ ] M1: Initialize Python project with pyproject.toml; pin polars, numpy, scipy, matplotlib, plotly, pytest, jupyter, pandas-ta (for validation reference)
-- [ ] M1: Set up .gitignore for Python + Jupyter + data artifacts
-- [ ] M1: Smoke test — notebook runs, polars loads sample data, commit to git
+- [x] M1: Install uv; project repo already on GitHub (private)
+- [x] M1: Initialize Python project with pyproject.toml; pin polars, numpy, scipy, matplotlib, plotly, pytest, jupyter, pandas-ta (for validation reference)
+- [x] M1: Set up .gitignore for Python + Jupyter + data artifacts
+- [x] M1: Smoke test — notebook runs, polars loads sample data, commit to git
 - [x] M2: Begin data loader — read one MNQ .txt file, produce polars DataFrame with parsed timestamps (`src/quant_research/data/data_loader.py::load_contract_file`)
 - [x] M2: Validate single-file load matches raw file contents (bar count, first/last timestamp) — see `tests/data/test_data_loader.py::test_real_mnq_03_26_*`
 
 ### Parallel tracks this week
 - [ ] PT1: Monitor live Flux V1 accounts daily
 - [ ] PT2: Track status of in-progress eval account; decide on next eval purchase timing
-- [ ] PT3: Start NT8 backtest methodology doc (finish as M3 closeout before M4 — see Week 3)
+- [~] PT3: NT8 methodology — scaffold in `docs/nt8-backtest-methodology.md`; **operator commits screenshots to `docs/nt8-screenshots/`** then doc merge to *Complete*
 - [ ] PT4: Acquire Lopez de Prado *Advances in Financial Machine Learning* (if not already owned)
 - [ ] PT7 (Phase 1b): Contact Apex support to confirm whether Tradovate API access is permitted for their funded accounts. One email or support ticket. Document the answer regardless of outcome.
 
