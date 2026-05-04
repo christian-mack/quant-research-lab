@@ -3,7 +3,7 @@
 **Plan period:** Days 1-30 of Phase 1
 **Phase:** 1 — Python Research Infrastructure
 **Status:** Active
-**Last updated:** April 30, 2026 — Phase 1b (Sierra migration) clarified in charter as **after Phase 1**, not parallel; **PT7 removed** (Apex API inquiry redundant — access restricted)
+**Last updated:** April 30, 2026 — **Path A** (M6 = ORB+Opt3 only; §8.6 directional) recorded in `nt8-backtest-methodology.md` §12; **M4 design review** next (`m4-backtest-engine-design.md` §§1–8 / §9).
 **Next review:** Weekly; full plan refresh at day 30
 **Related documents:** `program-charter.md`, `phase-1-detailed-plan.md`, `ai-project-instructions.md`, `lessons-log.md`
 
@@ -48,7 +48,7 @@ Update this document weekly. Add entries to the lessons log ad hoc. Refer to the
 ### Parallel tracks this week
 - [ ] PT1: Monitor live Flux V1 accounts daily
 - [ ] PT2: Track status of in-progress eval account; decide on next eval purchase timing
-- [~] PT3: NT8 methodology — scaffold in `docs/nt8-backtest-methodology.md`; **operator commits screenshots to `docs/nt8-screenshots/`** then doc merge to *Complete*
+- [x] PT3: NT8 methodology **`docs/nt8-backtest-methodology.md`** — **Complete** 2026-04-30; operator **Path A** sign-off §12 (M6 ORB+Opt3 only).
 - [ ] PT4: Acquire Lopez de Prado *Advances in Financial Machine Learning* (if not already owned)
 ### Week 1 success criteria
 - Environment runs a Jupyter notebook with polars operations
@@ -77,7 +77,7 @@ Update this document weekly. Add entries to the lessons log ad hoc. Refer to the
 ### Parallel tracks this week
 - [ ] PT1: Continued live operation monitoring
 - [ ] PT2: Log in-progress eval status; purchase next eval if appropriate per cadence
-- [ ] PT3: **M3 closeout / M4 gate —** complete NT8 backtest methodology documentation (see Week 3 ``M3 closeout`` section)
+- [x] PT3: **M4 gate —** NT8 methodology **Complete** + **Path A** sign-off; **M4 design** review in progress (`m4-backtest-engine-design.md` §9).
 - [ ] PT4: Begin Lopez de Prado reading — start with chapters on backtest overfitting (likely Ch. 11) and deflated Sharpe (likely Ch. 14)
 ### Week 2 success criteria
 - Full 6-year MNQ dataset loaded into polars with validated bar count and session labels
@@ -98,8 +98,8 @@ Update this document weekly. Add entries to the lessons log ad hoc. Refer to the
 - [x] M3: Unit tests for each (`tests/indicators/`); pandas-ta cross-checks where applicable (Williams %R ``talib=False``, SMA/EMA ``talib=False``); VWAP vs hand arithmetic + per-session numpy cumsum on real data.
 
 ### M3 closeout / M4 gate (before starting the backtest engine)
-- [~] **PT3: NT8 backtest methodology** — scaffold + checklist in `docs/nt8-backtest-methodology.md` (2026-04-28). **Operator must fill OPERATOR REQUIRED sections** from NT8 exports/screenshots before M4 defaults are frozen.
-- [~] **M4: Backtest engine design** — `docs/m4-backtest-engine-design.md` (pre-implementation). **Operator review required** before any M4 implementation PR.
+- [~] **PT3: NT8 backtest methodology** — **Complete** 2026-04-30; **Path A** (§12): M6 strict = **ORB+Opt3**; multi-module / §8.6 = **directional** only.
+- [~] **M4: Backtest engine design** — `docs/m4-backtest-engine-design.md`. **Methodology gate cleared** in §9; **§§1–8 section-by-section operator review in progress** — record full design approval when complete, then first M4 implementation PR.
 - [ ] M4: Design approval recorded in `m4-backtest-engine-design.md` §9; then implementation begins (`Design backtest engine architecture` → done when code lands)
 - [ ] M4: Implement core event loop — bar-by-bar iteration with strategy callbacks
 - [ ] M4: Implement order management — market orders first, then limit and stop

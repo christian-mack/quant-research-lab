@@ -309,8 +309,8 @@ Parsed from **row `PAAPEX3027390000003`** (`ORBQuantity = 3`, `ORBLatestEntryHou
 - Each setting in §§2–7 should map to a `BacktestRunSpec` / related field in `docs/m4-backtest-engine-design.md`, or an explicit **“Python uses X; NT8 uses Y”** delta.
 - **ORB+Opt3** / **ORBLatestEntryHourET** must match **§8.3–8.4** for the **6-year baseline** run configuration.
 - **$0** commission is a **conscious baseline simplification** — net P&L in Python for “apples-to-apples” M6 should match this assumption unless intentionally testing commission sensitivity.
-- **M6 strict parity:** **§8.3–8.4 + §4–7 + C# sources** — **not** the April multi-module lessons figures unless **§8.6** is operator-approved or a historical export appears.
-- **Multi-module April numbers:** **Directional** until quantities + third tri-module leg are confirmed (§8.6).
+- **M6 strict parity:** **§8.3–8.4 + §4–7 + C# sources** — **ORB+Opt3 only** (operator **Path A**, **2026-04-30**).
+- **Multi-module / April lessons figures:** **Directional reference only** — **not** a load-bearing M6 reproduction target. §8.6.2 / §8.6.3 remain **best-available source-derived approximations** if Phase 2 later needs multi-module experiments.
 
 ---
 
@@ -328,20 +328,18 @@ Evidence for this **Complete** revision is **committed artifacts** + operator ex
 
 ---
 
-## 12. Final methodology review — M4 §9 **not signed yet**
+## 12. Operator sign-off — **Path A** (M6 scope)
 
-PT3 remains **Complete**, but **do not sign** `docs/m4-backtest-engine-design.md` **§9** until you have **reviewed §8.6** (reconstructed historical configs) and accept **either**:
+**Accepted as-is:** **2026-04-30** (Christian).
 
-- **A)** **M6 scope = ORB+Opt3 exact** + multi-module April stats **directional only**, or  
-- **B)** You **annotate / correct** §8.6 (e.g. confirm **Config E → quantity** mapping) or attach a **recovered historical** Strategy property export.
+**Decision — Path A**
 
-After that decision, complete **M4 §9** as previously outlined.
+- **M6 reproduction scope:** **ORB+Opt3 only** (exported parameters + C# behavior in §§2–8).
+- **Historical multi-module** configs (lessons log, §8.6 quad/tri): **directional reference, not reproducible** in M6. §8.6.2 / §8.6.3 stand as **best-available source-derived approximations** until/unless Phase 2 work warrants fuller reconstruction with Python infrastructure in place.
 
-**Reference — M4 §9 checklist (unchanged intent):**
+**Rationale (operator):** Production simplification is settled. Re-validating historical multi-module numbers in Python is **not load-bearing**; Phase 2 is scored against **ORB+Opt3**. Pursuing exact historical reproducibility would cost more than it returns. Module-add experiments in Phase 2 can revisit multi-module reconstruction from `.cs` interpretation when needed.
 
-- [ ] Operator: review the M4 backtest engine design.
-- [ ] Operator: confirm `docs/nt8-backtest-methodology.md` is acceptable as the NT8 reference (including **$0** commission baseline, **§8.2** overwritten-export caveat, and **§8.6** reconstruction limits).
-- [ ] Record **approval date / initials** in **M4 §9** before the first M4 implementation PR.
+**M4:** Methodology gate cleared; see `docs/m4-backtest-engine-design.md` §9 for engine design approval (separate step).
 
 ---
 
@@ -368,6 +366,6 @@ After that decision, complete **M4 §9** as previously outlined.
 | 2026-04-28 | Initial scaffold; operator checklist; data/session context from research repo.                                                                                                                                                                            |
 | 2026-04-29 | §11: screenshot staging under `docs/nt8-screenshots/`; merge workflow after operator commit.                                                                                                                                                              |
 | 2026-04-30 | **Complete:** Strategy Analyzer + instrument + session + commission/slippage; §8 CSV parse + **ORBLatestEntryHourET=11**; `docs/nt8-artifacts/flux/` as C# ground truth; §8.2 CSV identity caveat; §12–13 ambiguities; M4 §9 called out for sign-off. |
-| 2026-04-30 | **Supplement:** §8.2 overwritten historical exports; **§8.6** source-based reconstruction (quad/tri) + **M6 scope** (ORB+Opt3 exact, multi-module directional); §10/11/12/13 updated; **M4 §9 deferred** until §8.6 reviewed. |
+| 2026-04-30 | **Operator sign-off — Path A:** M6 = ORB+Opt3 exact only; §8.6 directional; methodology accepted as-is (§12). |
 
 
