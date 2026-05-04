@@ -29,6 +29,26 @@ class OrderRequest:
 
 
 @dataclass(slots=True)
+class QueuedOrder:
+    """Order waiting in the simulator (market at next open, or working stop/limit)."""
+
+    order_id: int
+    request: OrderRequest
+
+
+@dataclass(slots=True)
+class SimulatedFill:
+    order_id: int
+    timestamp: Any
+    side: OrderSide
+    quantity: int
+    base_price: float
+    price: float
+    commission: float
+    tag: str = ""
+
+
+@dataclass(slots=True)
 class BarContext:
     bar_index: int
     timestamp: Any
