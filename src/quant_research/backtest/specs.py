@@ -23,6 +23,20 @@ class StopLimitIntrabarPolicy(StrEnum):
     OPTIMISTIC = "optimistic"
 
 
+class GapPolicy(StrEnum):
+    """When the bar open gaps through a stop/limit level."""
+
+    FILL_AT_OPEN = "fill_at_open"
+    NO_FILL_ON_GAP = "no_fill_on_gap"
+
+
+class IntrabarPricePath(StrEnum):
+    """Corner visit order after the open (see fill_model.intrabar_pivots)."""
+
+    OPEN_HIGH_LOW_CLOSE = "open_high_low_close"
+    OPEN_LOW_HIGH_CLOSE = "open_low_high_close"
+
+
 class SlippageMode(StrEnum):
     NONE = "none"
     FIXED_TICKS = "fixed_ticks"
@@ -91,6 +105,8 @@ class FillModelSpec:
     stop_limit_intrabar: StopLimitIntrabarPolicy = (
         StopLimitIntrabarPolicy.FIRST_TOUCH_OHLC_ORDER
     )
+    gap_policy: GapPolicy = GapPolicy.FILL_AT_OPEN
+    intrabar_path: IntrabarPricePath = IntrabarPricePath.OPEN_HIGH_LOW_CLOSE
 
 
 @dataclass(frozen=True, slots=True)
