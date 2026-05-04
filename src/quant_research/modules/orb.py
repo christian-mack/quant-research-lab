@@ -31,6 +31,13 @@ re-read the strategy for **15m bar close ATR vs 1m projection** before changing 
   layer — bracket params live on ``OrbStrategy``. Entry FSM must reset for the
   new session, but **position management** (stops, targets, break-even) must
   run on **every** bar until flat, independent of daily formation state.
+- **Broker-bracket persistence (M6 follow-up):** ``_manage_open`` re-emits the
+  current stop and target on **every** bar while open with ``dedupe_tag`` set,
+  so the engine ``working`` queue is **idempotently** refreshed. Mirrors NT8
+  ``SetStopLoss`` / ``SetProfitTarget`` semantics where protective orders persist
+  on the instrument until filled or cancelled. New modules must not silently
+  lose protective orders due to FSM-state bugs — the engine queue is the
+  source of truth, but the strategy contract is "always re-arm while open."
 """
 
 from __future__ import annotations
@@ -369,106 +376,69 @@ class OrbStrategy:
         ]
 
     def _manage_open(self, ctx: BarContext, mid: str) -> list[OrderRequest]:
+        """Defensively re-arm bracket every bar (stop + target) using ``dedupe_tag``.
+
+        Engine ``working`` queue is the source of truth for active brackets. Re-emitting
+        the desired pair every bar ensures **idempotent** broker-bracket semantics:
+        ``dedupe_tag`` causes the engine to replace any existing same-tag working order
+        with the latest emit. New module hypotheses (tighter stops, intra-day trails)
+        therefore can not silently lose protective orders due to FSM-state bugs.
+        """
         outs: list[OrderRequest] = []
         q = abs(ctx.position_qty)
         entry = ctx.avg_entry_price
-        if entry is None:
+        if entry is None or q == 0:
             return outs
 
         if self._pending_market_side is not None:
-            if ctx.position_qty != 0:
-                side = self._pending_market_side
-                self._pending_market_side = None
-                if side == "long":
-                    stop_px = entry - self._stop_distance
-                    outs.append(
-                        OrderRequest(
-                            OrderSide.SELL,
-                            q,
-                            OrderType.STOP,
-                            stop_price=stop_px,
-                            module_id=mid,
-                            tag="orb_exit_stop",
-                            dedupe_tag="orb_exit_stop",
-                        ),
-                    )
-                    outs.append(
-                        OrderRequest(
-                            OrderSide.SELL,
-                            q,
-                            OrderType.LIMIT,
-                            limit_price=self._target_price_snap,
-                            module_id=mid,
-                            tag="orb_exit_target",
-                            dedupe_tag="orb_exit_target",
-                        ),
-                    )
+            self._pending_market_side = None
+
+        if (
+            self.params.enable_break_even
+            and not self._break_even_done
+            and self._stop_distance > 0
+        ):
+            init_risk = abs(entry - self._initial_stop_price)
+            if init_risk > 0:
+                trigger = init_risk * self.params.be_trigger_r
+                if ctx.position_qty > 0:
+                    profit = ctx.close - entry
+                    if profit >= trigger and entry > (entry - self._stop_distance):
+                        self._break_even_done = True
                 else:
-                    stop_px = entry + self._stop_distance
-                    outs.append(
-                        OrderRequest(
-                            OrderSide.BUY,
-                            q,
-                            OrderType.STOP,
-                            stop_price=stop_px,
-                            module_id=mid,
-                            tag="orb_exit_stop",
-                            dedupe_tag="orb_exit_stop",
-                        ),
-                    )
-                    outs.append(
-                        OrderRequest(
-                            OrderSide.BUY,
-                            q,
-                            OrderType.LIMIT,
-                            limit_price=self._target_price_snap,
-                            module_id=mid,
-                            tag="orb_exit_target",
-                            dedupe_tag="orb_exit_target",
-                        ),
-                    )
-            return outs
+                    profit = entry - ctx.close
+                    if profit >= trigger and entry < (entry + self._stop_distance):
+                        self._break_even_done = True
 
-        if not self.params.enable_break_even or self._break_even_done:
-            return outs
-
-        init_risk = abs(entry - self._initial_stop_price)
-        if init_risk <= 0:
-            return outs
-        trigger = init_risk * self.params.be_trigger_r
         if ctx.position_qty > 0:
-            profit = ctx.close - entry
-            old_stop = entry - self._stop_distance
-            would_tighten = entry > old_stop
-            if profit >= trigger and would_tighten:
-                self._break_even_done = True
-                outs.append(
-                    OrderRequest(
-                        OrderSide.SELL,
-                        q,
-                        OrderType.STOP,
-                        stop_price=entry,
-                        module_id=mid,
-                        tag="orb_break_even",
-                        dedupe_tag="orb_exit_stop",
-                    ),
-                )
-        elif ctx.position_qty < 0:
-            profit = entry - ctx.close
-            old_stop = entry + self._stop_distance
-            would_tighten = entry < old_stop
-            if profit >= trigger and would_tighten:
-                self._break_even_done = True
-                outs.append(
-                    OrderRequest(
-                        OrderSide.BUY,
-                        q,
-                        OrderType.STOP,
-                        stop_price=entry,
-                        module_id=mid,
-                        tag="orb_break_even",
-                        dedupe_tag="orb_exit_stop",
-                    ),
-                )
+            stop_px = entry if self._break_even_done else (entry - self._stop_distance)
+            stop_tag = "orb_break_even" if self._break_even_done else "orb_exit_stop"
+            exit_side = OrderSide.SELL
+        else:
+            stop_px = entry if self._break_even_done else (entry + self._stop_distance)
+            stop_tag = "orb_break_even" if self._break_even_done else "orb_exit_stop"
+            exit_side = OrderSide.BUY
 
+        outs.append(
+            OrderRequest(
+                exit_side,
+                q,
+                OrderType.STOP,
+                stop_price=stop_px,
+                module_id=mid,
+                tag=stop_tag,
+                dedupe_tag="orb_exit_stop",
+            ),
+        )
+        outs.append(
+            OrderRequest(
+                exit_side,
+                q,
+                OrderType.LIMIT,
+                limit_price=self._target_price_snap,
+                module_id=mid,
+                tag="orb_exit_target",
+                dedupe_tag="orb_exit_target",
+            ),
+        )
         return outs

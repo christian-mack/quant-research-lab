@@ -137,6 +137,66 @@ def test_orb_cross_session_position_break_even_regression() -> None:
     assert row["exit_reason"] in ("orb_exit_stop", "orb_break_even")
 
 
+def _three_session_carry_initial_stop() -> pl.DataFrame:
+    """Day 1 entry; days 2-3 carry inside bracket band; day 3 bar pierces initial stop."""
+    d1 = dt.date(2020, 1, 6)
+    d2 = dt.date(2020, 1, 7)
+    d3 = dt.date(2020, 1, 8)
+    rows: list[tuple] = []
+
+    for m in range(30, 45):
+        rows.append((_bar_time(d1, 8, m), 95.0, 100.0, 90.0, 95.0, 2000.0, d1))
+    rows.append((_bar_time(d1, 8, 45), 95.0, 100.0, 90.0, 95.0, 2000.0, d1))
+    rows.append((_bar_time(d1, 9, 0), 95.0, 102.0, 94.0, 101.0, 3000.0, d1))
+    for minute in range(1, 30):
+        rows.append((_bar_time(d1, 9, minute), 100.0, 105.0, 95.0, 102.0, 1500.0, d1))
+
+    for minute in range(0, 30):
+        rows.append((_bar_time(d2, 9, minute), 100.0, 105.0, 95.0, 100.0, 1500.0, d2))
+
+    rows.append((_bar_time(d3, 9, 0), 100.0, 100.0, 85.0, 88.0, 5000.0, d3))
+    rows.append((_bar_time(d3, 9, 1), 88.0, 90.0, 87.0, 89.0, 2000.0, d3))
+
+    return pl.DataFrame(
+        rows,
+        schema=[
+            "timestamp",
+            "open",
+            "high",
+            "low",
+            "close",
+            "volume",
+            "cme_session_date",
+        ],
+        orient="row",
+    )
+
+
+def test_orb_brackets_persist_across_multiple_sessions_until_filled() -> None:
+    """M6: stop must fire on a 3rd-session bar when nothing during day 1 / day 2 hits it."""
+    p = OrbParams(
+        quantity=1,
+        latest_entry_hour_et=11,
+        earliest_entry_hour_et=10,
+        enable_break_even=False,
+        enable_vwap_filter=False,
+        target_multiplier=3.0,
+    )
+    strat = OrbStrategy(p)
+    bars = _three_session_carry_initial_stop()
+    orch = OrchestrationSpec(module_ids=("orb",), one_position_at_a_time=True)
+    cfg = BacktestConfig(orchestration=orch)
+    out = BacktestEngine(cfg).run(bars, [as_module("orb", strat)])
+
+    assert out.trade_log.height == 1, "expected exactly one round-trip"
+    row = out.trade_log.row(0, named=True)
+    d3 = dt.date(2020, 1, 8)
+    assert row["direction"] == "long"
+    assert row["exit_time"].astimezone(_CHISAGO).date() == d3
+    assert row["exit_reason"] == "orb_exit_stop"
+    assert row["exit_price"] == pytest.approx(87.0)
+
+
 def test_orb_synthetic_long_round_trip() -> None:
     p = OrbParams(
         quantity=1,

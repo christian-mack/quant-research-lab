@@ -24,6 +24,14 @@
 
 ## Entries
 
+## 2026-04-28 — M6 second escalation: defensive bracket re-arm, dollar gap widened (honest)
+
+**Phase:** 1 (M6)  
+**Context:** After the cross-session fix the **headline $/yr/contract** moved <2% (≈$2,175 vs NT8 ≈$10,885). User pushed: investigate **broker-bracket persistence** before closing M6, on the principle that a Phase 2 module with tighter stops would silently mis-report.  
+**Finding:** Static audit of `_manage_open` and the engine `working` queue showed brackets **should** persist (264 target / 117 stop / 6 BE / 4 segment-flatten of 391 trades). But applying the user’s **defensive re-arm** (always emit stop+target every bar while open, with `dedupe_tag` for idempotency) shifted trade count **391 → 799** (e.g., **2023 0 → 223**) and eliminated the **+$32k segment-flatten windfall** that pre-fix had inflated 2024. Net P&amp;L per contract per year **fell** from ~$2,175 to ~$1,014 — empirically the engine had a path where brackets weren’t consistently honored that static reasoning didn’t isolate.  
+**Implication:** The **dollar gap vs NT8 reference is now wider, not narrower**, but the gap is **honest**: the previous closer-to-NT8 dollar total was **partly artifact** (segment-end flatten of an unmanaged multi-month hold). M6 **stays open** until the long-hold pattern (BE-armed positions sitting at entry across calendar quarters) is reconciled with the lessons-log NT8 summary or that summary is restated. Re-arm + cross-session fix are kept regardless — they’re the correct broker-bracket semantics for any Phase 2 module.  
+**Artifact:** Commit landing `OrbStrategy` defensive re-arm + `test_orb_brackets_persist_across_multiple_sessions_until_filled` + `m6-nt8-reproduction.md` third-comparison table.
+
 ## 2026-04-28 — M5 ORB port: session FSM reset orphaned live position management; M6 forensics
 
 **Phase:** 1 (M5/M6)  
