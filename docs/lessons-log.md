@@ -30,7 +30,7 @@
 **Context:** M6 full-window Python ORB+Opt3 vs NT8 showed order-of-magnitude $/yr divergence plus multi-thousand-hour “ORB” holds and calendar years with zero exits despite RTH bars.  
 **Finding:** The Python `OrbStrategy` tied **open-position management** to the **daily entry** state machine: on `cme_session_date` rollover it reset to **Idle** before handling `ctx.position_qty != 0`, so **`_manage_open`** (break-even, bracket refresh) could **drop out** across sessions. In C#, `ResetDaily` clears `ExecutionEngine._positionState`, but **NT8 protective orders remain on the instrument**; production ORB+Opt3 had not exposed this in live because broker-side exits still run. The Python simulator has **no** broker layer—management must stay on-strategy every bar while flat is false.  
 **Implication:** M6 **validated the escalation path**: smoke bands + large divergence → investigation → **real** bug, not fill-model noise. **M7** can proceed once the operator accepts **M6 process** closure; **headline dollar parity** remains a stacked data/parity problem (plus residual bracket-queue hypotheses). Regression: `test_orb_cross_session_position_break_even_regression`.  
-**Artifact:** Commit fixing `orb.py` + updated `m6-nt8-reproduction.md`.
+**Artifact:** Commit **`b57a7b7`** — `orb.py` + regression test + `m6-nt8-reproduction.md`.
 
 ## 2026-04-28 — Docs referenced artifact paths that were never committed (looked fine locally)
 
