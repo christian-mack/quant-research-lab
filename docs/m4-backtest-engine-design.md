@@ -1,17 +1,19 @@
-# M4 Backtest Engine — Design (pre-implementation)
+# M4 Backtest Engine — Design
 
-**Status:** *Design for operator review (§§1–8).* **PT3 / methodology** accepted **2026-04-30** (operator **Path A** — M6 = ORB+Opt3 only; §8.6 directional). **No M4 implementation** until **§9** records **full design approval** after your section-by-section review.
+**Status:** *Approved for implementation* — **2026-04-28** (Christian). M4 is **correct research backtest engineering** (auditable assumptions, deterministic execution, sane Flux-inspired constraints). **Not** a forensic NT8 replicator. **PT3 / methodology** remain a **reference** for defaults and sanity checks, not a byte-match specification.
 
-**Related:** `docs/nt8-backtest-methodology.md` (PT3), `docs/phase-1-detailed-plan.md` (M4/M5/M6).
+**M6:** **Smoke validation** vs NT8 for the ORB+Opt3 baseline: **aggregate net P&L within ±10%**, **closed-trade count within ±5%**. Per-trade diff is diagnostic only unless it breaks those bands. (Operator framing **2026-04-28** — see `lessons-log.md`.)
+
+**Related:** `docs/nt8-backtest-methodology.md` (PT3 reference), `docs/phase-1-detailed-plan.md` (M4/M5/M6 program text — M6 acceptance criteria **should be reconciled** to this smoke-test framing in a future doc pass).
 
 ---
 
 ## 1. Goals
 
 1. Event-driven backtest over the existing **minute-bar** pipeline (polars), with optional **session** and **cme_session_date** from `quant_research.data.session`.
-2. **Reproducible** execution: every assumption is a named configuration field traceable to PT3 or labeled `PYTHON_ASSUMPTION`.
-3. Support Flux V1 constraints: **OneModuleAtATime**, **module priority**, single flat position per instrument (scalp of MNQ-scale quantity as in plan).
-4. Output a **canonical trade log** (polars DataFrame) suitable for M6 comparison to NT8 exports.
+2. **Reproducible** execution: every assumption is a named configuration field traceable to **PT3 where helpful** or labeled `PYTHON_ASSUMPTION` — so future you (and M7+) know what was assumed, without implying NT8 parity.
+3. Support Flux V1 constraints: **OneModuleAtATime**, **module priority**, single flat position per instrument (MNQ-scale quantity per program plan).
+4. Output a **canonical trade log** (polars DataFrame) suitable for **M6 smoke metrics** (P&L and trade count bands) and Phase 2 research.
 
 **Non-goals (initial implementation scope, subject to revision after review)**
 
@@ -38,7 +40,7 @@ Each subsection here maps to tables or checklist items in `docs/nt8-backtest-met
 | TIF | `TimeInForceSpec`: default for market / limit / stop (DAY / GTC enum); M4 v1 may only implement DAY semantics. |
 | Module orchestration | `OrchestrationSpec`: ordered module ids, `one_position_at_a_time`, optional per-module enable flags. |
 
-**Rule:** Default values for a “**NT8 parity run**” must match **`docs/nt8-backtest-methodology.md`** (PT3 **Complete**). Any deliberate delta is a named `PYTHON_ASSUMPTION` with a pointer to methodology § or this doc.
+**Rule:** **Starting defaults** should align with **`docs/nt8-backtest-methodology.md`** where it saves ambiguity (session, $0 commission baseline, tick sizing). Deliberate or unknown deltas are **`PYTHON_ASSUMPTION`** with a short rationale. **M6 does not require** resetting defaults until NT8 matches — only the **smoke bands** in the header.
 
 ---
 
@@ -81,7 +83,7 @@ Engine responsibilities:
 ## 5. Module host (Flux V1)
 
 - **Registry:** ordered list of strategy modules implementing a small interface, e.g. `on_bar`, `on_fill`, optional `on_start`/`on_end`.
-- **OneModuleAtATime:** if flat, any module may arm entries; if in position, only **exit logic** for the **owning** module runs until flat — behavior must trace to **C# aggregator** + `docs/nt8-backtest-methodology.md` §8; lock details during M4 review (**§8** open questions).
+- **OneModuleAtATime:** if flat, any module may arm entries; if in position, only **exit logic** for the **owning** module runs until flat — implement to match **documented Flux behavior** (`docs/nt8-backtest-methodology.md` §8 + C# reference). **First delivery:** ORB+Opt3 as **one coherent strategy surface** (Opt3 as sub-logic); general multi-module host can **follow** once M5/M6 smoke is green.
 - **Priority:** on simultaneous signals, higher-priority module wins; ties broken by deterministic tie-break (declared in code + doc).
 
 ---
@@ -109,30 +111,33 @@ Proposed columns (extend after review):
 
 - **Cash accounting:** sum of `net_pnl` + `initial_cash` equals final equity for deterministic runs.
 - **Invariants:** no overlapping positions under OMAT; order log replayable from trade log.
-- **Golden tests:** once PT3 filled, small **synthetic bar streams** with hand-computed fills v.s. engine.
+- **Unit / golden tests:** synthetic bar streams with **hand-computed fills** — prove the **engine**, not NT8 parity.
+- **M6:** instrument-level **smoke** only (see header): P&L and trade-count bands vs NT8 export; investigate only if **out of band** or blocking Phase 2 confidence.
 
 ---
 
-## 8. Open questions for operator review
+## 8. Adopted defaults (implementation starting positions)
 
-Cross-reference **`docs/nt8-backtest-methodology.md`** §§3–7 (Analyzer execution), **§8** (strategy params), **§13** (known ambiguities **not** blocking ORB+Opt3 M6).
+Locked **2026-04-28**; consistent with §§1–7 and the **speed-to-M7** goal.
 
-1. **Closed-bar vs intrabar signals** — M4 §3.1 uses **closed bar** by default. Confirm this matches Flux **Calculate.OnBarClose** + your intended **first meaningful fill** semantics (vs any NT8 “intrabar” stop/target touch you rely on — **PT3 §4** Standard fill + **§6** stops).
-2. **OMAT** — **§5** here defers to PT3 §8 / C# aggregator. Confirm Python mirrors **OneModuleAtATime / exit-only for owning module** exactly **before** any multi-module host work; for **ORB+Opt3-only** baseline, orchestration may be **single active module** until Opt3 is modeled as sub-logic inside the same host.
-3. **Order types for M4 v1** — ORB+Opt3 likely needs **market + stop + limit** for entries/exits per C#. Is **market-only** acceptable for a **thin vertical slice**, or must v1 ship **stop/limit** resolution ( **first-touch on OHLC, pessimistic/optimistic** per **FillModelSpec** )?
-4. **Tick grid** — Snap simulated fills to **0.25** MNQ tick (strict parity) always, vs optional **debug fractional** mode?
-5. **TIF** — PT3 shows **GTC** for managed types; M4 §2 says v1 may implement **DAY** only. Accept **`PYTHON_ASSUMPTION`** for DAY-equivalent **within backtest window**, or implement **GTC** semantics in v1?
-6. **Scope vs Path A** — First implementation milestone: **full engine shell + ORB+Opt3 strategy path only**, or **generic module host** from day one? (Both can satisfy M6; second is more code before first green run.)
+| # | Topic | Default |
+|---|--------|---------|
+| 1 | **Decision clock** | **Closed bar** — strategies observe bar *t* only after it closes (**§3.2**). Stop/limit **fills** use `FillModelSpec` (intrabar path on bar *t+1* OHLC or later bar per policy), not “extra” intrabar signal clock. |
+| 2 | **OMAT + first delivery** | **OMAT** per §5. **Implementation order:** ORB+Opt3 as **one strategy module** (Opt3 inside); generic **multi-module registry** after smoke pass unless trivial. |
+| 3 | **Order types (v1)** | **Market, limit, stop** supported (**§4**); resolution rules live in `FillModelSpec` (first-touch OHLC ordering documented in code). |
+| 4 | **Tick grid** | Fills snap to **`InstrumentSpec.tick_size`**; optional **non-strict** debug mode allowed but **off** for M6 runs. |
+| 5 | **TIF** | **`PYTHON_ASSUMPTION`:** treat **`DAY`** as *valid for entire backtest window* (backtest-local stand-in for GTC). Upgrade to full GTC semantics later if research needs it. |
+| 6 | **Market fill timing (baseline)** | **Next bar open** for unrestricted market orders unless `FillModelSpec` selects otherwise — matches `phase-1-detailed-plan` M4 wording and keeps bars coherent for minute data. |
 
 ---
 
 ## 9. Approval gate
 
-- [ ] Operator: review **this document §§1–8** (section-by-section).
-- [x] Operator: **`docs/nt8-backtest-methodology.md`** accepted **as-is** — **2026-04-30** (Christian). **Path A:** M6 strict scope = **ORB+Opt3**; **§8.6** / multi-module = **directional**, not reproducible.
-- [x] PT3 **Complete**; remaining methodology follow-ups (**§11.6** NT8 version string, optional archived export) **explicitly non-blocking** for M4.
+- [x] Operator: design intent — **M4 = correct engine**; **M6 = smoke bands** (±10% P&L, ±5% trade count); **optimize for M7 / Phase 2**. **2026-04-28** (Christian).
+- [x] **`docs/nt8-backtest-methodology.md`** accepted **2026-04-30** (Christian). **Path A:** M6 reference baseline = **ORB+Opt3**; multi-module / §8.6 = **directional**.
+- [x] PT3 **Complete** for reference purposes; **§11.6** NT8 version etc. **non-blocking**.
 
-**Approved for M4 implementation (design):** *[date, initials — when §§1–8 review complete]*
+**Approved for M4 implementation (design):** **2026-04-28**, Christian.
 
 ---
 
@@ -141,4 +146,5 @@ Cross-reference **`docs/nt8-backtest-methodology.md`** §§3–7 (Analyzer execu
 | Date | Change |
 |------|--------|
 | 2026-04-28 | Initial design draft; PT3 traceability table; no code. |
-| 2026-04-30 | PT3 / Path A recorded in §9; §8 expanded with PT3 cross-refs + scope; status line updated. |
+| 2026-04-30 | PT3 / Path A in §9; §8 as operator questions; status updated. |
+| 2026-04-28 | **Velocity reframe (post Path A):** M4 = correct engine, not NT8 forensic parity; M6 = smoke bands (±10% net P&L, ±5% trade count); §8 → **adopted defaults**; §9 signed; `quant_research.backtest` scaffold. |

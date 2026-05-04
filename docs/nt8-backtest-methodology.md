@@ -309,7 +309,8 @@ Parsed from **row `PAAPEX3027390000003`** (`ORBQuantity = 3`, `ORBLatestEntryHou
 - Each setting in §§2–7 should map to a `BacktestRunSpec` / related field in `docs/m4-backtest-engine-design.md`, or an explicit **“Python uses X; NT8 uses Y”** delta.
 - **ORB+Opt3** / **ORBLatestEntryHourET** must match **§8.3–8.4** for the **6-year baseline** run configuration.
 - **$0** commission is a **conscious baseline simplification** — net P&L in Python for “apples-to-apples” M6 should match this assumption unless intentionally testing commission sensitivity.
-- **M6 strict parity:** **§8.3–8.4 + §4–7 + C# sources** — **ORB+Opt3 only** (operator **Path A**, **2026-04-30**).
+- **M6 vs Python (operator framing, 2026-04-28):** **Smoke validation**, not forensic reproduction — **`docs/m4-backtest-engine-design.md`** header bands: **aggregate net P&L within ±10%**, **closed-trade count within ±5%** vs NT8 for the **ORB+Opt3** baseline. Pathology only if **out of band** or blocking research confidence.
+- **M6 reference baseline:** **§8.3–8.4 + §4–7 + C# sources** — **ORB+Opt3 only** (operator **Path A**, **2026-04-30**).
 - **Multi-module / April lessons figures:** **Directional reference only** — **not** a load-bearing M6 reproduction target. §8.6.2 / §8.6.3 remain **best-available source-derived approximations** if Phase 2 later needs multi-module experiments.
 
 ---
@@ -367,5 +368,4 @@ Evidence for this **Complete** revision is **committed artifacts** + operator ex
 | 2026-04-29 | §11: screenshot staging under `docs/nt8-screenshots/`; merge workflow after operator commit.                                                                                                                                                              |
 | 2026-04-30 | **Complete:** Strategy Analyzer + instrument + session + commission/slippage; §8 CSV parse + **ORBLatestEntryHourET=11**; `docs/nt8-artifacts/flux/` as C# ground truth; §8.2 CSV identity caveat; §12–13 ambiguities; M4 §9 called out for sign-off. |
 | 2026-04-30 | **Operator sign-off — Path A:** M6 = ORB+Opt3 exact only; §8.6 directional; methodology accepted as-is (§12). |
-
-
+| 2026-04-28 | §10: M6 smoke bands (**±10%** net P&L, **±5%** trade count) vs NT8 per `m4-backtest-engine-design.md`; operator velocity framing. |

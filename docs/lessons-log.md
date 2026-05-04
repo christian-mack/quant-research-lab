@@ -24,6 +24,16 @@
 
 ## Entries
 
+## 2026-04-28 — M4 = correct engine; M6 = NT8 smoke test (not parity)
+
+**Phase:** 1 (M4/M6 scope)
+**Context:** Path A had already fixed M6 baseline to ORB+Opt3 only; methodology was PT3-Complete. Remaining drag was an implicit “forensic NT8 reproduction” bar that competed with reaching M7 (Phase 2 statistical leverage).
+**Finding:** **M4** is explicitly **sound backtest engineering** (deterministic fills, auditable `PYTHON_ASSUMPTION`s, Flux-style OMAT/priority). **M6** is downgraded to a **smoke test** vs NT8: **±10% aggregate net P&L**, **±5% closed-trade count** for the ORB+Opt3 run; per-trade diff is diagnostic, not a gate, unless bands fail. PT3 remains a **reference**, not a byte-match spec.
+**Implication:** `docs/m4-backtest-engine-design.md` signed **2026-04-28** with **§8 adopted defaults**; `docs/nt8-backtest-methodology.md` §10 references smoke bands. **`docs/phase-1-detailed-plan.md` M6** still states “every divergence >5% investigated” — **needs a planned doc pass** to align exit criteria with operator smoke framing **without** silently rewriting charter gates in this session.
+**Artifact:** **`8f8d742`** — docs + `src/quant_research/backtest/`.
+
+---
+
 ## 2026-04-30 — Phase 1b after Phase 1; Python-first port spec to Sierra
 
 **Phase:** 1 / program infrastructure  

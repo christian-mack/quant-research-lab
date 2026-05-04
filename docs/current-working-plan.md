@@ -99,8 +99,7 @@ Update this document weekly. Add entries to the lessons log ad hoc. Refer to the
 
 ### M3 closeout / M4 gate (before starting the backtest engine)
 - [~] **PT3: NT8 backtest methodology** — **Complete** 2026-04-30; **Path A** (§12): M6 strict = **ORB+Opt3**; multi-module / §8.6 = **directional** only.
-- [~] **M4: Backtest engine design** — `docs/m4-backtest-engine-design.md`. **Methodology gate cleared** in §9; **§§1–8 section-by-section operator review in progress** — record full design approval when complete, then first M4 implementation PR.
-- [ ] M4: Design approval recorded in `m4-backtest-engine-design.md` §9; then implementation begins (`Design backtest engine architecture` → done when code lands)
+- [x] **M4: Backtest engine design** — **Approved 2026-04-28** — `docs/m4-backtest-engine-design.md` (smoke M6, §8 defaults); **scaffold** in `src/quant_research/backtest/`.
 - [ ] M4: Implement core event loop — bar-by-bar iteration with strategy callbacks
 - [ ] M4: Implement order management — market orders first, then limit and stop
 - [ ] M4: Implement position tracking and P&L calculation
