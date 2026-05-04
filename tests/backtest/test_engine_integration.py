@@ -14,6 +14,7 @@ from quant_research.backtest import (
     OrderRequest,
     OrderSide,
     OrderType,
+    as_module,
 )
 
 _DT = datetime(2020, 1, 2, tzinfo=UTC)
@@ -22,9 +23,9 @@ _DT = datetime(2020, 1, 2, tzinfo=UTC)
 class _BuyBar0SellBar1:
     def on_bar(self, ctx: BarContext) -> list[OrderRequest]:
         if ctx.bar_index == 0:
-            return [OrderRequest(OrderSide.BUY, 1, OrderType.MARKET)]
+            return [OrderRequest(OrderSide.BUY, 1, OrderType.MARKET, module_id="m")]
         if ctx.bar_index == 1:
-            return [OrderRequest(OrderSide.SELL, 1, OrderType.MARKET)]
+            return [OrderRequest(OrderSide.SELL, 1, OrderType.MARKET, module_id="m")]
         return []
 
 
@@ -41,36 +42,47 @@ def test_two_market_round_trip_next_bar_opens() -> None:
         }
     )
     engine = BacktestEngine(BacktestConfig())
-    out = engine.run(bars, _BuyBar0SellBar1())
+    out = engine.run(bars, [as_module("m", _BuyBar0SellBar1())])
     assert len(out.fills) == 2
     assert out.fills[0].price == 100.5
     assert out.fills[1].price == 101.0
     assert out.account.position_qty == 0
     assert out.account.realized_pnl == pytest.approx(1.0)
+    assert out.trade_log.height == 1
+    assert out.trade_log.row(0, named=True)["module_id"] == "m"
 
 
-class _BuyStopAfterBar0:
+class _BuyStopSellAfterFill:
     def on_bar(self, ctx: BarContext) -> list[OrderRequest]:
         if ctx.bar_index == 0:
             return [
-                OrderRequest(OrderSide.BUY, 1, OrderType.STOP, stop_price=100.25),
+                OrderRequest(
+                    OrderSide.BUY,
+                    1,
+                    OrderType.STOP,
+                    stop_price=100.25,
+                    module_id="m",
+                ),
             ]
+        if ctx.bar_index == 1:
+            return [OrderRequest(OrderSide.SELL, 1, OrderType.MARKET, module_id="m")]
         return []
 
 
-def test_stop_buy_triggers_segment_after_open() -> None:
+def test_stop_buy_triggers_then_exit_next_bar() -> None:
     bars = pl.DataFrame(
         {
-            "timestamp": [_DT, _DT],
-            "open": [100.0, 100.0],
-            "high": [100.0, 100.5],
-            "low": [100.0, 99.75],
-            "close": [100.0, 100.25],
-            "volume": [1.0, 1.0],
+            "timestamp": [_DT, _DT, _DT],
+            "open": [100.0, 100.0, 101.0],
+            "high": [100.0, 100.5, 101.25],
+            "low": [100.0, 99.75, 100.75],
+            "close": [100.0, 100.25, 101.0],
+            "volume": [1.0, 1.0, 1.0],
         }
     )
     engine = BacktestEngine(BacktestConfig())
-    out = engine.run(bars, _BuyStopAfterBar0())
-    assert len(out.fills) == 1
+    out = engine.run(bars, [as_module("m", _BuyStopSellAfterFill())])
+    assert len(out.fills) == 2
     assert out.fills[0].base_price == 100.25
-    assert out.account.position_qty == 1
+    assert out.account.position_qty == 0
+    assert out.trade_log.height == 1

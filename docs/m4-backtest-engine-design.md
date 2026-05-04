@@ -86,7 +86,9 @@ Engine responsibilities:
 - **OneModuleAtATime:** if flat, any module may arm entries; if in position, only **exit logic** for the **owning** module runs until flat — implement to match **documented Flux behavior** (`docs/nt8-backtest-methodology.md` §8 + C# reference). **First delivery:** ORB+Opt3 as **one coherent strategy surface** (Opt3 as sub-logic); general multi-module host can **follow** once M5/M6 smoke is green.
 - **Priority:** on simultaneous signals, higher-priority module wins; ties broken by deterministic tie-break (declared in code + doc).
 
----
+**Implemented in** ``quant_research.backtest.omat`` (**``StrategyModule``**, **``collect_orders_for_bar``**): flat bar → all modules’ ``on_bar`` run; if more than one submits orders under OMAT, **only** the highest-priority module’s list is kept (**``OrchestrationSpec.module_ids``** — earlier id wins; must match the set of ``StrategyModule.module_id``). In position → **only** ``position_owner`` runs. Each **``OrderRequest.module_id``** must match its strategy module.
+
+**End of series:** ``BacktestEngine`` **drops** unfilled pending/working orders (**``UserWarning``**). Any open position is **auto-flattened** at the **last bar’s close** (``PYTHON_ASSUMPTION``: not next open). Synthetic fill tag **``end_of_series_flatten``**; trade log **``exit_reason``** **``flatten``**. Optional env **``MFA_GIT_SHA``** populates **``mfa_git_sha``**.
 
 ## 6. Trade log schema (canonical, M6-ready)
 
@@ -147,4 +149,5 @@ Locked **2026-04-28**; consistent with §§1–7 and the **speed-to-M7** goal.
 |------|--------|
 | 2026-04-28 | Initial design draft; PT3 traceability table; no code. |
 | 2026-04-30 | PT3 / Path A in §9; §8 as operator questions; status updated. |
-| 2026-04-28 | **Velocity reframe (post Path A):** M4 = correct engine, not NT8 forensic parity; M6 = smoke bands (±10% net P&L, ±5% trade count); §8 → **adopted defaults**; §9 signed; `quant_research.backtest` scaffold. |
+| 2026-04-28 | **Velocity reframe (post Path A):** M4 = correct engine, not NT8 forensic parity; M6 = smoke bands; §8 adopted defaults; §9 signed; `quant_research.backtest` scaffold. |
+| 2026-05-04 | **OMAT + priority + trade log:** ``StrategyModule`` / ``omat.py``; ``TradeLedger`` round-trips; engine end-of-series flatten + warnings; ``OrderRequest.module_id`` / ``SimulatedFill.module_id``. |

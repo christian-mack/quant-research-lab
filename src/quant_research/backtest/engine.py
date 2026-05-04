@@ -1,7 +1,9 @@
-"""Bar-by-bar backtest host: next-bar market fills, stop/limit resolution, P&amp;L."""
+"""Bar-by-bar backtest host: OMAT, fills, trade log, end-of-series flatten."""
 
 from __future__ import annotations
 
+import warnings
+from collections.abc import Sequence
 from dataclasses import dataclass
 
 import polars as pl
@@ -10,13 +12,16 @@ from quant_research.backtest.account import Account
 from quant_research.backtest.fill_resolution import (
     fill_pending_market_at_open,
     resolve_stop_limit_for_bar,
+    synthetic_market_fill,
     validate_order_request,
 )
-from quant_research.backtest.schema import empty_trade_log
+from quant_research.backtest.omat import StrategyModule, collect_orders_for_bar
 from quant_research.backtest.specs import BacktestConfig, MarketFillTiming
+from quant_research.backtest.trade_ledger import TradeLedger
 from quant_research.backtest.types import (
     BarContext,
     OrderRequest,
+    OrderSide,
     OrderType,
     QueuedOrder,
     SimulatedFill,
@@ -33,14 +38,61 @@ class BacktestResult:
     account: Account
 
 
+def _reconcile_owner(
+    prev_qty: int,
+    prev_owner: str | None,
+    fill: SimulatedFill,
+    new_qty: int,
+) -> str | None:
+    """Which module owns an open position after this fill (OMAT)."""
+    if new_qty == 0:
+        return None
+    if prev_qty == 0:
+        return fill.module_id
+    if (prev_qty > 0 and new_qty < 0) or (prev_qty < 0 and new_qty > 0):
+        return fill.module_id
+    return prev_owner if prev_owner is not None else fill.module_id
+
+
+def _apply_fills(
+    fills: list[SimulatedFill],
+    *,
+    account: Account,
+    ledger: TradeLedger,
+    owner: str | None,
+    bar_index: int,
+    all_fills: list[SimulatedFill],
+) -> str | None:
+    pos_owner = owner
+    for f in fills:
+        pq = account.position_qty
+        account.apply_fill(f)
+        nq = account.position_qty
+        pos_owner = _reconcile_owner(pq, pos_owner, f, nq)
+        ledger.note_fill(f, pq, nq, bar_index)
+        all_fills.append(f)
+    return pos_owner
+
+
 class BacktestEngine:
-    """Closed-bar decisions; market orders fill at the **next** bar's open."""
+    """Closed-bar decisions; market orders fill at the **next** bar's open.
+
+    **End of data:** Unfilled working and pending orders are **dropped** with
+    ``UserWarning``. Any open position is **auto-flattened** at the **last
+    bar's close** (not the next open) — a ``PYTHON_ASSUMPTION`` for series end;
+    the synthetic exit uses tag ``end_of_series_flatten`` and ``exit_reason``
+    ``flatten`` in the trade log.
+    """
 
     def __init__(self, config: BacktestConfig) -> None:
         self.config = config
         self._next_order_id = 1
 
-    def run(self, bars: pl.DataFrame, strategy: Strategy) -> BacktestResult:
+    def run(
+        self,
+        bars: pl.DataFrame,
+        modules: Sequence[StrategyModule],
+    ) -> BacktestResult:
         if self.config.fill_model.market_fill_timing != MarketFillTiming.OPEN_OF_NEXT_BAR:
             msg = "only MarketFillTiming.OPEN_OF_NEXT_BAR is implemented"
             raise NotImplementedError(msg)
@@ -50,12 +102,23 @@ class BacktestEngine:
             msg = f"bars missing columns: {sorted(missing)}"
             raise ValueError(msg)
 
+        mod_list = list(modules)
+        if not mod_list:
+            msg = "modules must be non-empty"
+            raise ValueError(msg)
+
         df = bars.sort("timestamp")
         account = Account(self.config.run.initial_cash, self.config.instrument)
+        ledger = TradeLedger(self.config.instrument.tick_value)
         pending_market: list[QueuedOrder] = []
         working: list[QueuedOrder] = []
         prev_close: float | None = None
         all_fills: list[SimulatedFill] = []
+        position_owner: str | None = None
+
+        last_bar_index = 0
+        last_ts: object = None
+        last_close = 0.0
 
         for i, row in enumerate(df.iter_rows(named=True)):
             ts = row["timestamp"]
@@ -64,27 +127,109 @@ class BacktestEngine:
             low_px = float(row["low"])
             c = float(row["close"])
             v = float(row["volume"])
+            last_bar_index = i
+            last_ts = ts
+            last_close = c
 
-            for f in fill_pending_market_at_open(
-                pending_market, o, ts, self.config
-            ):
-                account.apply_fill(f)
-                all_fills.append(f)
+            mfills = fill_pending_market_at_open(pending_market, o, ts, self.config)
             pending_market.clear()
+            position_owner = _apply_fills(
+                mfills,
+                account=account,
+                ledger=ledger,
+                owner=position_owner,
+                bar_index=i,
+                all_fills=all_fills,
+            )
 
             sf, working = resolve_stop_limit_for_bar(
                 working, o, h, low_px, c, prev_close, ts, self.config
             )
-            for f in sf:
-                account.apply_fill(f)
-                all_fills.append(f)
+            position_owner = _apply_fills(
+                sf,
+                account=account,
+                ledger=ledger,
+                owner=position_owner,
+                bar_index=i,
+                all_fills=all_fills,
+            )
 
             ctx = BarContext(i, ts, o, h, low_px, c, v)
-            self._route_orders(strategy.on_bar(ctx), pending_market, working)
+            orders = collect_orders_for_bar(
+                mod_list,
+                ctx,
+                orchestration=self.config.orchestration,
+                position_qty=account.position_qty,
+                position_owner=position_owner,
+            )
+            self._route_orders(orders, pending_market, working)
 
             prev_close = c
 
-        return BacktestResult(empty_trade_log(), all_fills, account)
+        self._end_of_series_cleanup(
+            last_bar_index=last_bar_index,
+            last_ts=last_ts,
+            last_close=last_close,
+            account=account,
+            ledger=ledger,
+            pending_market=pending_market,
+            working=working,
+            all_fills=all_fills,
+            position_owner=position_owner,
+        )
+
+        trade_log = ledger.to_dataframe()
+        return BacktestResult(trade_log=trade_log, fills=all_fills, account=account)
+
+    def _end_of_series_cleanup(
+        self,
+        *,
+        last_bar_index: int,
+        last_ts: object,
+        last_close: float,
+        account: Account,
+        ledger: TradeLedger,
+        pending_market: list[QueuedOrder],
+        working: list[QueuedOrder],
+        all_fills: list[SimulatedFill],
+        position_owner: str | None,
+    ) -> str | None:
+        if pending_market or working:
+            warnings.warn(
+                "Backtest end: discarding unfilled pending market and working "
+                "stop/limit orders (no next bar to evaluate).",
+                UserWarning,
+                stacklevel=3,
+            )
+            pending_market.clear()
+            working.clear()
+        q = account.position_qty
+        if q == 0:
+            return None
+        mod_id = position_owner if position_owner is not None else "unknown"
+        warnings.warn(
+            "Backtest end: auto-flattening open position at last bar close "
+            "(fills at last close, not next open; see BacktestEngine docstring).",
+            UserWarning,
+            stacklevel=3,
+        )
+        side = OrderSide.SELL if q > 0 else OrderSide.BUY
+        fill = synthetic_market_fill(
+            order_id=self._next_order_id,
+            module_id=mod_id,
+            side=side,
+            quantity=abs(q),
+            base_price=last_close,
+            ts=last_ts,
+            config=self.config,
+            tag="end_of_series_flatten",
+        )
+        self._next_order_id += 1
+        pq = account.position_qty
+        account.apply_fill(fill)
+        ledger.note_fill(fill, pq, account.position_qty, last_bar_index)
+        all_fills.append(fill)
+        return _reconcile_owner(pq, position_owner, fill, account.position_qty)
 
     def _route_orders(
         self,
@@ -104,3 +249,8 @@ class BacktestEngine:
             else:
                 msg = f"unknown order type: {req.order_type!r}"
                 raise ValueError(msg)
+
+
+def as_module(module_id: str, strategy: Strategy) -> StrategyModule:
+    """Convenience wrapper for single-module runs."""
+    return StrategyModule(module_id, strategy)

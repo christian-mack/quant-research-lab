@@ -25,6 +25,8 @@ class OrderRequest:
     order_type: OrderType
     limit_price: float | None = None
     stop_price: float | None = None
+    #: Owning module (required for multi-module / OMAT runs).
+    module_id: str = ""
     tag: str = ""
 
 
@@ -45,6 +47,7 @@ class SimulatedFill:
     base_price: float
     price: float
     commission: float
+    module_id: str = ""
     tag: str = ""
 
 

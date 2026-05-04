@@ -100,9 +100,9 @@ Update this document weekly. Add entries to the lessons log ad hoc. Refer to the
 ### M3 closeout / M4 gate (before starting the backtest engine)
 - [~] **PT3: NT8 backtest methodology** — **Complete** 2026-04-30; **Path A** (§12): M6 strict = **ORB+Opt3**; multi-module / §8.6 = **directional** only.
 - [x] **M4: Backtest engine design** — **Approved 2026-04-28** — `docs/m4-backtest-engine-design.md` (smoke M6, §8 defaults); **scaffold** in `src/quant_research/backtest/`.
-- [ ] M4: Implement core event loop — bar-by-bar iteration with strategy callbacks
-- [ ] M4: Implement order management — market orders first, then limit and stop
-- [ ] M4: Implement position tracking and P&L calculation
+- [x] M4: Implement core event loop — bar-by-bar iteration with strategy callbacks (``StrategyModule`` list + OMAT routing).
+- [x] M4: Implement order management — market next open; stop/limit first-touch; end-series flatten.
+- [x] M4: Implement position tracking and P&L calculation — ``Account`` + ``TradeLedger`` round-trip rows.
 
 ### Parallel tracks this week
 - [ ] PT1: Continued live operation
@@ -124,10 +124,10 @@ Update this document weekly. Add entries to the lessons log ad hoc. Refer to the
 **Primary focus:** M4 complete, M5 begun (ORB and Momentum modules)
 
 ### Development tasks
-- [ ] M4: Complete execution engine — OneModuleAtATime constraint, module priority ordering
-- [ ] M4: Trade log output with standardized columns
-- [ ] M4: Configurable fill model, slippage, commissions (defaults to NT8-matching assumptions)
-- [ ] M4: End-to-end validation — simple strategy produces clean trade log
+- [x] M4: Complete execution engine — OneModuleAtATime constraint, module priority ordering
+- [x] M4: Trade log output with standardized columns
+- [x] M4: Configurable fill model, slippage, commissions (defaults to NT8-matching assumptions)
+- [ ] M4: End-to-end validation — **next:** real MNQ sample + ORB+Opt3 (M5)
 - [ ] M5: Implement ORBModule.py with unit tests
 - [ ] M5: Implement MomentumModule.py with 15m ATR gate and unit tests
 

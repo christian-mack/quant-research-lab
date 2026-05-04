@@ -7,7 +7,13 @@ from datetime import UTC, datetime
 import polars as pl
 import pytest
 
-from quant_research.backtest import BacktestConfig, BacktestEngine, BarContext, trade_log_schema
+from quant_research.backtest import (
+    BacktestConfig,
+    BacktestEngine,
+    BarContext,
+    as_module,
+    trade_log_schema,
+)
 
 
 class _NullStrategy:
@@ -30,7 +36,7 @@ def test_engine_run_empty_trade_log() -> None:
         }
     )
     engine = BacktestEngine(BacktestConfig())
-    out = engine.run(bars, _NullStrategy())
+    out = engine.run(bars, [as_module("solo", _NullStrategy())])
     assert out.trade_log.columns == list(trade_log_schema().keys())
     assert out.trade_log.height == 0
     assert out.account.position_qty == 0
@@ -40,4 +46,4 @@ def test_engine_missing_columns() -> None:
     bars = pl.DataFrame({"timestamp": [datetime(2020, 1, 1, tzinfo=UTC)], "open": [1.0]})
     engine = BacktestEngine(BacktestConfig())
     with pytest.raises(ValueError, match="missing columns"):
-        engine.run(bars, _NullStrategy())
+        engine.run(bars, [as_module("solo", _NullStrategy())])

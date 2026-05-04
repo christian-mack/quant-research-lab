@@ -23,6 +23,7 @@ def _fill(oid: int, side: OrderSide, qty: int, price: float, comm: float = 0.0) 
         base_price=price,
         price=price,
         commission=comm,
+        module_id="m1",
     )
 
 

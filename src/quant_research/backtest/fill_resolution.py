@@ -195,6 +195,7 @@ def _make_fill(
         base_price=base_price,
         price=slip_px,
         commission=comm,
+        module_id=req.module_id,
         tag=req.tag,
     )
 
@@ -218,3 +219,27 @@ def validate_order_request(req: OrderRequest) -> None:
     else:
         msg = f"unknown order type: {req.order_type!r}"
         raise ValueError(msg)
+
+
+def synthetic_market_fill(
+    *,
+    order_id: int,
+    module_id: str,
+    side: OrderSide,
+    quantity: int,
+    base_price: float,
+    ts: object,
+    config: BacktestConfig,
+    tag: str,
+) -> SimulatedFill:
+    """Used for end-of-series flatten at last bar close (engine applies slippage + snap)."""
+    req = OrderRequest(
+        side=side,
+        quantity=quantity,
+        order_type=OrderType.MARKET,
+        module_id=module_id,
+        tag=tag,
+    )
+    validate_order_request(req)
+    q = QueuedOrder(order_id, req)
+    return _make_fill(q, base_price, ts, config)
