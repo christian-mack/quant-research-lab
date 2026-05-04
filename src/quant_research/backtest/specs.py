@@ -71,6 +71,7 @@ class BacktestRunSpec:
 class InstrumentSpec:
     symbol: str = "MNQ"
     tick_size: float = 0.25
+    #: USD per **one full price index point** per contract (MNQ ≈ $2).
     tick_value: float = 2.0
     currency: str = "USD"
     min_lot: int = 1

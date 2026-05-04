@@ -7,12 +7,7 @@ from datetime import UTC, datetime
 import polars as pl
 import pytest
 
-from quant_research.backtest import (
-    BacktestConfig,
-    BacktestEngine,
-    BarContext,
-    trade_log_schema,
-)
+from quant_research.backtest import BacktestConfig, BacktestEngine, BarContext, trade_log_schema
 
 
 class _NullStrategy:
@@ -36,8 +31,9 @@ def test_engine_run_empty_trade_log() -> None:
     )
     engine = BacktestEngine(BacktestConfig())
     out = engine.run(bars, _NullStrategy())
-    assert out.columns == list(trade_log_schema().keys())
-    assert out.height == 0
+    assert out.trade_log.columns == list(trade_log_schema().keys())
+    assert out.trade_log.height == 0
+    assert out.account.position_qty == 0
 
 
 def test_engine_missing_columns() -> None:

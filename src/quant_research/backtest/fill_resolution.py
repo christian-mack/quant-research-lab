@@ -91,7 +91,7 @@ def fill_pending_market_at_open(
         if req.order_type != OrderType.MARKET:
             msg = "pending queue may only contain market orders"
             raise ValueError(msg)
-        _validate_request(req)
+        validate_order_request(req)
         fills.append(_make_fill(w, open_px, ts, config))
     return fills
 
@@ -112,7 +112,7 @@ def resolve_stop_limit_for_bar(
     fills: list[SimulatedFill] = []
 
     for w in remaining:
-        _validate_request(w.request)
+        validate_order_request(w.request)
         if w.request.order_type == OrderType.MARKET:
             msg = "working stop/limit queue may not contain market orders"
             raise ValueError(msg)
@@ -199,7 +199,7 @@ def _make_fill(
     )
 
 
-def _validate_request(req: OrderRequest) -> None:
+def validate_order_request(req: OrderRequest) -> None:
     if req.quantity <= 0:
         msg = "order quantity must be positive"
         raise ValueError(msg)

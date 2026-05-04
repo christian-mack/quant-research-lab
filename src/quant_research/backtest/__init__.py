@@ -1,13 +1,16 @@
 """Research backtest engine (M4). See ``docs/m4-backtest-engine-design.md``."""
 
-from quant_research.backtest.engine import BacktestEngine
+from quant_research.backtest.account import Account
+from quant_research.backtest.engine import BacktestEngine, BacktestResult
 from quant_research.backtest.schema import empty_trade_log, trade_log_schema
 from quant_research.backtest.specs import BacktestConfig, BacktestRunSpec, InstrumentSpec
 from quant_research.backtest.types import BarContext, OrderRequest, OrderSide, OrderType, Strategy
 
 __all__ = [
+    "Account",
     "BacktestConfig",
     "BacktestEngine",
+    "BacktestResult",
     "BacktestRunSpec",
     "BarContext",
     "InstrumentSpec",
