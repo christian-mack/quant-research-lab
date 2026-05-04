@@ -143,6 +143,18 @@ Locked **2026-04-28**; consistent with §§1–7 and the **speed-to-M7** goal.
 
 ---
 
+## 10. Known deferrals (Python vs NT8 ``ExecutionEngine`` / data feed)
+
+Items **intentionally absent** until a Phase 2 hypothesis or M6+ work needs them. Production ORB+Opt3 does **not** rely on these today.
+
+| Topic | NT8 location | Python status |
+|--------|----------------|---------------|
+| **ORB time flatten** | ``ExecutionEngine.ManagePosition``: ``ORBMaxHoldMinutes`` → ``FlattenForRisk`` | **Deferred** at **engine** level (not in ``OrbStrategy``). Production CSV has **0** (disabled). |
+| **15m ATR series** | ``FluxV1Strategy.SetPriceData`` → ``ORBModule._atr15m`` | **Deferred.** ``OrbParams.atr15m_series`` stays **0**; production ``ORBMaxATR15m == 0`` and ATR filters off. When enabled, re‑examine Flux strategy code for **15m bar ATR vs 1m projection**. |
+| **Entry hour gates** | ``ORBModule``: ``TimeSpan.Hours`` / hour compares | **Matched:** Python uses **ET hour only** (quirky but same as C#). |
+
+---
+
 ## Revision history
 
 | Date | Change |
@@ -151,3 +163,4 @@ Locked **2026-04-28**; consistent with §§1–7 and the **speed-to-M7** goal.
 | 2026-04-30 | PT3 / Path A in §9; §8 as operator questions; status updated. |
 | 2026-04-28 | **Velocity reframe (post Path A):** M4 = correct engine, not NT8 forensic parity; M6 = smoke bands; §8 adopted defaults; §9 signed; `quant_research.backtest` scaffold. |
 | 2026-05-04 | **OMAT + priority + trade log:** ``StrategyModule`` / ``omat.py``; ``TradeLedger`` round-trips; engine end-of-series flatten + warnings; ``OrderRequest.module_id`` / ``SimulatedFill.module_id``. |
+| 2026-05-04 | **M5 post:** §10 **known deferrals** (``ORBMaxHoldMinutes``, ``atr15m`` feed, hour-gate parity); engine docstring points to §10. |

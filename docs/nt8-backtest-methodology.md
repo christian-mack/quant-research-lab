@@ -368,4 +368,5 @@ Evidence for this **Complete** revision is **committed artifacts** + operator ex
 | 2026-04-29 | §11: screenshot staging under `docs/nt8-screenshots/`; merge workflow after operator commit.                                                                                                                                                              |
 | 2026-04-30 | **Complete:** Strategy Analyzer + instrument + session + commission/slippage; §8 CSV parse + **ORBLatestEntryHourET=11**; `docs/nt8-artifacts/flux/` as C# ground truth; §8.2 CSV identity caveat; §12–13 ambiguities; M4 §9 called out for sign-off. |
 | 2026-04-30 | **Operator sign-off — Path A:** M6 = ORB+Opt3 exact only; §8.6 directional; methodology accepted as-is (§12). |
+| 2026-05-04 | **Artifacts in git:** ``docs/nt8-artifacts/`` (``flux/*.cs``, CSV exports) committed for M6 ground truth; *d2259f5* committed the **methodology** document only — sources landed in a follow-up commit (this repo: **2026-05-04**). |
 | 2026-04-28 | §10: M6 smoke bands (**±10%** net P&L, **±5%** trade count) vs NT8 per `m4-backtest-engine-design.md`; operator velocity framing. |

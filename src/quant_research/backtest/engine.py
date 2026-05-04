@@ -82,6 +82,12 @@ class BacktestEngine:
     bar's close** (not the next open) — a ``PYTHON_ASSUMPTION`` for series end;
     the synthetic exit uses tag ``end_of_series_flatten`` and ``exit_reason``
     ``flatten`` in the trade log.
+
+    **Known deferral (NT8 ``ExecutionEngine.ManagePosition``):** ORB
+    **``ORBMaxHoldMinutes``** / **``FlattenForRisk``** time-based flatten is **not**
+    implemented in Python. Production ORB+Opt3 uses **0** (disabled). Add at
+    **engine** level when a Phase 2 hypothesis needs it — see
+    ``docs/m4-backtest-engine-design.md`` §10.
     """
 
     def __init__(self, config: BacktestConfig) -> None:

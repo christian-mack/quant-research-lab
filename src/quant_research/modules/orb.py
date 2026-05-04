@@ -3,6 +3,16 @@
 Opt3 (production) is **not** a separate module: it is the parameter set where
 ``latest_entry_hour_et == 11`` (and related ORB knobs from the funded CSV row).
 
+**Time gates (match NinjaTrader / C#):** ``ORBEarliestEntryHourET`` and
+``ORBLatestEntryHourET`` use **clock hour only** (``datetime.hour`` in America/New_York),
+not minutes. So ``latest_entry_hour_et == 11`` blocks new entries from **11:00 ET**
+onward for that calendar day.
+
+**Known deferral (15m ATR feed):** ``OrbParams.atr15m_series`` is not wired from
+live bars. Production ORB+Opt3 has ``ORBMaxATR15m == 0`` (ceiling off) and ATR range /
+stop filters off. When filters matter, align to ``FluxV1Strategy.SetPriceData`` and
+re-read the strategy for **15m bar close ATR vs 1m projection** before changing behavior.
+
 **PYTHON_ASSUMPTIONS** vs NT8/C#:
 
 - **Entry fill:** C# sizes stops/targets from signal-bar ``Close``; NT8 fills may
