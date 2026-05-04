@@ -24,6 +24,13 @@ re-read the strategy for **15m bar close ATR vs 1m projection** before changing 
   bar).
 - **Session clock:** Requires a ``cme_session_date`` column on the bars
   ``DataFrame`` (see :func:`quant_research.data.session.assign_cme_session_date`).
+- **Carry across ``cme_session_date``:** In C#, ``FluxV1Strategy.CheckSessionReset``
+  calls ``ExecutionEngine.ResetDaily()`` (clears RAM ``_positionState``) and
+  ``ORBModule.ResetSessionState()`` (ORB FSM back to Idle) **while** NT8
+  protective orders remain on the instrument. Python has no separate broker
+  layer — bracket params live on ``OrbStrategy``. Entry FSM must reset for the
+  new session, but **position management** (stops, targets, break-even) must
+  run on **every** bar until flat, independent of daily formation state.
 """
 
 from __future__ import annotations
@@ -140,15 +147,16 @@ class OrbStrategy:
             msg = "ORBStrategy requires BarContext.session_date (e.g. cme_session_date column)"
             raise ValueError(msg)
 
-        self._check_session_reset(sess)
+        self._check_session_reset(sess, ctx)
+
+        if ctx.position_qty != 0:
+            return self._manage_open(ctx, mid)
+
         if self.params.enable_vwap_filter:
             self._update_vwap(ctx)
 
         t_et = _time_et(ctx.timestamp)
         h_et = _hour_et(ctx.timestamp)
-
-        if ctx.position_qty != 0 and self._state == _OrbState.TRIGGERED:
-            return self._manage_open(ctx, mid)
 
         if self._state == _OrbState.TRIGGERED:
             return []
@@ -217,10 +225,27 @@ class OrbStrategy:
 
         return []
 
-    def _check_session_reset(self, session_date: Any) -> None:
-        if session_date != self._last_session_date:
-            self._last_session_date = session_date
+    def _check_session_reset(self, session_date: Any, ctx: BarContext) -> None:
+        if session_date == self._last_session_date:
+            return
+        self._last_session_date = session_date
+        if ctx.position_qty == 0:
             self._reset_session_state()
+        else:
+            self._reset_session_for_new_day_with_open_position()
+
+    def _reset_session_for_new_day_with_open_position(self) -> None:
+        """Daily ORB *entry* context only; bracket / BE fields stay on until flat.
+
+        Mirrors NT8: ORB module Idles for new opening-range logic, while working
+        exits are effectively outside the ORB state machine.
+        """
+        self._range_high = -math.inf
+        self._range_low = math.inf
+        self._range_size = 0.0
+        self._session_vwap_num = 0.0
+        self._session_vwap_den = 0.0
+        self._state = _OrbState.TRIGGERED
 
     def _reset_session_state(self) -> None:
         self._state = _OrbState.IDLE

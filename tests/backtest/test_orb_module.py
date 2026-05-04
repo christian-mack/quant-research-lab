@@ -78,6 +78,65 @@ def _synthetic_orb_session(*, breakout_close: float) -> pl.DataFrame:
     )
 
 
+def _two_session_carry_break_even() -> pl.DataFrame:
+    """Day1 long near close; day2 first bar triggers BE; second bar hits BE stop."""
+    d1 = dt.date(2020, 1, 6)
+    d2 = dt.date(2020, 1, 7)
+    rows: list[tuple] = []
+
+    for m in range(30, 45):
+        ts = _bar_time(d1, 8, m)
+        rows.append((ts, 95.0, 100.0, 90.0, 95.0, 2000.0, d1))
+    rows.append((_bar_time(d1, 8, 45), 95.0, 100.0, 90.0, 95.0, 2000.0, d1))
+    rows.append((_bar_time(d1, 9, 0), 95.0, 101.5, 94.0, 101.0, 3000.0, d1))
+    for minute, cl in [(1, 103.0), (2, 104.0), (3, 106.0)]:
+        rows.append((_bar_time(d1, 9, minute), cl - 1.0, cl + 1.0, cl - 2.0, cl, 1200.0, d1))
+
+    rows.append((_bar_time(d2, 8, 30), 106.0, 118.0, 106.0, 117.0, 4000.0, d2))
+    rows.append((_bar_time(d2, 8, 31), 105.0, 105.0, 97.0, 99.0, 5000.0, d2))
+
+    return pl.DataFrame(
+        rows,
+        schema=[
+            "timestamp",
+            "open",
+            "high",
+            "low",
+            "close",
+            "volume",
+            "cme_session_date",
+        ],
+        orient="row",
+    )
+
+
+def test_orb_cross_session_position_break_even_regression() -> None:
+    """M6: break-even must run after cme_session_date change while position is open."""
+    p = OrbParams(
+        quantity=1,
+        latest_entry_hour_et=11,
+        earliest_entry_hour_et=10,
+        enable_break_even=True,
+        be_trigger_r=1.0,
+        enable_vwap_filter=False,
+        target_multiplier=3.0,
+    )
+    strat = OrbStrategy(p)
+    bars = _two_session_carry_break_even()
+    orch = OrchestrationSpec(module_ids=("orb",), one_position_at_a_time=True)
+    cfg = BacktestConfig(orchestration=orch)
+    out = BacktestEngine(cfg).run(bars, [as_module("orb", strat)])
+
+    assert out.trade_log.height == 1
+    row = out.trade_log.row(0, named=True)
+    assert row["direction"] == "long"
+    d2 = dt.date(2020, 1, 7)
+    exit_day = row["exit_time"].astimezone(_CHISAGO).date()
+    assert exit_day == d2
+    assert row["exit_price"] >= 100.0
+    assert row["exit_reason"] in ("orb_exit_stop", "orb_break_even")
+
+
 def test_orb_synthetic_long_round_trip() -> None:
     p = OrbParams(
         quantity=1,
