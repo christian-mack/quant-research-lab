@@ -127,8 +127,8 @@ Update this document weekly. Add entries to the lessons log ad hoc. Refer to the
 - [x] M4: Complete execution engine — OneModuleAtATime constraint, module priority ordering
 - [x] M4: Trade log output with standardized columns
 - [x] M4: Configurable fill model, slippage, commissions (defaults to NT8-matching assumptions)
-- [ ] M4: End-to-end validation — **next:** real MNQ sample + ORB+Opt3 (M5)
-- [ ] M5: Implement ORBModule.py with unit tests
+- [x] M4: End-to-end validation — MNQ RTH slice smoke + ORB+Opt3 (`modules/orb.py`)
+- [x] M5: ORB strategy module (**Opt3** = params incl. `latest_entry_hour_et=11`) + unit tests (`src/quant_research/modules/orb.py`)
 - [ ] M5: Implement MomentumModule.py with 15m ATR gate and unit tests
 
 ### Parallel tracks this week

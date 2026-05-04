@@ -130,9 +130,11 @@ class BacktestEngine:
             last_bar_index = i
             last_ts = ts
             last_close = c
+            session_date = row.get("cme_session_date")
 
             mfills = fill_pending_market_at_open(pending_market, o, ts, self.config)
             pending_market.clear()
+            before_m = account.position_qty
             position_owner = _apply_fills(
                 mfills,
                 account=account,
@@ -141,10 +143,13 @@ class BacktestEngine:
                 bar_index=i,
                 all_fills=all_fills,
             )
+            if before_m != 0 and account.position_qty == 0:
+                working.clear()
 
             sf, working = resolve_stop_limit_for_bar(
                 working, o, h, low_px, c, prev_close, ts, self.config
             )
+            before_s = account.position_qty
             position_owner = _apply_fills(
                 sf,
                 account=account,
@@ -153,8 +158,21 @@ class BacktestEngine:
                 bar_index=i,
                 all_fills=all_fills,
             )
+            if before_s != 0 and account.position_qty == 0:
+                working.clear()
 
-            ctx = BarContext(i, ts, o, h, low_px, c, v)
+            ctx = BarContext(
+                i,
+                ts,
+                o,
+                h,
+                low_px,
+                c,
+                v,
+                position_qty=account.position_qty,
+                avg_entry_price=account.avg_entry if account.position_qty != 0 else None,
+                session_date=session_date,
+            )
             orders = collect_orders_for_bar(
                 mod_list,
                 ctx,
@@ -239,6 +257,16 @@ class BacktestEngine:
     ) -> None:
         for req in orders:
             validate_order_request(req)
+            if req.dedupe_tag:
+                dt = req.dedupe_tag
+                mid = req.module_id
+                working[:] = [
+                    w
+                    for w in working
+                    if not (
+                        w.request.module_id == mid and w.request.dedupe_tag == dt
+                    )
+                ]
             oid = self._next_order_id
             self._next_order_id += 1
             q = QueuedOrder(oid, req)

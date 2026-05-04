@@ -28,6 +28,9 @@ class OrderRequest:
     #: Owning module (required for multi-module / OMAT runs).
     module_id: str = ""
     tag: str = ""
+    #: When set, any **working** order with the same ``module_id`` and tag is
+    #: removed before this request is queued (break-even stop replacement).
+    dedupe_tag: str | None = None
 
 
 @dataclass(slots=True)
@@ -60,6 +63,11 @@ class BarContext:
     low: float
     close: float
     volume: float
+    #: Filled by the engine for strategies that need flat vs open awareness.
+    position_qty: int = 0
+    avg_entry_price: float | None = None
+    #: Optional session key (e.g. ``cme_session_date``); required for ORB daily reset.
+    session_date: Any | None = None
 
 
 class Strategy(Protocol):
