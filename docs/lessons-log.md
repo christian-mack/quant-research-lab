@@ -24,6 +24,14 @@
 
 ## Entries
 
+## 2026-04-28 — Docs referenced artifact paths that were never committed (looked fine locally)
+
+**Phase:** 1 (process / repo hygiene)  
+**Context:** Validating methodology and smoke results that pointed at on-disk paths such as `docs/nt8-artifacts/` (or similar) while reviewing git history and clone-fresh behavior.  
+**Finding:** Documentation and checklists referenced files that **existed only in the local working tree** (untracked or not yet pushed). On the author machine everything “resolved” because the files were present; another checkout or collaborator saw **broken references** until the artifacts were actually **committed** (or the doc was corrected).  
+**Implication:** When docs instruct readers to open paths or rely on committed baselines, **prove availability from a clean clone** (or CI) — not from “I have the folder here.” Treat **“referenced in doc” ⇒ “in git”** as an explicit gate for artifact directories, CSV exports, and NT8 dumps. Same class of failure as assuming env state that isn’t in the repo.  
+**Artifact:** `docs/lessons-log.md` (this entry); commits that added `docs/nt8-artifacts/` after methodology-only commits (see repo history / `SESSION_NOTES`).
+
 ## 2026-04-28 — M4 = correct engine; M6 = NT8 smoke test (not parity)
 
 **Phase:** 1 (M4/M6 scope)

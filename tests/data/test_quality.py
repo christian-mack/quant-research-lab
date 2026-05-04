@@ -43,6 +43,36 @@ def _make_minute_bar_frame(start: dt.datetime, n_minutes: int) -> pl.DataFrame:
     )
 
 
+def test_split_dataframe_at_operator_export_gaps_single_gap() -> None:
+    """Partition on one KnownGap: rows strictly inside [start,end] excluded from shards."""
+    d0 = dt.date(2024, 6, 17)
+    d_gap0 = dt.date(2024, 6, 18)
+    d_gap1 = dt.date(2024, 7, 31)
+    d2 = dt.date(2024, 8, 1)
+    df = pl.DataFrame(
+        {
+            "timestamp": [
+                dt.datetime(2024, 6, 17, 9, 0, tzinfo=CT),
+                dt.datetime(2024, 6, 19, 9, 0, tzinfo=CT),
+                dt.datetime(2024, 8, 1, 9, 0, tzinfo=CT),
+            ],
+            "cme_session_date": [d0, d_gap0, d2],
+        },
+    )
+    gaps = (
+        quality.KnownGap(
+            start_date=d_gap0,
+            end_date=d_gap1,
+            description="test gap",
+        ),
+    )
+    parts = quality.split_dataframe_at_operator_export_gaps(df, gaps=gaps)
+    assert len(parts) == 2
+    dates = [p["cme_session_date"].to_list() for p in parts]
+    assert [d0] in dates
+    assert [d2] in dates
+
+
 def test_known_gap_contains_inclusive_boundaries() -> None:
     g = quality.KnownGap(
         start_date=dt.date(2024, 6, 18),

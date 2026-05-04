@@ -3,7 +3,7 @@
 **Plan period:** Days 1-30 of Phase 1
 **Phase:** 1 — Python Research Infrastructure
 **Status:** Active
-**Last updated:** April 30, 2026 — **Path A** (M6 = ORB+Opt3 only; §8.6 directional) recorded in `nt8-backtest-methodology.md` §12; **M4 design review** next (`m4-backtest-engine-design.md` §§1–8 / §9).
+**Last updated:** April 28, 2026 — **M6** ORB+Opt3 full-window Python vs NT8 documented in `m6-nt8-reproduction.md` (smoke bands; ORB session/position coupling flagged for follow-up).
 **Next review:** Weekly; full plan refresh at day 30
 **Related documents:** `program-charter.md`, `phase-1-detailed-plan.md`, `ai-project-instructions.md`, `lessons-log.md`
 
@@ -129,6 +129,7 @@ Update this document weekly. Add entries to the lessons log ad hoc. Refer to the
 - [x] M4: Configurable fill model, slippage, commissions (defaults to NT8-matching assumptions)
 - [x] M4: End-to-end validation — MNQ RTH slice smoke + ORB+Opt3 (`modules/orb.py`)
 - [x] M5: ORB strategy module (**Opt3** = params incl. `latest_entry_hour_et=11`) + unit tests (`src/quant_research/modules/orb.py`)
+- [x] **M6 (smoke):** Full-window ORB+Opt3 Python run vs NT8 lessons-log reference — `docs/m6-nt8-reproduction.md`; `scripts/run_m6_orb_baseline.py` (gap-segmented); aggregate helpers/tests (`m6_metrics`, `split_dataframe_at_operator_export_gaps` test).
 - [ ] M5: Implement MomentumModule.py with 15m ATR gate and unit tests
 
 ### Parallel tracks this week

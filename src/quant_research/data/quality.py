@@ -103,12 +103,54 @@ KNOWN_GAPS: Final[tuple[KnownGap, ...]] = (
         ),
     ),
 )
-"""Operator-acknowledged data gaps in the local NT8 export.
 
-Trading days inside any range here are excluded from
-:func:`find_unexpected_missing_days`. Tests pin the count and span of
-each region against the current dataset.
-"""
+
+def split_dataframe_at_operator_export_gaps(
+    df: pl.DataFrame,
+    *,
+    session_date_col: str = "cme_session_date",
+    gaps: tuple[KnownGap, ...] = KNOWN_GAPS,
+) -> list[pl.DataFrame]:
+    """Partition rows so no segment spans an operator-known **export hole**.
+
+    NT8 exports can omit contiguous trading weeks (:data:`KNOWN_GAPS`). A
+    single :class:`~quant_research.backtest.engine.BacktestEngine` run on
+    concatenated minute bars otherwise **carries positions and working orders**
+    across clock time where no OHLC exists — non-NT8 behavior and pathological
+    P&amp;L when the series finally flattens.
+
+    Partitioning yields contiguous bar runs in session-date space with **gaps
+    excised**; run a **fresh** strategy instance per segment (or flatten
+    explicitly) for M6-scale parity with "no trade across missing tape."
+
+    Rows with ``session_date_col`` strictly inside ``[gap.start, gap.end]``
+    are absent in real data; the filter keeps ``date < start`` and
+    ``date > end`` shards only.
+
+    Args:
+        df: Bars sorted or unsorted; must include ``session_date_col``.
+        session_date_col: Session grouping key (typically ``cme_session_date``).
+        gaps: Defaults to :data:`KNOWN_GAPS`.
+
+    Returns:
+        Non-empty sorted partitions, each a ``DataFrame`` of bars.
+    """
+    if df.is_empty():
+        return []
+    parts: list[pl.DataFrame] = [df.sort("timestamp")]
+    for g in gaps:
+        new_parts: list[pl.DataFrame] = []
+        for p in parts:
+            if p.is_empty():
+                continue
+            before = p.filter(pl.col(session_date_col) < pl.lit(g.start_date))
+            after = p.filter(pl.col(session_date_col) > pl.lit(g.end_date))
+            if before.height:
+                new_parts.append(before)
+            if after.height:
+                new_parts.append(after)
+        parts = new_parts
+    return [p for p in parts if p.height > 0]
 
 
 def find_missing_trading_days(
