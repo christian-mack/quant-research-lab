@@ -68,6 +68,8 @@ class BarContext:
     avg_entry_price: float | None = None
     #: Optional session key (e.g. ``cme_session_date``); required for ORB daily reset.
     session_date: Any | None = None
+    #: Engine-set: **True** during CME daily maintenance deadzone (ET); suppress entries.
+    suppress_entry: bool = False
 
 
 class Strategy(Protocol):

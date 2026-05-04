@@ -24,6 +24,14 @@
 
 ## Entries
 
+## 2026-05-04 — PT3 missed NT8 break-at-end-of-session; M6 divergence (maintenance hold)
+
+**Phase:** 1 (M6 / methodology)  
+**Context:** Investigating Python vs NT8 economic gaps for ORB+Opt3; operator hypothesis that Python was **holding through CME daily maintenance** while NT8 **TradingHours** templates with **break at end of session** flatten and block entries into the gap.  
+**Finding:** PT3 (`docs/nt8-backtest-methodology.md` through 2026-04-30) did **not** record maintenance flatten or the **[17:00, 18:00) ET** entry deadzone. Python had **no** engine-level equivalent until **`SessionSpec.intraday_hygiene`** (**16:59 ET** close flatten, deadzone, queue clears). The **M6 RTH-only** baseline ends **before** 16:59 ET in the repo’s **`SESSION_RTH`** classifier, so the headline M6 row **unchanged** after the fix on that slice — the behavior is **regression-tested** and applies to ETH/full-session bars.  
+**Implication:** Future ports and full-session parity work inherit hygiene from the engine; **`OrbStrategy`** respects **`ctx.suppress_entry`** when flat. If dollar gaps persist on RTH-only M6, next step remains **parameter / CSV reconciliation** vs NT8 exports — not maintenance cross-session on this data slice.  
+**Artifact:** `session_hygiene.py`, `specs.IntradaySessionHygieneSpec`, `BacktestEngine` + `tests/backtest/test_session_hygiene.py`; `docs/nt8-backtest-methodology.md` §4.1; `m6-nt8-reproduction.md` fourth comparison column.
+
 ## 2026-04-28 — M6 second escalation: defensive bracket re-arm, dollar gap widened (honest)
 
 **Phase:** 1 (M6)  

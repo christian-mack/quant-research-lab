@@ -6,12 +6,13 @@
 
 ---
 
-## Two M6 escalations on this run
+## M6 escalations on this run
 
-| Pass | What changed in `OrbStrategy` | Why |
-|------|--------------------------------|-----|
+| Pass | What changed | Why |
+|------|--------------|-----|
 | **(A) Cross-session fix** | `on_bar` always routes through `_manage_open` while `position_qty != 0`; on `cme_session_date` rollover with an open position, **only** entry accumulators reset (FSM forced to `TRIGGERED`); BE flag and bracket fields persist. | Smoke ran with massive dollar divergence and multi-thousand-hour holds — trade FSM was orphaning the open position. |
-| **(B) Defensive bracket re-arm** | `_manage_open` now **emits stop and target every bar** while open with `dedupe_tag`. Engine `working` queue idempotently replaces same-tag orders. BE evaluation runs first; the emitted stop is at entry once `_break_even_done`, otherwise at `entry ± stop_distance`. | Static audit could not isolate where brackets dropped, but the empirical delta (next table) shows the OLD path lost protective orders for a small number of trades that then ran for **calendar quarters** until segment-end flatten. New Phase 2 modules with tighter stops would have silently inherited the same hole. |
+| **(B) Defensive bracket re-arm** | `_manage_open` now **emits stop and target every bar** while open with `dedupe_tag`. Engine `working` queue idempotently replaces same-tag orders. BE evaluation runs first; the emitted stop is at entry once `_break_even_done`, otherwise at `entry ± stop_distance`. | Static audit could not isolate where brackets dropped, but the empirical delta (next table) shows the OLD path lost protective orders for a small number of trades that then ran for **calendar quarters** until segment-end flatten. |
+| **(C) Session hygiene (engine)** | `BacktestEngine` + `SessionSpec.intraday_hygiene`: **16:59 ET** bar **close** `session_maintenance_flatten_et` when open; **[17:00, 18:00) ET** entry deadzone (`ctx.suppress_entry`, queued orders cleared at boundary). | NT8 **break at end of session** / Globex maintenance: Python had been able to **hold or queue fills across** the gap when post-RTH bars exist. Hoisted to the engine for all Phase 2 modules. |
 
 ---
 
@@ -23,18 +24,20 @@ Python has no broker layer. The engine `working` queue is the source of truth. P
 
 ---
 
-## Python — three runs on the same data
+## Python — four runs on the same data
 
-| Metric | **Pre-fix** (M5 baseline) | **After (A) cross-session** | **After (B) re-arm** |
-|--------|---------------------------|-----------------------------|----------------------|
-| Closed trades | 398 | 391 | **799** |
-| Net P&amp;L total (3 lots) | +$41,878.50 | +$41,115.00 | **+$19,167.00** |
-| Per-contract $ / yr | ~$2,216 | ~$2,175 | **~$1,014** |
-| Win rate | 64.57% | 64.19% | **62.95%** |
-| Profit factor | 1.68 | 1.67 | **1.18** |
-| Avg win / avg loss | +$403.20 / −$460.78 | +$408.75 / −$462.27 | **+$252.88 / −$392.84** |
-| Max drawdown (combined) | −$9,451.50 | −$9,451.50 | **−$8,025.00** |
-| Multi-thousand-hour trades | several | 7 (incl. 14k h, 13k h) | reduced; long-hold flatten artifact gone |
+| Metric | **Pre-fix** (M5 baseline) | **After (A) cross-session** | **After (B) re-arm** | **After (C) session hygiene** |
+|--------|---------------------------|-----------------------------|----------------------|--------------------------------|
+| Closed trades | 398 | 391 | **799** | **799** |
+| Net P&amp;L total (3 lots) | +$41,878.50 | +$41,115.00 | **+$19,167.00** | **+$19,167.00** |
+| Per-contract $ / yr | ~$2,216 | ~$2,175 | **~$1,014** | **~$1,014** |
+| Win rate | 64.57% | 64.19% | **62.95%** | **62.95%** |
+| Profit factor | 1.68 | 1.67 | **1.18** | **1.18** |
+| Avg win / avg loss | +$403.20 / −$460.78 | +$408.75 / −$462.27 | **+$252.88 / −$392.84** | **+$252.88 / −$392.84** |
+| Max drawdown (combined) | −$9,451.50 | −$9,451.50 | **−$8,025.00** | **−$8,025.00** |
+| Multi-thousand-hour trades | several | 7 (incl. 14k h, 13k h) | reduced; long-hold flatten artifact gone | unchanged vs (B) |
+
+**Why (C) matches (B) on this row:** The M6 protocol filters to **`SESSION_RTH`**, which in `session.classify_sessions` is **Mon–Fri `08:30 ≤ time < 15:00` Chicago** — i.e. the last RTH bar is **before 16:59 ET** maintenance. Hygiene is **load-bearing** for ETH / full-session bars and is **regression-tested** (`tests/backtest/test_session_hygiene.py`); it does **not** intersect the current RTH-only bar set.
 
 The **−$22k** drop in net P&amp;L from (A) to (B) traces to a single +$32,443 segment-flatten on the **2022-08-26 → 2024-03-28** trade — pre-(B), this position rode unmanaged for **~580 days** and crystallized at the segment boundary. That windfall was simulator artifact, not strategy edge: with proper bracket persistence, the trade exits on a normal stop or target far earlier.
 
@@ -86,7 +89,7 @@ Pass (B) is the **correct** bracket contract. The pre-(B) dollar total included 
 
 ## Milestone status — **M6 stays open**
 
-- **Engine reasonableness:** Improved twice. Bracket persistence now matches broker semantics.
+- **Engine reasonableness:** Cross-session management (A), broker-style bracket re-arm (B), and **session hygiene** (C) are now encoded; (C) is NT8 **break-at-end-of-session** parity for bar sets that reach **16:59 ET**.
 - **Win-rate band:** Pass.
 - **Dollar headline:** **Far** outside ±10%. Per the operator directive ("don't close M6 with the dollar gap unresolved"), **M6 is not closed** by this rerun.
 
@@ -95,4 +98,4 @@ Pass (B) is the **correct** bracket contract. The pre-(B) dollar total included 
 2. **Try `max_hold_minutes`** (Opt 5 in C#) on a sweep — does production-equivalent NT8 also run with it disabled?
 3. **Disable BE** on a pass: BE-armed-and-camp-at-entry is a known quirk for trending instruments; a no-BE run would isolate that effect.
 
-Artifact: `scripts/run_m6_orb_baseline.py` JSON on operator MNQ export; doc revised **2026-04-28** (post-(B), with three-run table).
+Artifact: `scripts/run_m6_orb_baseline.py` JSON on operator MNQ export; doc revised **2026-05-04** (post-(C) four-run table; (C) ≠ (B) only on feeds that include **≥ 16:59 ET** bars).

@@ -38,6 +38,12 @@ re-read the strategy for **15m bar close ATR vs 1m projection** before changing 
   on the instrument until filled or cancelled. New modules must not silently
   lose protective orders due to FSM-state bugs — the engine queue is the
   source of truth, but the strategy contract is "always re-arm while open."
+- **Session maintenance (NT8 break-at-end-of-session):** The engine's
+  ``SessionSpec.intraday_hygiene`` flattens open risk at **16:59 America/New_York**
+  bar **close** and drops strategy orders into the **[17:00, 18:00) ET** deadzone
+  when flat. ``ctx.suppress_entry`` is set in that deadzone — while flat,
+  ``on_bar`` returns no orders so entry FSM does not fight engine-level hygiene.
+  Open-position management still runs until flatten.
 """
 
 from __future__ import annotations
@@ -155,6 +161,9 @@ class OrbStrategy:
             raise ValueError(msg)
 
         self._check_session_reset(sess, ctx)
+
+        if ctx.suppress_entry and ctx.position_qty == 0:
+            return []
 
         if ctx.position_qty != 0:
             return self._manage_open(ctx, mid)

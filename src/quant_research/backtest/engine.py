@@ -16,6 +16,10 @@ from quant_research.backtest.fill_resolution import (
     validate_order_request,
 )
 from quant_research.backtest.omat import StrategyModule, collect_orders_for_bar
+from quant_research.backtest.session_hygiene import (
+    in_entry_deadzone_et,
+    is_flatten_time_et,
+)
 from quant_research.backtest.specs import BacktestConfig, MarketFillTiming
 from quant_research.backtest.trade_ledger import TradeLedger
 from quant_research.backtest.types import (
@@ -82,6 +86,13 @@ class BacktestEngine:
     bar's close** (not the next open) — a ``PYTHON_ASSUMPTION`` for series end;
     the synthetic exit uses tag ``end_of_series_flatten`` and ``exit_reason``
     ``flatten`` in the trade log.
+
+    **CME / NT8 session hygiene (``SessionSpec.intraday_hygiene``):** On each bar at
+    **16:59 America/New_York**, any open position is **force-flattened** at that bar's
+    **close** (tag ``session_maintenance_flatten_et``). During **[17:00, 18:00) ET**,
+    entry orders from strategies are suppressed when flat; any residual open position
+    is also flattened at bar close (covers missing 16:59 minute bar). Matches NT8
+    **TradingHours** / break-at-end-of-session behavior for intraday research.
 
     **Known deferral (NT8 ``ExecutionEngine.ManagePosition``):** ORB
     **``ORBMaxHoldMinutes``** / **``FlattenForRisk``** time-based flatten is **not**
@@ -167,6 +178,10 @@ class BacktestEngine:
             if before_s != 0 and account.position_qty == 0:
                 working.clear()
 
+            hygiene = self.config.session.intraday_hygiene
+            suppress_entry = (
+                hygiene.enabled and in_entry_deadzone_et(ts, hygiene)
+            )
             ctx = BarContext(
                 i,
                 ts,
@@ -178,6 +193,7 @@ class BacktestEngine:
                 position_qty=account.position_qty,
                 avg_entry_price=account.avg_entry if account.position_qty != 0 else None,
                 session_date=session_date,
+                suppress_entry=suppress_entry,
             )
             orders = collect_orders_for_bar(
                 mod_list,
@@ -186,7 +202,28 @@ class BacktestEngine:
                 position_qty=account.position_qty,
                 position_owner=position_owner,
             )
+            if hygiene.enabled and suppress_entry and account.position_qty == 0:
+                orders = []
             self._route_orders(orders, pending_market, working)
+
+            if hygiene.enabled:
+                flatten_bar = is_flatten_time_et(ts, hygiene)
+                in_dz = in_entry_deadzone_et(ts, hygiene)
+                if flatten_bar or in_dz:
+                    # Drop queued risk before maintenance / deadzone — otherwise a market
+                    # order at 16:59 would fill at 17:00 open (violates hygiene).
+                    pending_market.clear()
+                    working.clear()
+                if account.position_qty != 0 and (flatten_bar or in_dz):
+                    position_owner = self._force_session_hygiene_flatten(
+                        account=account,
+                        ledger=ledger,
+                        position_owner=position_owner,
+                        bar_index=i,
+                        close_px=c,
+                        ts=ts,
+                        all_fills=all_fills,
+                    )
 
             prev_close = c
 
@@ -204,6 +241,43 @@ class BacktestEngine:
 
         trade_log = ledger.to_dataframe()
         return BacktestResult(trade_log=trade_log, fills=all_fills, account=account)
+
+    def _force_session_hygiene_flatten(
+        self,
+        *,
+        account: Account,
+        ledger: TradeLedger,
+        position_owner: str | None,
+        bar_index: int,
+        close_px: float,
+        ts: object,
+        all_fills: list[SimulatedFill],
+    ) -> str | None:
+        """Market-out at this bar's close; queues already cleared by ``run``."""
+        q = account.position_qty
+        if q == 0:
+            return position_owner
+        mod_id = position_owner if position_owner is not None else "unknown"
+        side = OrderSide.SELL if q > 0 else OrderSide.BUY
+        fill = synthetic_market_fill(
+            order_id=self._next_order_id,
+            module_id=mod_id,
+            side=side,
+            quantity=abs(q),
+            base_price=close_px,
+            ts=ts,
+            config=self.config,
+            tag="session_maintenance_flatten_et",
+        )
+        self._next_order_id += 1
+        return _apply_fills(
+            [fill],
+            account=account,
+            ledger=ledger,
+            owner=position_owner,
+            bar_index=bar_index,
+            all_fills=all_fills,
+        )
 
     def _end_of_series_cleanup(
         self,

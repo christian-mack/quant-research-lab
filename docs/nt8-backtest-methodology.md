@@ -70,6 +70,14 @@
 | **Intrabar OHLC ordering** | Governed by NT8 **Standard** fill resolution and Analyzer historical data — **exact same-bar sequencing** for stops vs targets should be treated as **NT8-defined**; M6 should match NinjaTrader’s documented behavior for this mode or flag measured deltas. |
 
 
+### 4.1 CME daily maintenance / NT8 “break at end of session”
+
+**Execution semantics:** When the bar stream includes **America/New_York** time through the cash/Globex **maintenance** boundary, treat **NT8 TradingHours-style “break at end of session”** as requiring: (1) **flat by the 16:59 ET bar’s close** — any open position is **force-closed** at that bar’s **close** after normal bar processing; (2) **no new entries** during **[17:00, 18:00) ET** — queued orders must not open risk that would fill after the break (half-open interval on ET wall-clock; **Sunday ETH** uses the same ET clock if bars exist).
+
+**PT3 gap:** Through **2026-04-30**, this document did **not** capture the above as an explicit methodology item. **M6** surfaced it while investigating **economic divergence** vs NT8 when Python held through the maintenance window on feeds that still had post-RTH bars.
+
+**Python (M4):** Implemented on **`BacktestEngine`** via **`SessionSpec.intraday_hygiene`** (`IntradaySessionHygieneSpec` — flatten clock **16:59 ET**, deadzone **[17:00, 18:00) ET**). **`docs/m6-nt8-reproduction.md`** RTH-only baseline uses **`session == RTH`** (§2), which in this repo’s CME classifier ends **before** 16:59 ET — so hygiene is **covered by regression tests** but may **not move** headline M6 numbers until a **full-session or ETH-inclusive** run is compared.
+
 *Open point (not guessed):* If Strategy Analyzer global **Backtest…** options introduce an additional layer beyond `OrderFillResolution.Standard`, capture a screenshot or NT8 version Help reference in a future revision. **Proposed M6 approach:** treat **committed C# + Standard resolution + OnBarClose** as the **primary** behavioral spec; compare trade list timing against Python.
 
 ---
@@ -370,3 +378,4 @@ Evidence for this **Complete** revision is **committed artifacts** + operator ex
 | 2026-04-30 | **Operator sign-off — Path A:** M6 = ORB+Opt3 exact only; §8.6 directional; methodology accepted as-is (§12). |
 | 2026-05-04 | **Artifacts in git:** ``docs/nt8-artifacts/`` (``flux/*.cs``, CSV exports) committed for M6 ground truth; *d2259f5* committed the **methodology** document only — sources landed in a follow-up commit (this repo: **2026-05-04**). |
 | 2026-04-28 | §10: M6 smoke bands (**±10%** net P&L, **±5%** trade count) vs NT8 per `m4-backtest-engine-design.md`; operator velocity framing. |
+| 2026-05-04 | **§4.1:** CME maintenance / NT8 break-at-end-of-session — flat **16:59 ET** bar close, entry deadzone **[17:00, 18:00) ET**; **PT3 gap** noted; Python = `SessionSpec.intraday_hygiene`. |

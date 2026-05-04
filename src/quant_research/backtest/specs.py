@@ -8,7 +8,7 @@ simplification is labeled in type docstrings as a ``PYTHON_ASSUMPTION``.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from datetime import date
+from datetime import date, time
 from enum import StrEnum
 
 
@@ -79,10 +79,34 @@ class InstrumentSpec:
 
 
 @dataclass(frozen=True, slots=True)
+class IntradaySessionHygieneSpec:
+    """NT8 **break-at-end-of-session** analogue: flat into maintenance; entry deadzone.
+
+    Wall-clock **America/New_York** (handles DST via tz-aware bar timestamps).
+
+    - **Flatten time:** Any open position is closed with a market fill at this bar's
+      **close** (after normal fills and strategy ``on_bar`` for that bar).
+    - **Deadzone:** While flat, the engine drops **all** strategy orders so modules
+      cannot open new risk; if still open (missing 16:59 bar, etc.), also flattened
+      at **close** for every bar in the deadzone.
+
+    Disable with ``enabled=False`` for unit tests that intentionally span maintenance.
+    """
+
+    enabled: bool = True
+    flatten_time_et: time = time(16, 59)
+    entry_deadzone_start_et: time = time(17, 0)
+    entry_deadzone_end_et: time = time(18, 0)
+
+
+@dataclass(frozen=True, slots=True)
 class SessionSpec:
     calendar_name: str = "CME_Equity"
     classify_sessions: bool = True
     trade_rth_only: bool = False
+    intraday_hygiene: IntradaySessionHygieneSpec = field(
+        default_factory=IntradaySessionHygieneSpec,
+    )
 
 
 @dataclass(frozen=True, slots=True)
