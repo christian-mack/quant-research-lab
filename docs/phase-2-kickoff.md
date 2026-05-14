@@ -93,7 +93,7 @@ All of the following are **defaults** unless the operator explicitly approves an
 
 Phase 1 showed that **low trade count** can make a **real edge** **operationally unusable** under prop DD windows: variance dominates short horizons, and pass/fail becomes a sampling lottery.
 
-Phase 2 should treat **trade frequency** as a **constraint alongside** edge magnitude — not only “more P&L per trade.” **Higher frequency with smaller per-trade edge** may **dominate** **rare, high-edge** patterns for ** funded survival and payout realization**.
+Phase 2 should treat **trade frequency** as a **constraint alongside** edge magnitude — not only “more P&L per trade.” **Higher frequency with smaller per-trade edge** may **dominate** **rare, high-edge** patterns for **funded** survival and payout realization.
 
 ---
 
