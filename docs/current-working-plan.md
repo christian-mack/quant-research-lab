@@ -1,200 +1,97 @@
-# Current Working Plan: Next 30 Days
+# Current Working Plan: Phase 2 Research
 
-**Plan period:** Next 30 days (refresh recommended — Phase 1 core path complete)
-**Phase:** **2 — Flux V2 configuration research** (Phase 1 milestone gate cleared per amended **2026-05-14** criteria)
-**Status:** Phase 1 **M1–M7** complete; **M8/M9** minimal scope only (see `phase-1-detailed-plan.md`)
-**Last updated:** May 14, 2026 — **M8/M9** deferral formalized (lessons log **2026-05-14**); **`program-charter.md`** exit criteria aligned. Phase 2 work: ORB+Opt3 baseline investigations per charter.
-**Next review:** Weekly; replace this file with a Phase 2–focused 30-day plan when convenient
-**Related documents:** `program-charter.md`, `phase-1-detailed-plan.md`, `ai-project-instructions.md`, `lessons-log.md`
-
----
-
-## Purpose of This Document
-
-This is the zoomed-in tactical plan for the next ~30 days of work. It covers a subset of Phase 1 milestones (approximately M1-M5 with M6 starting) plus all parallel tracks. When this 30-day window ends, this document is archived and replaced with the next 30-day working plan covering M6 completion through M9.
-
-Update this document weekly. Add entries to the lessons log ad hoc. Refer to the charter and Phase 1 plan for context that doesn't belong here.
+**Plan type:** Batch-oriented research units (not week-by-week Phase 1 milestones)
+**Phase:** **2 — Flux V2** — configuration and pattern discovery vs frozen **ORB+Opt3** baseline
+**Status:** Phase 1 milestone gate cleared; Phase 2 execution begins after **`docs/phase-2-kickoff.md`** commit
+**Last updated:** May 14, 2026 — transition from Phase 1 weekly checklist to Phase 2 batch plan
+**Next review:** After each hypothesis batch / validation cycle (or at least weekly for parallel tracks)
+**Related documents:** `docs/phase-2-kickoff.md`, `docs/program-charter.md`, `flux-v2-module-search-starter.md`, `docs/phase-1-detailed-plan.md`, `docs/ai-project-instructions.md`, `docs/lessons-log.md`
 
 ---
 
-## 30-Day Scope
+## Purpose of this document
 
-**Primary development goal:** Complete M1-M5 of Phase 1 (environment through module implementations) and begin M6 (NT8 validation). At 20 hours/week of focused development, this is 80 hours of capacity covering an estimated 57-85 hours of primary-path work with buffer for the start of M6.
+Tactical plan for **Phase 2**: what research batch is active, what gates apply, and what runs in parallel with R&D. Phase 1 week-by-week tasks are **archived in git history**; this document is the single place for **current** Phase 2 scope.
 
-**Parallel tracks:** PT1–PT4 active throughout. PT5 and PT6 fit in as time allows. **Phase 1b / Sierra Chart** porting is **not** in this 30-day window — it starts after the **Phase 1** milestone gate passes (see `program-charter.md` Phase 1b).
-
-**Explicitly out of scope for this 30 days:**
-- ~~M6 completion~~ **M6 complete** (2026-05-13); **M7** (statistical testing) may start in current/next window per plan refresh
-- M8 multi-instrument infrastructure (next window)
-- M9 regime scaffolding (next window)
-- Any Flux V2 research (gated on Phase 1 completion)
+Update when a batch completes, when hypotheses are pre-registered, or when parallel-track status materially changes.
 
 ---
 
-## Week 1 — Environment + Data Pipeline Start
+## Phase 2 success criteria (reminder)
 
-**Primary focus:** M1 complete, M2 begun
-
-### Development tasks
-- [x] M1: Cursor IDE in use on Windows (Python/Jupyter extensions); WSL2 deferred per lessons-log 2026-04-26
-- [x] M1: Install uv; project repo already on GitHub (private)
-- [x] M1: Initialize Python project with pyproject.toml; pin polars, numpy, scipy, matplotlib, plotly, pytest, jupyter, pandas-ta (for validation reference)
-- [x] M1: Set up .gitignore for Python + Jupyter + data artifacts
-- [x] M1: Smoke test — notebook runs, polars loads sample data, commit to git
-- [x] M2: Begin data loader — read one MNQ .txt file, produce polars DataFrame with parsed timestamps (`src/quant_research/data/data_loader.py::load_contract_file`)
-- [x] M2: Validate single-file load matches raw file contents (bar count, first/last timestamp) — see `tests/data/test_data_loader.py::test_real_mnq_03_26_*`
-
-### Parallel tracks this week
-- [ ] PT1: Monitor live Flux V1 accounts daily
-- [ ] PT2: Track status of in-progress eval account; decide on next eval purchase timing
-- [x] PT3: NT8 methodology **`docs/nt8-backtest-methodology.md`** — **Complete** 2026-04-30; operator **Path A** sign-off §12 (M6 ORB+Opt3 only).
-- [ ] PT4: Acquire Lopez de Prado *Advances in Financial Machine Learning* (if not already owned)
-### Week 1 success criteria
-- Environment runs a Jupyter notebook with polars operations
-- At least one MNQ contract file loaded and inspected in Python
-- NT8 backtest methodology documentation started
-
-### Estimated effort
-12-18 hours (environment setup has known friction; budget accordingly)
+Charter-level Phase 2 exit is **≥ X% improvement vs ORB+Opt3 baseline** on agreed KPIs over the **6-year** protocol, plus statistical and (where applicable) **minimum viable edge** gates for new modules — see `docs/program-charter.md`. **Program north star** remains **per-account income** toward **$65K–$100K/yr**; see `docs/phase-2-kickoff.md` for gap framing and trade-frequency constraints.
 
 ---
 
-## Week 2 — Data Pipeline + Indicators
+## Active work: batch-oriented units
 
-**Primary focus:** M2 complete, M3 begun
+Research proceeds in **batches**, not calendar weeks. A typical batch includes:
 
-### Development tasks
-- [x] M2: Extend loader to all 26 MNQ contract files (`load_contracts`, `load_all_contracts`); dataset = 2,196,751 bars (no rows dropped after UTC discovery + load-time conversion to CT; see lessons-log 2026-04-27 entries on UTC discovery and DST correction)
-- [x] M2: Continuous contract construction with documented roll methodology (`continuous_contract.build_continuous_contract`); volume-crossover with `data_boundary` fallback. Empirical: NT8 export gives ~5-day overlap with current contract dominant through day 4 → all 25 rolls fall through to data-boundary. See lessons-log 2026-04-26 (NT8 export shape).
-- [x] M2: Timezone normalization — source confirmed UTC by inspection (Friday close, daily maintenance gap, DST shifts all consistent only with UTC); loader now does `replace_time_zone("UTC").convert_time_zone("America/Chicago")`. Last bar of dataset lands at 16:00 CT, matching CME's daily maintenance-break boundary.
-- [x] M2: Session classification (`src/quant_research/data/session.py::classify_sessions`) — RTH / ETH / BREAK / WEEKEND / HOLIDAY, backed by `pandas_market_calendars` `CME_Equity` for holiday and early-close lookup. Half-open `[market_open, market_close)` convention; BREAK is Mon-Thu only.
-- [x] M2: Known gap detection and flagging (`src/quant_research/data/quality.py`) — `KNOWN_GAPS` registry (4 entries: Good Friday 2024, Jun-Jul 2024, Good Friday 2025, Feb-Mar 2026; 61 missing trading days total). `find_unexpected_missing_days` returns `[]` on the current dataset.
-- [x] M2: Validation — total bar count 2,196,751 raw / 2,140,532 continuous ✓ (phase plan ~2.1M); 1,630 PMC trading days in range (phase plan ~1,580 was an estimate, PMC is exact); coarse price-level cross-check on 2024-04-04 vs `/NQM4` daily wrap (~18,173) passes (our RTH range 18,201-18,505). Tick-perfect TradingView OHLC comparison deferred — TV's free product can't render RTH-session daily candles cleanly enough to compare; internal validations (bar count, PMC days, known-gap coverage, tz boundaries) are strong enough. Decision documented in `SESSION_NOTES`. **M2 closed.**
-- [x] M3: Indicator library scaffolded with ATR (`src/quant_research/indicators/atr.py`); `true_range_expr`, `atr_expr`, `add_true_range`, `add_atr` with Wilder-default + SMA/EMA modes. Pandas-ta-equivalent seeding (TR pre-seeded with SMA at index `length-1`).
-- [x] M3: Unit tests for ATR against pandas-ta reference (`tests/indicators/test_atr.py`); 26 tests covering hand-computed primitive, three smoothing modes vs pandas-ta within 1e-6 relative error, edge cases, error paths, and real-data smoke. Indicator-API conventions documented in `atr.py` module docstring as the template for remaining M3 indicators.
+| Unit | Description |
+|------|-------------|
+| **Hypothesis batch** | 3–10 related ideas pre-registered; shared data slice and protocol; single comparison-correction context where possible. |
+| **Pattern discovery round** | Exploration allowed only within a **scoped question**; promotes survivors to named hypotheses for pre-registration. |
+| **Validation cycle** | IS/OOS, deflated Sharpe, bootstrap CIs, walk-forward on candidates that clear the discovery bar; integration/displacement tests when multiple levers interact. |
 
-### Parallel tracks this week
-- [ ] PT1: Continued live operation monitoring
-- [ ] PT2: Log in-progress eval status; purchase next eval if appropriate per cadence
-- [x] PT3: **M4 gate —** NT8 methodology **Complete** + **Path A** sign-off; **M4 design** review in progress (`m4-backtest-engine-design.md` §9).
-- [ ] PT4: Begin Lopez de Prado reading — start with chapters on backtest overfitting (likely Ch. 11) and deflated Sharpe (likely Ch. 14)
-### Week 2 success criteria
-- Full 6-year MNQ dataset loaded into polars with validated bar count and session labels
-- ATR indicator implemented and passing unit tests
-- NT8 methodology documentation complete
-
-### Estimated effort
-18-22 hours
+**Batch naming:** Use a short id in lessons log entries (e.g. `P2-B001-hypothesis-batch`).
 
 ---
 
-## Week 3 — Indicators + Backtest Engine Start
+## Batch 1 (current): Phase 2 kickoff and initial hypothesis selection
 
-**Primary focus:** M3 complete, M4 begun
+**Goal:** Establish Phase 2 operating rhythm and a **first pre-registered set** of investigations.
 
-### Development tasks
-- [x] M3: Williams %R (`indicators/williams_r.py`), EMA/SMA (`indicators/moving_average.py`), session-anchored VWAP (`indicators/vwap.py` + `session.assign_cme_session_date`), opening range (`indicators/opening_range.py`), basic volume profile (`indicators/volume_profile.py`). Session cumulative / grouped outputs document template deviations in-module (see `vwap.py`, `opening_range.py`, `volume_profile.py`).
-- [x] M3: Unit tests for each (`tests/indicators/`); pandas-ta cross-checks where applicable (Williams %R ``talib=False``, SMA/EMA ``talib=False``); VWAP vs hand arithmetic + per-session numpy cumsum on real data.
+**Tasks:**
 
-### M3 closeout / M4 gate (before starting the backtest engine)
-- [~] **PT3: NT8 backtest methodology** — **Complete** 2026-04-30; **Path A** (§12): M6 strict = **ORB+Opt3**; multi-module / §8.6 = **directional** only.
-- [x] **M4: Backtest engine design** — **Approved 2026-04-28** — `docs/m4-backtest-engine-design.md` (smoke M6, §8 defaults); **scaffold** in `src/quant_research/backtest/`.
-- [x] M4: Implement core event loop — bar-by-bar iteration with strategy callbacks (``StrategyModule`` list + OMAT routing).
-- [x] M4: Implement order management — market next open; stop/limit first-touch; end-series flatten.
-- [x] M4: Implement position tracking and P&L calculation — ``Account`` + ``TradeLedger`` round-trip rows.
+- [ ] Read **`docs/phase-2-kickoff.md`** end-to-end; align operator + strategy partner on gap, methodology, and roles.
+- [ ] Read **`flux-v2-module-search-starter.md`** and charter Phase 2; scrub any remaining stale “replace module X” framing in favor of **income-gap discovery**.
+- [ ] Confirm **pre-registration** format and storage (hypothesis statement, primary metrics, IS/OOS rule, expected artifact paths).
+- [ ] Produce **5–10** first hypotheses; **pre-register all** before running backtests that inform go/no-go.
+- [ ] Define how **results** are summarized and signed off (pass/pause/kill, links to trade logs / reports).
 
-### Parallel tracks this week
-- [ ] PT1: Continued live operation
-- [ ] PT2: Review eval progress; note any pattern emerging in pass rate data
-- [ ] PT4: Continue Lopez de Prado reading
-- [ ] PT5: Scope instrumentation work for live Flux V1 (per-module trade frequency logging) — estimate effort
-### Week 3 success criteria
-- All required indicators implemented and validated
-- Backtest engine can run a trivial strategy end-to-end without crashing
-- P&L accounting reconciles correctly
-
-### Estimated effort
-20-25 hours
+**Batch 1 exit:** First hypothesis batch documented and pre-registered; at least one analysis **ready to execute** in the implementation agent with frozen protocol references (`docs/m6-nt8-reproduction.md`, `docs/nt8-backtest-methodology.md`).
 
 ---
 
-## Week 4 — Backtest Engine Completion + Module Implementations Start
+## Parallel tracks (ongoing)
 
-**Primary focus:** M4 complete, M5 begun (ORB and Momentum modules)
+These run **alongside** Phase 2 research unless charter stop-conditions trigger:
 
-### Development tasks
-- [x] M4: Complete execution engine — OneModuleAtATime constraint, module priority ordering
-- [x] M4: Trade log output with standardized columns
-- [x] M4: Configurable fill model, slippage, commissions (defaults to NT8-matching assumptions)
-- [x] M4: End-to-end validation — MNQ RTH slice smoke + ORB+Opt3 (`modules/orb.py`)
-- [x] M5: ORB strategy module (**Opt3** = params incl. `latest_entry_hour_et=11`) + unit tests (`src/quant_research/modules/orb.py`)
-- [x] **M6 (smoke, closed 2026-05-13):** Full-window ORB+Opt3 Python vs NT8 — `docs/m6-nt8-reproduction.md`. Pass (A) cross-session, (B) bracket re-arm, (C) session hygiene; smoke bands met after **per-contract** NT8 basis correction (**2026-05-13** lessons log).
-- [x] **M7:** Statistical testing framework — ``src/quant_research/statistics/`` + ``tests/statistics/`` (2026-05-13).
-- [ ] M5: Implement MomentumModule.py with 15m ATR gate and unit tests
-
-### Parallel tracks this week
-- [ ] PT1: Continued live operation
-- [ ] PT2: Eval sample tracking
-- [ ] PT4: Continue reading
-- [ ] PT6: Begin investigation of data gap backfill sources — cost and feasibility
-### Week 4 success criteria
-- Backtest engine complete and validated
-- ORB and Momentum modules implemented with passing unit tests
-- Data gap backfill path identified (even if not yet purchased)
-
-### Estimated effort
-20-25 hours
+| Track | Owner | Notes |
+|-------|--------|--------|
+| **PT1 — Live Flux V1** | Operator | ORB+Opt3 production monitoring; integrity; journaling anomalies vs backtest. |
+| **PT2 — Eval sampling** | Operator | Continue building pass-rate sample toward statistical usefulness (charter parallel track). |
+| **PT3 — Documentation / methodology** | Implementation agent | Keep NT8 methodology and Python parity docs current when protocol changes. |
+| **PT4 — Phase 1b readiness** | Operator / future | Sierra (or alternative) **starts only after** Phase 1b entry criteria; no port work required for Phase 2 R&D. |
+| **PT5 — Research tooling** | Implementation agent | Bugfixes and small enhancements to stats/backtest stack as Phase 2 exposes needs. |
 
 ---
 
-## End of 30-Day Review
+## Near-future batches (placeholders)
 
-At day 30, review the following:
+Placeholders only — dates and scope TBD by operator after Batch 1:
 
-### Development progress
-- Which Phase 1 milestones are complete?
-- Which are in progress and what's their state?
-- Are any taking significantly longer than estimated? Why?
+- **Batch 2:** Execute first pre-registered hypothesis set; record deflated Sharpe / CI outputs; kill or promote.
+- **Batch 3:** Second discovery round or deep-dive on surviving families (e.g. frequency vs magnitude tradeoffs).
+- **Batch 4:** Walk-forward and integration tests on top candidate(s).
 
-### Parallel track progress
-- Flux V1 live pass rate data: what does the sample show?
-- Any operational anomalies worth investigating?
-- How much reading completed? What are the key takeaways?
-
-### Lessons log
-- Review entries added during the 30 days
-- Are there patterns? Anything that changes the Phase 1 plan or charter?
-
-### Next 30-day plan
-- Scope next 30 days covering M5 completion, M6, M7, and likely M8-M9
-- Update this document (archive current version, draft replacement)
+Rename or split as needed; document changes in **`docs/lessons-log.md`**.
 
 ---
 
-## Risks in This 30-Day Window
+## Risks (Phase 2)
 
 | Risk | Watch for | Response |
-|---|---|---|
-| Environment setup takes >1 week | Cursor/uv/polars friction on Windows | Budget extra time in Week 2; don't push to Week 3 if Week 1 slipping badly |
-| Data pipeline edge cases emerge | Unexpected bar count discrepancies, timezone issues | Log findings in lessons log; investigate before proceeding to indicators |
-| Backtest engine design takes multiple iterations | Unsure about best architecture | Document design decisions as they're made; M4 is the foundation for everything after |
-| Live Flux operational issues | Account requires attention beyond daily monitoring | Pause development; charter's operational load principles apply |
-| Lopez de Prado reading pace slow | Dense material, limited time | Focus on the key chapters (11, 14, 7-8); other chapters can wait for M7 |
+|------|-----------|----------|
+| Overfitting across many ideas | Many “looks good” OOS without correction | Enforce pre-registration + DSR/deflated Sharpe across batch size; log all tries. |
+| Ignoring trade count | Pretty equity, <80 trades/yr or prop-incompatible cadence | Explicit frequency constraints in kickoff; score candidates on trades/year and DD-window simulation where feasible. |
+| Scope creep into execution | Rewriting live before research gates | Phase 1b sequencing per charter; Python remains spec until side-by-side validation. |
+| Operator overload | Live + eval + research | Batch size caps; pause discovery if PT1 demands spike (charter operational principles). |
 
 ---
 
-## Working Plan Discipline
+## Working plan discipline
 
-This document is updated weekly at minimum. The review cadence:
-
-- **Daily:** Mental check on current task; update in-progress checkboxes
-- **Weekly:** Review week's completions, update next week's tasks based on what actually happened, add entries to lessons log if anything significant emerged
-- **At day 30:** Full review, archive this document, draft next 30-day plan
-
-Add entries to the lessons log when:
-- A decision was made that wasn't in the plan
-- Something was harder or easier than expected in a way that might affect future planning
-- An assumption turned out to be wrong
-- A finding changes the approach to a future phase
-
-Do not add entries for routine completions or non-surprising progress.
+- **Per batch:** Pre-register → run → document outcome in lessons log or agreed research log; link artifacts.
+- **Ad hoc:** Charter-level decisions and surprises → **`docs/lessons-log.md`** (append-only).
+- **Agent sessions:** Follow **`docs/ai-project-instructions.md`**; new chats start with kickoff + charter + lessons log.
