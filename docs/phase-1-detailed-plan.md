@@ -1,8 +1,8 @@
 # Phase 1 Detailed Plan: Python Research Infrastructure
 
 **Phase:** 1 of program
-**Scope:** Comprehensive Python research environment
-**Status:** Not started
+**Scope:** Comprehensive Python research environment (M1–M7 complete; **M8/M9 minimal** — see §M8–M9)
+**Status:** Complete for core path (2026-05-14): **M1–M7** done; **M8**/**M9** scoped to **design + examples** only; Phase 2 entry cleared
 **Owner:** Christian
 **Related documents:** `program-charter.md`, `current-working-plan.md`, `ai-project-instructions.md`
 
@@ -20,11 +20,11 @@ Estimated total effort: 6-8 weeks at ~20 hours/week, with meaningful variance de
 
 Build a comprehensive Python-based research environment that replaces NT8 as the primary research platform for all systematic trading strategy development. The environment must:
 
-- Reproduce Flux V1 backtest results with documented divergence analysis
-- Provide statistical testing appropriate for rigorous strategy research (deflated Sharpe, bootstrap CIs, walk-forward validation)
-- Support multi-instrument research from day one (even if initially only MNQ is used)
-- Scaffold regime detection capabilities for Flux V3 and beyond
-- Operate locally on Windows development machine with WSL2 (Tier 0 deployment)
+- Reproduce Flux V1 backtest results with documented divergence analysis (production path: **ORB+Opt3** smoke per M6)
+- Provide statistical testing appropriate for rigorous strategy research (deflated Sharpe, bootstrap CIs, walk-forward validation, purged CV v1)
+- **Defer** general multi-instrument data build until **concrete** cross-section requirements exist; keep **schema/interface** alignment only (see **M8**)
+- **Defer** generalized regime **framework** until Phase 3 overlay work; Phase 2 may compute regime-style features **ad hoc** from the existing pipeline (see **M9**)
+- Operate locally on Windows development machine (Tier 0 deployment)
 
 NT8 remains the execution platform. This phase does not change what runs in production — it changes where and how research happens.
 
@@ -34,11 +34,13 @@ NT8 remains the execution platform. This phase does not change what runs in prod
 
 1. **Data integrity verified** against raw MNQ files (bar counts, session alignment, gap handling)
 2. **Indicator correctness verified** against reference libraries within floating-point tolerance
-3. **Unit tests pass** for each Flux V1 module's execution logic on hand-constructed scenarios
-4. **Python vs. NT8 full backtests compared** for all four V1 modules; every divergence >5% investigated and documented
-5. **Statistical testing framework operational:** deflated Sharpe, bootstrap CIs, walk-forward validation
-6. **Multi-instrument data infrastructure in place**
-7. **Regime detection framework scaffolded**
+3. **Unit tests pass** for each Flux V1 module's execution logic on hand-constructed scenarios (production: **ORB+Opt3**; historical modules as repro artifacts where maintained)
+4. **Python vs. NT8 backtests compared** for the **ORB+Opt3** validation protocol (**M6** smoke bands; see `docs/m6-nt8-reproduction.md`). Broader multi-module divergence analysis is **research-optional**, not a Phase 1 gate.
+5. **Statistical testing framework operational:** deflated Sharpe (PSR/DSR v1), bootstrap CIs, walk-forward validation, purged K-fold + embargo (**M7**); see lessons log **2026-05-14** for AFML scope vs deferrals
+6. **Multi-instrument readiness (minimal):** **Canonical** bar/trade-oriented **data schema** and **loader extension interface** documented so a second instrument can be added without a rewrite; **only MNQ** is **actively loaded** in the research repo Phase 1 state. **Full** multi-instrument pipeline, cross-sectional alignment, and backtest multi-instrument wiring are **deferred** until the **first concrete need** (e.g. Onyx-class / Phase 4).
+7. **Regime-related research (minimal):** **Examples documented** for computing regime-*style* features (e.g. realized volatility, trend strength) using the **existing** session classification, `cme_session_date`, and **M3** indicators — sufficient for **Phase 2 ad hoc** hypotheses. A **generalized regime detection framework** (dedicated modules, engine hooks, production classifier) is **deferred** to **Phase 3** when overlay work is committed.
+
+**Rationale (M8/M9):** Avoid **speculative** infrastructure: build the **general** stack when **requirements** (symbols, books, constraints) are known, not while Phase 2 remains **single-instrument MNQ**. See lessons log **2026-05-14**.
 
 ---
 
@@ -238,44 +240,44 @@ Phase 1 is organized into nine milestones (M1-M9). Milestones are sequential in 
 
 ---
 
-### M8: Multi-Instrument Data Infrastructure
+### M8: Multi-Instrument Data Infrastructure — **scoped minimal (Phase 1 closure)**
 
-**Goal:** Data pipeline extended to support multiple instruments, even if only MNQ is actively loaded at this stage.
+**Goal (amended 2026-05-14):** Preserve a **clear path** to multiple instruments **without** building speculative loaders, storage trees, or cross-sectional alignment before Phase 2 needs them. Phase 2 remains **MNQ-only**.
 
-**Deliverables:**
-- Data loader generalized to support arbitrary futures symbols
-- Canonical data schema supports instrument_id and contract metadata
-- Directory structure and naming convention for multi-instrument data storage
-- Configuration system for registering new instruments
-- Example: load MNQ + at least one additional symbol (even a small sample) to prove the multi-instrument path works
+**Rationale:** Onyx-class **multi-instrument** research is **Phase 4** and **conditional**. Implementing a **full** M8 stack now risks wrong assumptions (roll rules per root, alignment semantics, memory layout) and rework when requirements are concrete.
 
-**Validation:**
-- Loading two instruments simultaneously produces correctly aligned timestamp-indexed data
-- Backtest engine can operate on multi-instrument data (even if no multi-instrument strategies exist yet)
+**Deliverables (minimal):**
+- **Canonical bar schema** stated for research: existing MNQ pipeline columns (`timestamp`, OHLCV, session labels, `cme_session_date`, …) treated as the **reference row shape**; new instruments must map into the **same** column set (plus optional `instrument` / `root` Utf8 column when added).
+- **Loader interface in principle:** new symbols follow the same **contract file → polars** pattern as `data_loader.load_contract_file` / `continuous_contract` (document **extension points** in code docstrings or a short subsection here — no second live dataset required in-repo).
+- **Only MNQ** is **actively loaded** and maintained in Phase 1/2 research artifacts unless a milestone explicitly adds a symbol.
 
-**Estimated effort:** 8-12 hours
+**Deferred (not Phase 1/2 gates):** arbitrary symbol registry configs, multi-root directory trees, simultaneous multi-instrument backtest engine wiring, cross-instrument P&amp;L — **first build when a committed use case exists.**
+
+**Validation:** MNQ-only path continues to pass existing tests; design notes are **reviewable** in this plan (no separate large spec required).
+
+**Estimated effort:** **≤4 hours** documentation / alignment (not 8–12 for full build).
 
 **Dependencies:** M2
 
 ---
 
-### M9: Regime Detection Framework Scaffolding
+### M9: Regime Detection Framework — **scoped examples only (Phase 1 closure)**
 
-**Goal:** Framework for regime feature engineering and classification, ready for Flux V3 use. Does not need to include a production regime model — just the scaffolding so V3 can build on it without rework.
+**Goal (amended 2026-05-14):** Enable Phase 2 researchers to compute **regime-style features ad hoc** using **existing** data (session classification, `cme_session_date`, **M3** indicators) — **without** a dedicated regime engine or backtest integration layer.
 
-**Deliverables:**
-- Regime feature module: library of functions producing features like realized volatility (multiple windows), trend strength (e.g., ADX), range-bound vs. trending classifier inputs, session-type one-hot encoding
-- Regime state tracking: ability to label each bar with regime state based on features
-- Simple baseline regime classifier: rule-based (e.g., high/medium/low volatility tercile on rolling RV). Not optimized, just functional.
-- Integration point with backtest engine: strategies can query current regime state
+**Rationale:** A **generalized** regime overlay is **Phase 3** scope. Premature framework (global state, strategy queries, classifier abstraction) optimizes for unknown hypotheses.
 
-**Validation:**
-- Features compute without error on full 6-year dataset
-- Regime state transitions look reasonable on spot-checked dates (e.g., March 2020 should be flagged high-vol)
+**Deliverables (minimal):**
+- **Documented examples** (this subsection + references to `session.py`, `indicators/atr.py`, `indicators/opening_range.py`, etc.) for patterns such as: rolling realized volatility / ATR-based vol proxy; trend-strength or directional bias from moving averages / range structure; session-type conditioning (already from `session` labels).
+- **No new** mandatory `RegimeState` API or engine callback — strategies or notebooks **compose** polars/numpy as needed.
 
-**Estimated effort:** 10-15 hours
+**Deferred:** packaged regime classifier, engine-level regime hooks, production gating — **Phase 3** when overlay work is approved.
 
-**Dependencies:** M3, M4
+**Validation:** Examples are **executable** by a maintainer (notebook or script optional); no new automated gate.
+
+**Estimated effort:** **≤4 hours** documentation / examples.
+
+**Dependencies:** M3, M4 (conceptual only; no code coupling required)
 
 ---
 
@@ -285,9 +287,9 @@ Phase 1 is organized into nine milestones (M1-M9). Milestones are sequential in 
 M1 (Environment)
  └─> M2 (Data Pipeline) ─┬─> M3 (Indicators) ─┬─> M4 (Backtest Engine) ─> M5 (Modules) ─> M6 (NT8 Validation)
                          │                     │                                              │
-                         │                     └─> M9 (Regime Framework) <───────────────────┘
+                         │                     └─> M9 (regime **examples** / Phase 3 defer) <───────────────────┘
                          │
-                         └─> M8 (Multi-Instrument)
+                         └─> M8 (multi-instrument **design** / Phase 4 defer)
 
 M7 (Statistical Framework) — independent, runnable after M6 or in parallel with M8/M9
 ```
@@ -307,9 +309,11 @@ Critical path: M1 → M2 → M3 → M4 → M5 → M6. This is the reproduction p
 | M5: Module Implementations | 20-30 | 57-85 |
 | M6: NT8 Validation | 15-25 | 72-110 |
 | M7: Statistical Framework | 15-20 | 87-130 |
-| M8: Multi-Instrument | 8-12 | 95-142 |
-| M9: Regime Scaffolding | 10-15 | 105-157 |
-| **Total** | **105-157 hours** | |
+| M8: Multi-Instrument (**minimal**) | ≤4 | *see cumulative note* |
+| M9: Regime (**examples only**) | ≤4 | *see cumulative note* |
+| **Total (revised)** | **~99–146 hours** | *M8/M9 hours removed from full-build estimates* |
+
+Phase 1 **core** cumulative through M7 is **~87–130 hours** per the table above; M8/M9 **minimal** adds at most **~8** hours documentation. Older **105–157** totals assumed **full** M8/M9 builds (**obsolete**).
 
 At 20 hours/week of focused development, this is 5-8 weeks of work, not counting interruptions from live operation, parallel tracks, or investigations extending M6.
 
@@ -390,9 +394,9 @@ When Phase 1 completes, the following artifacts exist and are committed to the r
 - Working Python research environment, reproducible via `uv sync` on a new machine
 - Full Flux V1 module implementations with unit tests
 - NT8 validation report (side-by-side comparison + divergence explanations)
-- Statistical testing framework with examples
-- Multi-instrument data infrastructure with at least one additional instrument loaded
-- Regime detection scaffolding with basic rule-based classifier
-- Lessons log entries for all significant findings and decisions
+- Statistical testing framework with examples (**M7**)
+- **M8 (minimal):** multi-instrument **schema + loader extension** design notes; **MNQ-only** active data
+- **M9 (minimal):** regime-style feature **examples** referencing existing pipeline (no generalized framework)
+- Lessons log entries for significant findings and decisions (including **2026-05-14** M7 scope + M8/M9 rationale)
 
-Exit gate review: confirm each of the seven milestone gate criteria is met with supporting artifact evidence. If yes, Phase 1 closes and Phase 2 begins — **Flux V2 configuration research** vs. the **ORB+Opt3** frozen baseline (new modules optional; see charter and `flux-v2-module-search-starter.md`).
+Exit gate review: confirm the **Exit Criteria** list (amended **2026-05-14**) with supporting artifacts — **M1–M7** complete; **M8/M9** minimal items satisfied **or** explicitly waived only by charter-level change. Phase 1 closes and **Phase 2** begins — **Flux V2 configuration research** vs. the **ORB+Opt3** frozen baseline (see charter and `flux-v2-module-search-starter.md`).

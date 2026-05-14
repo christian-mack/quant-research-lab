@@ -24,6 +24,22 @@
 
 ## Entries
 
+## 2026-05-14 — Phase 1 M8/M9 scope-down: infrastructure when requirements are concrete
+
+**Phase:** 1 → 2 transition  
+**Context:** Phase 2 research is **single-instrument MNQ**; **Onyx-class** multi-instrument work (Phase 4) and **regime overlay** (Phase 3) are **conditional**, not committed. Original Phase 1 text called for full **M8** (multi-instrument pipeline) and **M9** (regime framework scaffolding).  
+**Finding:** Building **general** multi-instrument loaders and **generalized** regime engines **before** symbols, cross-sectional design, or overlay specs exist tends to produce the **wrong abstractions** and **paid rework**. Speculative infrastructure has poor ROI vs. shipping the same capability when the decision to need it is explicit.  
+**Implication:** **M8** is reduced to **minimal readiness**: canonical data/schema and loader **interface** designed **in principle**, **MNQ only** actively loaded; **full** multi-instrument extension deferred until a **concrete** first use (e.g. Onyx-class). **M9** is reduced to **documented examples** of regime-*style* features (e.g. realized vol, trend strength) using the **existing** session + indicator stack; a **general** regime framework waits for Phase 3. Phase 1 **closes** with **M1–M7** plus these **scoped** M8/M9 items; Phase 2 begins.  
+**Artifact:** `docs/phase-1-detailed-plan.md` (M8/M9, exit criteria, completion artifact); `docs/program-charter.md` Phase 1 exit criteria (aligned).
+
+## 2026-05-14 — M7 statistics: AFML methodology scope (implemented vs deferred)
+
+**Phase:** 1 (M7)  
+**Context:** `src/quant_research/statistics/` is live; readers need a **single place** (besides code) that states how closely the stack follows López de Prado *Advances in Financial Machine Learning* vs intentional simplifications.  
+**Finding:** **Implemented (v1):** percentile **bootstrap** CIs for total P&amp;L, **trade-series** Sharpe, win rate, max drawdown; Bailey–López de Prado **PSR** and **DSR** with **expected_max_sharpe** (appendix-style); **walk-forward** (rolling/anchored); **purged K-fold** on event intervals ``[t0,t1]`` plus **embargo** helper; polars **IS/OOS** trade-log splits; **White (2000) Reality Check** bootstrap p-value; **`trade_log_research_report`**. **Deferred (explicit):** DSR **Exhibit 2** byte-for-byte replication (internal consistency accepted); **Hansen SPA** / studentized RC (White RC sufficient for Phase 2 workflow); **combinatorial purged CV** (standard purge + embargo adequate for now); **DSR inputs** using **trade P&amp;Ls** as the return series vs **period** returns — **documented**; trade-based framing chosen for Phase 2 ORB-style research.  
+**Implication:** Treat the package as **research v1**, not a full AFML encyclopedia; extend **when** a hypothesis needs a deferred method.  
+**Artifact:** `src/quant_research/statistics/`; `tests/statistics/`; `docs/phase-1-detailed-plan.md` §M7 repository note.
+
 ## 2026-05-13 — Correction: ~$10,885/yr was qty=10 total, not per contract; M6 closes
 
 **Phase:** 1 (M6 closure / reference hygiene)  

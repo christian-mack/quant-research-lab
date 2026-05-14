@@ -1,10 +1,10 @@
 # Current Working Plan: Next 30 Days
 
-**Plan period:** Days 1-30 of Phase 1
-**Phase:** 1 — Python Research Infrastructure
-**Status:** Active
-**Last updated:** May 13, 2026 — **M6 closed** (reference correction); **M7 statistical framework** landed in ``src/quant_research/statistics/`` (bootstrap, DSR, walk-forward, purged CV, IS/OOS, Reality Check, trade report). See ``docs/phase-1-detailed-plan.md`` M7.
-**Next review:** Weekly; full plan refresh at day 30
+**Plan period:** Next 30 days (refresh recommended — Phase 1 core path complete)
+**Phase:** **2 — Flux V2 configuration research** (Phase 1 milestone gate cleared per amended **2026-05-14** criteria)
+**Status:** Phase 1 **M1–M7** complete; **M8/M9** minimal scope only (see `phase-1-detailed-plan.md`)
+**Last updated:** May 14, 2026 — **M8/M9** deferral formalized (lessons log **2026-05-14**); **`program-charter.md`** exit criteria aligned. Phase 2 work: ORB+Opt3 baseline investigations per charter.
+**Next review:** Weekly; replace this file with a Phase 2–focused 30-day plan when convenient
 **Related documents:** `program-charter.md`, `phase-1-detailed-plan.md`, `ai-project-instructions.md`, `lessons-log.md`
 
 ---

@@ -59,7 +59,7 @@ Phases are the unit of work. Each phase has entry criteria, defined scope, a mil
 
 **Objective:** Build a comprehensive Python-based research environment that replaces NT8 as the primary research platform. NT8 remains the execution platform.
 
-**Scope:** Comprehensive — includes core backtest engine, statistical testing framework with deflated Sharpe and bootstrap confidence intervals, parameter optimization with proper IS/OOS handling, multi-instrument capability designed in from the start, regime detection framework, and results visualization.
+**Scope:** Comprehensive — core backtest engine, statistical testing (deflated Sharpe, bootstrap CIs, walk-forward, purged CV v1), results visualization. **Multi-instrument** and **general regime framework** are **minimal / deferred** per `docs/phase-1-detailed-plan.md` (**M8**/**M9** scoped **2026-05-14**); Phase 2 is **MNQ-only** until a later milestone adds scope.
 
 **Entry Criteria:**
 - Flux V1 live operation stable and producing eval samples
@@ -70,10 +70,10 @@ Phases are the unit of work. Each phase has entry criteria, defined scope, a mil
 1. Data integrity verified against raw MNQ files (bar counts, session alignment, gap handling)
 2. Indicator correctness verified against reference libraries (pandas-ta, talib) within floating-point tolerance
 3. Unit tests pass for each Flux V1 module's execution logic on hand-constructed scenarios
-4. Python vs. NT8 full backtests compared for all four historical V1 modules (Momentum, ORB, Range, AfternoonMR); every divergence >5% investigated and documented (not necessarily resolved — explained). **Live production** is ORB+Opt3 (see lessons log); full-module comparison supports methodology and counterfactual analysis, not current routing.
-5. Statistical testing framework operational: deflated Sharpe, bootstrap CIs, walk-forward validation
-6. Multi-instrument data infrastructure in place (even if only MNQ is actively loaded)
-7. Regime detection framework scaffolded (even if only basic features implemented)
+4. Python vs. NT8 backtests compared for the **ORB+Opt3** protocol (**M6** smoke; see `docs/m6-nt8-reproduction.md`). Historical multi-module comparison remains useful but is **not** a Phase 1 gate.
+5. Statistical testing framework operational (**M7**): deflated Sharpe (PSR/DSR v1), bootstrap CIs, walk-forward validation, purged K-fold + embargo; see lessons log **2026-05-14** for AFML-aligned scope vs deferrals
+6. **Multi-instrument readiness (minimal):** canonical schema / loader **extension** design documented; **only MNQ actively loaded**; **full** multi-instrument build deferred to first concrete need (e.g. Onyx-class)
+7. **Regime-related research (minimal):** **examples** documented for regime-style features using the existing session + indicator pipeline; **generalized** regime framework deferred to **Phase 3**
 
 **Stop Conditions:**
 - Layer 4 validation reveals Flux V1 backtest results are materially wrong (>20% P&L divergence unexplained) → pause phase, investigate NT8 backtest methodology before proceeding
@@ -395,3 +395,4 @@ The program itself has stop conditions, not just individual phases. If any of th
 | 2026-04-28 | Income constraint & empirical architecture; ORB+Opt3 baseline; Phase 2 relative gates; conditional Onyx / future framing | Production cut + lessons log: architecture serves income target; tri-module dollar gates obsolete; leading-candidate wording for late phases |
 | 2026-04-30 | Phase 1b sequenced **after** Phase 1; Python-first port spec; Sierra Chart remains target | Validated Python (M5/M6) is primary port specification; NT8 C# secondary; M1–M9 independent of live stack; NT8 production until side-by-side SIM passes |
 | 2026-05-13 | NT8 ORB+Opt3 anchor corrected ($10.9K/yr was qty=10; **~$1,088.50/yr per contract**); M6 closed; per-account income anchor **~$3.3K/yr** at qty=3 (vs obsolete ~$8K) | `docs/lessons-log.md` correction entry; `m6-nt8-reproduction.md` closure; empirical anchor and stop-conditions wording updated |
+| 2026-05-14 | Phase 1 **M8/M9** scoped to **minimal** (schema/interface + regime **examples**); avoid speculative infrastructure | `docs/phase-1-detailed-plan.md`, `docs/program-charter.md` exit criteria; lessons log |
