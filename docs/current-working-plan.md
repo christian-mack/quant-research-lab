@@ -3,7 +3,7 @@
 **Plan period:** Days 1-30 of Phase 1
 **Phase:** 1 — Python Research Infrastructure
 **Status:** Active
-**Last updated:** April 28, 2026 — **M6 still open**: cross-session fix + defensive bracket re-arm landed; dollar gap vs lessons-log NT8 widened (honest, no flatten windfall). See `m6-nt8-reproduction.md` "Next concrete investigations."
+**Last updated:** May 13, 2026 — **M6 closed**: NT8 reference was **~$10,885/yr at qty=10** (**~$1,088.50/yr per contract**), not per contract; Python **~$1,014/yr** per contract → **~6.8%**, within ±10% smoke band. **M7** (statistical testing framework) is next. See `m6-nt8-reproduction.md` closure section and lessons log **2026-05-13**.
 **Next review:** Weekly; full plan refresh at day 30
 **Related documents:** `program-charter.md`, `phase-1-detailed-plan.md`, `ai-project-instructions.md`, `lessons-log.md`
 
@@ -24,8 +24,7 @@ Update this document weekly. Add entries to the lessons log ad hoc. Refer to the
 **Parallel tracks:** PT1–PT4 active throughout. PT5 and PT6 fit in as time allows. **Phase 1b / Sierra Chart** porting is **not** in this 30-day window — it starts after the **Phase 1** milestone gate passes (see `program-charter.md` Phase 1b).
 
 **Explicitly out of scope for this 30 days:**
-- M6 completion (spans into next 30-day window)
-- M7 statistical testing framework (next window)
+- ~~M6 completion~~ **M6 complete** (2026-05-13); **M7** (statistical testing) may start in current/next window per plan refresh
 - M8 multi-instrument infrastructure (next window)
 - M9 regime scaffolding (next window)
 - Any Flux V2 research (gated on Phase 1 completion)
@@ -129,7 +128,8 @@ Update this document weekly. Add entries to the lessons log ad hoc. Refer to the
 - [x] M4: Configurable fill model, slippage, commissions (defaults to NT8-matching assumptions)
 - [x] M4: End-to-end validation — MNQ RTH slice smoke + ORB+Opt3 (`modules/orb.py`)
 - [x] M5: ORB strategy module (**Opt3** = params incl. `latest_entry_hour_et=11`) + unit tests (`src/quant_research/modules/orb.py`)
-- [~] **M6 (smoke, open):** Full-window ORB+Opt3 Python vs NT8 lessons-log reference — `docs/m6-nt8-reproduction.md` (3-run table). **OrbStrategy** fixes: cross-session `_manage_open` routing + **defensive bracket re-arm** every bar (`dedupe_tag` idempotency); regression tests for both. Win-rate band passes; **dollar headline still outside ±10%** — investigation queue documented.
+- [x] **M6 (smoke, closed 2026-05-13):** Full-window ORB+Opt3 Python vs NT8 — `docs/m6-nt8-reproduction.md`. Pass (A) cross-session, (B) bracket re-arm, (C) session hygiene; smoke bands met after **per-contract** NT8 basis correction (**2026-05-13** lessons log).
+- [ ] **M7:** Statistical testing framework (Phase 2 entry; begins post–M6 closure).
 - [ ] M5: Implement MomentumModule.py with 15m ATR gate and unit tests
 
 ### Parallel tracks this week

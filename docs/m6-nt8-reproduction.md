@@ -1,8 +1,10 @@
 # M6 — Python ORB+Opt3 vs NT8 reference (smoke + forensic escalation)
 
+**Status:** **Closed** (2026-05-13) — smoke bands met after NT8 reference basis was corrected (see **Reference resolution and M6 closure**).
+
 **Protocol window:** 2020-01-01 through **2026-04-19** (inclusive calendar end date), matching the six-year NT8 study cited in the lessons log. **Python:** funded ORB+Opt3 parameters, **qty = 3** (`production_orb_opt3_funded_params()`). **Bars:** NT8 MNQ export, RTH only, continuous contract, `cme_session_date` assigned in Chicago. **Runs:** `uv run python scripts/run_m6_orb_baseline.py` — segments with `split_dataframe_at_operator_export_gaps` (fresh `OrbStrategy` + `BacktestEngine` per segment) so positions do not span operator-known export holes.
 
-**Reference (lessons log — 2026-04-28, production simplification / six-year NT8):** ORB+Opt3 on the NT8 baseline was summarized as **~$10,885/yr per contract**, **63.8%** win rate, **7/7** positive calendar years, **max drawdown −$17,880** (instrument/account unit as recorded in NT8; not re-derived here).
+**Reference (NT8 six-year ORB+Opt3, corrected basis — see lessons log 2026-05-13):** The headline **~$10,885/yr** figure from the April 2026 summary was **total P&L at qty = 10** on the reference NT8 run, **not** per contract. **Per contract:** **~$1,088.50/yr**. Other cited stats (e.g. **63.8%** win rate, **7/7** positive calendar years, **max drawdown −$17,880**) remain as recorded in NT8 for that run (instrument/account unit; not re-derived here).
 
 ---
 
@@ -13,6 +15,8 @@
 | **(A) Cross-session fix** | `on_bar` always routes through `_manage_open` while `position_qty != 0`; on `cme_session_date` rollover with an open position, **only** entry accumulators reset (FSM forced to `TRIGGERED`); BE flag and bracket fields persist. | Smoke ran with massive dollar divergence and multi-thousand-hour holds — trade FSM was orphaning the open position. |
 | **(B) Defensive bracket re-arm** | `_manage_open` now **emits stop and target every bar** while open with `dedupe_tag`. Engine `working` queue idempotently replaces same-tag orders. BE evaluation runs first; the emitted stop is at entry once `_break_even_done`, otherwise at `entry ± stop_distance`. | Static audit could not isolate where brackets dropped, but the empirical delta (next table) shows the OLD path lost protective orders for a small number of trades that then ran for **calendar quarters** until segment-end flatten. |
 | **(C) Session hygiene (engine)** | `BacktestEngine` + `SessionSpec.intraday_hygiene`: **16:59 ET** bar **close** `session_maintenance_flatten_et` when open; **[17:00, 18:00) ET** entry deadzone (`ctx.suppress_entry`, queued orders cleared at boundary). | NT8 **break at end of session** / Globex maintenance: Python had been able to **hold or queue fills across** the gap when post-RTH bars exist. Hoisted to the engine for all Phase 2 modules. |
+
+**These fixes remain load-bearing:** They addressed **real** simulator bugs (orphaned management, non-persistent brackets, maintenance-boundary risk) that would have corrupted Phase 2 research **even when** the M6 **headline** P&amp;L row on RTH-only data barely moved — e.g. session hygiene does not intersect the current RTH-only bar clock, but is required for ETH / full-session parity.
 
 ---
 
@@ -69,33 +73,28 @@ Run metadata: **5** segments, **599,533** RTH bars; `commission_total` **0** (co
 
 ---
 
-## Smoke bands (operator) — current
+## Smoke bands (operator) — final
 
 | Check | Target | Result |
 |--------|--------|--------|
 | Win rate | NT8 ± **2** pp | **Pass** (63.8% vs 62.95%; Δ 0.85 pp). |
 | Trade count | NT8 ± **5%** | **N/A** (no NT8 trade count). |
-| Net P&amp;L | NT8 ± **10%** on per-contract $/yr | **Not met** (~$1.0k vs ~$10.9k). Gap **widened** vs (A) — but (B) is honest accounting; (A) banked a flatten artifact. |
+| Net P&amp;L | NT8 ± **10%** on **per-contract $/yr** (corrected reference) | **Pass** — Python **~$1,014/yr** vs NT8 **~$1,088.50/yr** per contract → **~6.8%** gap, inside band. |
 
-## Why the dollar gap is *bigger* after a real fix
+---
 
-Pass (B) is the **correct** bracket contract. The pre-(B) dollar total included an unmanaged **multi-quarter** drift on a single trade. Removing that artifact uncovers the **structural** divergence vs the NT8 lessons-log headline:
+## Reference resolution and M6 closure (2026-05-13)
 
-- 2021 still shows **zero exit-year trades**: the **2020-11 → 2022-08** trade armed BE, then sat at entry while MNQ ran from **$11k → $16k → back to $11k** before BE filled. With BE enabled (production setting), that is the strategy's actual behavior. Production NT8 reportedly does not produce those holds at the same scale; possible bases for the divergence (not investigated):
-  - **Different bar resolution** at NT8 (tick-level vs minute), so brackets fire on intrabar noise we don't see.
-  - **Different protocol window or roll calendar** behind the lessons-log $10,885 number.
-  - **Different ORB params** in the reference vs the funded CSV row (e.g., a non-zero `ORBMaxHoldMinutes` or ATR filters).
-  - **Live management** (operator-side flatten) that's not modeled in any backtest.
+The **apparent ~10× divergence** between Python (**~$1,014/yr per contract**) and the April 2026 lessons-log line (**~$10,885/yr**) was **not** evidence of a remaining engine miss after passes (A)(B)(C). It was a **reference-basis misinterpretation**: **~$10,885/yr** is **ORB+Opt3 P&amp;L at qty = 10** on the NT8 reference run, so the apples-to-apples **per-contract** NT8 anchor is **~$10,885 ÷ 10 ≈ $1,088.50/yr per contract**.
 
-## Milestone status — **M6 stays open**
+| Source | Per-contract $/yr (6-year protocol, same class of comparison) |
+|--------|------------------------------------------------------------------|
+| NT8 (corrected) | **~$1,088.50** |
+| Python (post-(B), qty=3 scaled to per-contract) | **~$1,014** |
+| Relative gap | **~6.8%** → within **±10%** smoke band |
 
-- **Engine reasonableness:** Cross-session management (A), broker-style bracket re-arm (B), and **session hygiene** (C) are now encoded; (C) is NT8 **break-at-end-of-session** parity for bar sets that reach **16:59 ET**.
-- **Win-rate band:** Pass.
-- **Dollar headline:** **Far** outside ±10%. Per the operator directive ("don't close M6 with the dollar gap unresolved"), **M6 is not closed** by this rerun.
+**M6 status:** **Closed** on operator smoke criteria. Follow-on research (**M7** statistical testing framework, Phase 2) proceeds from this baseline.
 
-### Next concrete investigations (not done here)
-1. **Reconcile the lessons-log NT8 reference** — pin down its data, time-period, and parameter basis. The $10,885/yr/contract figure may not be a like-for-like backtest.
-2. **Try `max_hold_minutes`** (Opt 5 in C#) on a sweep — does production-equivalent NT8 also run with it disabled?
-3. **Disable BE** on a pass: BE-armed-and-camp-at-entry is a known quirk for trending instruments; a no-BE run would isolate that effect.
+Residual **research** differences (minute vs tick path, long-hold / BE behavior, protocol micro-differences) may still be investigated for **science**, but they are **not** gates for M6 closure once the reference is stated in **per-contract** terms.
 
-Artifact: `scripts/run_m6_orb_baseline.py` JSON on operator MNQ export; doc revised **2026-05-04** (post-(C) four-run table; (C) ≠ (B) only on feeds that include **≥ 16:59 ET** bars).
+Artifact: `scripts/run_m6_orb_baseline.py` JSON on operator MNQ export; doc revised **2026-05-13** (closure + corrected NT8 basis).

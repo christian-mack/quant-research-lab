@@ -29,7 +29,7 @@ The path to this target is not a single strategy at institutional scale. It is a
 
 **$65,000–$100,000/year net per funded account** after prop firm payout splits. This is the engineering target for each strategy generation — individual account economics must support the aggregate income target without requiring unrealistic account counts.
 
-**Current empirical anchor (2026-04):** Lessons log: live **ORB+Opt3** funded sizing implies ~**$8K/yr** realistic net per account vs. this $65K–$100K bar. Closing the gap is a **first-order research priority**; the per-account target remains the north star — not an assumption already satisfied.
+**Current empirical anchor (2026-05, corrected):** Six-year NT8 **ORB+Opt3** reference P&amp;L was **~$10,885/yr at qty = 10**, i.e. **~$1,088.50/yr per contract** — **not** ~$10.9K/yr per contract (see lessons log **2026-05-13** correction). Static backtest anchor for **funded qty = 3** (same protocol class): roughly **~$1,088.50 × 3 ≈ ~$3,265/yr per account** before payout splits and live frictions; validated Python M6 is **~$1,014/yr × 3 ≈ ~$3,042/yr** on the research **RTH-only** rerun (~6.8% below NT8 per contract). Either way this **trails** the **$65K–$100K/yr per funded account** bar by an order of magnitude — the gap is **explicit** and **first-order** for research; the per-account target remains the north star.
 
 ---
 
@@ -355,7 +355,7 @@ Scaling is additive across generations. By Phase 4, operational load may justify
 The program itself has stop conditions, not just individual phases. If any of these trigger, reassessment is warranted before continuing:
 
 - **Flux V1 live pass rate over 10+ completed evals falls below 35%** → the system may have decayed or may have been overfit initially. Pause phase work, investigate root cause before continuing.
-- **Per-account net yield target (≥$65,000) looks unreachable after Flux V3** → the entire ladder's economics may need reassessment (lessons log: **~$8K/yr** ORB+Opt3 funded anchor makes this an **explicit** gap, not a surprise). May justify pivoting to non-Flux strategies or an Onyx-class probe earlier.
+- **Per-account net yield target (≥$65,000) looks unreachable after Flux V3** → the entire ladder's economics may need reassessment (lessons log: corrected **ORB+Opt3** static anchor **~$3.3K/yr** per funded account at qty=3 on the six-year backtest protocol — **~$3K/yr** on Python M6 — vs. charter bar; see **2026-05-13**). May justify pivoting to non-Flux strategies or an Onyx-class probe earlier.
 - **Multiple consecutive phase stop conditions trigger** → pattern indicates structural issues with the program approach, not with individual phases. Consider external perspective or significant restructuring.
 
 ---
@@ -394,3 +394,4 @@ The program itself has stop conditions, not just individual phases. If any of th
 | 2026-04-21 | Added Phase 1b: Execution Platform Migration | NT8 data feed stability compromising live integrity; migration treated as parallel infrastructure track rather than deferred work |
 | 2026-04-28 | Income constraint & empirical architecture; ORB+Opt3 baseline; Phase 2 relative gates; conditional Onyx / future framing | Production cut + lessons log: architecture serves income target; tri-module dollar gates obsolete; leading-candidate wording for late phases |
 | 2026-04-30 | Phase 1b sequenced **after** Phase 1; Python-first port spec; Sierra Chart remains target | Validated Python (M5/M6) is primary port specification; NT8 C# secondary; M1–M9 independent of live stack; NT8 production until side-by-side SIM passes |
+| 2026-05-13 | NT8 ORB+Opt3 anchor corrected ($10.9K/yr was qty=10; **~$1,088.50/yr per contract**); M6 closed; per-account income anchor **~$3.3K/yr** at qty=3 (vs obsolete ~$8K) | `docs/lessons-log.md` correction entry; `m6-nt8-reproduction.md` closure; empirical anchor and stop-conditions wording updated |

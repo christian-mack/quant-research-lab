@@ -206,6 +206,8 @@ Phase 1 is organized into nine milestones (M1-M9). Milestones are sequential in 
 
 **Risk:** If Layer 4 validation reveals a major NT8 backtest issue (>20% unexplained P&L divergence), this milestone may extend significantly. Stop condition from charter applies.
 
+**Closure (2026-05-13):** M6 **closed** on operator **smoke** criteria (win rate ±2 pp; per-contract net P&amp;L ±10% vs **corrected** NT8 basis — **~$1,088.50/yr per contract** from **~$10,885/yr at qty=10**). Python **~$1,014/yr** per contract (~6.8% gap). Historical goal text above is superseded for exit by `docs/m6-nt8-reproduction.md` + `docs/nt8-backtest-methodology.md` §10 framing.
+
 ---
 
 ### M7: Statistical Testing Framework

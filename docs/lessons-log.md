@@ -24,6 +24,14 @@
 
 ## Entries
 
+## 2026-05-13 — Correction: ~$10,885/yr was qty=10 total, not per contract; M6 closes
+
+**Phase:** 1 (M6 closure / reference hygiene)  
+**Context:** Closing M6 after operator resolved how the six-year **ORB+Opt3** NT8 headline was labeled in April 2026 docs and log entries.  
+**Finding:** Several **2026-04-28** entries (notably **Production cut to ORB+Opt3** and **M6 second escalation**) describe **`~$10,885/yr per contract`**. The **source NT8 figure** is **`~$10,885/yr` total P&amp;L at `qty = 10`**, i.e. **`~$1,088.50/yr per contract`** (before payout / live frictions). Python M6 reports **`~$1,014/yr` per contract** — about **6.8%** below that anchor, **within** the agreed **±10%** smoke band. The earlier **~10×** apparent dollar gap was **misread units / sizing**, not proof of a residual backtest engine bug after cross-session, bracket re-arm, and session hygiene fixes. **Prior entries are not edited** (append-only log); this entry **corrects the interpretation**.  
+**Implication:** **M6 passes and is closed** on smoke criteria (`docs/m6-nt8-reproduction.md`). Charter and planning must **re-base income anchors** that inferred **`~$8K/yr` per funded account at qty=3** from the erroneous per-contract reading — honest static anchor from the corrected NT8 line is roughly **`$1,088.50/yr × 3 contracts ≈ $3,265/yr` per account** on the same backtest protocol (operator may round to **~$3,264/yr** for planning); Python at **`~$1,014/yr × 3`** is **~$3,042/yr** under the same simulator. Phase **M7** (statistical testing) begins from this baseline. **Passes (A)(B)(C)** in M6 remain **necessary** — they fixed real simulator bugs independent of the reference mislabel.  
+**Artifact:** `docs/m6-nt8-reproduction.md` (closure section); `docs/program-charter.md` (empirical anchor); this correction entry.
+
 ## 2026-05-04 — PT3 missed NT8 break-at-end-of-session; M6 divergence (maintenance hold)
 
 **Phase:** 1 (M6 / methodology)  
