@@ -214,6 +214,8 @@ Phase 1 is organized into nine milestones (M1-M9). Milestones are sequential in 
 
 **Goal:** Library of statistical tests and validation methods required for rigorous strategy research.
 
+**Repository (2026-05-13):** Implemented under ``src/quant_research/statistics/`` with tests in ``tests/statistics/`` — percentile bootstrap CIs (P&amp;L, trade-series Sharpe, win rate, MDD), Bailey–López de Prado PSR/DSR + ``expected_max_sharpe``, walk-forward (rolling/anchored), purged K-fold + embargo helper, polars trade-log IS/OOS splits, White (2000) Reality Check bootstrap *p*-value, ``trade_log_research_report`` summary. Hansen SPA / studentized RC and combinatorial purged CV **not** in v1.
+
 **Deliverables:**
 - Bootstrap confidence intervals for: P&L, Sharpe ratio, win rate, max drawdown
 - Deflated Sharpe ratio implementation (per Lopez de Prado; handles multiple-comparisons inflation)

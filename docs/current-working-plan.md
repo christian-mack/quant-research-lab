@@ -3,7 +3,7 @@
 **Plan period:** Days 1-30 of Phase 1
 **Phase:** 1 — Python Research Infrastructure
 **Status:** Active
-**Last updated:** May 13, 2026 — **M6 closed**: NT8 reference was **~$10,885/yr at qty=10** (**~$1,088.50/yr per contract**), not per contract; Python **~$1,014/yr** per contract → **~6.8%**, within ±10% smoke band. **M7** (statistical testing framework) is next. See `m6-nt8-reproduction.md` closure section and lessons log **2026-05-13**.
+**Last updated:** May 13, 2026 — **M6 closed** (reference correction); **M7 statistical framework** landed in ``src/quant_research/statistics/`` (bootstrap, DSR, walk-forward, purged CV, IS/OOS, Reality Check, trade report). See ``docs/phase-1-detailed-plan.md`` M7.
 **Next review:** Weekly; full plan refresh at day 30
 **Related documents:** `program-charter.md`, `phase-1-detailed-plan.md`, `ai-project-instructions.md`, `lessons-log.md`
 
@@ -129,7 +129,7 @@ Update this document weekly. Add entries to the lessons log ad hoc. Refer to the
 - [x] M4: End-to-end validation — MNQ RTH slice smoke + ORB+Opt3 (`modules/orb.py`)
 - [x] M5: ORB strategy module (**Opt3** = params incl. `latest_entry_hour_et=11`) + unit tests (`src/quant_research/modules/orb.py`)
 - [x] **M6 (smoke, closed 2026-05-13):** Full-window ORB+Opt3 Python vs NT8 — `docs/m6-nt8-reproduction.md`. Pass (A) cross-session, (B) bracket re-arm, (C) session hygiene; smoke bands met after **per-contract** NT8 basis correction (**2026-05-13** lessons log).
-- [ ] **M7:** Statistical testing framework (Phase 2 entry; begins post–M6 closure).
+- [x] **M7:** Statistical testing framework — ``src/quant_research/statistics/`` + ``tests/statistics/`` (2026-05-13).
 - [ ] M5: Implement MomentumModule.py with 15m ATR gate and unit tests
 
 ### Parallel tracks this week
