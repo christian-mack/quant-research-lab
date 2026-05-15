@@ -3,7 +3,7 @@
 **Status:** Entry artifact for Phase 2 (fresh-chat startup)
 **Date:** May 2026
 **Owner:** Christian
-**Related:** `docs/program-charter.md`, `docs/lessons-log.md`, `docs/current-working-plan.md`, `flux-v2-module-search-starter.md` (repo root), `docs/ai-project-instructions.md`
+**Related:** `docs/program-charter.md`, `docs/lessons-log.md`, `docs/current-working-plan.md`, `docs/research-log.md`, `flux-v2-module-search-starter.md` (repo root), `docs/ai-project-instructions.md`
 
 ---
 
@@ -57,7 +57,19 @@ Define a **conservative bound** for the Apex **$3K** EOD trailing DD cap (sugges
 
 **Max sustainable qty** is the **largest** integer **q** such that **R(q) ≤ $3,000**. (Interpretation: pad the observed max DD by the **larger** of a **50%** uplift or a **$500** absolute buffer — whichever is stricter — then require that padded figure to clear the prop ceiling.) Document the exact algebra in the research artifact so live scaling stays reproducible.
 
-Operator may tighten/loosen the margin rule with a lessons-log entry; the expression above is the **starting convention**.
+**DLL vs this buffer:** The **+$500** term is **not** Apex’s **Daily Loss Limit**. It is an **internal research margin** on **trailing drawdown** sizing. Per `docs/ai-project-instructions.md`, Apex **EOD accounts use a $1,000 DLL** (per day). Graded **eval simulations** and any **path-dependent DD** runs must enforce **firm rules** (DLL **and** $3K EOD trailing) as documented there — do **not** substitute one for the other.
+
+Operator may tighten/loosen the **R(q)** margin rule (the 1.5× / +$500 pair) with a lessons-log entry; the expression above is the **starting convention**.
+
+**DD scaling (default vs path-dependent):** **Linear DD approximation** (**DD(q) ≈ q × DD(1)**) is the **default** and matches the **R(q)** formula when scaled drawdown is **proportional to qty**. For candidates where **DD(q)** clearly **deviates from linearity** — typically **multi-trade-per-day** strategies with **intraday winner/loser offset** — **grade via simulated path-dependent max DD at each integer q** rather than the linear approximation. **Flag deviation cases** in the **`docs/research-log.md`** entry (and artifact).
+
+**Eval pass rate at max sustainable qty (backtest simulation):** When **live** eval samples are **unavailable or insufficient**, estimate pass rate using **rolling 30‑day windows** across the **six-year** backtest **at max sustainable qty**. Count a window as a **pass** if the simulated account reaches the **$3,000 profit target** without hitting the **$3,000 EOD trailing drawdown** and without breaching the **$1,000 DLL** per program Apex EOD rules (`docs/ai-project-instructions.md`). Report **passing windows / total windows**. Pre-register window construction (e.g. advance one **session** vs one calendar day; inclusion of partial windows at series ends) in `docs/research-log.md` before first use.
+
+### Wave 0 (mandatory before hypothesis waves)
+
+**Re-run ORB+Opt3 at max sustainable qty** per the **R(q)** formula (and path-dependent DD **only** if linear scaling is invalid for this strategy — ORB+Opt3 is expected to use the **linear default** unless analysis proves otherwise). This establishes the **graded baseline** all subsequent waves compare against.
+
+Until Wave 0 completes, **ORB+Opt3 economics quoted in this document** (including the qty = 3 snapshot) are **operator snapshots**, not **graded baselines**.
 
 Tight stops and high win rates can support **higher** sustainable qty than wide-stop, lower-win-rate structures — **both** are legitimate; each is graded at **its** sustainable size.
 
@@ -67,7 +79,9 @@ Tight stops and high win rates can support **higher** sustainable qty than wide-
 | **Target** (genuinely good) | Eval pass rate **≥ 70%**; average funded P&L **≥ $60K/yr**; profitable **≥ 5 of 6** years; **low correlation** with existing **portfolio** strategies. |
 | **Stretch** (transformative) | Eval pass rate **≥ 80%**; average funded P&L **≥ $100K/yr**; profitable **all 6** years; **stacks** with portfolio strategies (combined / displaced economics documented). |
 
-**Live vs backtest:** Backtest establishes **max sustainable qty** and long-horizon economics; **eval pass rate** and **funded P&L** are validated from **sampled live/eval experience** when data exist — otherwise proxy with pre-registered simulation rules and document uncertainty.
+**Eval pass rate column:** Use **live/eval** sample when sufficient; otherwise the **rolling 30-day backtest simulation** rule (above) at **max sustainable qty**. The “30 days” floor wording aligns with that window length.
+
+**Live vs backtest:** Backtest establishes **max sustainable qty** and long-horizon economics; **eval pass rate** and **funded P&L** come from **live/eval** when the sample is large enough — otherwise use the **rolling 30-day backtest simulation** rule above (pre-registered window spec).
 
 ---
 
@@ -84,7 +98,7 @@ The **V2 starter packet** mental model remains useful:
 
 **Updated mantra:** discover **any configurations** (filters, session/regime gates, structural rule changes, new modules only if justified, or other discoveries) that **close the income gap** while surviving statistical gates and prop constraints — with **sizing** set by **max sustainable qty** relative to **$3K EOD trailing DD**, not by fixing qty a priori.
 
-Canonical research-process details and acceptable outcome families: **`flux-v2-module-search-starter.md`** (repo root).
+Canonical supplemental research-process detail: **`flux-v2-module-search-starter.md`** (repo root; see deprecation header — **`docs/phase-2-kickoff.md`** is authoritative on framing).
 
 ---
 
@@ -102,7 +116,7 @@ All of the following are **defaults** unless the operator explicitly approves an
 
 1. **Pre-registration:** Hypotheses and primary metrics are stated **before** the backtest run that tests them.
 2. **IS / OOS:** **60/40 split by trade count** (or charter-aligned variant if superseded — document if changed).
-3. **Multiple testing:** **Deflated Sharpe** (or equivalent Bailey–López de Prado–style correction) across the **set of hypotheses tested** in a research wave.
+3. **Multiple testing:** **Deflated Sharpe** (or equivalent Bailey–López de Prado–style correction) across the **set of hypotheses tested** in a research **wave**, with **N = wave size** (see `docs/research-log.md`).
 4. **Uncertainty:** **Bootstrap confidence intervals** on key metrics where applicable.
 5. **Temporal robustness:** **Walk-forward** validation for candidates that survive initial screens.
 6. **Structural rationale:** Patterns must have a **structural / behavioral reason**, not only favorable equity curves.
@@ -134,9 +148,10 @@ Read these **in order** when opening a new Phase 2 session:
 
 1. `docs/program-charter.md` — program structure, Phase 2 gates, MV edge language.
 2. `docs/lessons-log.md` — decisions, failures, baseline corrections, multi-module findings.
-3. **`docs/phase-2-kickoff.md`** (this document) — intent, **max sustainable qty** grading, methodology, roles.
-4. **`flux-v2-module-search-starter.md`** — reframed Phase 2 objective and acceptable outcome families.
-5. `docs/ai-project-instructions.md` — agent and documentation conventions.
+3. **`docs/phase-2-kickoff.md`** (this document) — intent, **max sustainable qty** grading, methodology, roles, **Wave 0**.
+4. **`docs/research-log.md`** — append-only pre-registration and results (**wave** = deflated Sharpe **N**).
+5. **`flux-v2-module-search-starter.md`** — legacy process detail; see **deprecation header** — authoritative framing is this kickoff + charter.
+6. `docs/ai-project-instructions.md` — agent and documentation conventions (incl. Apex **$3K trailing** + **$1K DLL**).
 
 Supporting: `docs/phase-1-detailed-plan.md` (what was built), `docs/m6-nt8-reproduction.md` (parity anchor), `docs/nt8-backtest-methodology.md` (NT8 reference protocol).
 
@@ -145,8 +160,8 @@ Supporting: `docs/phase-1-detailed-plan.md` (what was built), `docs/m6-nt8-repro
 ## First-session priorities (Phase 2)
 
 1. Re-read **`flux-v2-module-search-starter.md`** and the charter Phase 2 section for **any remaining stale framing**; align language with **income-gap discovery** (not “replace named legacy modules”).
-2. **Confirm** research methodology and **where pre-registered hypotheses are recorded** (e.g. lessons log, dedicated research log, or ticket list — pick one convention and stick to it).
-3. Identify the **first batch** of **5–10** hypotheses to investigate and **pre-register** them before running tests.
+2. **Confirm** research methodology; **pre-register** hypotheses in **`docs/research-log.md`** (append-only) before runs.
+3. After **Wave 0** completes: identify the **first hypothesis wave** (**5–10** ideas) and **pre-register** them before running tests.
 4. Agree how **findings** are **documented and surfaced** (summary format, pass/fail, links to artifacts, operator sign-off checkpoints).
 
 ---
