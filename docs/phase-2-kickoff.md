@@ -29,19 +29,45 @@
 
 | Dimension | Summary |
 |-----------|---------|
-| **Economics (static backtest, pre-payout)** | **ORB+Opt3** at **qty = 3** (funded-scale) is on the order of **~$3,265/yr per account** (NT8 reference basis; ~$1,088.50/yr per contract × 3 — see `docs/program-charter.md` and lessons log **2026-05-13** correction). |
-| **Python vs NT8** | Research rerun is within **~6.8%** of the NT8 reference on a **per-contract** basis (RTH-only protocol; `docs/m6-nt8-reproduction.md`). |
-| **Live / operational** | Even when edge appears real in backtest, **trade frequency is structurally low** for the current ORB+Opt3 configuration: the strategy does not trade often enough to **reliably overcome variance** inside typical prop-firm drawdown windows. |
+| **Economics (static backtest, pre-payout)** | **ORB+Opt3** at **qty = 3** reflects an **operator/production** funded sizing choice, not a research **graded** size. At that snapshot, NT8-class reference economics are on the order of **~$3,265/yr per account** (~$1,088.50/yr per contract × 3 — see `docs/program-charter.md` and lessons log **2026-05-13**). **Do not** infer floor/target/stretch pass or fail from this row alone — see **max sustainable qty** grading below. |
+| **Python vs NT8** | Research rerun is within **~6.8%** of the NT8 reference on a **per-contract** basis (RTH-only protocol; `docs/m6-nt8-reproduction.md`). Per-contract behavior is the input to **sizing-scaled** graded P&L once max sustainable qty is computed. |
+| **Live / operational** | Even when edge appears real in backtest, **trade frequency** for the current ORB+Opt3 configuration appears **structurally low** for prop **eval/funded window** dynamics: variance can dominate short horizons until sample size catches up — a concern **alongside** economically scaled grading. |
 
 ---
 
 ## Per-account income gap
 
-- **Target:** **$65,000–$100,000/yr net per funded account** (after payout splits — charter-level engineering target).
-- **Baseline (anchor above):** **~$3,265/yr** pre-payout static backtest at funded qty ≈ 3.
-- **Gap scale:** Roughly **~20×** between baseline anchor and the per-account target.
+- **Charter engineering target:** **$65,000–$100,000/yr net per funded account** (after payout splits).
+- **Phase 2 compares apples to apples:** Strategies (including **ORB+Opt3** as baseline) are evaluated at each strategy’s **maximum sustainable quantity**, not at an arbitrary fixed qty (see below). The **~$3,265/yr at qty = 3** figure is a **historical production snapshot** for continuity with prior analysis; it is **not** the graded economic anchor until **ORB+Opt3** is re-run under the **max sustainable qty** methodology.
+- **Gap:** Closing a **meaningful fraction** of the distance from **graded baseline → charter target range** is the program burden. Order-of-magnitude tension at legacy snapshot sizing (e.g. **~20×** vs $65K+ if that snapshot were representative) illustrates scale of ambition; **graded** baseline may differ once max sustainable sizing is applied.
 
-Phase 2 must close **a meaningful fraction** of this gap — not merely ship marginal tweaks. Success is judged against **aggregate per-account economics**, not a single satisfying backtest curve.
+Phase 2 must close **a meaningful fraction** of this gap — not merely ship marginal tweaks. Success is judged against **aggregate per-account economics at sustainable sizing**, not a single satisfying backtest curve at a hand-picked qty.
+
+---
+
+## Phase 2 grading framework (max sustainable quantity)
+
+**Principle:** **Quantity is a consequence of strategy metrics, not an input.** Each strategy is evaluated at its **maximum sustainable qty**: the **largest** integer size such that **backtested maximum drawdown**, plus a **reasonable safety margin**, remains within **Apex $3K end-of-day trailing drawdown** constraints (eval/funded rule class used for this program).
+
+**Methodology (default):** For every candidate and for the **ORB+Opt3** baseline, Phase 2 grading must **compute max sustainable qty** on the **six-year** backtest (standard protocol). Let **DD(q)** be backtested **maximum drawdown in dollars** at integer quantity **q** (with **DD(1)** from qty-1 run or equivalent per-unit DD; assume **DD(q) ≈ q × DD(1)** unless a sizing model says otherwise).
+
+Define a **conservative bound** for the Apex **$3K** EOD trailing DD cap (suggested default):
+
+**R(q) = max(1.5 × DD(q), DD(q) + $500)**
+
+**Max sustainable qty** is the **largest** integer **q** such that **R(q) ≤ $3,000**. (Interpretation: pad the observed max DD by the **larger** of a **50%** uplift or a **$500** absolute buffer — whichever is stricter — then require that padded figure to clear the prop ceiling.) Document the exact algebra in the research artifact so live scaling stays reproducible.
+
+Operator may tighten/loosen the margin rule with a lessons-log entry; the expression above is the **starting convention**.
+
+Tight stops and high win rates can support **higher** sustainable qty than wide-stop, lower-win-rate structures — **both** are legitimate; each is graded at **its** sustainable size.
+
+| Tier | Criteria (all at **max sustainable qty** unless noted) |
+|------|--------------------------------------------------------|
+| **Floor** (acceptable minimum) | Eval pass rate **≥ 50%** within **30 days**; average funded P&L **≥ $36K/yr** (~**$3K/month**); profitable **≥ 4 of 6** years; edge survives **deflated Sharpe** (or agreed multiple-comparisons correction). |
+| **Target** (genuinely good) | Eval pass rate **≥ 70%**; average funded P&L **≥ $60K/yr**; profitable **≥ 5 of 6** years; **low correlation** with existing **portfolio** strategies. |
+| **Stretch** (transformative) | Eval pass rate **≥ 80%**; average funded P&L **≥ $100K/yr**; profitable **all 6** years; **stacks** with portfolio strategies (combined / displaced economics documented). |
+
+**Live vs backtest:** Backtest establishes **max sustainable qty** and long-horizon economics; **eval pass rate** and **funded P&L** are validated from **sampled live/eval experience** when data exist — otherwise proxy with pre-registered simulation rules and document uncertainty.
 
 ---
 
@@ -56,23 +82,17 @@ The **V2 starter packet** mental model remains useful:
 - **Phase 2:** Strategy development from validated patterns.
 - **Phase 3:** Integration and deployment planning.
 
-**Updated mantra:** discover **any configurations** (sizing, filters, session/regime gates, new modules only if justified, or other structures) that **close the income gap** while surviving statistical gates and prop constraints.
+**Updated mantra:** discover **any configurations** (filters, session/regime gates, structural rule changes, new modules only if justified, or other discoveries) that **close the income gap** while surviving statistical gates and prop constraints — with **sizing** set by **max sustainable qty** relative to **$3K EOD trailing DD**, not by fixing qty a priori.
 
 Canonical research-process details and acceptable outcome families: **`flux-v2-module-search-starter.md`** (repo root).
 
 ---
 
-## Minimum viable edge criteria (per-strategy)
+## Charter minimum viable edge (new modules, normalized)
 
-When the winning path includes a **new module**, the charter’s **minimum viable edge** thresholds remain in force (see `docs/program-charter.md`):
+When the winning path includes a **new module**, `docs/program-charter.md` still specifies **minimum viable edge** for **go/no-go on that module** (OOS WR **≥ 57%**, edge over BE **≥ +3pp**, P&L **≥ $5K/yr** at **1 NQ**, trades **≥ 80/yr**, profitable **≥ 4 of 6** years). Treat that block as a **normalized isolation screen** at **one contract** (or per-contract analog) before integration and **displacement** tests — **not** a substitute for the **Phase 2 grading table** above, which always applies at **max sustainable qty**.
 
-- OOS win rate **≥ 57%**
-- Edge over breakeven **≥ +3 percentage points**
-- P&L **≥ $5K/yr** at **1 NQ**
-- Trades **≥ 80/yr**
-- Profitable in **≥ 4 of 6** years
-
-**Important:** These are **individual-strategy / module** criteria. **Program success** is **closing the per-account income gap**, which may require **multiple strategies**, **sizing increases** within risk limits, **portfolio diversification**, or **other leverage** — not a single new module clearing MV edge in isolation.
+**Program success** remains **closing the income gap** under the **floor / target / stretch** framework; that may require **multiple strategies** and **portfolio** construction, not a single module clearing MV edge in isolation.
 
 ---
 
@@ -86,6 +106,7 @@ All of the following are **defaults** unless the operator explicitly approves an
 4. **Uncertainty:** **Bootstrap confidence intervals** on key metrics where applicable.
 5. **Temporal robustness:** **Walk-forward** validation for candidates that survive initial screens.
 6. **Structural rationale:** Patterns must have a **structural / behavioral reason**, not only favorable equity curves.
+7. **Sustainable sizing:** Every graded run reports **max sustainable qty** (per the Apex $3K EOD trailing DD + margin rule); headline P&L and pass-rate targets in this document assume that qty.
 
 ---
 
@@ -113,7 +134,7 @@ Read these **in order** when opening a new Phase 2 session:
 
 1. `docs/program-charter.md` — program structure, Phase 2 gates, MV edge language.
 2. `docs/lessons-log.md` — decisions, failures, baseline corrections, multi-module findings.
-3. **`docs/phase-2-kickoff.md`** (this document) — intent, gap math, methodology, roles.
+3. **`docs/phase-2-kickoff.md`** (this document) — intent, **max sustainable qty** grading, methodology, roles.
 4. **`flux-v2-module-search-starter.md`** — reframed Phase 2 objective and acceptable outcome families.
 5. `docs/ai-project-instructions.md` — agent and documentation conventions.
 
