@@ -1,8 +1,8 @@
 # Wave 0b — R(q) methodology investigation
 
-**Git SHA:** `f95fb9fc20ff94d9e941fb210d4970e56375a2ee`  
+**Git SHA:** `b945022bffc9e0d1d36f9c81501fdbdbc8e4d3d2`  
 **Dirty tree:** True  
-**Generated:** 2026-05-16T05:15:31.282436+00:00  
+**Generated:** 2026-05-16T05:16:44.708131+00:00  
 
 ## Scope
 
@@ -19,12 +19,12 @@ Methodology investigation (not a strategy hypothesis): reconcile **closed-trade 
 
 | Qty | Mode | Peak-to-trough DD on equity | Min margin to floor | Breach sessions | DLL hits | Binding session |
 |-----|------|----------------------------|---------------------|-----------------|----------|----------------|
-| 1 | pure_trailing | $2,675.00 | $325.00 | 0 | 0 | 2020-01-02 |
-| 1 | funded_lock | $2,675.00 | $2,739.50 | 0 | 0 | 2020-01-02 |
+| 1 | pure_trailing | $2,675.00 | $325.00 | 0 | 0 | 2023-11-16 |
+| 1 | funded_lock | $2,675.00 | $2,739.50 | 0 | 0 | 2023-11-16 |
 | 2 | pure_trailing | $5,350.00 | $-2,350.00 | 125 | 4 | 2023-11-16 |
-| 2 | funded_lock | $5,350.00 | $2,479.00 | 0 | 4 | 2020-01-02 |
+| 2 | funded_lock | $5,350.00 | $2,479.00 | 0 | 4 | 2023-11-16 |
 | 3 | pure_trailing | $8,025.00 | $-5,025.00 | 249 | 5 | 2023-11-16 |
-| 3 | funded_lock | $8,025.00 | $2,328.00 | 0 | 5 | 2020-01-02 |
+| 3 | funded_lock | $8,025.00 | $2,328.00 | 0 | 5 | 2023-11-16 |
 
 **Interpretation:** **funded_lock** freezes the trailing floor after the first HWM ≥ start+\$100; on this backtest that removes **trailing breach** sessions at qty 2–3 that appear under **pure_trailing**, while **DLL** flags are unchanged. **Peak-to-trough** equity drawdown at q=3 still reaches **\$8,025**, matching closed-trade ×3 — the “stop” gap example (EOD \ll closed×3) **did not occur** here.
 

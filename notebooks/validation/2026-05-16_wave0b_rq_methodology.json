@@ -1,7 +1,7 @@
 {
   "wave": "0b",
   "git": {
-    "git_sha": "f95fb9fc20ff94d9e941fb210d4970e56375a2ee",
+    "git_sha": "b945022bffc9e0d1d36f9c81501fdbdbc8e4d3d2",
     "git_dirty": true
   },
   "account_class_starting_balance_usd": 50000.0,
@@ -28,8 +28,8 @@
         "min_margin_to_floor": 325.0,
         "breach_session_count": 0,
         "dll_hit_session_count": 0,
-        "binding_session_index": 0,
-        "binding_cme_session_date": "2020-01-02"
+        "binding_session_index": 439,
+        "binding_cme_session_date": "2023-11-16"
       },
       "funded_lock": {
         "qty": 1,
@@ -41,8 +41,8 @@
         "min_margin_to_floor": 2739.5,
         "breach_session_count": 0,
         "dll_hit_session_count": 0,
-        "binding_session_index": 0,
-        "binding_cme_session_date": "2020-01-02"
+        "binding_session_index": 439,
+        "binding_cme_session_date": "2023-11-16"
       }
     },
     "2": {
@@ -69,8 +69,8 @@
         "min_margin_to_floor": 2479.0,
         "breach_session_count": 0,
         "dll_hit_session_count": 4,
-        "binding_session_index": 0,
-        "binding_cme_session_date": "2020-01-02"
+        "binding_session_index": 439,
+        "binding_cme_session_date": "2023-11-16"
       }
     },
     "3": {
@@ -97,8 +97,8 @@
         "min_margin_to_floor": 2328.0,
         "breach_session_count": 0,
         "dll_hit_session_count": 5,
-        "binding_session_index": 0,
-        "binding_cme_session_date": "2020-01-02"
+        "binding_session_index": 439,
+        "binding_cme_session_date": "2023-11-16"
       }
     }
   },

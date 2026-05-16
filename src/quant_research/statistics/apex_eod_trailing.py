@@ -63,6 +63,7 @@ def simulate_apex_eod_trailing(
 
     peak_eq = float(starting_balance)
     max_pt_dd = 0.0
+    max_pt_dd_i = 0
     max_violation = 0.0
     min_margin = float("inf")
     breaches = 0
@@ -101,7 +102,13 @@ def simulate_apex_eod_trailing(
 
         if equity > peak_eq:
             peak_eq = equity
-        max_pt_dd = max(max_pt_dd, peak_eq - equity)
+        pt_dd = peak_eq - equity
+        if pt_dd > max_pt_dd:
+            max_pt_dd = pt_dd
+            max_pt_dd_i = i
+
+    if max_violation <= 0.0:
+        bind_i = max_pt_dd_i
 
     return EodTrailingSimResult(
         starting_balance=starting_balance,
