@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from datetime import date
+
 import numpy as np
 import pytest
 
@@ -9,7 +11,9 @@ from quant_research.statistics.apex_eod_trailing import (
     block_bootstrap_resample_trades,
     collapse_trades_to_session_streaks,
     max_drawdown_closed_trade_pnl,
+    simulate_apex_50k_eod_two_phase,
     simulate_apex_eod_trailing,
+    simulate_eval_window_50k_eod,
     trades_to_daily_pnls_chronological,
 )
 
@@ -54,6 +58,55 @@ def test_max_drawdown_closed_matches_known_path() -> None:
     p = np.array([100.0, -400.0, 200.0])
     dd = max_drawdown_closed_trade_pnl(p)
     assert dd == pytest.approx(-400.0)  # cum path 0,100,-300,-100 → -400 vs peak 100
+
+
+def test_apex_50k_pre_lock_breach() -> None:
+    """Equity lands $2K below HWM → breach (floor 48K when HWM 50K)."""
+    ny = [date(2020, 1, d) for d in range(1, 6)]
+    r = simulate_apex_50k_eod_two_phase(
+        np.array([-2_100.0, 0.0, 0.0, 0.0, 0.0]),
+        ny,
+    )
+    assert not r.survived
+    assert r.trail_breach_sessions >= 1
+
+
+def test_apex_50k_post_lock_breach() -> None:
+    """HWM reaches 52K then equity below 50K → post-lock failure."""
+    ny = [date(2020, 1, d) for d in range(1, 5)]
+    r = simulate_apex_50k_eod_two_phase(
+        np.array([2_500.0, -2_600.0, 0.0, 0.0]),
+        ny,
+    )
+    assert r.locked_achieved
+    assert not r.survived
+    assert r.trail_breach_sessions >= 1
+
+
+def test_apex_50k_pre_lock_survives_small_wiggle() -> None:
+    ny = [date(2020, 1, 1), date(2020, 1, 2)]
+    r = simulate_apex_50k_eod_two_phase(
+        np.array([-500.0, 600.0]),
+        ny,
+    )
+    assert r.survived
+    assert r.trail_breach_sessions == 0
+
+
+def test_eval_window_50k_pass_and_trailing_fail() -> None:
+    good = simulate_eval_window_50k_eod(
+        np.array([500.0, 3_000.0]),
+        [date(2020, 1, 1), date(2020, 1, 2)],
+        [1, 2],
+    )
+    assert good["outcome"] == "pass"
+    bad = simulate_eval_window_50k_eod(
+        np.array([-2_100.0]),
+        [date(2020, 1, 1)],
+        [1],
+    )
+    assert bad["outcome"] == "fail"
+    assert bad["mode"] == "trailing_dd"
 
 
 def test_block_bootstrap_shape_and_determinism() -> None:

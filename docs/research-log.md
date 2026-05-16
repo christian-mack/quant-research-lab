@@ -163,11 +163,70 @@
 - **Production vs formal R(q):** Wave 0 **q_max=0** is **not** resolved by switching DD metric to **EOD peak-to-trough** on this log — magnitudes **match** closed-trade scaling. **funded_lock** does change **breach-count semantics** vs a continuously rising trail.  
 - **Next step for live:** Operator supplies daily realized P&amp;L (qty=3) CSV → re-run runner; **STOP** logic in script flags breach, DLL, or margin **&lt; $500**.
 
+**Caveat (superseded by Wave 0c — 2026-05-16):** Wave 0b mechanics and Wave 0 eval/trailing text assumed **$3K** trail and **start+$100** lock. That parameterization was **wrong** for the **$50K EOD** class under research (see `docs/lessons-log.md`, **Wave 0c correction**). Do **not** use Wave 0b breach tables as firm-rule evidence; use **Wave 0c** two-gate artifacts instead.
+
 **Artifacts:**  
 - `notebooks/validation/2026-05-16_wave0b_rq_methodology.md`  
 - `notebooks/validation/2026-05-16_wave0b_rq_methodology.json`  
 - `scripts/run_wave0b_rq_methodology.py`  
 - `src/quant_research/statistics/apex_eod_trailing.py`  
+
+---
+
+## 2026-05-16 — Wave 0c ORB+Opt3 two-gate re-baseline — PRE-REGISTERED
+
+**Wave:** Wave 0c
+
+**Structural rationale:** Wave 0 / 0b used **incorrect** Apex **$50K EOD** parameters ($3K trail, wrong lock story). Phase 2 must **separate funded survival** from **eval pass rate** and re-grade ORB+Opt3 under **$2K** pre-lock trail, **$52K** lock, **$50K** post-lock floor, **$53K** profit target, **$1K** DLL.
+
+**Specification:**
+
+- **Strategy / protocol:** ORB+Opt3 (same six-year MNQ window and pipeline as Wave 0).
+- **Apex simulation (canonical):** `simulate_apex_50k_eod_two_phase` + `simulate_eval_window_50k_eod` in `src/quant_research/statistics/apex_eod_trailing.py`.
+- **Deliverable 1 — Two gates:**  
+  - **(a) Funded survival:** full-length **session-daily** scaled P&amp;L path; pass = no trailing/post-lock breach and no DLL fail. Report **funded q_max** for **q ∈ {1,2,3,4,5}**.  
+  - **(b) Eval pass:** rolling **30-session** windows, advance **1**; trades in window by **exit `cme_session_date`**; **trade-by-trade** path; pass = reach **$53K** before breach/DLL. Report pass rate **per q**.
+- **Deliverable 2 — Bootstrap:** **q ∈ {1..5}**, block lengths **5, 20, 50**, **10,000** resamples, RNG **seed = 42 + block_len + q×1000**; survival fraction; margin percentiles **pre-lock** and **post-lock** (post-lock NaN when lock never achieved in replicate).
+- **Deliverable 3 — Eval at funded q_max:** pass rate at **funded q_max** only; grading pair **(funded_q_max, eval_pass_rate)**.
+- **Deliverable 4 — Graded baseline:** economics at **funded q_max** (annual tier, year profile).
+- **Stop:** funded fails **q=1**; eval **0%** all **q**; bootstrap survival **&lt; ~80%** at **funded_q_max**; verify two-phase code before trusting Wave 0b-style breach summaries.
+
+**Date pre-registered:** 2026-05-16  
+**Date run completed:** 2026-05-16  
+**Result:** *(see RESULT-LOGGED below)*  
+**Artifact:** `notebooks/validation/2026-05-17_wave0c_orb_opt3_two_gate_baseline.{md,json}`; `scripts/run_wave0c_orb_opt3_two_gate_baseline.py`
+
+---
+
+## 2026-05-16 — Wave 0c ORB+Opt3 two-gate re-baseline — RESULT-LOGGED
+
+**Wave:** Wave 0c (implements pre-registration above)
+
+**Date run completed:** 2026-05-16
+
+**Verification:** `simulate_apex_50k_eod_two_phase` implements **pre-lock** ``HWM − $2K`` and **post-lock** static **$50K** once **HWM ≥ $52K**. Legacy `simulate_apex_eod_trailing` (**$3K** / **+$100** lock) retained **only** for Wave 0b reproduction.
+
+**STOP / operator flags (this run):**
+
+| Condition | Triggered |
+|-----------|-----------|
+| Funded survival fails **q=1** | **No** — **q=1** passes |
+| Eval pass **0%** for **all** q | **No** |
+| Bootstrap funded survival **&lt; ~80%** at **funded q_max** | **Yes** — at **q=1** survival frac **~0.58–0.61** across block lengths (see JSON) |
+
+**Deliverable 1 — Headline**
+
+- **Funded q_max:** **1**. **q ≥ 2** fail **DLL** on the **6y session-daily** path (scaled same-day loss), **not** trailing floor breach (**0** trail breach rows for all **q** in this artifact).  
+- **Eval pass rates (30-session windows, 1532 windows):** e.g. **q=1:** **30 / 1532 ≈ 1.96%**; higher **q** yields higher pass rates but **do not** satisfy **Gate A** here.
+
+**Grading conclusion:** **(funded_q_max, eval_pass_rate) = (1, ~1.96%)**.
+
+**Deliverable 4 — Economics at funded q_max (q=1):** ~**$1,014/yr** per contract (same as Wave 0 per-contract totals); **tier:** **below_floor**; **4 / 7** profitable calendar years (2020–2026 slice).
+
+**Artifacts:**  
+- `notebooks/validation/2026-05-17_wave0c_orb_opt3_two_gate_baseline.md`  
+- `notebooks/validation/2026-05-17_wave0c_orb_opt3_two_gate_baseline.json`  
+- `scripts/run_wave0c_orb_opt3_two_gate_baseline.py`
 
 ---
 

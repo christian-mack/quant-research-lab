@@ -1,0 +1,471 @@
+{
+  "wave": "0c",
+  "git": {
+    "git_sha": "9395685ad200d19b4d767e534150154b7888fad7",
+    "git_dirty": true
+  },
+  "apex_rules": {
+    "account": "$50K EOD",
+    "starting_balance": 50000.0,
+    "trail_dollars_pre_lock": 2000,
+    "lock_high_water_equity": 52000,
+    "post_lock_static_floor": 50000,
+    "profit_target_equity": 53000,
+    "dll_limit": 1000,
+    "dll_test": "ny_day_sum_pnl < -1000 (Wave 0 convention)"
+  },
+  "protocol": {
+    "start": "2020-01-01",
+    "end_inclusive": "2026-04-19",
+    "trade_count_qty1": 799,
+    "daily_sessions": 779
+  },
+  "deliverable_1_two_gate": {
+    "funded_survival_6y_daily_path": {
+      "1": {
+        "survived": true,
+        "trail_breach_sessions": 0,
+        "dll_fail": false,
+        "dll_failure_days": 0,
+        "locked_achieved": true,
+        "min_margin_pre_lock": 1249.0,
+        "min_margin_post_lock": 827.5,
+        "final_equity": 56389.0,
+        "binding_session_index": 439
+      },
+      "2": {
+        "survived": false,
+        "trail_breach_sessions": 0,
+        "dll_fail": true,
+        "dll_failure_days": 4,
+        "locked_achieved": true,
+        "min_margin_pre_lock": 1479.0,
+        "min_margin_post_lock": 1102.0,
+        "final_equity": 62778.0,
+        "binding_session_index": 439
+      },
+      "3": {
+        "survived": false,
+        "trail_breach_sessions": 0,
+        "dll_fail": true,
+        "dll_failure_days": 5,
+        "locked_achieved": true,
+        "min_margin_pre_lock": 1218.5,
+        "min_margin_post_lock": 1609.5,
+        "final_equity": 69167.0,
+        "binding_session_index": 439
+      },
+      "4": {
+        "survived": false,
+        "trail_breach_sessions": 0,
+        "dll_fail": true,
+        "dll_failure_days": 6,
+        "locked_achieved": true,
+        "min_margin_pre_lock": 958.0,
+        "min_margin_post_lock": 2146.0,
+        "final_equity": 75556.0,
+        "binding_session_index": 439
+      },
+      "5": {
+        "survived": false,
+        "trail_breach_sessions": 0,
+        "dll_fail": true,
+        "dll_failure_days": 6,
+        "locked_achieved": true,
+        "min_margin_pre_lock": 697.5,
+        "min_margin_post_lock": 2400.0,
+        "final_equity": 81945.0,
+        "binding_session_index": 439
+      }
+    },
+    "funded_q_max": 1,
+    "funded_passing_quantities": [
+      1
+    ],
+    "eval_rolling_30_session_windows": {
+      "1": {
+        "total_windows": 1532,
+        "passing_windows": 30,
+        "pass_rate": 0.0195822454308094,
+        "fail_trailing": 0,
+        "fail_dll": 0,
+        "fail_no_target": 1502
+      },
+      "2": {
+        "total_windows": 1532,
+        "passing_windows": 30,
+        "pass_rate": 0.0195822454308094,
+        "fail_trailing": 12,
+        "fail_dll": 120,
+        "fail_no_target": 1370
+      },
+      "3": {
+        "total_windows": 1532,
+        "passing_windows": 53,
+        "pass_rate": 0.034595300261096605,
+        "fail_trailing": 177,
+        "fail_dll": 47,
+        "fail_no_target": 1255
+      },
+      "4": {
+        "total_windows": 1532,
+        "passing_windows": 164,
+        "pass_rate": 0.10704960835509138,
+        "fail_trailing": 379,
+        "fail_dll": 41,
+        "fail_no_target": 948
+      },
+      "5": {
+        "total_windows": 1532,
+        "passing_windows": 262,
+        "pass_rate": 0.17101827676240208,
+        "fail_trailing": 460,
+        "fail_dll": 37,
+        "fail_no_target": 773
+      }
+    },
+    "eval_window_spec": {
+      "window_sessions": 30,
+      "advance_sessions": 1,
+      "partial_windows": "drop",
+      "path": "trade_by_trade within window (same as Wave 0 eval driver)"
+    }
+  },
+  "deliverable_2_bootstrap_funded_survival_all_q": {
+    "q1_block5": {
+      "funded_survival_fraction": 0.61,
+      "margin_pre_lock_percentiles": {
+        "p01": -3799.1,
+        "p05": -2145.6,
+        "p50": 579.5,
+        "p95": 1651.0249999999996,
+        "p99": 1893.0
+      },
+      "margin_post_lock_percentiles": {
+        "p01": -2050.155,
+        "p05": -579.6749999999998,
+        "p50": 1774.75,
+        "p95": 4664.5,
+        "p99": 5346.555000000001
+      },
+      "worst_tail_labels": "p01/p05 = lower tail of min_margin (stress); p95/p99 = upper tail (headroom)",
+      "n_iterations": 10000,
+      "seed": 1047
+    },
+    "q1_block20": {
+      "funded_survival_fraction": 0.5849,
+      "margin_pre_lock_percentiles": {
+        "p01": -4355.03,
+        "p05": -2511.7,
+        "p50": 611.75,
+        "p95": 1727.0,
+        "p99": 2000.0
+      },
+      "margin_post_lock_percentiles": {
+        "p01": -2564.465,
+        "p05": -932.75,
+        "p50": 1735.0,
+        "p95": 4450.0,
+        "p99": 5117.495
+      },
+      "worst_tail_labels": "p01/p05 = lower tail of min_margin (stress); p95/p99 = upper tail (headroom)",
+      "n_iterations": 10000,
+      "seed": 1062
+    },
+    "q1_block50": {
+      "funded_survival_fraction": 0.6032,
+      "margin_pre_lock_percentiles": {
+        "p01": -3367.56,
+        "p05": -1955.525,
+        "p50": 506.0,
+        "p95": 1840.0,
+        "p99": 1840.0
+      },
+      "margin_post_lock_percentiles": {
+        "p01": -1754.295,
+        "p05": -434.65,
+        "p50": 1893.5,
+        "p95": 4335.5,
+        "p99": 4965.405000000009
+      },
+      "worst_tail_labels": "p01/p05 = lower tail of min_margin (stress); p95/p99 = upper tail (headroom)",
+      "n_iterations": 10000,
+      "seed": 1092
+    },
+    "q2_block5": {
+      "funded_survival_fraction": 0.0096,
+      "margin_pre_lock_percentiles": {
+        "p01": -8722.04,
+        "p05": -5175.05,
+        "p50": 198.0,
+        "p95": 1677.0499999999993,
+        "p99": 2000.0
+      },
+      "margin_post_lock_percentiles": {
+        "p01": -7324.3,
+        "p05": -4234.75,
+        "p50": 1093.5,
+        "p95": 7479.299999999999,
+        "p99": 8713.46
+      },
+      "worst_tail_labels": "p01/p05 = lower tail of min_margin (stress); p95/p99 = upper tail (headroom)",
+      "n_iterations": 10000,
+      "seed": 2047
+    },
+    "q2_block20": {
+      "funded_survival_fraction": 0.0087,
+      "margin_pre_lock_percentiles": {
+        "p01": -9968.25,
+        "p05": -5833.549999999999,
+        "p50": 115.5,
+        "p95": 1680.0,
+        "p99": 2000.0
+      },
+      "margin_post_lock_percentiles": {
+        "p01": -8198.0,
+        "p05": -4554.0,
+        "p50": 1118.0,
+        "p95": 7255.0,
+        "p99": 8402.0
+      },
+      "worst_tail_labels": "p01/p05 = lower tail of min_margin (stress); p95/p99 = upper tail (headroom)",
+      "n_iterations": 10000,
+      "seed": 2062
+    },
+    "q2_block50": {
+      "funded_survival_fraction": 0.0045,
+      "margin_pre_lock_percentiles": {
+        "p01": -8029.07,
+        "p05": -5380.05,
+        "p50": -229.0,
+        "p95": 1680.0,
+        "p99": 1680.0
+      },
+      "margin_post_lock_percentiles": {
+        "p01": -6104.98,
+        "p05": -3373.6,
+        "p50": 1379.0,
+        "p95": 7500.0,
+        "p99": 7963.959999999999
+      },
+      "worst_tail_labels": "p01/p05 = lower tail of min_margin (stress); p95/p99 = upper tail (headroom)",
+      "n_iterations": 10000,
+      "seed": 2092
+    },
+    "q3_block5": {
+      "funded_survival_fraction": 0.0024,
+      "margin_pre_lock_percentiles": {
+        "p01": -13652.545,
+        "p05": -7750.599999999999,
+        "p50": 54.5,
+        "p95": 1605.5,
+        "p99": 2000.0
+      },
+      "margin_post_lock_percentiles": {
+        "p01": -12614.82,
+        "p05": -7535.55,
+        "p50": 330.75,
+        "p95": 9692.550000000001,
+        "p99": 12182.94000000001
+      },
+      "worst_tail_labels": "p01/p05 = lower tail of min_margin (stress); p95/p99 = upper tail (headroom)",
+      "n_iterations": 10000,
+      "seed": 3047
+    },
+    "q3_block20": {
+      "funded_survival_fraction": 0.0023,
+      "margin_pre_lock_percentiles": {
+        "p01": -14608.465,
+        "p05": -8663.8,
+        "p50": -17.5,
+        "p95": 1812.5,
+        "p99": 2000.0
+      },
+      "margin_post_lock_percentiles": {
+        "p01": -13499.865,
+        "p05": -8378.775,
+        "p50": 370.5,
+        "p95": 9426.525000000005,
+        "p99": 11349.0
+      },
+      "worst_tail_labels": "p01/p05 = lower tail of min_margin (stress); p95/p99 = upper tail (headroom)",
+      "n_iterations": 10000,
+      "seed": 3062
+    },
+    "q3_block50": {
+      "funded_survival_fraction": 0.0002,
+      "margin_pre_lock_percentiles": {
+        "p01": -12596.605,
+        "p05": -8032.45,
+        "p50": -706.0,
+        "p95": 1553.0,
+        "p99": 1553.0
+      },
+      "margin_post_lock_percentiles": {
+        "p01": -10929.36,
+        "p05": -6166.5,
+        "p50": 1261.5,
+        "p95": 10483.199999999999,
+        "p99": 11520.0
+      },
+      "worst_tail_labels": "p01/p05 = lower tail of min_margin (stress); p95/p99 = upper tail (headroom)",
+      "n_iterations": 10000,
+      "seed": 3092
+    },
+    "q4_block5": {
+      "funded_survival_fraction": 0.0008,
+      "margin_pre_lock_percentiles": {
+        "p01": -17866.26,
+        "p05": -9824.4,
+        "p50": 46.0,
+        "p95": 2000.0,
+        "p99": 2000.0
+      },
+      "margin_post_lock_percentiles": {
+        "p01": -17698.04,
+        "p05": -10895.8,
+        "p50": -318.0,
+        "p95": 10950.400000000001,
+        "p99": 15338.080000000002
+      },
+      "worst_tail_labels": "p01/p05 = lower tail of min_margin (stress); p95/p99 = upper tail (headroom)",
+      "n_iterations": 10000,
+      "seed": 4047
+    },
+    "q4_block20": {
+      "funded_survival_fraction": 0.0005,
+      "margin_pre_lock_percentiles": {
+        "p01": -18604.36,
+        "p05": -10880.8,
+        "p50": -24.0,
+        "p95": 1750.0,
+        "p99": 2000.0
+      },
+      "margin_post_lock_percentiles": {
+        "p01": -19818.4,
+        "p05": -12378.0,
+        "p50": -374.0,
+        "p95": 11518.0,
+        "p99": 15132.0
+      },
+      "worst_tail_labels": "p01/p05 = lower tail of min_margin (stress); p95/p99 = upper tail (headroom)",
+      "n_iterations": 10000,
+      "seed": 4062
+    },
+    "q4_block50": {
+      "funded_survival_fraction": 0.0013,
+      "margin_pre_lock_percentiles": {
+        "p01": -16686.28,
+        "p05": -10428.3,
+        "p50": -556.0,
+        "p95": 1404.0,
+        "p99": 1404.0
+      },
+      "margin_post_lock_percentiles": {
+        "p01": -14927.8,
+        "p05": -9707.5,
+        "p50": 350.0,
+        "p95": 9967.0,
+        "p99": 13747.7
+      },
+      "worst_tail_labels": "p01/p05 = lower tail of min_margin (stress); p95/p99 = upper tail (headroom)",
+      "n_iterations": 10000,
+      "seed": 4092
+    },
+    "q5_block5": {
+      "funded_survival_fraction": 0.0003,
+      "margin_pre_lock_percentiles": {
+        "p01": -21345.35,
+        "p05": -11401.374999999998,
+        "p50": 5.0,
+        "p95": 2000.0,
+        "p99": 2000.0
+      },
+      "margin_post_lock_percentiles": {
+        "p01": -23558.4,
+        "p05": -14268.0,
+        "p50": -1197.5,
+        "p95": 11916.5,
+        "p99": 18485.499999999985
+      },
+      "worst_tail_labels": "p01/p05 = lower tail of min_margin (stress); p95/p99 = upper tail (headroom)",
+      "n_iterations": 10000,
+      "seed": 5047
+    },
+    "q5_block20": {
+      "funded_survival_fraction": 0.0005,
+      "margin_pre_lock_percentiles": {
+        "p01": -22913.5,
+        "p05": -13747.75,
+        "p50": -115.0,
+        "p95": 2000.0,
+        "p99": 2000.0
+      },
+      "margin_post_lock_percentiles": {
+        "p01": -24814.25,
+        "p05": -16256.25,
+        "p50": -1117.5,
+        "p95": 13305.625,
+        "p99": 18742.5
+      },
+      "worst_tail_labels": "p01/p05 = lower tail of min_margin (stress); p95/p99 = upper tail (headroom)",
+      "n_iterations": 10000,
+      "seed": 5062
+    },
+    "q5_block50": {
+      "funded_survival_fraction": 0.0001,
+      "margin_pre_lock_percentiles": {
+        "p01": -20770.125,
+        "p05": -12647.5,
+        "p50": -500.0,
+        "p95": 1487.5,
+        "p99": 1487.5
+      },
+      "margin_post_lock_percentiles": {
+        "p01": -20367.5,
+        "p05": -13229.125,
+        "p50": -178.75,
+        "p95": 10041.124999999996,
+        "p99": 16147.5
+      },
+      "worst_tail_labels": "p01/p05 = lower tail of min_margin (stress); p95/p99 = upper tail (headroom)",
+      "n_iterations": 10000,
+      "seed": 5092
+    }
+  },
+  "deliverable_3_eval_at_funded_q_max": {
+    "total_windows": 1532,
+    "passing_windows": 30,
+    "pass_rate": 0.0195822454308094,
+    "fail_trailing": 0,
+    "fail_dll": 0,
+    "fail_no_target": 1502
+  },
+  "deliverable_4_graded_baseline_at_funded_q_max": {
+    "funded_q_max": 1,
+    "q_used_for_economics": 1,
+    "total_pnl_scaled": 6389.0,
+    "avg_annual_pnl": 1014.1600391134289,
+    "annual_by_year_scaled": {
+      "2020": 1038.5,
+      "2021": 0.0,
+      "2022": 2038.0,
+      "2023": -1386.5,
+      "2024": 1375.0,
+      "2025": 3912.0,
+      "2026": -588.0
+    },
+    "profitable_calendar_years_2020_2026": 4,
+    "tier_vs_36_60_100k": "below_floor"
+  },
+  "stop_conditions": {
+    "funded_survival_fails_qty1": false,
+    "eval_pass_rate_zero_all_q": false,
+    "bootstrap_funded_survival_below_80pct_at_funded_q_max": true
+  },
+  "grading_conclusion": {
+    "funded_q_max": 1,
+    "eval_pass_rate_at_funded_q_max": 0.0195822454308094
+  },
+  "operator_notes": "Wave 0 / 0b used **$3K** trailing and wrong lock semantics; see lessons log and docs. Wave 0b **breach counts** under legacy modes are not comparable to funded survival under these rules."
+}
