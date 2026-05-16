@@ -1,8 +1,8 @@
 # Wave 0b — R(q) methodology investigation
 
-**Git SHA:** `b945022bffc9e0d1d36f9c81501fdbdbc8e4d3d2`  
+**Git SHA:** `5b32b158b2bcb9d66873ddb7464c9c25ba5b9838`  
 **Dirty tree:** True  
-**Generated:** 2026-05-16T05:16:44.708131+00:00  
+**Generated:** 2026-05-16T05:17:40.462791+00:00  
 
 ## Scope
 

@@ -1,7 +1,7 @@
 {
   "wave": "0b",
   "git": {
-    "git_sha": "b945022bffc9e0d1d36f9c81501fdbdbc8e4d3d2",
+    "git_sha": "5b32b158b2bcb9d66873ddb7464c9c25ba5b9838",
     "git_dirty": true
   },
   "account_class_starting_balance_usd": 50000.0,
