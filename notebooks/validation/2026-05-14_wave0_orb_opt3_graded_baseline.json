@@ -1,7 +1,7 @@
 {
   "wave": 0,
   "git": {
-    "git_sha": "3cb97cfbcb9df07474daa348634e2b12c08899ac",
+    "git_sha": "c98b3d7b794a573f0daf33545fd7ab461542d480",
     "git_dirty": true
   },
   "protocol": {
@@ -67,10 +67,10 @@
   },
   "multi_entry_session_days": 4,
   "multi_entry_session_dates": [
-    "2025-11-06",
-    "2022-08-26",
+    "2023-03-07",
     "2024-04-03",
-    "2023-03-07"
+    "2025-11-06",
+    "2022-08-26"
   ],
   "multi_entry_same_session_note": "Multiple closed trades share an entry cme_session_date on listed days \u2014 diagnostic shows sequential same-day round-trips (BE/target churn), not overlapping positions. Re-run at qty=2,3: max DD = 5350.00, 8025.00; matches q\u00d7DD(1) linearly: True.",
   "max_entry_count_single_day": 6,

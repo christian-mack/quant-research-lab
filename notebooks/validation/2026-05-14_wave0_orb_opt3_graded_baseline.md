@@ -1,8 +1,8 @@
 # Wave 0 — ORB+Opt3 graded baseline
 
-**Git SHA:** `3cb97cfbcb9df07474daa348634e2b12c08899ac`  
+**Git SHA:** `c98b3d7b794a573f0daf33545fd7ab461542d480`  
 **Dirty tree:** True  
-**Generated:** 2026-05-16T04:43:55.803825+00:00  
+**Generated:** 2026-05-16T04:46:15.308270+00:00  
 
 ## Headline
 
