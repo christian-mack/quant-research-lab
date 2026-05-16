@@ -2,9 +2,9 @@
 
 # Wave 0c — ORB+Opt3 two-gate baseline ($2K trail / $52K lock / $50K floor)
 
-**Git SHA:** `9395685ad200d19b4d767e534150154b7888fad7`  
+**Git SHA:** `3177dc0fe2a3450cbd29594d96177e906691fc89`  
 **Dirty tree:** True  
-**Generated:** 2026-05-16T06:09:42.885277+00:00  
+**Generated:** 2026-05-16T06:12:14.620109+00:00  
 
 ## Apex rules (corrected)
 
