@@ -29,8 +29,8 @@
 
 | Dimension | Summary |
 |-----------|---------|
-| **Economics (static backtest, pre-payout)** | **ORB+Opt3** at **qty = 3** reflects an **operator/production** funded sizing choice, not a research **graded** size. At that snapshot, NT8-class reference economics are on the order of **~$3,265/yr per account** (~$1,088.50/yr per contract × 3 — see `docs/program-charter.md` and lessons log **2026-05-13**). **Do not** infer floor/target/stretch pass or fail from this row alone — see **max sustainable qty** grading below. |
-| **Python vs NT8** | Research rerun is within **~6.8%** of the NT8 reference on a **per-contract** basis (RTH-only protocol; `docs/m6-nt8-reproduction.md`). Per-contract behavior is the input to **sizing-scaled** graded P&L once max sustainable qty is computed. |
+| **Economics (static backtest, pre-payout)** | **ORB+Opt3** at **qty = 3** reflects an **operator/production** funded sizing choice, not a research **graded** size. At that snapshot, NT8-class reference economics are on the order of **~$3,265/yr per account** (~$1,088.50/yr per contract × 3 — see `docs/program-charter.md` and lessons log **2026-05-13**). **Do not** infer floor/target/stretch pass or fail from this row alone — see **funded q_max (Gate A)** grading below. |
+| **Python vs NT8** | Research rerun is within **~6.8%** of the NT8 reference on a **per-contract** basis (RTH-only protocol; `docs/m6-nt8-reproduction.md`). Per-contract behavior is the input to **sizing-scaled** graded P&L once **funded q_max** is known. |
 | **Live / operational** | Even when edge appears real in backtest, **trade frequency** for the current ORB+Opt3 configuration appears **structurally low** for prop **eval/funded window** dynamics: variance can dominate short horizons until sample size catches up — a concern **alongside** economically scaled grading. |
 
 ---
@@ -38,50 +38,63 @@
 ## Per-account income gap
 
 - **Charter engineering target:** **$65,000–$100,000/yr net per funded account** (after payout splits).
-- **Phase 2 compares apples to apples:** Strategies (including **ORB+Opt3** as baseline) are evaluated at each strategy’s **maximum sustainable quantity**, not at an arbitrary fixed qty (see below). The **~$3,265/yr at qty = 3** figure is a **historical production snapshot** for continuity with prior analysis; it is **not** the graded economic anchor until **ORB+Opt3** is re-run under the **max sustainable qty** methodology.
-- **Gap:** Closing a **meaningful fraction** of the distance from **graded baseline → charter target range** is the program burden. Order-of-magnitude tension at legacy snapshot sizing (e.g. **~20×** vs $65K+ if that snapshot were representative) illustrates scale of ambition; **graded** baseline may differ once max sustainable sizing is applied.
+- **Phase 2 compares apples to apples:** Strategies (including **ORB+Opt3** as baseline) are evaluated at each strategy’s **funded q_max (Gate A)**, not at an arbitrary fixed qty (see below). The **~$3,265/yr at qty = 3** figure is a **historical production snapshot** for continuity with prior analysis; it is **not** the graded economic anchor until **ORB+Opt3** is re-run under the **two-gate** methodology.
+- **Gap:** Closing a **meaningful fraction** of the distance from **graded baseline → charter target range** is the program burden. Order-of-magnitude tension at legacy snapshot sizing (e.g. **~20×** vs $65K+ if that snapshot were representative) illustrates scale of ambition; **graded** baseline may differ once **funded q_max** sizing is applied.
 
 Phase 2 must close **a meaningful fraction** of this gap — not merely ship marginal tweaks. Success is judged against **aggregate per-account economics at sustainable sizing**, not a single satisfying backtest curve at a hand-picked qty.
 
 ---
 
-## Phase 2 grading framework (max sustainable quantity)
+## Phase 2 grading framework (two gates — funded survival vs eval)
 
-**Principle:** **Quantity is a consequence of strategy metrics, not an input.** Each strategy is evaluated at its **maximum sustainable qty**: the **largest** integer size such that **backtested maximum drawdown**, plus a **reasonable safety margin**, remains within **Apex $3K end-of-day trailing drawdown** constraints (eval/funded rule class used for this program).
+**Principle:** **Quantity is a consequence of path-dependent firm rules, not an arbitrary input.** Phase 2 distinguishes **(A) funded-account survival** on the full backtest path from **(B) eval-style pass rate** in rolling windows. They use the **same** Apex $50K EOD rule class documented in `docs/ai-project-instructions.md` but answer **different questions** — do **not** conflate them into a single **R(q)** DD-margin formula for grading.
 
-**Methodology (default):** For every candidate and for the **ORB+Opt3** baseline, Phase 2 grading must **compute max sustainable qty** on the **six-year** backtest (standard protocol). Let **DD(q)** be backtested **maximum drawdown in dollars** at integer quantity **q** (with **DD(1)** from qty-1 run or equivalent per-unit DD; assume **DD(q) ≈ q × DD(1)** unless a sizing model says otherwise).
+### Apex $50K EOD parameters (research default)
 
-Define a **conservative bound** for the Apex **$3K** EOD trailing DD cap (suggested default):
+| Rule | Value |
+|------|--------|
+| Starting balance | **$50,000** |
+| Pre-lock trailing | Floor **trails $1-for-$1** with equity high water: **allowed minimum = HWM − $2,000** (initial floor **$48,000**) |
+| Lock | When **HWM ≥ $52,000**, floor **locks permanently at $50,000** |
+| Breach | Pre-lock: **equity &lt; HWM − $2,000**; post-lock: **equity &lt; $50,000** |
+| Profit target (eval) | Account reaches **$53,000** (**+$3,000** vs start) |
+| DLL | **$1,000** max realized loss per **America/New_York** calendar day |
 
-**R(q) = max(1.5 × DD(q), DD(q) + $500)**
+Simulations must enforce **both** pre-lock and post-lock failure modes and **DLL** where applicable.
 
-**Max sustainable qty** is the **largest** integer **q** such that **R(q) ≤ $3,000**. (Interpretation: pad the observed max DD by the **larger** of a **50%** uplift or a **$500** absolute buffer — whichever is stricter — then require that padded figure to clear the prop ceiling.) Document the exact algebra in the research artifact so live scaling stays reproducible.
+### Gate A — Funded survival (six-year path)
 
-**DLL vs this buffer:** The **+$500** term is **not** Apex’s **Daily Loss Limit**. It is an **internal research margin** on **trailing drawdown** sizing. Per `docs/ai-project-instructions.md`, Apex **EOD accounts use a $1,000 DLL** (per day). Graded **eval simulations** and any **path-dependent DD** runs must enforce **firm rules** (DLL **and** $3K EOD trailing) as documented there — do **not** substitute one for the other.
+On the **full** standard-protocol backtest, at integer quantity **q**: apply scaled realized P&amp;L **in time order** (session-close / daily aggregation is acceptable if documented; trade-by-trade is stricter for intraday path — match the research artifact). **Pass** if the account **never** breaches trailing/post-lock rules and (when modeled) **never** fails **DLL**. Report **funded q_max** = largest **q** that passes (or **none**).
 
-Operator may tighten/loosen the **R(q)** margin rule (the 1.5× / +$500 pair) with a lessons-log entry; the expression above is the **starting convention**.
+Optional **internal** sizing margins (e.g. legacy **R(q) = max(1.5×DD, DD+$500)** against a notional ceiling) may still be used for **internal** stress screens — they are **not** substitutes for **Gate A** unless explicitly pre-registered.
 
-**DD scaling (default vs path-dependent):** **Linear DD approximation** (**DD(q) ≈ q × DD(1)**) is the **default** and matches the **R(q)** formula when scaled drawdown is **proportional to qty**. For candidates where **DD(q)** clearly **deviates from linearity** — typically **multi-trade-per-day** strategies with **intraday winner/loser offset** — **grade via simulated path-dependent max DD at each integer q** rather than the linear approximation. **Flag deviation cases** in the **`docs/research-log.md`** entry (and artifact).
+### Gate B — Eval pass rate (rolling windows)
 
-**Eval pass rate at max sustainable qty (backtest simulation):** When **live** eval samples are **unavailable or insufficient**, estimate pass rate using **rolling 30‑day windows** across the **six-year** backtest **at max sustainable qty**. Count a window as a **pass** if the simulated account reaches the **$3,000 profit target** without hitting the **$3,000 EOD trailing drawdown** and without breaching the **$1,000 DLL** per program Apex EOD rules (`docs/ai-project-instructions.md`). Report **passing windows / total windows**. Pre-register window construction (e.g. advance one **session** vs one calendar day; inclusion of partial windows at series ends) in `docs/research-log.md` before first use.
+**Rolling windows** (default: **30 trading sessions**, advance **1 session**, drop partial tails; pre-register changes in `docs/research-log.md`). **Pass** a window if the simulated account reaches the **$3,000** profit target (**$53,000** equity) **without** trailing/post-lock breach and **without** **DLL** failure, under the same Apex rules. Report **passing windows / total** at each **q** of interest.
 
-### Wave 0 (mandatory before hypothesis waves)
+At the graded quantity, report **eval pass rate at funded q_max** as the headline operating statistic alongside **Gate A**.
 
-**Re-run ORB+Opt3 at max sustainable qty** per the **R(q)** formula (and path-dependent DD **only** if linear scaling is invalid for this strategy — ORB+Opt3 is expected to use the **linear default** unless analysis proves otherwise). This establishes the **graded baseline** all subsequent waves compare against.
+### Legacy Wave 0 **R(q)** (DD margin) — optional screen only
 
-Until Wave 0 completes, **ORB+Opt3 economics quoted in this document** (including the qty = 3 snapshot) are **operator snapshots**, not **graded baselines**.
+The expression **R(q) = max(1.5 × DD(q), DD(q) + $500)** compared to a notional drawdown **ceiling** was a **Wave 0 research convenience** using **incorrect** Apex trail assumptions in early artifacts. It remains an **optional** crude screen against backtested **DD(q)**; **graded** sizing for Phase 2 baseline work should use **Gate A / Gate B** with the **$2K / $52K lock / $50K floor** rules above.
+
+**DD scaling:** **DD(q) ≈ q × DD(1)** remains the default *economic* linearity check; **Gate A** is authoritative for firm-rule survival.
+
+**Wave 0 (mandatory before hypothesis waves — re-baselined Wave 0c):**
+
+**Re-run ORB+Opt3** under **Gate A** and **Gate B** with the corrected Apex rules and document **(funded q_max, eval pass rate at funded q_max)** plus economics at **funded q_max**. Earlier Wave 0 / 0b artifacts that assumed **$3K** trail and **+$100** lock are **obsolete** for firm-rule conclusions (see `docs/lessons-log.md`).
 
 Tight stops and high win rates can support **higher** sustainable qty than wide-stop, lower-win-rate structures — **both** are legitimate; each is graded at **its** sustainable size.
 
-| Tier | Criteria (all at **max sustainable qty** unless noted) |
+| Tier | Criteria (all at **funded q_max** unless noted) |
 |------|--------------------------------------------------------|
 | **Floor** (acceptable minimum) | Eval pass rate **≥ 50%** within **30 days**; average funded P&L **≥ $36K/yr** (~**$3K/month**); profitable **≥ 4 of 6** years; edge survives **deflated Sharpe** (or agreed multiple-comparisons correction). |
 | **Target** (genuinely good) | Eval pass rate **≥ 70%**; average funded P&L **≥ $60K/yr**; profitable **≥ 5 of 6** years; **low correlation** with existing **portfolio** strategies. |
 | **Stretch** (transformative) | Eval pass rate **≥ 80%**; average funded P&L **≥ $100K/yr**; profitable **all 6** years; **stacks** with portfolio strategies (combined / displaced economics documented). |
 
-**Eval pass rate column:** Use **live/eval** sample when sufficient; otherwise the **rolling 30-day backtest simulation** rule (above) at **max sustainable qty**. The “30 days” floor wording aligns with that window length.
+**Eval pass rate column:** Use **live/eval** sample when sufficient; otherwise the **rolling 30-session backtest simulation** at **funded q_max** (and optionally other **q** for diagnostics). The “30 days” floor wording aligns with that window length (sessions, not calendar days).
 
-**Live vs backtest:** Backtest establishes **max sustainable qty** and long-horizon economics; **eval pass rate** and **funded P&L** come from **live/eval** when the sample is large enough — otherwise use the **rolling 30-day backtest simulation** rule above (pre-registered window spec).
+**Live vs backtest:** Backtest establishes **funded q_max** and long-horizon economics; **eval pass rate** and **funded P&L** come from **live/eval** when the sample is large enough — otherwise use the **rolling 30-session backtest simulation** rule above (pre-registered window spec).
 
 ---
 
@@ -96,7 +109,7 @@ The **V2 starter packet** mental model remains useful:
 - **Phase 2:** Strategy development from validated patterns.
 - **Phase 3:** Integration and deployment planning.
 
-**Updated mantra:** discover **any configurations** (filters, session/regime gates, structural rule changes, new modules only if justified, or other discoveries) that **close the income gap** while surviving statistical gates and prop constraints — with **sizing** set by **max sustainable qty** relative to **$3K EOD trailing DD**, not by fixing qty a priori.
+**Updated mantra:** discover **any configurations** (filters, session/regime gates, structural rule changes, new modules only if justified, or other discoveries) that **close the income gap** while surviving statistical gates and prop constraints — with **sizing** set by **funded survival (Gate A)** and **eval pass dynamics (Gate B)** under the documented Apex **$2K / $52K / $50K** rules, not by fixing qty a priori.
 
 Canonical supplemental research-process detail: **`flux-v2-module-search-starter.md`** (repo root; see deprecation header — **`docs/phase-2-kickoff.md`** is authoritative on framing).
 
@@ -104,7 +117,7 @@ Canonical supplemental research-process detail: **`flux-v2-module-search-starter
 
 ## Charter minimum viable edge (new modules, normalized)
 
-When the winning path includes a **new module**, `docs/program-charter.md` still specifies **minimum viable edge** for **go/no-go on that module** (OOS WR **≥ 57%**, edge over BE **≥ +3pp**, P&L **≥ $5K/yr** at **1 NQ**, trades **≥ 80/yr**, profitable **≥ 4 of 6** years). Treat that block as a **normalized isolation screen** at **one contract** (or per-contract analog) before integration and **displacement** tests — **not** a substitute for the **Phase 2 grading table** above, which always applies at **max sustainable qty**.
+When the winning path includes a **new module**, `docs/program-charter.md` still specifies **minimum viable edge** for **go/no-go on that module** (OOS WR **≥ 57%**, edge over BE **≥ +3pp**, P&L **≥ $5K/yr** at **1 NQ**, trades **≥ 80/yr**, profitable **≥ 4 of 6** years). Treat that block as a **normalized isolation screen** at **one contract** (or per-contract analog) before integration and **displacement** tests — **not** a substitute for the **Phase 2 grading table** above, which always applies at **funded q_max**.
 
 **Program success** remains **closing the income gap** under the **floor / target / stretch** framework; that may require **multiple strategies** and **portfolio** construction, not a single module clearing MV edge in isolation.
 
@@ -120,7 +133,7 @@ All of the following are **defaults** unless the operator explicitly approves an
 4. **Uncertainty:** **Bootstrap confidence intervals** on key metrics where applicable.
 5. **Temporal robustness:** **Walk-forward** validation for candidates that survive initial screens.
 6. **Structural rationale:** Patterns must have a **structural / behavioral reason**, not only favorable equity curves.
-7. **Sustainable sizing:** Every graded run reports **max sustainable qty** (per the Apex $3K EOD trailing DD + margin rule); headline P&L and pass-rate targets in this document assume that qty.
+7. **Sustainable sizing:** Every graded run reports **funded q_max (Gate A)** and **eval pass rate at that qty (Gate B)** under Apex **$50K EOD** rules in `docs/ai-project-instructions.md`; headline P&L targets assume that pair unless pre-registered otherwise.
 
 ---
 
@@ -148,10 +161,10 @@ Read these **in order** when opening a new Phase 2 session:
 
 1. `docs/program-charter.md` — program structure, Phase 2 gates, MV edge language.
 2. `docs/lessons-log.md` — decisions, failures, baseline corrections, multi-module findings.
-3. **`docs/phase-2-kickoff.md`** (this document) — intent, **max sustainable qty** grading, methodology, roles, **Wave 0**.
+3. **`docs/phase-2-kickoff.md`** (this document) — intent, **two-gate** grading, methodology, roles, **Wave 0 / 0c** baseline.
 4. **`docs/research-log.md`** — append-only pre-registration and results (**wave** = deflated Sharpe **N**).
 5. **`flux-v2-module-search-starter.md`** — legacy process detail; see **deprecation header** — authoritative framing is this kickoff + charter.
-6. `docs/ai-project-instructions.md` — agent and documentation conventions (incl. Apex **$3K trailing** + **$1K DLL**).
+6. `docs/ai-project-instructions.md` — agent and documentation conventions (incl. Apex **$50K EOD**: **$2K** trailing pre-lock, **$52K** lock, **$50K** static floor, **$3K** profit target, **$1K** DLL).
 
 Supporting: `docs/phase-1-detailed-plan.md` (what was built), `docs/m6-nt8-reproduction.md` (parity anchor), `docs/nt8-backtest-methodology.md` (NT8 reference protocol).
 

@@ -24,6 +24,14 @@
 
 ## Entries
 
+## 2026-05-16 — Wave 0c correction: Apex $50K EOD was mis-parameterized in Wave 0 / 0b
+
+**Phase:** 2  
+**Context:** Graded baseline work (**Wave 0**), DD methodology (**Wave 0b**), and kickoff / AI instructions referenced **$3,000** end-of-day trailing drawdown and a **starting balance + $100** lock story. Operator confirmed the **$50K EOD** research class should use **$2,000** trailing pre-lock, **$52,000** high-water lock, **$50,000** static floor post-lock, **$3,000** profit target (**$53,000** equity), and **$1,000** DLL.  
+**Finding:** Earlier **R(q)** and **eval / funded** simulations that applied a **$3K** trail and the **+$100** lock convention **do not match** the firm rule set under discussion. **Wave 0b** “zero breach” counts under **legacy** `funded_lock` in code are **not** comparable to survival under the **two-phase** rule; **pre-lock** trailing can breach in paths that wrongly modeled **post-lock-only** behavior.  
+**Implication:** **Wave 0c** re-baselines ORB+Opt3 with **Gate A (funded survival)** and **Gate B (eval pass rate)** separately. `docs/phase-2-kickoff.md`, `docs/ai-project-instructions.md`, `simulate_apex_50k_eod_two_phase` (in `apex_eod_trailing.py`), and `scripts/run_wave0c_orb_opt3_two_gate_baseline.py` are authoritative for new runs. Legacy `simulate_apex_eod_trailing` modes remain for **historical** Wave 0b artifact reproduction only.  
+**Artifact:** `notebooks/validation/2026-05-17_wave0c_orb_opt3_two_gate_baseline.{md,json}`; `docs/research-log.md` Wave 0c RESULT-LOGGED.
+
 ## 2026-05-14 — Phase 1 M8/M9 scope-down: infrastructure when requirements are concrete
 
 **Phase:** 1 → 2 transition  

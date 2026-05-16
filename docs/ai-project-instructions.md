@@ -244,16 +244,19 @@ Agents should not add lessons log entries silently. The operator should see and 
   - AfternoonMR: 14:00-16:00 ET (currently, subject to V2 replacement)
   - Range: ETH + RTH (currently, subject to V2 replacement)
 
-### Prop Firm Compliance (Apex EOD)
+### Prop Firm Compliance (Apex EOD $50K class — research defaults)
 
-All strategy logic must respect Apex Trader Funding constraints:
+All strategy logic must respect **research-track** Apex Trader Funding **$50K EOD** constraints used in Phase 2 grading:
 
-- $3,000 EOD trailing drawdown (locks at starting balance + $100)
+- **Starting balance:** **$50,000**
+- **Pre-lock trailing drawdown:** **$2,000** below the **equity high-water mark** (floor starts at **$48,000** when HWM is $50K; floor rises **$1-for-$1** with new highs)
+- **Lock:** when HWM reaches **$52,000**, the drawdown floor **locks permanently at $50,000** (post-lock breach if equity **&lt; $50,000**)
+- **Eval profit target:** **+$3,000** vs start (account reaches **$53,000**)
+- **Daily loss limit (DLL):** **$1,000** per **America/New_York** calendar day on **realized** P&amp;L (research convention: day total **&lt; −$1,000** fails, consistent with Wave 0 eval sim)
 - Max contracts: 60 MNQ on $50K account, 80 MNQ on $100K account (full-size NQ equivalents)
-- $1,000 DLL (Daily Loss Limit) on EOD accounts
 - Consistency rule: no single trading day may be >30% of total profit
 
-These are production constraints. Research code may explore strategies that violate them, but any proposed live deployment must verify compliance.
+These are production constraints. Research code may explore strategies that violate them, but any proposed live deployment must verify compliance. **Older docs** that cite **$3,000** trail and **starting balance + $100** lock describe a **superseded** research mistake — see `docs/lessons-log.md` (**Wave 0c correction**).
 
 ### NT8 Integration
 
