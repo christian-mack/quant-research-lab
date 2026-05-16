@@ -43,9 +43,9 @@ Research proceeds in **batches**, not calendar weeks. A typical batch includes:
 
 **Tasks:**
 
-- [ ] Re-run **ORB+Opt3** at **computed max sustainable qty** using **R(q)** and default **linear DD(q) ≈ q × DD(1)** (path-dependent DD only if justified and logged).
-- [ ] Document **graded P&L** (and year-by-year profile), **max DD / DD(q)** curve, and **simulated eval pass rate** per `docs/phase-2-kickoff.md` (rolling 30-day windows; **$3K** profit target + **$3K** EOD trailing + **$1K** DLL per `docs/ai-project-instructions.md`).
-- [ ] Append **Wave 0** summary + artifact pointers (notebook, report, **git SHA**) to **`docs/research-log.md`** and link from **`docs/lessons-log.md`** if charter-level.
+- [x] Re-run **ORB+Opt3** at **computed max sustainable qty** using **R(q)** and default **linear DD(q) ≈ q × DD(1)** (path-dependent DD only if justified and logged).
+- [x] Document **graded P&L** (and year-by-year profile), **max DD / DD(q)** curve, and **simulated eval pass rate** per `docs/phase-2-kickoff.md` (rolling 30-day windows; **$3K** profit target + **$3K** EOD trailing + **$1K** DLL per `docs/ai-project-instructions.md`).
+- [x] Append **Wave 0** summary + artifact pointers to **`docs/research-log.md`**. *(Lessons log: no charter-level surprise warranting an entry per AI Section 6.)*
 
 **Wave 0 exit:** Operator + implementation agent agree the baseline numbers are **repeatable**; subsequent waves compare **only** against this **Wave 0** anchor — not against qty = 3 snapshots alone.
 

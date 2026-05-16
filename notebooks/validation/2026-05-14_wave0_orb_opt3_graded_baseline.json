@@ -1,0 +1,142 @@
+{
+  "wave": 0,
+  "git": {
+    "git_sha": "3cb97cfbcb9df07474daa348634e2b12c08899ac",
+    "git_dirty": true
+  },
+  "protocol": {
+    "start": "2020-01-01",
+    "end_inclusive": "2026-04-19",
+    "rth_bars": 599533,
+    "session_count_unique": 1561,
+    "segment_count": 5
+  },
+  "per_contract_qty1": {
+    "trade_count": 799,
+    "net_pnl_total": 6389.0,
+    "pnl_per_contract_per_year": 1014.1600391134289,
+    "win_rate": 0.6295369211514393,
+    "avg_win": 84.29324055666004,
+    "avg_loss": -130.94727272727272,
+    "breakeven_win_rate_iid_approx": 0.6083765120673853,
+    "edge_over_breakeven_win_rate_pp": 2.1160409084054033,
+    "max_drawdown_dollars": -2675.0,
+    "dd1_magnitude": 2675.0,
+    "max_dd_peak_exit": "2023-01-23 15:02:00+00:00",
+    "max_dd_trough_exit": "2023-11-16 15:09:00+00:00",
+    "peak_trade_index": 260,
+    "trough_trade_index": 450,
+    "years_calendar_pnl_full_2020_2026": {
+      "2020": 1038.5,
+      "2021": 0.0,
+      "2022": 2038.0,
+      "2023": -1386.5,
+      "2024": 1375.0,
+      "2025": 3912.0,
+      "2026": -588.0
+    },
+    "years_calendar_pnl_nonempty_years_only": {
+      "2020": 1038.5,
+      "2022": 2038.0,
+      "2023": -1386.5,
+      "2024": 1375.0,
+      "2025": 3912.0,
+      "2026": -588.0
+    },
+    "trades_per_exit_year": {
+      "2020": 165,
+      "2021": 0,
+      "2022": 86,
+      "2023": 223,
+      "2024": 166,
+      "2025": 138,
+      "2026": 21
+    },
+    "trades_per_year_avg": 126.82953063885266,
+    "yearly_max_dd_within_year": {
+      "2020": -660.0,
+      "2021": 0.0,
+      "2022": -484.0,
+      "2023": -2675.0,
+      "2024": -902.0,
+      "2025": -1502.5,
+      "2026": -816.5
+    },
+    "years_profitable_count_qty1_calendar_2020_2026": 4,
+    "year_fraction": 6.299794661190965
+  },
+  "multi_entry_session_days": 4,
+  "multi_entry_session_dates": [
+    "2025-11-06",
+    "2022-08-26",
+    "2024-04-03",
+    "2023-03-07"
+  ],
+  "multi_entry_same_session_note": "Multiple closed trades share an entry cme_session_date on listed days \u2014 diagnostic shows sequential same-day round-trips (BE/target churn), not overlapping positions. Re-run at qty=2,3: max DD = 5350.00, 8025.00; matches q\u00d7DD(1) linearly: True.",
+  "max_entry_count_single_day": 6,
+  "r_of_q": {
+    "formula": "R(q)=max(1.5*DD(q), DD(q)+500) <= 3000",
+    "linear_dd": "DD(q)=q*DD(1)",
+    "q_max": 0,
+    "binding_at_qmax": "no_positive_q",
+    "R_at_qmax": 0.0,
+    "headroom_under_3000": 3000.0
+  },
+  "graded_at_qmax": {
+    "q_max": 0,
+    "total_pnl_scaled": 0.0,
+    "avg_annual_pnl": 0.0,
+    "annual_by_year_scaled": {
+      "2020": 0.0,
+      "2021": 0.0,
+      "2022": 0.0,
+      "2023": -0.0,
+      "2024": 0.0,
+      "2025": 0.0,
+      "2026": -0.0
+    },
+    "profitable_years": 0,
+    "tier_vs_36_60_100k": "below_floor"
+  },
+  "eval_sim": {
+    "window_sessions": 30,
+    "advance_sessions": 1,
+    "partial_windows": "drop",
+    "total_windows": 1532,
+    "passing_windows": 0,
+    "pass_rate": 0.0,
+    "fail_trailing": 0,
+    "fail_dll": 0,
+    "fail_no_target": 1532,
+    "time_to_pass_sessions_median": null,
+    "time_to_pass_sessions_iqr": [
+      null,
+      null
+    ],
+    "trail_margin_min_median": null,
+    "trail_margin_min_iqr": [
+      null,
+      null
+    ],
+    "note_q0_degenerate": "q_max=0 => zero scaled P&L \u2014 every window fails the $3k profit target."
+  },
+  "bootstrap_annual_pnl_per_contract_ci95": {
+    "low": -362.24196544980435,
+    "point": 1014.1600391134289,
+    "high": 2766.5227102346807,
+    "n_trades": 799,
+    "n_iterations": 10000
+  },
+  "m6_reconciliation": {
+    "python_anchor_per_contract_per_year": 1014.0,
+    "wave0_per_contract_per_year": 1014.1600391134289,
+    "pct_abs_diff_vs_anchor": 0.015782950042294446,
+    "within_5pct_band": true
+  },
+  "deflated_sharpe_note": "N/A for Wave 0 \u2014 baseline only; no hypothesis search.",
+  "operator_flags": {
+    "r_q_yields_q0": true,
+    "m6_recon_gt_5pct": false,
+    "multi_entry_sessions_gt0": true
+  }
+}
