@@ -95,6 +95,82 @@
 
 ---
 
+## 2026-05-16 — Wave 0b R(q) methodology investigation — PRE-REGISTERED
+
+**Wave:** Wave 0b (methodology — not a strategy hypothesis)
+
+**Structural rationale:** Wave 0’s **R(q)** used **closed-trade cumulative** max drawdown; it implied **q_max = 0** while **live** runs **qty=3**. This investigation tests whether **DD definition** (Apex **EOD trailing** + lock), the **1.5×** multiplier, or both misalign with firm-relevant risk — before Wave 1+ uses **R(q)** as a sizing gate.
+
+**Deliverable 1 — EOD trailing DD simulation (6-year ORB+Opt3 trade log)**  
+- **Account class:** **$50,000** starting balance (`docs/nt8-backtest-methodology.md` / `docs/ai-project-instructions.md` — $50K EOD context).  
+- **Daily P&L:** Sum of scaled `net_pnl` for all trades whose **`exit_cme_session_date`** equals that session (Chicago / CME session key, same construction as Wave 0). Apply **after** each session in chronological order.  
+- **Qty:** Run at **1, 2, 3** by scaling qty=1 trade `net_pnl` linearly (validated in Wave 0).  
+- **Trailing rule (two documented variants):**
+  - **A — Pure trailing:** after each session `hwm = max(hwm, equity)`; `allowed_min = hwm − $3,000`; breach if `equity < allowed_min`.
+  - **B — Funded-style lock (primary report):** identical until `hwm ≥ starting_balance + $100`; at first crossing, set **`locked_floor = hwm − $3,000`**; thereafter **`allowed_min = locked_floor`** (floor does **not** rise with later highs — “drawdown stops moving up” per common Apex funded interpretation). *Operator may correct interpretation; variants labeled in artifact.*
+- **DLL (flag only):** Count sessions where **daily scaled P&amp;L &lt; −$1,000**; **do not** alter equity path for DD (underlying profile).  
+- **Outputs per qty:** path max **(allowed_min − equity)** margin stress; sessions with breach; binding session index/date; count of **liquidation/breach** sessions; **DLL-hit** session count; compare to **closed-trade cumulative** |max DD| from Wave 0 (**$2,675 @ qty=1**; **$8,025 @ qty=3**).
+
+**Deliverable 2 — Block bootstrap of max DD (qty=1, closed-trade path)**  
+- **Sequence:** 799 closed trades, `net_pnl` at qty=1, **exit-time order**.  
+- **Block lengths:** **1, 5, 10** (non-overlapping blocks, concatenate resampled blocks, **truncate to 799** trades).  
+- **Resamples:** **10,000**, seed **42**.  
+- **Metric:** max drawdown on **closed-trade cumulative** path each resample.  
+- **Percentiles:** mean, median, **75th / 90th / 95th / 99th**; full distribution stored in JSON (histogram or sample array summary).  
+- **Purpose:** Ground a **percentile-based** margin to replace **1.5×** in a **proposed** (non-binding) revised **R(q)** for operator sign-off.
+
+**Deliverable 3 — Live production audit**  
+- **Source:** **Operator-supplied** funded-account data only (no live logs in repo per `docs/ai-project-instructions.md`).  
+- **Required:** EOD equity or daily realized P&amp;L since ORB+Opt3 **qty=3** deployment; reconstruct **live EOD trailing** stress vs **Deliverable 1** at qty=3.  
+- **STOP if:** any evidence **trailing breach**, **DLL breach**, or **margin within $500** of modeled liquidation — report immediately in artifact and summary.  
+- **If no file provided:** document **cannot complete** live comparison; operator must supply or waive.
+
+**Primary output:** `notebooks/validation/` dated markdown + JSON; **RESULT-LOGGED** entry; **proposal only** for revised **R(q)** (no kickoff/working-plan edit until operator accepts + lessons log).
+
+**Date pre-registered:** 2026-05-16  
+
+**Date run completed:** 2026-05-16  
+
+**Result:** RESULT-LOGGED — see follow-up entry (EOD DD vs closed-trade; bootstrap tails; live CSV pending).  
+
+**Artifact:** `notebooks/validation/2026-05-16_wave0b_rq_methodology.md`, `.json`; runner `scripts/run_wave0b_rq_methodology.py`; module `src/quant_research/statistics/apex_eod_trailing.py`  
+
+---
+
+## 2026-05-16 — Wave 0b R(q) methodology investigation — RESULT-LOGGED
+
+**Wave:** Wave 0b (implements pre-registration block above)
+
+**Date run completed:** 2026-05-16
+
+**Execution `git` metadata:** `git_sha` = `03df8667945f942786b8ffbc32c20f6c703a3bf2` (amended commit incl. artifacts); **`git_dirty`:** see JSON — may read **true** if unrelated untracked files exist in the workspace.
+
+**Deliverable 1 — EOD trailing on ORB+Opt3 (2020-01-01 — 2026-04-19, qty 1/2/3)**  
+- **Account:** **$50,000** start (same $50K EOD class as Wave 0).  
+- **Daily P&L:** Sum of `net_pnl` on **`exit_cme_session_date`**; **779** session rows (**799** closed trades).  
+- **Peak-to-trough DD on equity (reported):** At **qty=1**, **$2,675** under both **pure_trailing** and **funded_lock** — matches **closed-trade DD(1)**. At **qty=3**, peak-to-trough remains **$8,025** = **3 × DD(1)** (same as Wave 0 linear scaled closed-trade DD).  
+- **Pure vs funded_lock:** **Pure trailing** shows **trailing breach** sessions at qty 2–3 (**125** / **249** sessions); **funded_lock** shows **0** breach sessions at qty≤3 (floor locks early; **min margin to floor** stays positive on the unstopped path). **DLL** session hits (daily P&amp;L &lt; **−$1k**): **4** / **5** / **5** at qty 1/2/3 (path **not** censored for DD).  
+- **Stop check (EOD ≪ closed×3):** **Not triggered** — EOD peak-to-trough at q=3 is **not** materially below **$8,025**.
+
+**Deliverable 2 — Block bootstrap max DD (qty=1), 10,000 resamples, seed 42**  
+- Block lengths **1, 5, 10**: see JSON percentiles + histograms. **Primary (block=5):** closed-trade max DD **p95 ≈ $4,815**, **p99 ≈ $6,162**; **EOD (funded_lock on collapsed bootstrap path)** matches these nearly exactly (same block construction).  
+- **Implication for R(q):** Tail DD at **q=1** already exceeds **$3,000** at **p95** under percentile-style margins built from this strategy alone — **q_max** stays **0** for the illustrative **`max(p95×q, q×EOD_point+500)`** rule unless the percentile or ceiling is relaxed.
+
+**Deliverable 3 — Live audit**  
+- **Incomplete:** no operator **`data/wave0b_live_funded_daily.csv`** in-repo (expected path documented in artifact). **No live breach / near-miss assessment** possible without that file.
+
+**Operator flags**  
+- **Production vs formal R(q):** Wave 0 **q_max=0** is **not** resolved by switching DD metric to **EOD peak-to-trough** on this log — magnitudes **match** closed-trade scaling. **funded_lock** does change **breach-count semantics** vs a continuously rising trail.  
+- **Next step for live:** Operator supplies daily realized P&amp;L (qty=3) CSV → re-run runner; **STOP** logic in script flags breach, DLL, or margin **&lt; $500**.
+
+**Artifacts:**  
+- `notebooks/validation/2026-05-16_wave0b_rq_methodology.md`  
+- `notebooks/validation/2026-05-16_wave0b_rq_methodology.json`  
+- `scripts/run_wave0b_rq_methodology.py`  
+- `src/quant_research/statistics/apex_eod_trailing.py`  
+
+---
+
 ## Entry template
 
 Copy from `## YYYY-MM-DD` through **`Artifact:`** for each new hypothesis or baseline record.
