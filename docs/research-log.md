@@ -143,7 +143,7 @@
 
 **Date run completed:** 2026-05-16
 
-**Execution `git` metadata:** `git_sha` = `03df8667945f942786b8ffbc32c20f6c703a3bf2` (amended commit incl. artifacts); **`git_dirty`:** see JSON — may read **true** if unrelated untracked files exist in the workspace.
+**Execution `git` metadata:** implementation commit `f95fb9fc20ff94d9e941fb210d4970e56375a2ee`; artifact tip (JSON/MD `git_sha` pointer refresh) `3a6eccb` — JSON/Markdown **`git_sha`** field references the **implementation** commit.
 
 **Deliverable 1 — EOD trailing on ORB+Opt3 (2020-01-01 — 2026-04-19, qty 1/2/3)**  
 - **Account:** **$50,000** start (same $50K EOD class as Wave 0).  
