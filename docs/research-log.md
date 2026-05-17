@@ -260,7 +260,7 @@
 
 **Date run completed:** 2026-05-13
 
-**Execution `git` metadata:** Implementation **`17dde52`**; artifact JSON **`git_sha`** = **`85d5cae`** (clean tree at artifact commit).
+**Execution `git` metadata:** Survey **run** captured ``git_sha`` = **`17dde52`** (tree before artifact commit). **Artifact files** committed as **`85d5cae`**; research-log pointers updated in **`df67b87`**.
 
 **Deliverable 1 — Parameter verification:** JSON `verification` records operator simulation row + **deltas vs third-party 4.0 blog tables** (trailing DD and PA contract caps **disagree** on several tiers — **requires** confirmation on [Apex Help Center](https://apextraderfunding.com/help-center/)).
 
