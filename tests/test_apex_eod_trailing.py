@@ -13,7 +13,9 @@ from quant_research.statistics.apex_eod_trailing import (
     max_drawdown_closed_trade_pnl,
     simulate_apex_50k_eod_two_phase,
     simulate_apex_eod_trailing,
+    simulate_apex_eod_two_phase,
     simulate_eval_window_50k_eod,
+    simulate_eval_window_eod,
     trades_to_daily_pnls_chronological,
 )
 
@@ -45,6 +47,7 @@ def test_trades_to_daily_sums_and_sorts() -> None:
     )
     assert xs == [d1, d2]
     assert np.allclose(ys, np.array([150.0, 10.0]))
+
 
 def test_collapse_session_streaks() -> None:
     d = [1, 1, 2, 2, 2, 3]
@@ -107,6 +110,90 @@ def test_eval_window_50k_pass_and_trailing_fail() -> None:
     )
     assert bad["outcome"] == "fail"
     assert bad["mode"] == "trailing_dd"
+
+
+def test_dll_pause_survives_and_terminal_fails_50k() -> None:
+    """DLL day then recovery: pause survives; legacy terminal kills run."""
+    # Same NY day: two sessions net past DLL; next day large win to 53K+.
+    ny = [date(2020, 1, 1), date(2020, 1, 1), date(2020, 1, 2)]
+    pnl = np.array([-600.0, -600.0, 5_200.0])
+    pause = simulate_apex_50k_eod_two_phase(pnl, ny)
+    assert pause.survived
+    assert pause.dll_failure_days == 1
+    assert not pause.dll_fail
+    assert pause.final_equity == pytest.approx(50_000.0 - 1_200.0 + 5_200.0)
+
+    term = simulate_apex_50k_eod_two_phase(pnl, ny, dll_terminates_run=True)
+    assert not term.survived
+    assert term.dll_fail
+
+
+def test_dll_pause_eval_passes_terminal_fails() -> None:
+    ny = [date(2020, 1, 1), date(2020, 1, 1), date(2020, 1, 2)]
+    sess = [100, 100, 200]
+    pnl = np.array([-600.0, -600.0, 5_200.0])
+    ok = simulate_eval_window_50k_eod(pnl, ny, sess)
+    assert ok["outcome"] == "pass"
+
+    bad = simulate_eval_window_50k_eod(pnl, ny, sess, dll_terminates_run=True)
+    assert bad["outcome"] == "fail"
+    assert bad["mode"] == "dll"
+
+
+def test_dll_pause_then_trailing_breach_failure_mode() -> None:
+    """After DLL pause, a later day can still breach trailing — not DLL."""
+    ny = [date(2020, 1, 1), date(2020, 1, 2), date(2020, 1, 3)]
+    # Day1 DLL to 48,900; day2 −901 stays above −1K DLL but breaches 48K floor
+    pnl = np.array([-1_100.0, -901.0, 0.0])
+    r = simulate_apex_50k_eod_two_phase(pnl, ny)
+    assert not r.survived
+    assert r.trail_breach_sessions >= 1
+    assert r.dll_failure_days == 1
+    assert not r.dll_fail
+
+
+def test_no_dll_hits_pause_matches_terminal_equity() -> None:
+    ny = [date(2020, 1, 1), date(2020, 1, 2)]
+    pnl = np.array([-400.0, 200.0])
+    a = simulate_apex_50k_eod_two_phase(pnl, ny)
+    b = simulate_apex_50k_eod_two_phase(pnl, ny, dll_terminates_run=True)
+    assert a.survived == b.survived
+    assert a.final_equity == pytest.approx(b.final_equity)
+    assert a.dll_failure_days == 0
+    assert not a.dll_fail
+
+
+def test_generalized_25k_lock_floor() -> None:
+    """Lock HWM = start + trail; static floor = start (25K example)."""
+    ny = [date(2020, 1, 1), date(2020, 1, 2)]
+    r = simulate_apex_eod_two_phase(
+        np.array([2_000.0, 0.0]),
+        ny,
+        starting_balance=25_000.0,
+        trailing_dd=1_500.0,
+        dll_limit=500.0,
+    )
+    assert r.locked_achieved
+    assert r.starting_balance == 25_000.0
+
+
+def test_eval_window_generalized_matches_50k_shorthand() -> None:
+    ny = [date(2020, 1, 1)]
+    sess = [1]
+    p = np.array([3_000.0])
+    a = simulate_eval_window_50k_eod(p, ny, sess)
+    b = simulate_eval_window_eod(
+        p,
+        ny,
+        sess,
+        starting_balance=50_000.0,
+        trailing_dd=2_000.0,
+        profit_target=3_000.0,
+        dll_limit=1_000.0,
+        lock_equity_threshold=52_000.0,
+        post_lock_floor=50_000.0,
+    )
+    assert a["outcome"] == b["outcome"] == "pass"
 
 
 def test_block_bootstrap_shape_and_determinism() -> None:

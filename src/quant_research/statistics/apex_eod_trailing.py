@@ -1,16 +1,32 @@
 """Apex-style EOD simulation helpers for research.
 
-**Canonical $50K EOD (Wave 0c+):** use :func:`simulate_apex_50k_eod_two_phase` — **$2K**
-trailing before lock, lock when equity high water reaches **$52K**, static floor **$50K**
-after lock, **$1K** DLL, **$53K** equity = profit target (+$3K).
+**Canonical multi-class EOD (Wave 0d+):** :func:`simulate_apex_eod_two_phase` and
+:func:`simulate_eval_window_eod` — configurable start, trail, lock at **HWM ≥
+start + trailing_dd**, static floor = **starting balance** post-lock, **DLL** as
+**session/day pause** (no account death).
 
-**Legacy modes** (:func:`simulate_apex_eod_trailing` with ``pure_trailing`` /
-``funded_lock``): Wave **0b** $3K trail / start+$100 lock convention — retained only
-so historical notebooks and comparators keep stable numbers; do **not** use for new
-graded runs.
+**Shorthand $50K:** :func:`simulate_apex_50k_eod_two_phase` /
+:func:`simulate_eval_window_50k_eod` wrap the generalized API.
 
-DLL is counted per **America/New_York** calendar day: cumulative loss on a day with
-sum **&lt; -dll_limit** fails DLL (matches Wave 0 eval: ``day_accum &lt; -_DLL_CAP``).
+**Legacy DLL (testing only):** Pass ``dll_terminates_run=True`` to approximate the
+pre–Wave 0d bug where any DLL day failed the whole run.
+
+**Legacy Wave 0b:** :func:`simulate_apex_eod_trailing` (**$3K** trail / start **+$100**
+lock) — historical notebooks only.
+
+DLL pause rule (EOD accounts): per [Apex Help Center](https://apextraderfunding.com/help-center/)
+and project ``docs/ai-project-instructions.md``, hitting the daily loss limit **pauses
+trading for the remainder of the session**; the account **continues** the next session.
+
+Per **America/New_York** calendar day, cumulative realized P&amp;L on filled closes:
+when a new fill would push that cumulative **strictly below** ``-dll_limit``, we apply
+that fill (snapshot equity at breach), then **ignore** further same-day P&amp;L for
+equity and for the running day accumulator until the next NY day.
+
+Result field ``dll_failure_days`` counts **distinct NY days** on which a pause triggered
+(legacy name retained for API stability). ``dll_fail`` is **False** when
+``dll_terminates_run`` is **False**; when **True**, ``dll_fail`` mirrors the old
+terminal semantics.
 """
 
 from __future__ import annotations
@@ -40,8 +56,8 @@ class EodTrailingSimResult:
 
 
 @dataclass(frozen=True, slots=True)
-class Apex50kEodSimResult:
-    """Result of :func:`simulate_apex_50k_eod_two_phase` (pre-lock + post-lock)."""
+class ApexEodTwoPhaseSimResult:
+    """Result of :func:`simulate_apex_eod_two_phase` (pre-lock + post-lock + DLL pause)."""
 
     starting_balance: float
     final_equity: float
@@ -57,43 +73,56 @@ class Apex50kEodSimResult:
     n_sessions: int
 
 
-def simulate_apex_50k_eod_two_phase(
+# Backward-compatible alias
+Apex50kEodSimResult = ApexEodTwoPhaseSimResult
+
+
+def simulate_apex_eod_two_phase(
     session_pnls: np.ndarray,
     ny_calendar_dates: list[dt.date],
     *,
-    starting_balance: float = 50_000.0,
-    trail: float = 2_000.0,
-    lock_equity_threshold: float = 52_000.0,
-    post_lock_floor: float = 50_000.0,
-    dll_limit: float = 1_000.0,
+    starting_balance: float,
+    trailing_dd: float,
+    dll_limit: float,
+    lock_equity_threshold: float | None = None,
+    post_lock_floor: float | None = None,
     enforce_dll: bool = True,
-) -> Apex50kEodSimResult:
+    dll_terminates_run: bool = False,
+) -> ApexEodTwoPhaseSimResult:
     """
-    Walk **session-close** scaled P&amp;L with Apex $50K EOD two-phase floor rules.
+    Walk **session-close** scaled P&amp;L with Apex-style two-phase floor rules.
 
-    **Pre-lock:** ``allowed_min = high_water_equity - trail`` (starts at **48K** when
-    HWM is **50K**). Breach if ``equity < allowed_min``.
+    **Pre-lock:** ``allowed_min = high_water_equity - trailing_dd`` (initially
+    ``starting_balance - trailing_dd``).
 
-    **Lock:** when ``high_water_equity >= lock_equity_threshold`` (default **52K**),
-    switch to **post-lock**: ``allowed_min = post_lock_floor`` (**50K**) permanently.
+    **Lock:** when ``high_water_equity >= lock_equity_threshold`` (default
+    ``starting_balance + trailing_dd``), use **post-lock**
+    ``allowed_min = post_lock_floor`` (default ``starting_balance``) permanently.
 
-    **DLL:** per NY calendar day, cumulative scaled session P&amp;L; if any day ends
-    with sum **< -dll_limit**, set ``dll_fail`` and ``survived=False`` when
-    ``enforce_dll``.
+    **DLL (default):** same-day cumulative P&amp;L; first cross strictly below
+    ``-dll_limit`` pauses further same-day application; counts toward
+    ``dll_failure_days``; **does not** set ``survived`` false.
 
-    Parameters
-    ----------
-    session_pnls
-        One row per **session** (e.g. daily net realized for that CME session).
-    ny_calendar_dates
-        Parallel list of **America/New_York** calendar dates for each session row
-        (used for DLL bucketing).
+    **Legacy:** ``dll_terminates_run=True`` reproduces pre–Wave 0d behavior
+    (any DLL day fails the run).
     """
     pnl = np.asarray(session_pnls, dtype=np.float64).ravel()
     n = int(pnl.size)
     if len(ny_calendar_dates) != n:
         msg = "ny_calendar_dates must match session_pnls length"
         raise ValueError(msg)
+
+    lock_at = (
+        float(lock_equity_threshold)
+        if lock_equity_threshold is not None
+        else float(starting_balance) + float(trailing_dd)
+    )
+    floor_after = (
+        float(post_lock_floor)
+        if post_lock_floor is not None
+        else float(starting_balance)
+    )
+    trail = float(trailing_dd)
 
     equity = float(starting_balance)
     hwm = float(starting_balance)
@@ -114,6 +143,8 @@ def simulate_apex_50k_eod_two_phase(
 
     current_day: dt.date | None = None
     day_accum = 0.0
+    day_dll_paused = False
+    dll_hit_counted_for_day = False
 
     for i in range(n):
         d_ny = ny_calendar_dates[i]
@@ -122,24 +153,43 @@ def simulate_apex_50k_eod_two_phase(
         if current_day is None:
             current_day = d_ny
             day_accum = 0.0
+            day_dll_paused = False
+            dll_hit_counted_for_day = False
         elif d_ny != current_day:
-            if enforce_dll and day_accum < -dll_limit:
+            if dll_terminates_run and enforce_dll and day_accum < -dll_limit:
                 dll_fail = True
                 dll_day_hits += 1
             current_day = d_ny
             day_accum = 0.0
+            day_dll_paused = False
+            dll_hit_counted_for_day = False
 
-        day_accum += s_pnl
-        equity += s_pnl
+        if dll_terminates_run or not enforce_dll:
+            day_accum += s_pnl
+            equity += s_pnl
+        elif day_dll_paused:
+            pass
+        else:
+            cand = day_accum + s_pnl
+            if cand < -dll_limit:
+                day_accum = cand
+                equity += s_pnl
+                if not dll_hit_counted_for_day:
+                    dll_day_hits += 1
+                    dll_hit_counted_for_day = True
+                day_dll_paused = True
+            else:
+                day_accum = cand
+                equity += s_pnl
 
         if equity > hwm:
             hwm = equity
-        if not locked and hwm >= lock_equity_threshold:
+        if not locked and hwm >= lock_at:
             locked = True
 
         if locked:
-            allowed_min = post_lock_floor
-            min_post = min(min_post, equity - post_lock_floor)
+            allowed_min = floor_after
+            min_post = min(min_post, equity - floor_after)
         else:
             allowed_min = hwm - trail
             min_pre = min(min_pre, equity - allowed_min)
@@ -158,7 +208,12 @@ def simulate_apex_50k_eod_two_phase(
             max_pt_dd = pt_dd
             max_pt_dd_i = i
 
-    if current_day is not None and enforce_dll and day_accum < -dll_limit:
+    if (
+        current_day is not None
+        and dll_terminates_run
+        and enforce_dll
+        and day_accum < -dll_limit
+    ):
         dll_fail = True
         dll_day_hits += 1
 
@@ -166,19 +221,24 @@ def simulate_apex_50k_eod_two_phase(
         bind_i = max_pt_dd_i
 
     trail_fail = trail_breaches > 0
-    survived = not trail_fail and (not enforce_dll or not dll_fail)
+    if dll_terminates_run and enforce_dll:
+        survived = not trail_fail and not dll_fail
+        out_dll_fail = bool(dll_fail)
+    else:
+        survived = not trail_fail
+        out_dll_fail = False
 
     if not np.isfinite(min_pre):
         min_pre = float("nan")
     if not locked or not np.isfinite(min_post):
         min_post = float("nan") if not locked else min_post
 
-    return Apex50kEodSimResult(
-        starting_balance=starting_balance,
+    return ApexEodTwoPhaseSimResult(
+        starting_balance=float(starting_balance),
         final_equity=equity,
         survived=bool(survived),
         trail_breach_sessions=int(trail_breaches),
-        dll_fail=bool(dll_fail),
+        dll_fail=out_dll_fail,
         dll_failure_days=int(dll_day_hits),
         locked_achieved=bool(locked),
         min_margin_pre_lock=float(min_pre) if np.isfinite(min_pre) else float("nan"),
@@ -189,22 +249,65 @@ def simulate_apex_50k_eod_two_phase(
     )
 
 
-def simulate_eval_window_50k_eod(
-    pnls_scaled: np.ndarray,
-    exit_ny_dates: list[dt.date],
-    exit_session_dates: list[object],
+def simulate_apex_50k_eod_two_phase(
+    session_pnls: np.ndarray,
+    ny_calendar_dates: list[dt.date],
     *,
     starting_balance: float = 50_000.0,
     trail: float = 2_000.0,
     lock_equity_threshold: float = 52_000.0,
     post_lock_floor: float = 50_000.0,
-    profit_target_equity: float = 53_000.0,
     dll_limit: float = 1_000.0,
+    enforce_dll: bool = True,
+    dll_terminates_run: bool = False,
+) -> ApexEodTwoPhaseSimResult:
+    """$50K EOD shorthand; **trail** is pre-lock trailing drawdown in dollars."""
+    return simulate_apex_eod_two_phase(
+        session_pnls,
+        ny_calendar_dates,
+        starting_balance=starting_balance,
+        trailing_dd=trail,
+        dll_limit=dll_limit,
+        lock_equity_threshold=lock_equity_threshold,
+        post_lock_floor=post_lock_floor,
+        enforce_dll=enforce_dll,
+        dll_terminates_run=dll_terminates_run,
+    )
+
+
+def simulate_eval_window_eod(
+    pnls_scaled: np.ndarray,
+    exit_ny_dates: list[dt.date],
+    exit_session_dates: list[object],
+    *,
+    starting_balance: float,
+    trailing_dd: float,
+    profit_target: float,
+    dll_limit: float,
+    lock_equity_threshold: float | None = None,
+    post_lock_floor: float | None = None,
+    dll_terminates_run: bool = False,
 ) -> dict[str, object]:
     """
-    Eval-style window: **trade-by-trade** path; pass if equity reaches **profit_target**
-    before any trail/DLL breach. Early exit on pass.
+    Eval-style window: **trade-by-trade** path; pass if equity reaches
+    ``starting_balance + profit_target`` before trailing breach.
+
+    **DLL:** default = pause remainder of NY day; does **not** fail the window.
+    With ``dll_terminates_run=True``, DLL fails the window (legacy).
     """
+    lock_at = (
+        float(lock_equity_threshold)
+        if lock_equity_threshold is not None
+        else float(starting_balance) + float(trailing_dd)
+    )
+    floor_after = (
+        float(post_lock_floor)
+        if post_lock_floor is not None
+        else float(starting_balance)
+    )
+    pt_equity = float(starting_balance) + float(profit_target)
+    trail = float(trailing_dd)
+
     cum = 0.0
     equity = float(starting_balance)
     hwm = float(starting_balance)
@@ -212,6 +315,7 @@ def simulate_eval_window_50k_eod(
     trail_margin_min = float("inf")
     current_day: dt.date | None = None
     day_accum = 0.0
+    day_dll_paused = False
 
     lock_triggered = False
 
@@ -221,8 +325,9 @@ def simulate_eval_window_50k_eod(
         if current_day is None:
             current_day = d
             day_accum = 0.0
+            day_dll_paused = False
         elif d != current_day:
-            if day_accum < -dll_limit:
+            if dll_terminates_run and day_accum < -dll_limit:
                 return {
                     "outcome": "fail",
                     "mode": "dll",
@@ -233,18 +338,33 @@ def simulate_eval_window_50k_eod(
                 }
             current_day = d
             day_accum = 0.0
+            day_dll_paused = False
 
-        day_accum += float(pnl)
-        cum += float(pnl)
-        equity = starting_balance + cum
+        p = float(pnl)
+        if dll_terminates_run:
+            day_accum += p
+            cum += p
+        elif day_dll_paused:
+            pass
+        else:
+            cand = day_accum + p
+            if cand < -dll_limit:
+                day_accum = cand
+                cum += p
+                day_dll_paused = True
+            else:
+                day_accum = cand
+                cum += p
+
+        equity = float(starting_balance) + cum
 
         if equity > hwm:
             hwm = equity
-        if not locked and hwm >= lock_equity_threshold:
+        if not locked and hwm >= lock_at:
             locked = True
             lock_triggered = True
 
-        allowed_min = post_lock_floor if locked else hwm - trail
+        allowed_min = floor_after if locked else hwm - trail
 
         margin = equity - allowed_min
         trail_margin_min = min(trail_margin_min, margin)
@@ -258,7 +378,7 @@ def simulate_eval_window_50k_eod(
                 "locked": lock_triggered,
             }
 
-        if equity >= profit_target_equity:
+        if equity >= pt_equity:
             cross_i = i
             ny_to_pass = len({exit_ny_dates[j] for j in range(cross_i + 1)})
             sess_to_pass = len(
@@ -275,7 +395,7 @@ def simulate_eval_window_50k_eod(
                 "locked": lock_triggered,
             }
 
-    if day_accum < -dll_limit:
+    if dll_terminates_run and day_accum < -dll_limit:
         return {
             "outcome": "fail",
             "mode": "dll",
@@ -293,6 +413,35 @@ def simulate_eval_window_50k_eod(
         "trail_margin_min": trail_margin_min,
         "locked": lock_triggered,
     }
+
+
+def simulate_eval_window_50k_eod(
+    pnls_scaled: np.ndarray,
+    exit_ny_dates: list[dt.date],
+    exit_session_dates: list[object],
+    *,
+    starting_balance: float = 50_000.0,
+    trail: float = 2_000.0,
+    lock_equity_threshold: float = 52_000.0,
+    post_lock_floor: float = 50_000.0,
+    profit_target_equity: float = 53_000.0,
+    dll_limit: float = 1_000.0,
+    dll_terminates_run: bool = False,
+) -> dict[str, object]:
+    """$50K EOD eval shorthand; **profit_target_equity** overrides ``profit_target`` dollars."""
+    pt = float(profit_target_equity) - float(starting_balance)
+    return simulate_eval_window_eod(
+        pnls_scaled,
+        exit_ny_dates,
+        exit_session_dates,
+        starting_balance=starting_balance,
+        trailing_dd=trail,
+        profit_target=pt,
+        dll_limit=dll_limit,
+        lock_equity_threshold=lock_equity_threshold,
+        post_lock_floor=post_lock_floor,
+        dll_terminates_run=dll_terminates_run,
+    )
 
 
 def trades_to_daily_pnls_with_ny(
@@ -482,7 +631,7 @@ def collapse_trades_with_ny_to_session_streaks(
     return dates, np.array(totals, dtype=np.float64), ny_out
 
 
-def block_bootstrap_apex_50k_funded(
+def block_bootstrap_apex_eod_funded(
     trades_pnl: np.ndarray,
     trade_dates: list[object],
     trade_ny_dates: list[dt.date],
@@ -492,13 +641,17 @@ def block_bootstrap_apex_50k_funded(
     n_target_trades: int,
     n_iterations: int,
     rng: np.random.Generator,
+    starting_balance: float = 50_000.0,
+    trailing_dd: float = 2_000.0,
+    dll_limit: float = 1_000.0,
+    lock_equity_threshold: float | None = None,
+    post_lock_floor: float | None = None,
+    enforce_dll: bool = True,
+    dll_terminates_run: bool = False,
 ) -> dict[str, np.ndarray]:
     """
-    Block-bootstrap **trade** rows, collapse to session streaks, scale P&amp;L, run
-    :func:`simulate_apex_50k_eod_two_phase`.
-
-    Returns arrays length ``n_iterations``: ``survived``, ``min_margin_pre_lock``,
-    ``min_margin_post_lock`` (NaN if post-lock never achieved), ``locked_achieved``.
+    Block-bootstrap trade rows, collapse to session streaks, scale P&amp;L, run
+    :func:`simulate_apex_eod_two_phase`.
     """
     n = int(trades_pnl.size)
     if n != len(trade_dates) or n != len(trade_ny_dates):
@@ -538,7 +691,17 @@ def block_bootstrap_apex_50k_funded(
 
         arr = np.array(buf_pnl, dtype=np.float64)
         _, daily, dny = collapse_trades_with_ny_to_session_streaks(buf_d, buf_ny, arr)
-        r = simulate_apex_50k_eod_two_phase(daily, dny)
+        r = simulate_apex_eod_two_phase(
+            daily,
+            dny,
+            starting_balance=starting_balance,
+            trailing_dd=trailing_dd,
+            dll_limit=dll_limit,
+            lock_equity_threshold=lock_equity_threshold,
+            post_lock_floor=post_lock_floor,
+            enforce_dll=enforce_dll,
+            dll_terminates_run=dll_terminates_run,
+        )
         survived[it] = r.survived
         min_pre[it] = r.min_margin_pre_lock
         min_post[it] = r.min_margin_post_lock
@@ -550,6 +713,37 @@ def block_bootstrap_apex_50k_funded(
         "min_margin_post_lock": min_post,
         "locked_achieved": locked_achieved,
     }
+
+
+def block_bootstrap_apex_50k_funded(
+    trades_pnl: np.ndarray,
+    trade_dates: list[object],
+    trade_ny_dates: list[dt.date],
+    *,
+    quantity: float,
+    block_len: int,
+    n_target_trades: int,
+    n_iterations: int,
+    rng: np.random.Generator,
+) -> dict[str, np.ndarray]:
+    """$50K EOD shorthand for :func:`block_bootstrap_apex_eod_funded`."""
+    return block_bootstrap_apex_eod_funded(
+        trades_pnl,
+        trade_dates,
+        trade_ny_dates,
+        quantity=quantity,
+        block_len=block_len,
+        n_target_trades=n_target_trades,
+        n_iterations=n_iterations,
+        rng=rng,
+        starting_balance=50_000.0,
+        trailing_dd=2_000.0,
+        dll_limit=1_000.0,
+        lock_equity_threshold=52_000.0,
+        post_lock_floor=50_000.0,
+        enforce_dll=True,
+        dll_terminates_run=False,
+    )
 
 
 def block_bootstrap_resample_trades(
