@@ -24,6 +24,14 @@
 
 ## Entries
 
+## 2026-05-13 — Wave 0d: Apex EOD DLL is session pause, not account death
+
+**Phase:** 2  
+**Context:** `simulate_apex_50k_eod_two_phase` / `simulate_eval_window_50k_eod` (through Wave 0c) treated any NY day with realized sum **&lt; −DLL** as **terminating** the funded path or failing the eval window — inconsistent with Apex’s **EOD daily loss limit** (trading paused for the remainder of the session; account continues next session). Source: [Apex Help Center](https://apextraderfunding.com/help-center/) (DLL / EOD product pages); aligned with `docs/ai-project-instructions.md`.  
+**Finding:** **Wave 0c** conclusions that **scaled DLL days** “failed Gate A” at **q ≥ 2** were driven by **terminal DLL** semantics in code, not firm rules. Correct modeling **pauses** same-day P&amp;L after the breach, increments a **DLL day counter**, and fails funded survival **only** on **trailing / post-lock floor** breach. Eval windows **do not** fail on DLL alone.  
+**Implication:** Use **`simulate_apex_eod_two_phase`** and **`simulate_eval_window_eod`** (generalized account-class API) with default ``dll_terminates_run=False`` for new research. **Wave 0d** re-runs the account-class survey with corrected DLL. Legacy ``dll_terminates_run=True`` remains for comparing the old bug.  
+**Artifact:** `src/quant_research/statistics/apex_eod_trailing.py`; `tests/test_apex_eod_trailing.py`; `scripts/run_wave0d_orb_opt3_account_class_survey.py`; `notebooks/validation/2026-05-13_wave0d_orb_opt3_account_class_survey.{md,json}`; `docs/research-log.md` Wave 0d.
+
 ## 2026-05-16 — Wave 0c correction: Apex $50K EOD was mis-parameterized in Wave 0 / 0b
 
 **Phase:** 2  

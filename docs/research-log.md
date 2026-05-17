@@ -223,10 +223,66 @@
 
 **Deliverable 4 — Economics at funded q_max (q=1):** ~**$1,014/yr** per contract (same as Wave 0 per-contract totals); **tier:** **below_floor**; **4 / 7** profitable calendar years (2020–2026 slice).
 
+**Caveat (Wave 0d — DLL semantics):** Wave 0c code treated **DLL as terminal** for funded survival and eval failure. Apex **EOD DLL** is a **session pause**, not account termination. The **“q ≥ 2 fail DLL”** headline in this block reflects **incorrect simulation**, not operational firm outcomes — see `docs/research-log.md` **Wave 0d** and `docs/lessons-log.md` (**2026-05-13**). Wave **0c** numeric **artifacts** remain in-repo as **historical** outputs under the bug.
+
 **Artifacts:**  
 - `notebooks/validation/2026-05-17_wave0c_orb_opt3_two_gate_baseline.md`  
 - `notebooks/validation/2026-05-17_wave0c_orb_opt3_two_gate_baseline.json`  
 - `scripts/run_wave0c_orb_opt3_two_gate_baseline.py`
+
+---
+
+## 2026-05-13 — Wave 0d DLL fix + Apex EOD account-class survey — PRE-REGISTERED
+
+**Wave:** Wave 0d
+
+**Structural rationale:** Correct **DLL = session pause** in `apex_eod_trailing.py`; generalize two-phase EOD simulators for all Apex **EOD account classes** in the operator parameter table; quantify whether **larger accounts + higher qty** can satisfy **funded survival**, **bootstrap path robustness**, and **operationally meaningful eval pass rate** jointly.
+
+**Specification:**
+
+- **DLL model:** same **America/New_York** day cumulative realized P&amp;L; on first cross **strictly below −DLL**, apply that fill to equity then **ignore** further same-day P&amp;L; count **DLL pause days**; **do not** fail funded path or eval window on DLL alone; **trailing / post-lock** still fails runs.
+- **Generalized API:** `simulate_apex_eod_two_phase`, `simulate_eval_window_eod` with `(starting_balance, trailing_dd, profit_target, dll, lock = start+trail, post_lock_floor = start)`; `$50K` helpers retained.
+- **Account rows (operator table — verify vs Apex Help Center):** $25K / $50K / $100K / $150K EOD with **PA max contracts** for funded grid; **eval max contracts** from secondary 4.0 summary for disclosure; eval pass rates computed for **q = 1..PA_cap** (counterfactual above eval cap flagged in JSON).
+- **Per class, per q:** (a) funded survival on **6y** session-daily path; (b) **30-session** rolling eval pass (trade-by-trade); (c) block-bootstrap (length **20**, **10,000** reps) funded survival; (d) annual avg P&amp;L at q; (e) avg DLL pause days per year.
+- **Summary:** `(funded_q_max, eval@q_max, bootstrap@q_max, annual$@q_max, dll pauses/yr, tier)`.
+- **Joint criteria:** funded pass, bootstrap **≥ 80%**, eval **≥ 50%**, maximize avg annual $ — report best or closest misses.
+- **Stops:** Wave 0c q=1 funded or eval rate moves **> ~20% relative** vs terminal-DLL baseline; no triple pass; no funded-passing qty reaches **80%** bootstrap in any class.
+
+**Date pre-registered:** 2026-05-13  
+**Date run completed:** *(see RESULT-LOGGED below)*  
+**Artifact:** *(pending)*
+
+---
+
+## 2026-05-13 — Wave 0d DLL fix + Apex EOD account-class survey — RESULT-LOGGED
+
+**Wave:** Wave 0d
+
+**Date run completed:** 2026-05-13
+
+**Deliverable 1 — Parameter verification:** JSON `verification` records operator simulation row + **deltas vs third-party 4.0 blog tables** (trailing DD and PA contract caps **disagree** on several tiers — **requires** confirmation on [Apex Help Center](https://apextraderfunding.com/help-center/)).
+
+**Deliverable 2 — Code:** `simulate_apex_eod_two_phase`, `simulate_eval_window_eod`, tests in `tests/test_apex_eod_trailing.py`; `dll_terminates_run` preserves pre-fix behavior for regression.
+
+**Wave 0c regression ($50K, q=1, historical path):** **Terminal vs pause:** both **funded survive**; eval passes **30 / 1532** both — **no** **>20%** eval rate change (**STOP** not triggered for magnitude).
+
+**Headline survey (ORB+Opt3, DLL pause, operator PA caps):**
+
+| Class | funded_q_max | eval @ q_max | bootstrap @ q_max | ~$/yr @ q_max | DLL pauses/yr @ q_max | tier @ q_max |
+|-------|-------------|--------------|-------------------|---------------|------------------------|--------------|
+| $25K | 4 | ~32.8% | ~0.18 | ~$4,057 | ~24.8 | below_floor |
+| $50K | 7 | ~24.2% | ~0.17 | ~$7,099 | ~20.2 | below_floor |
+| $100K | 9 | ~14.8% | ~0.17 | ~$9,127 | ~1.0 | below_floor |
+| $150K | 11 | ~8.2% | ~0.15 | ~$11,156 | ~1.0 | below_floor |
+
+**Joint criteria (funded + bootstrap ≥ 80% + eval ≥ 50%):** **No** **(class, qty)** pair satisfied all three gates in this run.
+
+**STOP flags:** **Triple gate:** no pass; **Bootstrap ≥ 80%:** no funded-passing qty in any class met **80%** block-20 survival; **Wave 0c material regression:** **false** on headline q=1 check.
+
+**Artifacts:**  
+- `notebooks/validation/2026-05-13_wave0d_orb_opt3_account_class_survey.{md,json}`  
+- `notebooks/validation/2026-05-13_wave0d_account_class_survey.ipynb`  
+- `scripts/run_wave0d_orb_opt3_account_class_survey.py`
 
 ---
 

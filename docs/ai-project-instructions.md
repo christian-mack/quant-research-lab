@@ -252,7 +252,7 @@ All strategy logic must respect **research-track** Apex Trader Funding **$50K EO
 - **Pre-lock trailing drawdown:** **$2,000** below the **equity high-water mark** (floor starts at **$48,000** when HWM is $50K; floor rises **$1-for-$1** with new highs)
 - **Lock:** when HWM reaches **$52,000**, the drawdown floor **locks permanently at $50,000** (post-lock breach if equity **&lt; $50,000**)
 - **Eval profit target:** **+$3,000** vs start (account reaches **$53,000**)
-- **Daily loss limit (DLL):** **$1,000** per **America/New_York** calendar day on **realized** P&amp;L (research convention: day total **&lt; −$1,000** fails, consistent with Wave 0 eval sim)
+- **Daily loss limit (DLL):** **$1,000** per **America/New_York** calendar day on **realized** P&amp;L (breach when cumulative day total is **strictly below −$1,000** in simulation). **Firm behavior:** hitting the DLL **pauses trading for the rest of the session**; the account **does not** fail solely due to DLL — see [Apex Help Center](https://apextraderfunding.com/help-center/). Research code models this as **same-day P&amp;L freeze after the breach trade** in `simulate_apex_eod_two_phase` / `simulate_eval_window_eod` (Wave 0d+).
 - Max contracts: 60 MNQ on $50K account, 80 MNQ on $100K account (full-size NQ equivalents)
 - Consistency rule: no single trading day may be >30% of total profit
 
