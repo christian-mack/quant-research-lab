@@ -249,8 +249,8 @@
 - **Stops:** Wave 0c q=1 funded or eval rate moves **> ~20% relative** vs terminal-DLL baseline; no triple pass; no funded-passing qty reaches **80%** bootstrap in any class.
 
 **Date pre-registered:** 2026-05-13  
-**Date run completed:** *(see RESULT-LOGGED below)*  
-**Artifact:** *(pending)*
+**Date run completed:** 2026-05-13 *(see RESULT-LOGGED)*  
+**Artifact:** `notebooks/validation/2026-05-13_wave0d_orb_opt3_account_class_survey.{md,json}`; `scripts/run_wave0d_orb_opt3_account_class_survey.py`; code **`77f35f0`** (DLL fix).
 
 ---
 
@@ -259,6 +259,8 @@
 **Wave:** Wave 0d
 
 **Date run completed:** 2026-05-13
+
+**Execution `git` metadata:** Implementation **`17dde52`**; artifact JSON **`git_sha`** = **`85d5cae`** (clean tree at artifact commit).
 
 **Deliverable 1 — Parameter verification:** JSON `verification` records operator simulation row + **deltas vs third-party 4.0 blog tables** (trailing DD and PA contract caps **disagree** on several tiers — **requires** confirmation on [Apex Help Center](https://apextraderfunding.com/help-center/)).
 
