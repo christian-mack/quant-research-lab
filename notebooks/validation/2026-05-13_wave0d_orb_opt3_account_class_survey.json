@@ -1,0 +1,1298 @@
+{
+  "wave": "0d",
+  "git": {
+    "git_sha": "17dde52f3421bc7dcf4cde8e6cfbe7d062b69c7f",
+    "git_dirty": true
+  },
+  "verification": {
+    "primary_official_source": "https://apextraderfunding.com/help-center/",
+    "secondary_blog_verify_2026_03": "PropTradingVibes / community tables (March 2026 4.0 summaries) \u2014 **not** a substitute for the help center.",
+    "operator_simulation_row": [
+      {
+        "class": "25k",
+        "trailing_dd": 1500,
+        "profit_target": 1500,
+        "dll": 500,
+        "pa_cap": 4,
+        "eval_cap_secondary_source": 4
+      },
+      {
+        "class": "50k",
+        "trailing_dd": 2000,
+        "profit_target": 3000,
+        "dll": 1000,
+        "pa_cap": 10,
+        "eval_cap_secondary_source": 6
+      },
+      {
+        "class": "100k",
+        "trailing_dd": 2500,
+        "profit_target": 6000,
+        "dll": 1500,
+        "pa_cap": 14,
+        "eval_cap_secondary_source": 8
+      },
+      {
+        "class": "150k",
+        "trailing_dd": 3000,
+        "profit_target": 9000,
+        "dll": 2000,
+        "pa_cap": 17,
+        "eval_cap_secondary_source": 12
+      }
+    ],
+    "deltas_vs_blog_table": [
+      "$25K: third-party trailing **$1,000** (not **$1,500**) on some 4.0 summaries \u2014 operator row uses **$1,500**; confirm on Apex help center.",
+      "$100K: third-party trailing **$3,000** vs operator **$2,500** \u2014 confirm.",
+      "$150K: third-party trailing **$4,000** vs operator **$3,000** \u2014 confirm.",
+      "$50K PA max contracts: third-party **4** vs operator **10** \u2014 likely **definition/version** mismatch; confirm max PA size for your product SKU."
+    ]
+  },
+  "protocol": {
+    "start": "2020-01-01",
+    "end_inclusive": "2026-04-19",
+    "trade_count_qty1": 799,
+    "daily_sessions": 779,
+    "yfrac": 6.299794661190965
+  },
+  "dll_model": "session_pause_per_NY_day_strict_below_neg_dll_limit",
+  "deliverable_account_survey": {
+    "25k": {
+      "label": "$25K EOD",
+      "apex_params": {
+        "starting_balance": 25000,
+        "trailing_dd": 1500,
+        "profit_target": 1500,
+        "dll_limit": 500,
+        "lock_equity_high_water": 26500,
+        "post_lock_floor": 25000,
+        "pa_max_contracts": 4,
+        "eval_max_contracts_reported": 4
+      },
+      "funded_by_qty": {
+        "1": {
+          "survived": true,
+          "trail_breach_sessions": 0,
+          "dll_fail": false,
+          "dll_pause_days": 4,
+          "avg_dll_pause_days_per_year": 0.6349,
+          "locked_achieved": true,
+          "final_equity": 31389.0,
+          "bootstrap_funded_survival_fraction_block20": 0.4725
+        },
+        "2": {
+          "survived": true,
+          "trail_breach_sessions": 0,
+          "dll_fail": false,
+          "dll_pause_days": 6,
+          "avg_dll_pause_days_per_year": 0.9524,
+          "locked_achieved": true,
+          "final_equity": 37778.0,
+          "bootstrap_funded_survival_fraction_block20": 0.2663
+        },
+        "3": {
+          "survived": true,
+          "trail_breach_sessions": 0,
+          "dll_fail": false,
+          "dll_pause_days": 6,
+          "avg_dll_pause_days_per_year": 0.9524,
+          "locked_achieved": true,
+          "final_equity": 44167.0,
+          "bootstrap_funded_survival_fraction_block20": 0.2145
+        },
+        "4": {
+          "survived": true,
+          "trail_breach_sessions": 0,
+          "dll_fail": false,
+          "dll_pause_days": 156,
+          "avg_dll_pause_days_per_year": 24.7627,
+          "locked_achieved": true,
+          "final_equity": 50556.0,
+          "bootstrap_funded_survival_fraction_block20": 0.1819
+        }
+      },
+      "eval_by_qty": {
+        "1": {
+          "total_windows": 1532,
+          "passing_windows": 30,
+          "pass_rate": 0.0195822454308094,
+          "fail_trailing": 0,
+          "fail_no_target": 1502,
+          "within_eval_contract_cap": true
+        },
+        "2": {
+          "total_windows": 1532,
+          "passing_windows": 164,
+          "pass_rate": 0.10704960835509138,
+          "fail_trailing": 172,
+          "fail_no_target": 1196,
+          "within_eval_contract_cap": true
+        },
+        "3": {
+          "total_windows": 1532,
+          "passing_windows": 351,
+          "pass_rate": 0.22911227154046998,
+          "fail_trailing": 390,
+          "fail_no_target": 791,
+          "within_eval_contract_cap": true
+        },
+        "4": {
+          "total_windows": 1532,
+          "passing_windows": 502,
+          "pass_rate": 0.3276762402088773,
+          "fail_trailing": 431,
+          "fail_no_target": 599,
+          "within_eval_contract_cap": true
+        }
+      },
+      "annual_avg_pnl_by_qty": {
+        "1": 1014.16,
+        "2": 2028.32,
+        "3": 3042.48,
+        "4": 4056.64
+      },
+      "tier_by_qty": {
+        "1": "below_floor",
+        "2": "below_floor",
+        "3": "below_floor",
+        "4": "below_floor"
+      },
+      "summary": {
+        "funded_q_max": 4,
+        "eval_pass_rate_at_funded_q_max": 0.3276762402088773,
+        "bootstrap_survival_at_funded_q_max": 0.1819,
+        "annual_pnl_at_funded_q_max": 4056.64,
+        "avg_dll_pause_days_per_year_at_funded_q_max": 24.7627,
+        "tier_at_funded_q_max": "below_floor"
+      }
+    },
+    "50k": {
+      "label": "$50K EOD",
+      "apex_params": {
+        "starting_balance": 50000,
+        "trailing_dd": 2000,
+        "profit_target": 3000,
+        "dll_limit": 1000,
+        "lock_equity_high_water": 52000,
+        "post_lock_floor": 50000,
+        "pa_max_contracts": 10,
+        "eval_max_contracts_reported": 6
+      },
+      "funded_by_qty": {
+        "1": {
+          "survived": true,
+          "trail_breach_sessions": 0,
+          "dll_fail": false,
+          "dll_pause_days": 0,
+          "avg_dll_pause_days_per_year": 0.0,
+          "locked_achieved": true,
+          "final_equity": 56389.0,
+          "bootstrap_funded_survival_fraction_block20": 0.5782
+        },
+        "2": {
+          "survived": true,
+          "trail_breach_sessions": 0,
+          "dll_fail": false,
+          "dll_pause_days": 4,
+          "avg_dll_pause_days_per_year": 0.6349,
+          "locked_achieved": true,
+          "final_equity": 62778.0,
+          "bootstrap_funded_survival_fraction_block20": 0.3382
+        },
+        "3": {
+          "survived": true,
+          "trail_breach_sessions": 0,
+          "dll_fail": false,
+          "dll_pause_days": 5,
+          "avg_dll_pause_days_per_year": 0.7937,
+          "locked_achieved": true,
+          "final_equity": 69167.0,
+          "bootstrap_funded_survival_fraction_block20": 0.254
+        },
+        "4": {
+          "survived": true,
+          "trail_breach_sessions": 0,
+          "dll_fail": false,
+          "dll_pause_days": 6,
+          "avg_dll_pause_days_per_year": 0.9524,
+          "locked_achieved": true,
+          "final_equity": 75556.0,
+          "bootstrap_funded_survival_fraction_block20": 0.2097
+        },
+        "5": {
+          "survived": true,
+          "trail_breach_sessions": 0,
+          "dll_fail": false,
+          "dll_pause_days": 6,
+          "avg_dll_pause_days_per_year": 0.9524,
+          "locked_achieved": true,
+          "final_equity": 81945.0,
+          "bootstrap_funded_survival_fraction_block20": 0.1874
+        },
+        "6": {
+          "survived": true,
+          "trail_breach_sessions": 0,
+          "dll_fail": false,
+          "dll_pause_days": 6,
+          "avg_dll_pause_days_per_year": 0.9524,
+          "locked_achieved": true,
+          "final_equity": 88334.0,
+          "bootstrap_funded_survival_fraction_block20": 0.1801
+        },
+        "7": {
+          "survived": true,
+          "trail_breach_sessions": 0,
+          "dll_fail": false,
+          "dll_pause_days": 127,
+          "avg_dll_pause_days_per_year": 20.1594,
+          "locked_achieved": true,
+          "final_equity": 94723.0,
+          "bootstrap_funded_survival_fraction_block20": 0.1672
+        },
+        "8": {
+          "survived": false,
+          "trail_breach_sessions": 1,
+          "dll_fail": false,
+          "dll_pause_days": 156,
+          "avg_dll_pause_days_per_year": 24.7627,
+          "locked_achieved": true,
+          "final_equity": 101112.0,
+          "bootstrap_funded_survival_fraction_block20": 0.1513
+        },
+        "9": {
+          "survived": false,
+          "trail_breach_sessions": 2,
+          "dll_fail": false,
+          "dll_pause_days": 184,
+          "avg_dll_pause_days_per_year": 29.2073,
+          "locked_achieved": true,
+          "final_equity": 107501.0,
+          "bootstrap_funded_survival_fraction_block20": 0.1509
+        },
+        "10": {
+          "survived": false,
+          "trail_breach_sessions": 2,
+          "dll_fail": false,
+          "dll_pause_days": 203,
+          "avg_dll_pause_days_per_year": 32.2233,
+          "locked_achieved": true,
+          "final_equity": 113890.0,
+          "bootstrap_funded_survival_fraction_block20": 0.1478
+        }
+      },
+      "eval_by_qty": {
+        "1": {
+          "total_windows": 1532,
+          "passing_windows": 30,
+          "pass_rate": 0.0195822454308094,
+          "fail_trailing": 0,
+          "fail_no_target": 1502,
+          "within_eval_contract_cap": true
+        },
+        "2": {
+          "total_windows": 1532,
+          "passing_windows": 30,
+          "pass_rate": 0.0195822454308094,
+          "fail_trailing": 64,
+          "fail_no_target": 1438,
+          "within_eval_contract_cap": true
+        },
+        "3": {
+          "total_windows": 1532,
+          "passing_windows": 53,
+          "pass_rate": 0.034595300261096605,
+          "fail_trailing": 214,
+          "fail_no_target": 1265,
+          "within_eval_contract_cap": true
+        },
+        "4": {
+          "total_windows": 1532,
+          "passing_windows": 164,
+          "pass_rate": 0.10704960835509138,
+          "fail_trailing": 402,
+          "fail_no_target": 966,
+          "within_eval_contract_cap": true
+        },
+        "5": {
+          "total_windows": 1532,
+          "passing_windows": 263,
+          "pass_rate": 0.1716710182767624,
+          "fail_trailing": 494,
+          "fail_no_target": 775,
+          "within_eval_contract_cap": true
+        },
+        "6": {
+          "total_windows": 1532,
+          "passing_windows": 346,
+          "pass_rate": 0.2258485639686684,
+          "fail_trailing": 548,
+          "fail_no_target": 638,
+          "within_eval_contract_cap": true
+        },
+        "7": {
+          "total_windows": 1532,
+          "passing_windows": 371,
+          "pass_rate": 0.24216710182767623,
+          "fail_trailing": 661,
+          "fail_no_target": 500,
+          "within_eval_contract_cap": false
+        },
+        "8": {
+          "total_windows": 1532,
+          "passing_windows": 421,
+          "pass_rate": 0.2748041775456919,
+          "fail_trailing": 662,
+          "fail_no_target": 449,
+          "within_eval_contract_cap": false
+        },
+        "9": {
+          "total_windows": 1532,
+          "passing_windows": 439,
+          "pass_rate": 0.28655352480417756,
+          "fail_trailing": 660,
+          "fail_no_target": 433,
+          "within_eval_contract_cap": false
+        },
+        "10": {
+          "total_windows": 1532,
+          "passing_windows": 469,
+          "pass_rate": 0.30613577023498695,
+          "fail_trailing": 632,
+          "fail_no_target": 431,
+          "within_eval_contract_cap": false
+        }
+      },
+      "annual_avg_pnl_by_qty": {
+        "1": 1014.16,
+        "2": 2028.32,
+        "3": 3042.48,
+        "4": 4056.64,
+        "5": 5070.8,
+        "6": 6084.96,
+        "7": 7099.12,
+        "8": 8113.28,
+        "9": 9127.44,
+        "10": 10141.6
+      },
+      "tier_by_qty": {
+        "1": "below_floor",
+        "2": "below_floor",
+        "3": "below_floor",
+        "4": "below_floor",
+        "5": "below_floor",
+        "6": "below_floor",
+        "7": "below_floor",
+        "8": "below_floor",
+        "9": "below_floor",
+        "10": "below_floor"
+      },
+      "summary": {
+        "funded_q_max": 7,
+        "eval_pass_rate_at_funded_q_max": 0.24216710182767623,
+        "bootstrap_survival_at_funded_q_max": 0.1672,
+        "annual_pnl_at_funded_q_max": 7099.12,
+        "avg_dll_pause_days_per_year_at_funded_q_max": 20.1594,
+        "tier_at_funded_q_max": "below_floor"
+      }
+    },
+    "100k": {
+      "label": "$100K EOD",
+      "apex_params": {
+        "starting_balance": 100000,
+        "trailing_dd": 2500,
+        "profit_target": 6000,
+        "dll_limit": 1500,
+        "lock_equity_high_water": 102500,
+        "post_lock_floor": 100000,
+        "pa_max_contracts": 14,
+        "eval_max_contracts_reported": 8
+      },
+      "funded_by_qty": {
+        "1": {
+          "survived": true,
+          "trail_breach_sessions": 0,
+          "dll_fail": false,
+          "dll_pause_days": 0,
+          "avg_dll_pause_days_per_year": 0.0,
+          "locked_achieved": true,
+          "final_equity": 106389.0,
+          "bootstrap_funded_survival_fraction_block20": 0.679
+        },
+        "2": {
+          "survived": true,
+          "trail_breach_sessions": 0,
+          "dll_fail": false,
+          "dll_pause_days": 1,
+          "avg_dll_pause_days_per_year": 0.1587,
+          "locked_achieved": true,
+          "final_equity": 112778.0,
+          "bootstrap_funded_survival_fraction_block20": 0.4143
+        },
+        "3": {
+          "survived": true,
+          "trail_breach_sessions": 0,
+          "dll_fail": false,
+          "dll_pause_days": 4,
+          "avg_dll_pause_days_per_year": 0.6349,
+          "locked_achieved": true,
+          "final_equity": 119167.0,
+          "bootstrap_funded_survival_fraction_block20": 0.3061
+        },
+        "4": {
+          "survived": true,
+          "trail_breach_sessions": 0,
+          "dll_fail": false,
+          "dll_pause_days": 4,
+          "avg_dll_pause_days_per_year": 0.6349,
+          "locked_achieved": true,
+          "final_equity": 125556.0,
+          "bootstrap_funded_survival_fraction_block20": 0.2404
+        },
+        "5": {
+          "survived": true,
+          "trail_breach_sessions": 0,
+          "dll_fail": false,
+          "dll_pause_days": 5,
+          "avg_dll_pause_days_per_year": 0.7937,
+          "locked_achieved": true,
+          "final_equity": 131945.0,
+          "bootstrap_funded_survival_fraction_block20": 0.2177
+        },
+        "6": {
+          "survived": true,
+          "trail_breach_sessions": 0,
+          "dll_fail": false,
+          "dll_pause_days": 6,
+          "avg_dll_pause_days_per_year": 0.9524,
+          "locked_achieved": true,
+          "final_equity": 138334.0,
+          "bootstrap_funded_survival_fraction_block20": 0.1959
+        },
+        "7": {
+          "survived": true,
+          "trail_breach_sessions": 0,
+          "dll_fail": false,
+          "dll_pause_days": 6,
+          "avg_dll_pause_days_per_year": 0.9524,
+          "locked_achieved": true,
+          "final_equity": 144723.0,
+          "bootstrap_funded_survival_fraction_block20": 0.1756
+        },
+        "8": {
+          "survived": true,
+          "trail_breach_sessions": 0,
+          "dll_fail": false,
+          "dll_pause_days": 6,
+          "avg_dll_pause_days_per_year": 0.9524,
+          "locked_achieved": true,
+          "final_equity": 151112.0,
+          "bootstrap_funded_survival_fraction_block20": 0.1699
+        },
+        "9": {
+          "survived": true,
+          "trail_breach_sessions": 0,
+          "dll_fail": false,
+          "dll_pause_days": 6,
+          "avg_dll_pause_days_per_year": 0.9524,
+          "locked_achieved": true,
+          "final_equity": 157501.0,
+          "bootstrap_funded_survival_fraction_block20": 0.17
+        },
+        "10": {
+          "survived": false,
+          "trail_breach_sessions": 1,
+          "dll_fail": false,
+          "dll_pause_days": 115,
+          "avg_dll_pause_days_per_year": 18.2546,
+          "locked_achieved": true,
+          "final_equity": 163890.0,
+          "bootstrap_funded_survival_fraction_block20": 0.1511
+        },
+        "11": {
+          "survived": false,
+          "trail_breach_sessions": 1,
+          "dll_fail": false,
+          "dll_pause_days": 136,
+          "avg_dll_pause_days_per_year": 21.588,
+          "locked_achieved": true,
+          "final_equity": 170279.0,
+          "bootstrap_funded_survival_fraction_block20": 0.1591
+        },
+        "12": {
+          "survived": false,
+          "trail_breach_sessions": 2,
+          "dll_fail": false,
+          "dll_pause_days": 156,
+          "avg_dll_pause_days_per_year": 24.7627,
+          "locked_achieved": true,
+          "final_equity": 176668.0,
+          "bootstrap_funded_survival_fraction_block20": 0.1541
+        },
+        "13": {
+          "survived": false,
+          "trail_breach_sessions": 3,
+          "dll_fail": false,
+          "dll_pause_days": 179,
+          "avg_dll_pause_days_per_year": 28.4136,
+          "locked_achieved": true,
+          "final_equity": 183057.0,
+          "bootstrap_funded_survival_fraction_block20": 0.1503
+        },
+        "14": {
+          "survived": false,
+          "trail_breach_sessions": 6,
+          "dll_fail": false,
+          "dll_pause_days": 191,
+          "avg_dll_pause_days_per_year": 30.3184,
+          "locked_achieved": true,
+          "final_equity": 189446.0,
+          "bootstrap_funded_survival_fraction_block20": 0.1485
+        }
+      },
+      "eval_by_qty": {
+        "1": {
+          "total_windows": 1532,
+          "passing_windows": 0,
+          "pass_rate": 0.0,
+          "fail_trailing": 0,
+          "fail_no_target": 1532,
+          "within_eval_contract_cap": true
+        },
+        "2": {
+          "total_windows": 1532,
+          "passing_windows": 30,
+          "pass_rate": 0.0195822454308094,
+          "fail_trailing": 33,
+          "fail_no_target": 1469,
+          "within_eval_contract_cap": true
+        },
+        "3": {
+          "total_windows": 1532,
+          "passing_windows": 30,
+          "pass_rate": 0.0195822454308094,
+          "fail_trailing": 140,
+          "fail_no_target": 1362,
+          "within_eval_contract_cap": true
+        },
+        "4": {
+          "total_windows": 1532,
+          "passing_windows": 30,
+          "pass_rate": 0.0195822454308094,
+          "fail_trailing": 257,
+          "fail_no_target": 1245,
+          "within_eval_contract_cap": true
+        },
+        "5": {
+          "total_windows": 1532,
+          "passing_windows": 35,
+          "pass_rate": 0.022845953002610966,
+          "fail_trailing": 402,
+          "fail_no_target": 1095,
+          "within_eval_contract_cap": true
+        },
+        "6": {
+          "total_windows": 1532,
+          "passing_windows": 53,
+          "pass_rate": 0.034595300261096605,
+          "fail_trailing": 466,
+          "fail_no_target": 1013,
+          "within_eval_contract_cap": true
+        },
+        "7": {
+          "total_windows": 1532,
+          "passing_windows": 111,
+          "pass_rate": 0.07245430809399478,
+          "fail_trailing": 551,
+          "fail_no_target": 870,
+          "within_eval_contract_cap": true
+        },
+        "8": {
+          "total_windows": 1532,
+          "passing_windows": 162,
+          "pass_rate": 0.10574412532637076,
+          "fail_trailing": 625,
+          "fail_no_target": 745,
+          "within_eval_contract_cap": true
+        },
+        "9": {
+          "total_windows": 1532,
+          "passing_windows": 227,
+          "pass_rate": 0.1481723237597911,
+          "fail_trailing": 698,
+          "fail_no_target": 607,
+          "within_eval_contract_cap": false
+        },
+        "10": {
+          "total_windows": 1532,
+          "passing_windows": 249,
+          "pass_rate": 0.16253263707571802,
+          "fail_trailing": 734,
+          "fail_no_target": 549,
+          "within_eval_contract_cap": false
+        },
+        "11": {
+          "total_windows": 1532,
+          "passing_windows": 273,
+          "pass_rate": 0.17819843342036554,
+          "fail_trailing": 749,
+          "fail_no_target": 510,
+          "within_eval_contract_cap": false
+        },
+        "12": {
+          "total_windows": 1532,
+          "passing_windows": 289,
+          "pass_rate": 0.18864229765013055,
+          "fail_trailing": 749,
+          "fail_no_target": 494,
+          "within_eval_contract_cap": false
+        },
+        "13": {
+          "total_windows": 1532,
+          "passing_windows": 308,
+          "pass_rate": 0.2010443864229765,
+          "fail_trailing": 747,
+          "fail_no_target": 477,
+          "within_eval_contract_cap": false
+        },
+        "14": {
+          "total_windows": 1532,
+          "passing_windows": 323,
+          "pass_rate": 0.2108355091383812,
+          "fail_trailing": 750,
+          "fail_no_target": 459,
+          "within_eval_contract_cap": false
+        }
+      },
+      "annual_avg_pnl_by_qty": {
+        "1": 1014.16,
+        "2": 2028.32,
+        "3": 3042.48,
+        "4": 4056.64,
+        "5": 5070.8,
+        "6": 6084.96,
+        "7": 7099.12,
+        "8": 8113.28,
+        "9": 9127.44,
+        "10": 10141.6,
+        "11": 11155.76,
+        "12": 12169.92,
+        "13": 13184.08,
+        "14": 14198.24
+      },
+      "tier_by_qty": {
+        "1": "below_floor",
+        "2": "below_floor",
+        "3": "below_floor",
+        "4": "below_floor",
+        "5": "below_floor",
+        "6": "below_floor",
+        "7": "below_floor",
+        "8": "below_floor",
+        "9": "below_floor",
+        "10": "below_floor",
+        "11": "below_floor",
+        "12": "below_floor",
+        "13": "below_floor",
+        "14": "below_floor"
+      },
+      "summary": {
+        "funded_q_max": 9,
+        "eval_pass_rate_at_funded_q_max": 0.1481723237597911,
+        "bootstrap_survival_at_funded_q_max": 0.17,
+        "annual_pnl_at_funded_q_max": 9127.44,
+        "avg_dll_pause_days_per_year_at_funded_q_max": 0.9524,
+        "tier_at_funded_q_max": "below_floor"
+      }
+    },
+    "150k": {
+      "label": "$150K EOD",
+      "apex_params": {
+        "starting_balance": 150000,
+        "trailing_dd": 3000,
+        "profit_target": 9000,
+        "dll_limit": 2000,
+        "lock_equity_high_water": 153000,
+        "post_lock_floor": 150000,
+        "pa_max_contracts": 17,
+        "eval_max_contracts_reported": 12
+      },
+      "funded_by_qty": {
+        "1": {
+          "survived": true,
+          "trail_breach_sessions": 0,
+          "dll_fail": false,
+          "dll_pause_days": 0,
+          "avg_dll_pause_days_per_year": 0.0,
+          "locked_achieved": true,
+          "final_equity": 156389.0,
+          "bootstrap_funded_survival_fraction_block20": 0.7584
+        },
+        "2": {
+          "survived": true,
+          "trail_breach_sessions": 0,
+          "dll_fail": false,
+          "dll_pause_days": 0,
+          "avg_dll_pause_days_per_year": 0.0,
+          "locked_achieved": true,
+          "final_equity": 162778.0,
+          "bootstrap_funded_survival_fraction_block20": 0.4701
+        },
+        "3": {
+          "survived": true,
+          "trail_breach_sessions": 0,
+          "dll_fail": false,
+          "dll_pause_days": 2,
+          "avg_dll_pause_days_per_year": 0.3175,
+          "locked_achieved": true,
+          "final_equity": 169167.0,
+          "bootstrap_funded_survival_fraction_block20": 0.3318
+        },
+        "4": {
+          "survived": true,
+          "trail_breach_sessions": 0,
+          "dll_fail": false,
+          "dll_pause_days": 4,
+          "avg_dll_pause_days_per_year": 0.6349,
+          "locked_achieved": true,
+          "final_equity": 175556.0,
+          "bootstrap_funded_survival_fraction_block20": 0.263
+        },
+        "5": {
+          "survived": true,
+          "trail_breach_sessions": 0,
+          "dll_fail": false,
+          "dll_pause_days": 4,
+          "avg_dll_pause_days_per_year": 0.6349,
+          "locked_achieved": true,
+          "final_equity": 181945.0,
+          "bootstrap_funded_survival_fraction_block20": 0.2327
+        },
+        "6": {
+          "survived": true,
+          "trail_breach_sessions": 0,
+          "dll_fail": false,
+          "dll_pause_days": 5,
+          "avg_dll_pause_days_per_year": 0.7937,
+          "locked_achieved": true,
+          "final_equity": 188334.0,
+          "bootstrap_funded_survival_fraction_block20": 0.2133
+        },
+        "7": {
+          "survived": true,
+          "trail_breach_sessions": 0,
+          "dll_fail": false,
+          "dll_pause_days": 6,
+          "avg_dll_pause_days_per_year": 0.9524,
+          "locked_achieved": true,
+          "final_equity": 194723.0,
+          "bootstrap_funded_survival_fraction_block20": 0.2027
+        },
+        "8": {
+          "survived": true,
+          "trail_breach_sessions": 0,
+          "dll_fail": false,
+          "dll_pause_days": 6,
+          "avg_dll_pause_days_per_year": 0.9524,
+          "locked_achieved": true,
+          "final_equity": 201112.0,
+          "bootstrap_funded_survival_fraction_block20": 0.1787
+        },
+        "9": {
+          "survived": true,
+          "trail_breach_sessions": 0,
+          "dll_fail": false,
+          "dll_pause_days": 6,
+          "avg_dll_pause_days_per_year": 0.9524,
+          "locked_achieved": true,
+          "final_equity": 207501.0,
+          "bootstrap_funded_survival_fraction_block20": 0.1791
+        },
+        "10": {
+          "survived": true,
+          "trail_breach_sessions": 0,
+          "dll_fail": false,
+          "dll_pause_days": 6,
+          "avg_dll_pause_days_per_year": 0.9524,
+          "locked_achieved": true,
+          "final_equity": 213890.0,
+          "bootstrap_funded_survival_fraction_block20": 0.1695
+        },
+        "11": {
+          "survived": true,
+          "trail_breach_sessions": 0,
+          "dll_fail": false,
+          "dll_pause_days": 6,
+          "avg_dll_pause_days_per_year": 0.9524,
+          "locked_achieved": true,
+          "final_equity": 220279.0,
+          "bootstrap_funded_survival_fraction_block20": 0.154
+        },
+        "12": {
+          "survived": false,
+          "trail_breach_sessions": 1,
+          "dll_fail": false,
+          "dll_pause_days": 6,
+          "avg_dll_pause_days_per_year": 0.9524,
+          "locked_achieved": true,
+          "final_equity": 226668.0,
+          "bootstrap_funded_survival_fraction_block20": 0.152
+        },
+        "13": {
+          "survived": false,
+          "trail_breach_sessions": 1,
+          "dll_fail": false,
+          "dll_pause_days": 110,
+          "avg_dll_pause_days_per_year": 17.4609,
+          "locked_achieved": true,
+          "final_equity": 233057.0,
+          "bootstrap_funded_survival_fraction_block20": 0.1546
+        },
+        "14": {
+          "survived": false,
+          "trail_breach_sessions": 2,
+          "dll_fail": false,
+          "dll_pause_days": 127,
+          "avg_dll_pause_days_per_year": 20.1594,
+          "locked_achieved": true,
+          "final_equity": 239446.0,
+          "bootstrap_funded_survival_fraction_block20": 0.1427
+        },
+        "15": {
+          "survived": false,
+          "trail_breach_sessions": 2,
+          "dll_fail": false,
+          "dll_pause_days": 143,
+          "avg_dll_pause_days_per_year": 22.6992,
+          "locked_achieved": true,
+          "final_equity": 245835.0,
+          "bootstrap_funded_survival_fraction_block20": 0.1471
+        },
+        "16": {
+          "survived": false,
+          "trail_breach_sessions": 4,
+          "dll_fail": false,
+          "dll_pause_days": 156,
+          "avg_dll_pause_days_per_year": 24.7627,
+          "locked_achieved": true,
+          "final_equity": 252224.0,
+          "bootstrap_funded_survival_fraction_block20": 0.1478
+        },
+        "17": {
+          "survived": false,
+          "trail_breach_sessions": 6,
+          "dll_fail": false,
+          "dll_pause_days": 172,
+          "avg_dll_pause_days_per_year": 27.3025,
+          "locked_achieved": true,
+          "final_equity": 258613.0,
+          "bootstrap_funded_survival_fraction_block20": 0.1502
+        }
+      },
+      "eval_by_qty": {
+        "1": {
+          "total_windows": 1532,
+          "passing_windows": 0,
+          "pass_rate": 0.0,
+          "fail_trailing": 0,
+          "fail_no_target": 1532,
+          "within_eval_contract_cap": true
+        },
+        "2": {
+          "total_windows": 1532,
+          "passing_windows": 0,
+          "pass_rate": 0.0,
+          "fail_trailing": 0,
+          "fail_no_target": 1532,
+          "within_eval_contract_cap": true
+        },
+        "3": {
+          "total_windows": 1532,
+          "passing_windows": 30,
+          "pass_rate": 0.0195822454308094,
+          "fail_trailing": 64,
+          "fail_no_target": 1438,
+          "within_eval_contract_cap": true
+        },
+        "4": {
+          "total_windows": 1532,
+          "passing_windows": 30,
+          "pass_rate": 0.0195822454308094,
+          "fail_trailing": 174,
+          "fail_no_target": 1328,
+          "within_eval_contract_cap": true
+        },
+        "5": {
+          "total_windows": 1532,
+          "passing_windows": 30,
+          "pass_rate": 0.0195822454308094,
+          "fail_trailing": 309,
+          "fail_no_target": 1193,
+          "within_eval_contract_cap": true
+        },
+        "6": {
+          "total_windows": 1532,
+          "passing_windows": 30,
+          "pass_rate": 0.0195822454308094,
+          "fail_trailing": 402,
+          "fail_no_target": 1100,
+          "within_eval_contract_cap": true
+        },
+        "7": {
+          "total_windows": 1532,
+          "passing_windows": 31,
+          "pass_rate": 0.020234986945169713,
+          "fail_trailing": 452,
+          "fail_no_target": 1049,
+          "within_eval_contract_cap": true
+        },
+        "8": {
+          "total_windows": 1532,
+          "passing_windows": 37,
+          "pass_rate": 0.024151436031331592,
+          "fail_trailing": 512,
+          "fail_no_target": 983,
+          "within_eval_contract_cap": true
+        },
+        "9": {
+          "total_windows": 1532,
+          "passing_windows": 52,
+          "pass_rate": 0.033942558746736295,
+          "fail_trailing": 570,
+          "fail_no_target": 910,
+          "within_eval_contract_cap": true
+        },
+        "10": {
+          "total_windows": 1532,
+          "passing_windows": 85,
+          "pass_rate": 0.05548302872062663,
+          "fail_trailing": 675,
+          "fail_no_target": 772,
+          "within_eval_contract_cap": true
+        },
+        "11": {
+          "total_windows": 1532,
+          "passing_windows": 126,
+          "pass_rate": 0.08224543080939947,
+          "fail_trailing": 716,
+          "fail_no_target": 690,
+          "within_eval_contract_cap": true
+        },
+        "12": {
+          "total_windows": 1532,
+          "passing_windows": 161,
+          "pass_rate": 0.10509138381201044,
+          "fail_trailing": 736,
+          "fail_no_target": 635,
+          "within_eval_contract_cap": true
+        },
+        "13": {
+          "total_windows": 1532,
+          "passing_windows": 205,
+          "pass_rate": 0.13381201044386423,
+          "fail_trailing": 758,
+          "fail_no_target": 569,
+          "within_eval_contract_cap": false
+        },
+        "14": {
+          "total_windows": 1532,
+          "passing_windows": 221,
+          "pass_rate": 0.14425587467362924,
+          "fail_trailing": 766,
+          "fail_no_target": 545,
+          "within_eval_contract_cap": false
+        },
+        "15": {
+          "total_windows": 1532,
+          "passing_windows": 233,
+          "pass_rate": 0.152088772845953,
+          "fail_trailing": 765,
+          "fail_no_target": 534,
+          "within_eval_contract_cap": false
+        },
+        "16": {
+          "total_windows": 1532,
+          "passing_windows": 252,
+          "pass_rate": 0.16449086161879894,
+          "fail_trailing": 780,
+          "fail_no_target": 500,
+          "within_eval_contract_cap": false
+        },
+        "17": {
+          "total_windows": 1532,
+          "passing_windows": 266,
+          "pass_rate": 0.17362924281984335,
+          "fail_trailing": 775,
+          "fail_no_target": 491,
+          "within_eval_contract_cap": false
+        }
+      },
+      "annual_avg_pnl_by_qty": {
+        "1": 1014.16,
+        "2": 2028.32,
+        "3": 3042.48,
+        "4": 4056.64,
+        "5": 5070.8,
+        "6": 6084.96,
+        "7": 7099.12,
+        "8": 8113.28,
+        "9": 9127.44,
+        "10": 10141.6,
+        "11": 11155.76,
+        "12": 12169.92,
+        "13": 13184.08,
+        "14": 14198.24,
+        "15": 15212.4,
+        "16": 16226.56,
+        "17": 17240.72
+      },
+      "tier_by_qty": {
+        "1": "below_floor",
+        "2": "below_floor",
+        "3": "below_floor",
+        "4": "below_floor",
+        "5": "below_floor",
+        "6": "below_floor",
+        "7": "below_floor",
+        "8": "below_floor",
+        "9": "below_floor",
+        "10": "below_floor",
+        "11": "below_floor",
+        "12": "below_floor",
+        "13": "below_floor",
+        "14": "below_floor",
+        "15": "below_floor",
+        "16": "below_floor",
+        "17": "below_floor"
+      },
+      "summary": {
+        "funded_q_max": 11,
+        "eval_pass_rate_at_funded_q_max": 0.08224543080939947,
+        "bootstrap_survival_at_funded_q_max": 0.154,
+        "annual_pnl_at_funded_q_max": 11155.76,
+        "avg_dll_pause_days_per_year_at_funded_q_max": 0.9524,
+        "tier_at_funded_q_max": "below_floor"
+      }
+    }
+  },
+  "joint_criteria_scan": {
+    "gates": {
+      "funded_survival": true,
+      "bootstrap_survival_min": 0.8,
+      "eval_pass_rate_min": 0.5
+    },
+    "meets_all_gates": [],
+    "closest_candidates_top15_by_pnl": [
+      {
+        "account_class": "150k",
+        "q": 11,
+        "avg_annual_pnl": 11155.76,
+        "bootstrap_survival": 0.154,
+        "eval_pass_rate": 0.08224543080939947,
+        "within_eval_contract_cap": true,
+        "meets_all_three_gates": false,
+        "gate_failures_if_any": [
+          "bootstrap_lt_80pct",
+          "eval_lt_50pct"
+        ]
+      },
+      {
+        "account_class": "150k",
+        "q": 10,
+        "avg_annual_pnl": 10141.6,
+        "bootstrap_survival": 0.1695,
+        "eval_pass_rate": 0.05548302872062663,
+        "within_eval_contract_cap": true,
+        "meets_all_three_gates": false,
+        "gate_failures_if_any": [
+          "bootstrap_lt_80pct",
+          "eval_lt_50pct"
+        ]
+      },
+      {
+        "account_class": "100k",
+        "q": 9,
+        "avg_annual_pnl": 9127.44,
+        "bootstrap_survival": 0.17,
+        "eval_pass_rate": 0.1481723237597911,
+        "within_eval_contract_cap": false,
+        "meets_all_three_gates": false,
+        "gate_failures_if_any": [
+          "bootstrap_lt_80pct",
+          "eval_lt_50pct"
+        ]
+      },
+      {
+        "account_class": "150k",
+        "q": 9,
+        "avg_annual_pnl": 9127.44,
+        "bootstrap_survival": 0.1791,
+        "eval_pass_rate": 0.033942558746736295,
+        "within_eval_contract_cap": true,
+        "meets_all_three_gates": false,
+        "gate_failures_if_any": [
+          "bootstrap_lt_80pct",
+          "eval_lt_50pct"
+        ]
+      },
+      {
+        "account_class": "100k",
+        "q": 8,
+        "avg_annual_pnl": 8113.28,
+        "bootstrap_survival": 0.1699,
+        "eval_pass_rate": 0.10574412532637076,
+        "within_eval_contract_cap": true,
+        "meets_all_three_gates": false,
+        "gate_failures_if_any": [
+          "bootstrap_lt_80pct",
+          "eval_lt_50pct"
+        ]
+      },
+      {
+        "account_class": "150k",
+        "q": 8,
+        "avg_annual_pnl": 8113.28,
+        "bootstrap_survival": 0.1787,
+        "eval_pass_rate": 0.024151436031331592,
+        "within_eval_contract_cap": true,
+        "meets_all_three_gates": false,
+        "gate_failures_if_any": [
+          "bootstrap_lt_80pct",
+          "eval_lt_50pct"
+        ]
+      },
+      {
+        "account_class": "50k",
+        "q": 7,
+        "avg_annual_pnl": 7099.12,
+        "bootstrap_survival": 0.1672,
+        "eval_pass_rate": 0.24216710182767623,
+        "within_eval_contract_cap": false,
+        "meets_all_three_gates": false,
+        "gate_failures_if_any": [
+          "bootstrap_lt_80pct",
+          "eval_lt_50pct"
+        ]
+      },
+      {
+        "account_class": "100k",
+        "q": 7,
+        "avg_annual_pnl": 7099.12,
+        "bootstrap_survival": 0.1756,
+        "eval_pass_rate": 0.07245430809399478,
+        "within_eval_contract_cap": true,
+        "meets_all_three_gates": false,
+        "gate_failures_if_any": [
+          "bootstrap_lt_80pct",
+          "eval_lt_50pct"
+        ]
+      },
+      {
+        "account_class": "150k",
+        "q": 7,
+        "avg_annual_pnl": 7099.12,
+        "bootstrap_survival": 0.2027,
+        "eval_pass_rate": 0.020234986945169713,
+        "within_eval_contract_cap": true,
+        "meets_all_three_gates": false,
+        "gate_failures_if_any": [
+          "bootstrap_lt_80pct",
+          "eval_lt_50pct"
+        ]
+      },
+      {
+        "account_class": "50k",
+        "q": 6,
+        "avg_annual_pnl": 6084.96,
+        "bootstrap_survival": 0.1801,
+        "eval_pass_rate": 0.2258485639686684,
+        "within_eval_contract_cap": true,
+        "meets_all_three_gates": false,
+        "gate_failures_if_any": [
+          "bootstrap_lt_80pct",
+          "eval_lt_50pct"
+        ]
+      },
+      {
+        "account_class": "100k",
+        "q": 6,
+        "avg_annual_pnl": 6084.96,
+        "bootstrap_survival": 0.1959,
+        "eval_pass_rate": 0.034595300261096605,
+        "within_eval_contract_cap": true,
+        "meets_all_three_gates": false,
+        "gate_failures_if_any": [
+          "bootstrap_lt_80pct",
+          "eval_lt_50pct"
+        ]
+      },
+      {
+        "account_class": "150k",
+        "q": 6,
+        "avg_annual_pnl": 6084.96,
+        "bootstrap_survival": 0.2133,
+        "eval_pass_rate": 0.0195822454308094,
+        "within_eval_contract_cap": true,
+        "meets_all_three_gates": false,
+        "gate_failures_if_any": [
+          "bootstrap_lt_80pct",
+          "eval_lt_50pct"
+        ]
+      },
+      {
+        "account_class": "50k",
+        "q": 5,
+        "avg_annual_pnl": 5070.8,
+        "bootstrap_survival": 0.1874,
+        "eval_pass_rate": 0.1716710182767624,
+        "within_eval_contract_cap": true,
+        "meets_all_three_gates": false,
+        "gate_failures_if_any": [
+          "bootstrap_lt_80pct",
+          "eval_lt_50pct"
+        ]
+      },
+      {
+        "account_class": "100k",
+        "q": 5,
+        "avg_annual_pnl": 5070.8,
+        "bootstrap_survival": 0.2177,
+        "eval_pass_rate": 0.022845953002610966,
+        "within_eval_contract_cap": true,
+        "meets_all_three_gates": false,
+        "gate_failures_if_any": [
+          "bootstrap_lt_80pct",
+          "eval_lt_50pct"
+        ]
+      },
+      {
+        "account_class": "150k",
+        "q": 5,
+        "avg_annual_pnl": 5070.8,
+        "bootstrap_survival": 0.2327,
+        "eval_pass_rate": 0.0195822454308094,
+        "within_eval_contract_cap": true,
+        "meets_all_three_gates": false,
+        "gate_failures_if_any": [
+          "bootstrap_lt_80pct",
+          "eval_lt_50pct"
+        ]
+      }
+    ]
+  },
+  "stop_conditions": {
+    "wave0c_material_regression_dll_semantics": false,
+    "no_joint_pass_funded_bootstrap80_eval50": true,
+    "no_funded_qty_reaches_bootstrap_80pct_any_class": true,
+    "wave0c_regression_detail": {
+      "funded_survived_terminal": true,
+      "funded_survived_pause": true,
+      "eval_passes_terminal_q1": 30,
+      "eval_passes_pause_q1": 30,
+      "eval_rates": {
+        "terminal": 0.0195822454308094,
+        "pause": 0.0195822454308094
+      },
+      "rel_eval_rate_change_vs_terminal": 0.0
+    }
+  }
+}
