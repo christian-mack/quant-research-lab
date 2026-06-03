@@ -288,6 +288,34 @@
 
 ---
 
+## 2026-06-01 — ICT daily-bias corpus ingested (JadeCap primary, TTrades supplement) — PROVENANCE / RESULT-LOGGED
+
+**Wave:** Parallel track — ICT source-material ingestion (NOT a Phase 2 quant hypothesis; no edge claim, no backtest).
+
+**Structural rationale:** A SEPARATE daily-bias corpus (two teaching videos) is ingested so a human (the ICT strategy chat) can build a daily-bias spec downstream from raw timestamped wording. This corpus is kept **distinct** from the 2022 mentorship midnight-open / Power 3 maps — no merge, no cross-reference, no reconciliation between the two creators.
+
+**Specification (ingestion only):**
+- **Sources (`data/raw/ict_sources/bias_manifest.csv`, tracked via `git add -f` since `/data/` is gitignored):**
+  - `x4FJVEZUXhc` — JadeCap, "The Only ICT Daily Bias Video You'll Ever Need" — **primary** (`primary: true`). Title verified against the live video and corrected from the provisional hand-off title.
+  - `-KKuZb5Z5aU` — TTrades, "Easy Daily Bias - Mechanical Framework" — **supplement** (`primary: false`). Title verified/corrected. Leading-hyphen id handled as a manifest VALUE (never a bare CLI flag).
+- **Retrieval:** `youtube-transcript-api` (auto-generated EN captions for both; no manual captions). `yt-dlp` fallback not needed; **whisper not used / not approved**. Both deps were approved+installed in Phase A — none reinstalled.
+- **Normalization (LOCAL / gitignored):** `data/processed/transcripts/bias/<video_id>.json` — full third-party content, not committed (JadeCap 383 segments, TTrades 490 segments).
+- **Concept maps (TRACKED):** pure case-insensitive, alphanumeric-boundary keyword windowing (`±2` context segments) over the 8-group `BIAS_LEXICON`, one map PER video, never merged.
+
+**Tracked-path choice (flagged):** Concept maps are placed under **`docs/ict_bias_concept_maps/`** (option (a) from the hand-off) rather than a `results/` `.gitignore` negation, since `docs/` is already tracked and resolves cleanly from a fresh clone. Map files:
+- `docs/ict_bias_concept_maps/jadecap_primary.json` — 91 hits across 8 concept groups.
+- `docs/ict_bias_concept_maps/ttrades_supplement.json` — 69 hits across 8 concept groups.
+
+**Provenance:** Maps generated from the working tree atop commit `75c84e5`; each map's metadata carries `creator`, `role`, `video_id`, `primary`, and `git_sha` (the 2022 maps embed no SHA, so this is an added-provenance improvement, not a parity requirement). Both maps' `structure` group is legitimately empty — neither transcript uses "structure"/"shift"/"displacement"/"bos"/"mss" (verified against raw text), not a matching bug.
+
+**Reuse / module change:** Reused `src/quant_research/utils/transcript_ingest.py` (Phase A). Added backward-compatibly (no fork): `BIAS_LEXICON`, `BiasManifestRow`, `read_bias_manifest`, `normalize_bias_transcript`, `build_bias_concept_map`. The custom-lexicon path on `build_*` already existed; per-video creator/role metadata is the only new emission. Tests extended in `tests/utils/test_transcript_ingest.py` (word-boundary: "consequent encroachment" matches; short tokens "bos"/"mss" do not match inside "embossed"/"dismiss"; bare "ce" omitted) — all 231 pass.
+
+**Out of scope (not done):** no bias-rule synthesis, no JadeCap-vs-TTrades reconciliation, no 2022 midnight-open / Power 3 folding, no strategy/backtest/NT8 code.
+
+**Artifact:** `notebooks/exploration/2026-06-01_ict_daily_bias_extraction.ipynb`; `docs/ict_bias_concept_maps/{jadecap_primary,ttrades_supplement}.json`; `data/raw/ict_sources/bias_manifest.csv`; `src/quant_research/utils/transcript_ingest.py`; `tests/utils/test_transcript_ingest.py`. Commit SHA recorded in the commit that adds these maps.
+
+---
+
 ## Entry template
 
 Copy from `## YYYY-MM-DD` through **`Artifact:`** for each new hypothesis or baseline record.
