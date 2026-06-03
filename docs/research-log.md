@@ -330,6 +330,18 @@
 
 **Artifact:** `src/quant_research/utils/transcript_ingest.py` (`BIAS_LEXICON_EXTENSION`); `tests/utils/test_transcript_ingest.py`; `docs/ict_bias_concept_maps/{jadecap_primary,ttrades_supplement}.json`; feature commit `15c31fd`; git_sha stamp commit `8112098`.
 
+## 2026-06-02 — TTrades CISD + SMT confirmation primitives ingested (distinct `cisd_smt` mini-corpus) — PROVENANCE / RESULT-LOGGED
+
+**Wave:** Parallel track — ICT source-material ingestion (NOT a Phase 2 quant hypothesis; no edge claim, no backtest).
+
+**Context:** The daily-bias module depends on two TTrades confirmation-primitive sub-specs — Change in State of Delivery (CISD) and SMT Divergence. Extracted both as a NEW, distinct `cisd_smt` mini-corpus, kept SEPARATE from the 2022 mentorship corpus and the daily-bias corpus (never merged/cross-referenced). Manifest `data/raw/ict_sources/cisd_smt_manifest.csv` (titles verified against the live videos and corrected from provisional). Transcripts fetched via `youtube-transcript-api` (auto_subs) on the pinned `.venv` (`quant-venv`) kernel — see lessons-log 2026-06-01 nbconvert silent-failure entry; no whisper, no re-fetch beyond the two videos, no network beyond transcript fetch.
+
+**Result (ingestion only):** One concept map PER VIDEO using a new additive `CISD_SMT_LEXICON` (groups: cisd_core, cisd_mechanics, smt_core, smt_mechanics, instruments, shared_confirm); existing lexicons untouched. Per-group hit counts — `ttrades_cisd.json` (`CHIK5oBRKiw`, 369 segments): cisd_core 19, cisd_mechanics 14, smt_core 0, smt_mechanics 0, instruments 0, shared_confirm 23 (total 56); `ttrades_smt.json` (`q1NmxUTm4n4`, 200 segments): cisd_core 0, cisd_mechanics 0, smt_core 24, smt_mechanics 12, instruments 14, shared_confirm 5 (total 55). Clean per-video separation (the CISD video has zero SMT/instrument hits and vice versa). Guard tests extended (cisd/smt token boundaries; "dow" not inside "down"; "euro" not inside "european"; displacement/divergence and "higher high" phrase matches) — all 55 pass.
+
+**Out of scope:** no CISD/SMT definition synthesis, no cross-video reconciliation, no folding into the bias or 2022 corpora, no strategy/backtest/NT8 code. Raw transcripts stay LOCAL/gitignored under `data/processed/transcripts/cisd_smt/`.
+
+**Artifact:** `data/raw/ict_sources/cisd_smt_manifest.csv`; `src/quant_research/utils/transcript_ingest.py` (`CISD_SMT_LEXICON`); `tests/utils/test_transcript_ingest.py`; `docs/ict_bias_concept_maps/{ttrades_cisd,ttrades_smt}.json`; `notebooks/exploration/2026-06-02_ict_cisd_smt_extraction.ipynb` (local orchestration); feature commit `9ad932e`; git_sha stamp commit `ad42034`.
+
 ---
 
 ## Entry template
