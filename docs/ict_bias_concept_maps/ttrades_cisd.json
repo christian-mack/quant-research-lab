@@ -6,7 +6,7 @@
   "role": "primary",
   "corpus": "cisd_smt",
   "primary": true,
-  "git_sha": "a2b041e",
+  "git_sha": "9ad932e",
   "concepts": {
     "cisd_core": [
       {
