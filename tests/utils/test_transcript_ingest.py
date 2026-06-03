@@ -12,6 +12,7 @@ from pathlib import Path
 from quant_research.utils.transcript_ingest import (
     BIAS_LEXICON,
     BIAS_LEXICON_EXTENSION,
+    CISD_SMT_LEXICON,
     CONCEPT_LEXICON,
     BiasManifestRow,
     ManifestRow,
@@ -530,6 +531,98 @@ def test_extended_lexicon_omits_bare_two_letter_tokens() -> None:
     flat = {kw for kws in BIAS_LEXICON_EXTENSION.values() for kw in kws}
     assert "eq" not in flat
     assert "po3" not in flat
+
+
+# --------------------------------------------------------------------------------------------
+# CISD + SMT sub-spec lexicon (TTrades confirmation primitives): boundary-guard correctness
+# --------------------------------------------------------------------------------------------
+def test_cisd_smt_lexicon_has_expected_groups_and_is_disjoint() -> None:
+    expected = {
+        "cisd_core",
+        "cisd_mechanics",
+        "smt_core",
+        "smt_mechanics",
+        "instruments",
+        "shared_confirm",
+    }
+    assert set(CISD_SMT_LEXICON) == expected
+    # The mini-corpus lexicon must not collide with any existing lexicon's group names.
+    assert set(CISD_SMT_LEXICON).isdisjoint(set(BIAS_LEXICON))
+    assert set(CISD_SMT_LEXICON).isdisjoint(set(BIAS_LEXICON_EXTENSION))
+    assert set(CISD_SMT_LEXICON).isdisjoint(set(CONCEPT_LEXICON))
+
+
+def test_cisd_smt_lexicon_cisd_matches_token_not_inside_word() -> None:
+    segments = _segments("we saw a CISD here", "the discisding noise", "cisding along")
+    hits = find_keyword_hits(segments, CISD_SMT_LEXICON["cisd_core"], context=0)
+    assert [h["start"] for h in hits] == [0.0]
+    assert "cisd" in hits[0]["matched_keywords"]
+
+
+def test_cisd_smt_lexicon_smt_matches_token_not_inside_word() -> None:
+    segments = _segments("an SMT divergence formed", "the smt held", "transmit the order")
+    hits = find_keyword_hits(segments, ["smt"], context=0)
+    assert [h["start"] for h in hits] == [0.0, 1.0]
+
+
+def test_cisd_smt_lexicon_dow_matches_token_not_inside_down() -> None:
+    # "dow" (the index) must match "dow"/"Dow" but never inside "down"/"download".
+    segments = _segments("price moved down then up", "the Dow made a higher high", "dow diverged")
+    hits = find_keyword_hits(segments, ["dow"], context=0)
+    assert [h["start"] for h in hits] == [1.0, 2.0]
+
+
+def test_cisd_smt_lexicon_euro_not_inside_european() -> None:
+    segments = _segments("the european session opened", "the euro made a low")
+    hits = find_keyword_hits(segments, ["euro"], context=0)
+    assert [h["start"] for h in hits] == [1.0]
+
+
+def test_cisd_smt_lexicon_displacement_and_divergence_match() -> None:
+    segments = _segments("a strong displacement lower", "clear divergence at the highs")
+    disp = find_keyword_hits(segments, ["displacement"], context=0)
+    div = find_keyword_hits(segments, ["divergence"], context=0)
+    assert [h["start"] for h in disp] == [0.0]
+    assert [h["start"] for h in div] == [1.0]
+
+
+def test_cisd_smt_lexicon_higher_high_phrase_matches_across_spaces() -> None:
+    segments = _segments("it made a higher high here", "a higher   high again", "just higher now")
+    hits = find_keyword_hits(segments, ["higher high"], context=0)
+    assert [h["start"] for h in hits] == [0.0, 1.0]
+
+
+def test_cisd_smt_lexicon_omits_bare_two_letter_tickers() -> None:
+    flat = {kw for kws in CISD_SMT_LEXICON.values() for kw in kws}
+    for ticker in ("es", "nq", "ym", "ob"):
+        assert ticker not in flat
+
+
+def test_cisd_smt_lexicon_builds_per_video_map_with_custom_lexicon() -> None:
+    transcript = normalize_bias_transcript(
+        video_id="CHIK5oBRKiw",
+        title="Change In State Of Delivery",
+        url="https://www.youtube.com/watch?v=CHIK5oBRKiw",
+        creator="ttrades",
+        role="primary",
+        corpus="cisd_smt",
+        source="auto_subs",
+        raw_segments=_segments(
+            "this is a change in state of delivery",
+            "price closes below the up close candle",
+            "an SMT divergence between nasdaq and the dow",
+        ),
+    )
+    cmap = build_bias_concept_map(transcript, lexicon=CISD_SMT_LEXICON, git_sha="deadbee")
+    assert cmap["corpus"] == "cisd_smt"
+    assert cmap["creator"] == "ttrades"
+    assert set(cmap["concepts"]) == set(CISD_SMT_LEXICON)
+    core_hits = cmap["concepts"]["cisd_core"]
+    assert any("change in state of delivery" in hit["matched_keywords"] for hit in core_hits)
+    smt_hits = cmap["concepts"]["smt_core"]
+    assert any("smt" in hit["matched_keywords"] for hit in smt_hits)
+    instrument_hits = cmap["concepts"]["instruments"]
+    assert any("nasdaq" in hit["matched_keywords"] for hit in instrument_hits)
 
 
 def test_build_bias_concept_map_supplement_sets_primary_false() -> None:

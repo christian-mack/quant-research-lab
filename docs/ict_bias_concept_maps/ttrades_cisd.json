@@ -1,0 +1,2160 @@
+{
+  "video_id": "CHIK5oBRKiw",
+  "title": "Change In State Of Delivery [CISD] - Orderblock Formation - ICT Concepts",
+  "url": "https://www.youtube.com/watch?v=CHIK5oBRKiw",
+  "creator": "ttrades",
+  "role": "primary",
+  "corpus": "cisd_smt",
+  "primary": true,
+  "git_sha": "a2b041e",
+  "concepts": {
+    "cisd_core": [
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 27.16,
+        "text": "is the change in state of delivery well",
+        "matched_keywords": [
+          "change in state of delivery",
+          "state of delivery"
+        ],
+        "end": 31.48,
+        "context": [
+          {
+            "start": 21.88,
+            "end": 27.16,
+            "text": "deviations and AMD to create an entry"
+          },
+          {
+            "start": 24.72,
+            "end": 29.56,
+            "text": "model so here we are in the PDF and what"
+          },
+          {
+            "start": 27.16,
+            "end": 31.48,
+            "text": "is the change in state of delivery well"
+          },
+          {
+            "start": 29.56,
+            "end": 33.96,
+            "text": "the change State delivery is when price"
+          },
+          {
+            "start": 31.48,
+            "end": 36.28,
+            "text": "goes from bullish to bearish or from"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 46.76,
+        "text": "when the change in state of delivery",
+        "matched_keywords": [
+          "change in state of delivery",
+          "state of delivery"
+        ],
+        "end": 51.079,
+        "context": [
+          {
+            "start": 41.36,
+            "end": 46.76,
+            "text": "important level this up close candle"
+          },
+          {
+            "start": 43.64,
+            "end": 48.68,
+            "text": "here gets closed below here and that is"
+          },
+          {
+            "start": 46.76,
+            "end": 51.079,
+            "text": "when the change in state of delivery"
+          },
+          {
+            "start": 48.68,
+            "end": 53.199,
+            "text": "occurs when the opening price of this up"
+          },
+          {
+            "start": 51.079,
+            "end": 55.559,
+            "text": "closed candle or series of up closed"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 68.799,
+        "text": "state of delivery when price returns I",
+        "matched_keywords": [
+          "state of delivery"
+        ],
+        "end": 73.47900000000001,
+        "context": [
+          {
+            "start": 63.76,
+            "end": 68.79899999999999,
+            "text": "and then closes over the series or"
+          },
+          {
+            "start": 66.28,
+            "end": 71.2,
+            "text": "single down Clos candle changing the"
+          },
+          {
+            "start": 68.799,
+            "end": 73.47900000000001,
+            "text": "state of delivery when price returns I"
+          },
+          {
+            "start": 71.2,
+            "end": 75.60000000000001,
+            "text": "can anticipate a reaction to trade"
+          },
+          {
+            "start": 73.479,
+            "end": 77.759,
+            "text": "higher now let's take a look at two more"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 99.28,
+        "text": "in state of delivery so let's go into",
+        "matched_keywords": [
+          "state of delivery"
+        ],
+        "end": 102.799,
+        "context": [
+          {
+            "start": 94.6,
+            "end": 99.28,
+            "text": "important level I will use the opening"
+          },
+          {
+            "start": 97.04,
+            "end": 101.07900000000001,
+            "text": "price of the first candle as my change"
+          },
+          {
+            "start": 99.28,
+            "end": 102.799,
+            "text": "in state of delivery so let's go into"
+          },
+          {
+            "start": 101.079,
+            "end": 104.39899999999999,
+            "text": "the charts and look at a few examples of"
+          },
+          {
+            "start": 102.799,
+            "end": 105.96000000000001,
+            "text": "this so here we are with our first"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 161.0,
+        "text": "price to change the state of delivery",
+        "matched_keywords": [
+          "state of delivery"
+        ],
+        "end": 165.879,
+        "context": [
+          {
+            "start": 155.16,
+            "end": 161.0,
+            "text": "level and then now we get a new sweep of"
+          },
+          {
+            "start": 158.319,
+            "end": 163.35999999999999,
+            "text": "a high so now where would I look for"
+          },
+          {
+            "start": 161.0,
+            "end": 165.879,
+            "text": "price to change the state of delivery"
+          },
+          {
+            "start": 163.36,
+            "end": 169.56,
+            "text": "I'd want to see price close below these"
+          },
+          {
+            "start": 165.879,
+            "end": 169.56,
+            "text": "series of up close candles"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 174.76,
+        "text": "changed the state of delivery from",
+        "matched_keywords": [
+          "state of delivery"
+        ],
+        "end": 178.959,
+        "context": [
+          {
+            "start": 169.72,
+            "end": 174.76,
+            "text": "here and you can see price does close"
+          },
+          {
+            "start": 172.72,
+            "end": 176.56,
+            "text": "below those candles now that we have"
+          },
+          {
+            "start": 174.76,
+            "end": 178.959,
+            "text": "changed the state of delivery from"
+          },
+          {
+            "start": 176.56,
+            "end": 182.04,
+            "text": "bullish to bearish I can be looking for"
+          },
+          {
+            "start": 178.959,
+            "end": 184.56,
+            "text": "price to trade lower where is lower well"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 246.319,
+        "text": "this can't change the state of delivery",
+        "matched_keywords": [
+          "state of delivery"
+        ],
+        "end": 250.11999999999998,
+        "context": [
+          {
+            "start": 240.2,
+            "end": 246.319,
+            "text": "so just to review price goes sweeps an"
+          },
+          {
+            "start": 243.159,
+            "end": 248.28,
+            "text": "old high then displaces down however"
+          },
+          {
+            "start": 246.319,
+            "end": 250.11999999999998,
+            "text": "this can't change the state of delivery"
+          },
+          {
+            "start": 248.28,
+            "end": 252.36,
+            "text": "we get a lower time frame sweep which"
+          },
+          {
+            "start": 250.12,
+            "end": 254.4,
+            "text": "changes the state of delivery and then"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 250.12,
+        "text": "changes the state of delivery and then",
+        "matched_keywords": [
+          "state of delivery"
+        ],
+        "end": 254.4,
+        "context": [
+          {
+            "start": 246.319,
+            "end": 250.11999999999998,
+            "text": "this can't change the state of delivery"
+          },
+          {
+            "start": 248.28,
+            "end": 252.36,
+            "text": "we get a lower time frame sweep which"
+          },
+          {
+            "start": 250.12,
+            "end": 254.4,
+            "text": "changes the state of delivery and then"
+          },
+          {
+            "start": 252.36,
+            "end": 256.16,
+            "text": "we can anticipate price to trade lower"
+          },
+          {
+            "start": 254.4,
+            "end": 258.28000000000003,
+            "text": "to London lows and the standard"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 294.52,
+        "text": "a change in the state of delivery after",
+        "matched_keywords": [
+          "change in the state of delivery",
+          "state of delivery"
+        ],
+        "end": 299.08,
+        "context": [
+          {
+            "start": 290.28,
+            "end": 294.52,
+            "text": "confirm this bias so here we are on the"
+          },
+          {
+            "start": 292.44,
+            "end": 296.44,
+            "text": "hourly chart and ideally we want to see"
+          },
+          {
+            "start": 294.52,
+            "end": 299.08,
+            "text": "a change in the state of delivery after"
+          },
+          {
+            "start": 296.44,
+            "end": 300.88,
+            "text": "engaging our higher time frame PD array"
+          },
+          {
+            "start": 299.08,
+            "end": 303.08,
+            "text": "well here is is our daily fair value Gap"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 303.08,
+        "text": "get a change in the state of delivery",
+        "matched_keywords": [
+          "change in the state of delivery",
+          "state of delivery"
+        ],
+        "end": 307.32,
+        "context": [
+          {
+            "start": 299.08,
+            "end": 303.08,
+            "text": "well here is is our daily fair value Gap"
+          },
+          {
+            "start": 300.88,
+            "end": 304.68,
+            "text": "or our higher time frame PD array do we"
+          },
+          {
+            "start": 303.08,
+            "end": 307.32,
+            "text": "get a change in the state of delivery"
+          },
+          {
+            "start": 304.68,
+            "end": 309.84000000000003,
+            "text": "after engaging with it we do as we"
+          },
+          {
+            "start": 307.32,
+            "end": 311.96,
+            "text": "displace and close below a series of up"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 375.44,
+        "text": "see a change in state of delivery or",
+        "matched_keywords": [
+          "change in state of delivery",
+          "state of delivery"
+        ],
+        "end": 379.8,
+        "context": [
+          {
+            "start": 370.639,
+            "end": 375.44,
+            "text": "up closed back in the range so if I'd"
+          },
+          {
+            "start": 373.68,
+            "end": 377.56,
+            "text": "want to see this move down I'd want to"
+          },
+          {
+            "start": 375.44,
+            "end": 379.8,
+            "text": "see a change in state of delivery or"
+          },
+          {
+            "start": 377.56,
+            "end": 382.24,
+            "text": "Price close below the series of up Clos"
+          },
+          {
+            "start": 379.8,
+            "end": 382.24,
+            "text": "candles"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 385.44,
+        "text": "it as a change in state of delivery so",
+        "matched_keywords": [
+          "change in state of delivery",
+          "state of delivery"
+        ],
+        "end": 389.16,
+        "context": [
+          {
+            "start": 379.8,
+            "end": 382.24,
+            "text": "candles"
+          },
+          {
+            "start": 382.599,
+            "end": 387.4,
+            "text": "here here we get that close validating"
+          },
+          {
+            "start": 385.44,
+            "end": 389.16,
+            "text": "it as a change in state of delivery so"
+          },
+          {
+            "start": 387.4,
+            "end": 391.79999999999995,
+            "text": "I'd be looking to enter a short position"
+          },
+          {
+            "start": 389.16,
+            "end": 394.59900000000005,
+            "text": "here My Stop on this high now what can I"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 457.44,
+        "text": "state of delivery on the hourly chart",
+        "matched_keywords": [
+          "state of delivery"
+        ],
+        "end": 462.68,
+        "context": [
+          {
+            "start": 453.96,
+            "end": 457.44,
+            "text": "which in this case was a daily fair"
+          },
+          {
+            "start": 455.4,
+            "end": 459.75899999999996,
+            "text": "value Gap we waited for the change in"
+          },
+          {
+            "start": 457.44,
+            "end": 462.68,
+            "text": "state of delivery on the hourly chart"
+          },
+          {
+            "start": 459.759,
+            "end": 464.8,
+            "text": "and then the next day we had a sweep of"
+          },
+          {
+            "start": 462.68,
+            "end": 467.72,
+            "text": "buy side liquidity which is an area to"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 522.959,
+        "text": "is our change in state of delivery now",
+        "matched_keywords": [
+          "change in state of delivery",
+          "state of delivery"
+        ],
+        "end": 527.7199999999999,
+        "context": [
+          {
+            "start": 517.839,
+            "end": 522.9590000000001,
+            "text": "below it"
+          },
+          {
+            "start": 519.76,
+            "end": 525.6,
+            "text": "yet and there is our close below so that"
+          },
+          {
+            "start": 522.959,
+            "end": 527.7199999999999,
+            "text": "is our change in state of delivery now"
+          },
+          {
+            "start": 525.6,
+            "end": 530.2,
+            "text": "if I'm looking to take the first entry"
+          },
+          {
+            "start": 527.72,
+            "end": 531.76,
+            "text": "looking to enter here at the change of"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 530.2,
+        "text": "state of delivery or when it retests the",
+        "matched_keywords": [
+          "state of delivery"
+        ],
+        "end": 534.44,
+        "context": [
+          {
+            "start": 525.6,
+            "end": 530.2,
+            "text": "if I'm looking to take the first entry"
+          },
+          {
+            "start": 527.72,
+            "end": 531.76,
+            "text": "looking to enter here at the change of"
+          },
+          {
+            "start": 530.2,
+            "end": 534.44,
+            "text": "state of delivery or when it retests the"
+          },
+          {
+            "start": 531.76,
+            "end": 537.12,
+            "text": "order block my stop on the manipulation"
+          },
+          {
+            "start": 534.44,
+            "end": 540.12,
+            "text": "High which swept and then for targets I"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 626.079,
+        "text": "see a change in the state of delivery or",
+        "matched_keywords": [
+          "change in the state of delivery",
+          "state of delivery"
+        ],
+        "end": 630.56,
+        "context": [
+          {
+            "start": 620.519,
+            "end": 626.079,
+            "text": "-2.5 and Below these lows so if this is"
+          },
+          {
+            "start": 623.8,
+            "end": 628.519,
+            "text": "going to become manipulation I'd want to"
+          },
+          {
+            "start": 626.079,
+            "end": 630.56,
+            "text": "see a change in the state of delivery or"
+          },
+          {
+            "start": 628.519,
+            "end": 633.5600000000001,
+            "text": "Price close close over the series of"
+          },
+          {
+            "start": 630.56,
+            "end": 633.56,
+            "text": "down close candles"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 652.76,
+        "text": "change and state of delivery or the",
+        "matched_keywords": [
+          "state of delivery"
+        ],
+        "end": 657.4399999999999,
+        "context": [
+          {
+            "start": 647.32,
+            "end": 652.7600000000001,
+            "text": "first Target so if I'm looking for the"
+          },
+          {
+            "start": 649.6,
+            "end": 654.2,
+            "text": "first entry I'm looking to enter on this"
+          },
+          {
+            "start": 652.76,
+            "end": 657.4399999999999,
+            "text": "change and state of delivery or the"
+          },
+          {
+            "start": 654.2,
+            "end": 661.0400000000001,
+            "text": "order block with my stop on the"
+          },
+          {
+            "start": 657.44,
+            "end": 661.0400000000001,
+            "text": "manipulation targeting this"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 701.04,
+        "text": "before change in state of delivery once",
+        "matched_keywords": [
+          "change in state of delivery",
+          "state of delivery"
+        ],
+        "end": 705.92,
+        "context": [
+          {
+            "start": 696.48,
+            "end": 701.04,
+            "text": "thing is manipulation so you can see we"
+          },
+          {
+            "start": 698.6,
+            "end": 703.8000000000001,
+            "text": "have manipulation over an old high"
+          },
+          {
+            "start": 701.04,
+            "end": 705.92,
+            "text": "before change in state of delivery once"
+          },
+          {
+            "start": 703.8,
+            "end": 708.3199999999999,
+            "text": "those two things occur I Look to project"
+          },
+          {
+            "start": 705.92,
+            "end": 711.24,
+            "text": "out this manipulation leg to give myself"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 736.72,
+        "text": "the change in state of delivery or an",
+        "matched_keywords": [
+          "change in state of delivery",
+          "state of delivery"
+        ],
+        "end": 740.9590000000001,
+        "context": [
+          {
+            "start": 731.639,
+            "end": 736.72,
+            "text": "we're going to talk about in this video"
+          },
+          {
+            "start": 733.279,
+            "end": 738.36,
+            "text": "is combining AMD or the Box setup with"
+          },
+          {
+            "start": 736.72,
+            "end": 740.9590000000001,
+            "text": "the change in state of delivery or an"
+          },
+          {
+            "start": 738.36,
+            "end": 743.8000000000001,
+            "text": "order block formation now I posted on my"
+          },
+          {
+            "start": 740.959,
+            "end": 746.279,
+            "text": "community tab this post and so we're"
+          }
+        ]
+      }
+    ],
+    "cisd_mechanics": [
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 41.36,
+        "text": "important level this up close candle",
+        "matched_keywords": [
+          "up close candle"
+        ],
+        "end": 46.76,
+        "context": [
+          {
+            "start": 36.28,
+            "end": 41.36,
+            "text": "this example here price is moving up"
+          },
+          {
+            "start": 38.96,
+            "end": 43.64,
+            "text": "into a higher time frame PD array or"
+          },
+          {
+            "start": 41.36,
+            "end": 46.76,
+            "text": "important level this up close candle"
+          },
+          {
+            "start": 43.64,
+            "end": 48.68,
+            "text": "here gets closed below here and that is"
+          },
+          {
+            "start": 46.76,
+            "end": 51.079,
+            "text": "when the change in state of delivery"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 48.68,
+        "text": "occurs when the opening price of this up",
+        "matched_keywords": [
+          "opening price"
+        ],
+        "end": 53.199,
+        "context": [
+          {
+            "start": 43.64,
+            "end": 48.68,
+            "text": "here gets closed below here and that is"
+          },
+          {
+            "start": 46.76,
+            "end": 51.079,
+            "text": "when the change in state of delivery"
+          },
+          {
+            "start": 48.68,
+            "end": 53.199,
+            "text": "occurs when the opening price of this up"
+          },
+          {
+            "start": 51.079,
+            "end": 55.559,
+            "text": "closed candle or series of up closed"
+          },
+          {
+            "start": 53.199,
+            "end": 57.68,
+            "text": "candles gets closed below after being"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 79.96,
+        "text": "closed candles I use the opening price",
+        "matched_keywords": [
+          "opening price"
+        ],
+        "end": 84.79899999999999,
+        "context": [
+          {
+            "start": 75.6,
+            "end": 79.96,
+            "text": "examples now when there is more than one"
+          },
+          {
+            "start": 77.759,
+            "end": 82.36,
+            "text": "up closed candle or a series of up"
+          },
+          {
+            "start": 79.96,
+            "end": 84.79899999999999,
+            "text": "closed candles I use the opening price"
+          },
+          {
+            "start": 82.36,
+            "end": 87.52,
+            "text": "of the first candle so I will look for"
+          },
+          {
+            "start": 84.799,
+            "end": 89.36000000000001,
+            "text": "this price to be closed below and then"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 133.599,
+        "text": "are the series or single up close candle",
+        "matched_keywords": [
+          "up close candle"
+        ],
+        "end": 138.23899999999998,
+        "context": [
+          {
+            "start": 130.28,
+            "end": 133.599,
+            "text": "but we'll go ahead and Mark it out"
+          },
+          {
+            "start": 131.48,
+            "end": 136.04,
+            "text": "without one so what I'm looking for here"
+          },
+          {
+            "start": 133.599,
+            "end": 138.23899999999998,
+            "text": "are the series or single up close candle"
+          },
+          {
+            "start": 136.04,
+            "end": 140.64,
+            "text": "that made the new high before displacing"
+          },
+          {
+            "start": 138.239,
+            "end": 144.56,
+            "text": "and closing below now where would that"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 146.16,
+        "text": "displacement down and I'd want to see a",
+        "matched_keywords": [
+          "displacement"
+        ],
+        "end": 151.2,
+        "context": [
+          {
+            "start": 140.64,
+            "end": 146.16,
+            "text": "be right here we have one two candles"
+          },
+          {
+            "start": 144.56,
+            "end": 147.959,
+            "text": "that made the new high before the"
+          },
+          {
+            "start": 146.16,
+            "end": 151.2,
+            "text": "displacement down and I'd want to see a"
+          },
+          {
+            "start": 147.959,
+            "end": 153.239,
+            "text": "close below here"
+          },
+          {
+            "start": 151.2,
+            "end": 155.16,
+            "text": "so you can see price is failing to close"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 147.959,
+        "text": "close below here",
+        "matched_keywords": [
+          "close below"
+        ],
+        "end": 153.239,
+        "context": [
+          {
+            "start": 144.56,
+            "end": 147.959,
+            "text": "that made the new high before the"
+          },
+          {
+            "start": 146.16,
+            "end": 151.2,
+            "text": "displacement down and I'd want to see a"
+          },
+          {
+            "start": 147.959,
+            "end": 153.239,
+            "text": "close below here"
+          },
+          {
+            "start": 151.2,
+            "end": 155.16,
+            "text": "so you can see price is failing to close"
+          },
+          {
+            "start": 153.239,
+            "end": 158.31900000000002,
+            "text": "below this"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 163.36,
+        "text": "I'd want to see price close below these",
+        "matched_keywords": [
+          "close below"
+        ],
+        "end": 169.56,
+        "context": [
+          {
+            "start": 158.319,
+            "end": 163.35999999999999,
+            "text": "a high so now where would I look for"
+          },
+          {
+            "start": 161.0,
+            "end": 165.879,
+            "text": "price to change the state of delivery"
+          },
+          {
+            "start": 163.36,
+            "end": 169.56,
+            "text": "I'd want to see price close below these"
+          },
+          {
+            "start": 165.879,
+            "end": 169.56,
+            "text": "series of up close candles"
+          },
+          {
+            "start": 169.72,
+            "end": 174.76,
+            "text": "here and you can see price does close"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 307.32,
+        "text": "displace and close below a series of up",
+        "matched_keywords": [
+          "close below"
+        ],
+        "end": 311.96,
+        "context": [
+          {
+            "start": 303.08,
+            "end": 307.32,
+            "text": "get a change in the state of delivery"
+          },
+          {
+            "start": 304.68,
+            "end": 309.84000000000003,
+            "text": "after engaging with it we do as we"
+          },
+          {
+            "start": 307.32,
+            "end": 311.96,
+            "text": "displace and close below a series of up"
+          },
+          {
+            "start": 309.84,
+            "end": 314.19899999999996,
+            "text": "Clos candles here now what else can we"
+          },
+          {
+            "start": 311.96,
+            "end": 316.919,
+            "text": "do from my latest videos to give us a"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 377.56,
+        "text": "Price close below the series of up Clos",
+        "matched_keywords": [
+          "close below"
+        ],
+        "end": 382.24,
+        "context": [
+          {
+            "start": 373.68,
+            "end": 377.56,
+            "text": "want to see this move down I'd want to"
+          },
+          {
+            "start": 375.44,
+            "end": 379.8,
+            "text": "see a change in state of delivery or"
+          },
+          {
+            "start": 377.56,
+            "end": 382.24,
+            "text": "Price close below the series of up Clos"
+          },
+          {
+            "start": 379.8,
+            "end": 382.24,
+            "text": "candles"
+          },
+          {
+            "start": 382.599,
+            "end": 387.4,
+            "text": "here here we get that close validating"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 423.599,
+        "text": "in pretty choppy some displacement",
+        "matched_keywords": [
+          "displacement"
+        ],
+        "end": 428.919,
+        "context": [
+          {
+            "start": 418.4,
+            "end": 423.039,
+            "text": "in"
+          },
+          {
+            "start": 420.0,
+            "end": 423.039,
+            "text": "so here we get tagged"
+          },
+          {
+            "start": 423.599,
+            "end": 428.919,
+            "text": "in pretty choppy some displacement"
+          },
+          {
+            "start": 430.919,
+            "end": 437.0,
+            "text": "down and zooming back out there we go"
+          },
+          {
+            "start": 433.96,
+            "end": 441.08,
+            "text": "and we hit the low you can see we hit"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 519.76,
+        "text": "yet and there is our close below so that",
+        "matched_keywords": [
+          "close below"
+        ],
+        "end": 525.6,
+        "context": [
+          {
+            "start": 515.36,
+            "end": 519.76,
+            "text": "candle so you can see we have not closed"
+          },
+          {
+            "start": 517.839,
+            "end": 522.9590000000001,
+            "text": "below it"
+          },
+          {
+            "start": 519.76,
+            "end": 525.6,
+            "text": "yet and there is our close below so that"
+          },
+          {
+            "start": 522.959,
+            "end": 527.7199999999999,
+            "text": "is our change in state of delivery now"
+          },
+          {
+            "start": 525.6,
+            "end": 530.2,
+            "text": "if I'm looking to take the first entry"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 557.68,
+        "text": "here and close below them and now we",
+        "matched_keywords": [
+          "close below"
+        ],
+        "end": 562.279,
+        "context": [
+          {
+            "start": 550.519,
+            "end": 553.24,
+            "text": "just keep it on this"
+          },
+          {
+            "start": 554.839,
+            "end": 560.36,
+            "text": "low now we create more up Clos candles"
+          },
+          {
+            "start": 557.68,
+            "end": 562.279,
+            "text": "here and close below them and now we"
+          },
+          {
+            "start": 560.36,
+            "end": 564.24,
+            "text": "have more order blocks so if I was going"
+          },
+          {
+            "start": 562.279,
+            "end": 567.24,
+            "text": "to miss the first entry I'd be looking"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 668.959,
+        "text": "over this down close candle so now that",
+        "matched_keywords": [
+          "down close candle"
+        ],
+        "end": 674.04,
+        "context": [
+          {
+            "start": 657.44,
+            "end": 661.0400000000001,
+            "text": "manipulation targeting this"
+          },
+          {
+            "start": 666.12,
+            "end": 671.72,
+            "text": "high now what I'm focusing on is a close"
+          },
+          {
+            "start": 668.959,
+            "end": 674.04,
+            "text": "over this down close candle so now that"
+          },
+          {
+            "start": 671.72,
+            "end": 675.8000000000001,
+            "text": "they close over that it is also a valid"
+          },
+          {
+            "start": 674.04,
+            "end": 677.959,
+            "text": "order block so I'm looking for that to"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 819.36,
+        "text": "closed below the opening price of that",
+        "matched_keywords": [
+          "opening price"
+        ],
+        "end": 824.24,
+        "context": [
+          {
+            "start": 814.8,
+            "end": 819.3599999999999,
+            "text": "of up Clos candles that made the high"
+          },
+          {
+            "start": 817.399,
+            "end": 822.0,
+            "text": "right here and you can see price already"
+          },
+          {
+            "start": 819.36,
+            "end": 824.24,
+            "text": "closed below the opening price of that"
+          },
+          {
+            "start": 822.0,
+            "end": 827.079,
+            "text": "validating it as an order block so then"
+          },
+          {
+            "start": 824.24,
+            "end": 829.279,
+            "text": "I can look for an entry here and then I"
+          }
+        ]
+      }
+    ],
+    "smt_core": [],
+    "smt_mechanics": [],
+    "instruments": [],
+    "shared_confirm": [
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 60.6,
+        "text": "puts in a swing low raids the sell stops",
+        "matched_keywords": [
+          "swing low"
+        ],
+        "end": 66.28,
+        "context": [
+          {
+            "start": 55.559,
+            "end": 60.599999999999994,
+            "text": "closed below I can anticipate price to"
+          },
+          {
+            "start": 57.68,
+            "end": 63.76,
+            "text": "trade lower similarly down here price"
+          },
+          {
+            "start": 60.6,
+            "end": 66.28,
+            "text": "puts in a swing low raids the sell stops"
+          },
+          {
+            "start": 63.76,
+            "end": 68.79899999999999,
+            "text": "and then closes over the series or"
+          },
+          {
+            "start": 66.28,
+            "end": 71.2,
+            "text": "single down Clos candle changing the"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 105.96,
+        "text": "Mark out our buy side liquidity resting",
+        "matched_keywords": [
+          "liquidity"
+        ],
+        "end": 110.6,
+        "context": [
+          {
+            "start": 102.799,
+            "end": 105.96000000000001,
+            "text": "this so here we are with our first"
+          },
+          {
+            "start": 104.399,
+            "end": 108.2,
+            "text": "example and I'm going to go ahead and"
+          },
+          {
+            "start": 105.96,
+            "end": 110.6,
+            "text": "Mark out our buy side liquidity resting"
+          },
+          {
+            "start": 108.2,
+            "end": 113.2,
+            "text": "above these old highs I'm then going to"
+          },
+          {
+            "start": 110.6,
+            "end": 115.719,
+            "text": "drop down to a 5 minute time frame and"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 128.239,
+        "text": "time frame Sweep with my entry models",
+        "matched_keywords": [
+          "sweep"
+        ],
+        "end": 131.48000000000002,
+        "context": [
+          {
+            "start": 124.079,
+            "end": 128.239,
+            "text": "this high and then displaces back into"
+          },
+          {
+            "start": 126.0,
+            "end": 130.28,
+            "text": "the range now I generally prefer a lower"
+          },
+          {
+            "start": 128.239,
+            "end": 131.48000000000002,
+            "text": "time frame Sweep with my entry models"
+          },
+          {
+            "start": 130.28,
+            "end": 133.599,
+            "text": "but we'll go ahead and Mark it out"
+          },
+          {
+            "start": 131.48,
+            "end": 136.04,
+            "text": "without one so what I'm looking for here"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 155.16,
+        "text": "level and then now we get a new sweep of",
+        "matched_keywords": [
+          "sweep"
+        ],
+        "end": 161.0,
+        "context": [
+          {
+            "start": 151.2,
+            "end": 155.16,
+            "text": "so you can see price is failing to close"
+          },
+          {
+            "start": 153.239,
+            "end": 158.31900000000002,
+            "text": "below this"
+          },
+          {
+            "start": 155.16,
+            "end": 161.0,
+            "text": "level and then now we get a new sweep of"
+          },
+          {
+            "start": 158.319,
+            "end": 163.35999999999999,
+            "text": "a high so now where would I look for"
+          },
+          {
+            "start": 161.0,
+            "end": 165.879,
+            "text": "price to change the state of delivery"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 210.879,
+        "text": "you can see it tags the order block",
+        "matched_keywords": [
+          "order block"
+        ],
+        "end": 215.51899999999998,
+        "context": [
+          {
+            "start": 204.799,
+            "end": 210.87900000000002,
+            "text": "then look for the -2 so letting this"
+          },
+          {
+            "start": 207.48,
+            "end": 213.11999999999998,
+            "text": "play out let's see what happens"
+          },
+          {
+            "start": 210.879,
+            "end": 215.51899999999998,
+            "text": "you can see it tags the order block"
+          },
+          {
+            "start": 213.12,
+            "end": 218.799,
+            "text": "respects this fair value Gap in"
+          },
+          {
+            "start": 215.519,
+            "end": 221.59900000000002,
+            "text": "Here and Now price trades and closes"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 213.12,
+        "text": "respects this fair value Gap in",
+        "matched_keywords": [
+          "fair value gap"
+        ],
+        "end": 218.799,
+        "context": [
+          {
+            "start": 207.48,
+            "end": 213.11999999999998,
+            "text": "play out let's see what happens"
+          },
+          {
+            "start": 210.879,
+            "end": 215.51899999999998,
+            "text": "you can see it tags the order block"
+          },
+          {
+            "start": 213.12,
+            "end": 218.799,
+            "text": "respects this fair value Gap in"
+          },
+          {
+            "start": 215.519,
+            "end": 221.59900000000002,
+            "text": "Here and Now price trades and closes"
+          },
+          {
+            "start": 218.799,
+            "end": 224.959,
+            "text": "below this candle here which is now"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 248.28,
+        "text": "we get a lower time frame sweep which",
+        "matched_keywords": [
+          "sweep"
+        ],
+        "end": 252.36,
+        "context": [
+          {
+            "start": 243.159,
+            "end": 248.28,
+            "text": "old high then displaces down however"
+          },
+          {
+            "start": 246.319,
+            "end": 250.11999999999998,
+            "text": "this can't change the state of delivery"
+          },
+          {
+            "start": 248.28,
+            "end": 252.36,
+            "text": "we get a lower time frame sweep which"
+          },
+          {
+            "start": 250.12,
+            "end": 254.4,
+            "text": "changes the state of delivery and then"
+          },
+          {
+            "start": 252.36,
+            "end": 256.16,
+            "text": "we can anticipate price to trade lower"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 272.28,
+        "text": "daily fair value Gap right here which",
+        "matched_keywords": [
+          "fair value gap"
+        ],
+        "end": 276.08,
+        "context": [
+          {
+            "start": 268.68,
+            "end": 272.28000000000003,
+            "text": "of delivery on multiple different time"
+          },
+          {
+            "start": 270.52,
+            "end": 274.28,
+            "text": "frames so you can see here we have a"
+          },
+          {
+            "start": 272.28,
+            "end": 276.08,
+            "text": "daily fair value Gap right here which"
+          },
+          {
+            "start": 274.28,
+            "end": 278.84,
+            "text": "would be the draw in"
+          },
+          {
+            "start": 276.08,
+            "end": 281.28,
+            "text": "liquidity here you can see price reaches"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 276.08,
+        "text": "liquidity here you can see price reaches",
+        "matched_keywords": [
+          "liquidity"
+        ],
+        "end": 281.28,
+        "context": [
+          {
+            "start": 272.28,
+            "end": 276.08,
+            "text": "daily fair value Gap right here which"
+          },
+          {
+            "start": 274.28,
+            "end": 278.84,
+            "text": "would be the draw in"
+          },
+          {
+            "start": 276.08,
+            "end": 281.28,
+            "text": "liquidity here you can see price reaches"
+          },
+          {
+            "start": 278.84,
+            "end": 284.32,
+            "text": "up into this fair value Gap respects it"
+          },
+          {
+            "start": 281.28,
+            "end": 286.28,
+            "text": "and closes down using the next day model"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 278.84,
+        "text": "up into this fair value Gap respects it",
+        "matched_keywords": [
+          "fair value gap"
+        ],
+        "end": 284.32,
+        "context": [
+          {
+            "start": 274.28,
+            "end": 278.84,
+            "text": "would be the draw in"
+          },
+          {
+            "start": 276.08,
+            "end": 281.28,
+            "text": "liquidity here you can see price reaches"
+          },
+          {
+            "start": 278.84,
+            "end": 284.32,
+            "text": "up into this fair value Gap respects it"
+          },
+          {
+            "start": 281.28,
+            "end": 286.28,
+            "text": "and closes down using the next day model"
+          },
+          {
+            "start": 284.32,
+            "end": 288.759,
+            "text": "we can anticipate price to move lower"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 299.08,
+        "text": "well here is is our daily fair value Gap",
+        "matched_keywords": [
+          "fair value gap"
+        ],
+        "end": 303.08,
+        "context": [
+          {
+            "start": 294.52,
+            "end": 299.08,
+            "text": "a change in the state of delivery after"
+          },
+          {
+            "start": 296.44,
+            "end": 300.88,
+            "text": "engaging our higher time frame PD array"
+          },
+          {
+            "start": 299.08,
+            "end": 303.08,
+            "text": "well here is is our daily fair value Gap"
+          },
+          {
+            "start": 300.88,
+            "end": 304.68,
+            "text": "or our higher time frame PD array do we"
+          },
+          {
+            "start": 303.08,
+            "end": 307.32,
+            "text": "get a change in the state of delivery"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 459.759,
+        "text": "and then the next day we had a sweep of",
+        "matched_keywords": [
+          "sweep"
+        ],
+        "end": 464.8,
+        "context": [
+          {
+            "start": 455.4,
+            "end": 459.75899999999996,
+            "text": "value Gap we waited for the change in"
+          },
+          {
+            "start": 457.44,
+            "end": 462.68,
+            "text": "state of delivery on the hourly chart"
+          },
+          {
+            "start": 459.759,
+            "end": 464.8,
+            "text": "and then the next day we had a sweep of"
+          },
+          {
+            "start": 462.68,
+            "end": 467.72,
+            "text": "buy side liquidity which is an area to"
+          },
+          {
+            "start": 464.8,
+            "end": 469.08,
+            "text": "get short when price is bearish from"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 462.68,
+        "text": "buy side liquidity which is an area to",
+        "matched_keywords": [
+          "liquidity"
+        ],
+        "end": 467.72,
+        "context": [
+          {
+            "start": 457.44,
+            "end": 462.68,
+            "text": "state of delivery on the hourly chart"
+          },
+          {
+            "start": 459.759,
+            "end": 464.8,
+            "text": "and then the next day we had a sweep of"
+          },
+          {
+            "start": 462.68,
+            "end": 467.72,
+            "text": "buy side liquidity which is an area to"
+          },
+          {
+            "start": 464.8,
+            "end": 469.08,
+            "text": "get short when price is bearish from"
+          },
+          {
+            "start": 467.72,
+            "end": 471.24,
+            "text": "here we looked for the change in state"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 531.76,
+        "text": "order block my stop on the manipulation",
+        "matched_keywords": [
+          "order block"
+        ],
+        "end": 537.12,
+        "context": [
+          {
+            "start": 527.72,
+            "end": 531.76,
+            "text": "looking to enter here at the change of"
+          },
+          {
+            "start": 530.2,
+            "end": 534.44,
+            "text": "state of delivery or when it retests the"
+          },
+          {
+            "start": 531.76,
+            "end": 537.12,
+            "text": "order block my stop on the manipulation"
+          },
+          {
+            "start": 534.44,
+            "end": 540.12,
+            "text": "High which swept and then for targets I"
+          },
+          {
+            "start": 537.12,
+            "end": 542.32,
+            "text": "like to project out my targets now here"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 654.2,
+        "text": "order block with my stop on the",
+        "matched_keywords": [
+          "order block"
+        ],
+        "end": 661.0400000000001,
+        "context": [
+          {
+            "start": 649.6,
+            "end": 654.2,
+            "text": "first entry I'm looking to enter on this"
+          },
+          {
+            "start": 652.76,
+            "end": 657.4399999999999,
+            "text": "change and state of delivery or the"
+          },
+          {
+            "start": 654.2,
+            "end": 661.0400000000001,
+            "text": "order block with my stop on the"
+          },
+          {
+            "start": 657.44,
+            "end": 661.0400000000001,
+            "text": "manipulation targeting this"
+          },
+          {
+            "start": 666.12,
+            "end": 671.72,
+            "text": "high now what I'm focusing on is a close"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 674.04,
+        "text": "order block so I'm looking for that to",
+        "matched_keywords": [
+          "order block"
+        ],
+        "end": 677.959,
+        "context": [
+          {
+            "start": 668.959,
+            "end": 674.04,
+            "text": "over this down close candle so now that"
+          },
+          {
+            "start": 671.72,
+            "end": 675.8000000000001,
+            "text": "they close over that it is also a valid"
+          },
+          {
+            "start": 674.04,
+            "end": 677.959,
+            "text": "order block so I'm looking for that to"
+          },
+          {
+            "start": 675.8,
+            "end": 680.639,
+            "text": "support"
+          },
+          {
+            "start": 677.959,
+            "end": 683.8,
+            "text": "price and we go reach that high and"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 725.04,
+        "text": "the order block or fair value Gap as",
+        "matched_keywords": [
+          "fair value gap",
+          "order block"
+        ],
+        "end": 729.24,
+        "context": [
+          {
+            "start": 721.12,
+            "end": 725.04,
+            "text": "confirmed by changing the state of"
+          },
+          {
+            "start": 722.68,
+            "end": 727.279,
+            "text": "delivery I can then look for an entry on"
+          },
+          {
+            "start": 725.04,
+            "end": 729.24,
+            "text": "the order block or fair value Gap as"
+          },
+          {
+            "start": 727.279,
+            "end": 731.639,
+            "text": "price reaches higher to these projection"
+          },
+          {
+            "start": 729.24,
+            "end": 733.279,
+            "text": "targets and liquidity levels last thing"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 729.24,
+        "text": "targets and liquidity levels last thing",
+        "matched_keywords": [
+          "liquidity"
+        ],
+        "end": 733.279,
+        "context": [
+          {
+            "start": 725.04,
+            "end": 729.24,
+            "text": "the order block or fair value Gap as"
+          },
+          {
+            "start": 727.279,
+            "end": 731.639,
+            "text": "price reaches higher to these projection"
+          },
+          {
+            "start": 729.24,
+            "end": 733.279,
+            "text": "targets and liquidity levels last thing"
+          },
+          {
+            "start": 731.639,
+            "end": 736.72,
+            "text": "we're going to talk about in this video"
+          },
+          {
+            "start": 733.279,
+            "end": 738.36,
+            "text": "is combining AMD or the Box setup with"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 738.36,
+        "text": "order block formation now I posted on my",
+        "matched_keywords": [
+          "order block"
+        ],
+        "end": 743.8000000000001,
+        "context": [
+          {
+            "start": 733.279,
+            "end": 738.36,
+            "text": "is combining AMD or the Box setup with"
+          },
+          {
+            "start": 736.72,
+            "end": 740.9590000000001,
+            "text": "the change in state of delivery or an"
+          },
+          {
+            "start": 738.36,
+            "end": 743.8000000000001,
+            "text": "order block formation now I posted on my"
+          },
+          {
+            "start": 740.959,
+            "end": 746.279,
+            "text": "community tab this post and so we're"
+          },
+          {
+            "start": 743.8,
+            "end": 748.24,
+            "text": "going to go over this example so if you"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 802.92,
+        "text": "order block or a change in the state of",
+        "matched_keywords": [
+          "order block"
+        ],
+        "end": 807.7199999999999,
+        "context": [
+          {
+            "start": 798.279,
+            "end": 802.92,
+            "text": "area instead of immediately taking an"
+          },
+          {
+            "start": 800.56,
+            "end": 804.6389999999999,
+            "text": "entry I'm looking for a formation of an"
+          },
+          {
+            "start": 802.92,
+            "end": 807.7199999999999,
+            "text": "order block or a change in the state of"
+          },
+          {
+            "start": 804.639,
+            "end": 807.72,
+            "text": "delivery right"
+          },
+          {
+            "start": 807.76,
+            "end": 812.6,
+            "text": "here"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 822.0,
+        "text": "validating it as an order block so then",
+        "matched_keywords": [
+          "order block"
+        ],
+        "end": 827.079,
+        "context": [
+          {
+            "start": 817.399,
+            "end": 822.0,
+            "text": "right here and you can see price already"
+          },
+          {
+            "start": 819.36,
+            "end": 824.24,
+            "text": "closed below the opening price of that"
+          },
+          {
+            "start": 822.0,
+            "end": 827.079,
+            "text": "validating it as an order block so then"
+          },
+          {
+            "start": 824.24,
+            "end": 829.279,
+            "text": "I can look for an entry here and then I"
+          },
+          {
+            "start": 827.079,
+            "end": 831.5999999999999,
+            "text": "can decide I can either put my stop here"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 831.6,
+        "text": "putting my stop here as we had a sweep",
+        "matched_keywords": [
+          "sweep"
+        ],
+        "end": 837.12,
+        "context": [
+          {
+            "start": 827.079,
+            "end": 831.5999999999999,
+            "text": "can decide I can either put my stop here"
+          },
+          {
+            "start": 829.279,
+            "end": 834.48,
+            "text": "or up here in this case I'm comfortable"
+          },
+          {
+            "start": 831.6,
+            "end": 837.12,
+            "text": "putting my stop here as we had a sweep"
+          },
+          {
+            "start": 834.48,
+            "end": 839.6,
+            "text": "and then I can look to Target that"
+          },
+          {
+            "start": 837.12,
+            "end": 841.759,
+            "text": "original projection so let's see how"
+          }
+        ]
+      },
+      {
+        "video_id": "CHIK5oBRKiw",
+        "creator": "ttrades",
+        "role": "primary",
+        "start": 872.639,
+        "text": "however let's wait for an order block",
+        "matched_keywords": [
+          "order block"
+        ],
+        "end": 876.279,
+        "context": [
+          {
+            "start": 867.639,
+            "end": 872.639,
+            "text": "my original entry would be on a retest"
+          },
+          {
+            "start": 869.959,
+            "end": 874.279,
+            "text": "of this line here my stop on this low"
+          },
+          {
+            "start": 872.639,
+            "end": 876.279,
+            "text": "however let's wait for an order block"
+          },
+          {
+            "start": 874.279,
+            "end": 879.519,
+            "text": "formation"
+          },
+          {
+            "start": 876.279,
+            "end": 881.88,
+            "text": "there so you can see we have a down Clos"
+          }
+        ]
+      }
+    ]
+  }
+}

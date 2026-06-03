@@ -233,6 +233,83 @@ BIAS_LEXICON_EXTENSION: dict[str, tuple[str, ...]] = {
     ),
 }
 
+# CISD + SMT sub-spec lexicon: concept group -> keyword/phrase list. This is a SEPARATE,
+# ADDITIVE mini-corpus for the two TTrades confirmation-primitive videos (Change in State of
+# Delivery, SMT Divergence) that the bias module depends on. It is intentionally distinct from
+# CONCEPT_LEXICON (2022 mentorship), BIAS_LEXICON / BIAS_LEXICON_EXTENSION (daily-bias corpus),
+# and must not be merged with any of them. Same matcher and short-token discipline apply: every
+# token is boundary-guarded by ``_compile_keyword`` (no matches inside larger words). Bare
+# two-letter tickers ("es"/"nq"/"ym"/"ob") are deliberately omitted as boundary-unsafe in favor
+# of the spelled-out instrument names; ``cisd``/``smt``/``dow``/``dxy`` are 3+ chars and safe
+# under the boundary guards (e.g. "dow" never matches inside "down").
+CISD_SMT_LEXICON: dict[str, tuple[str, ...]] = {
+    "cisd_core": (
+        "change in state of delivery",
+        "change in the state of delivery",
+        "state of delivery",
+        "cisd",
+    ),
+    "cisd_mechanics": (
+        "down close candle",
+        "down-close candle",
+        "up close candle",
+        "up-close candle",
+        "last down candle",
+        "last up candle",
+        "close above",
+        "close below",
+        "close through",
+        "reclaim",
+        "opening price",
+        "displacement",
+    ),
+    "smt_core": (
+        "smt",
+        "smart money technique",
+        "divergence",
+        "divergent",
+        "diverge",
+    ),
+    "smt_mechanics": (
+        "correlated",
+        "correlation",
+        "in sync",
+        "out of sync",
+        "fails to make",
+        "failed to make",
+        "did not make",
+        "didn't make",
+        "higher high",
+        "lower high",
+        "higher low",
+        "lower low",
+        "did not take out",
+        "didn't take out",
+    ),
+    "instruments": (
+        "nasdaq",
+        "dow",
+        "s&p",
+        "sp 500",
+        "dollar index",
+        "dxy",
+        "euro",
+        "pound",
+        "gold",
+        "correlated pair",
+        "correlated asset",
+    ),
+    "shared_confirm": (
+        "order block",
+        "fair value gap",
+        "sweep",
+        "liquidity",
+        "swing high",
+        "swing low",
+        "protected",
+    ),
+}
+
 VALID_ERAS = frozenset({"2022", "2016", "other"})
 VALID_ROLES = frozenset({"primary", "supplement"})
 MANIFEST_COLUMNS = ("video_id", "title", "url", "era", "concept_tags")
