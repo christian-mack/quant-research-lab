@@ -24,6 +24,14 @@
 
 ## Entries
 
+## 2026-06-01 — nbconvert silently used the anaconda base kernel, faking "no transcript"
+
+**Phase:** Parallel track (ICT ingestion)
+**Context:** Executing the bias-extraction notebook via `jupyter nbconvert --execute`. Both videos logged as `no_transcript` even though direct `.venv` calls fetched them fine.
+**Finding:** nbconvert defaulted to the `python3` kernelspec, which resolves to `C:\Users\chris\anaconda3` (no `youtube-transcript-api` / `yt-dlp`), so the fetch helpers' dependency guards returned `None` — a silent capability failure, not a video/network failure. Registering the `.venv` as kernel `quant-venv` and passing `--ExecutePreprocessor.kernel_name=quant-venv` fixed it.
+**Implication:** Notebook executions in this repo must pin the `.venv` kernel; a missing-dependency path that's indistinguishable from a real retrieval failure is a footgun worth a one-line guard or a startup assertion that the expected backends are importable.
+**Artifact:** `notebooks/exploration/2026-06-01_ict_daily_bias_extraction.ipynb`; commit `6848990`.
+
 ## 2026-05-13 — Wave 0d: Apex EOD DLL is session pause, not account death
 
 **Phase:** 2  
