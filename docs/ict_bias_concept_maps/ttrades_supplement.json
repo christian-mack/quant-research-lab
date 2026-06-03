@@ -6,7 +6,7 @@
   "role": "supplement",
   "corpus": "bias",
   "primary": false,
-  "git_sha": "7088d32",
+  "git_sha": "15c31fd",
   "concepts": {
     "bias_core": [
       {
