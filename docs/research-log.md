@@ -316,6 +316,22 @@
 
 ---
 
+## 2026-06-02 — Bias corpus re-scanned with TTrades mechanical lexicon; TTrades set as mechanical spec primary — PROVENANCE / DECISION
+
+**Wave:** Parallel track — ICT source-material ingestion (NOT a Phase 2 quant hypothesis; no edge claim, no backtest).
+
+**Context:** The first bias scan (commit `6848990`) used ICT-standard terms and under-collected TTrades' own mechanical vocabulary (TTrades only 69 hits, with delivery / candle-mechanics / day-type empty). Re-scanned the EXISTING local transcripts (NO re-fetch, no network) with an additive `BIAS_LEXICON_EXTENSION` (delivery, smt, candle_mechanics, day_type, protected_swing, eq_targets, power_of_three). Base `BIAS_LEXICON` groups left untouched.
+
+**Result (ingestion only):** New groups merged into the committed maps under `concepts` (existing groups byte-unchanged). **TTrades 69 → 206 hits** — delivery 15, smt 6, candle_mechanics 43, day_type 52, protected_swing 6, eq_targets 15, power_of_three 0; the under-collection is resolved. **JadeCap 91 → 97** (ICT-standard vocabulary; only power_of_three 6 from the new groups). Maps: `docs/ict_bias_concept_maps/{jadecap_primary,ttrades_supplement}.json`, `git_sha` stamped to the feature commit `15c31fd`. Guard tests extended (cisd/smt token-boundary, "wick" not in "wicked", "body of the candle" phrase, reversal/continuation) — all 46 pass.
+
+**Operator decision (SPEC-level, not extraction):** For building the daily-bias SPEC, **TTrades is the mechanical PRIMARY** and **JadeCap the supplement** — TTrades teaches a mechanical, rule-based framework better suited to mechanization. This is a spec-precedence decision recorded here only; it does **not** rewrite extraction provenance. The artifact role/primary flags are **UNCHANGED**: `ttrades_supplement.json` keeps `role="supplement"` / `primary=false` and `jadecap_primary.json` keeps `primary=true`; filenames unchanged. No merge / reconciliation / synthesis across creators was performed.
+
+**Out of scope:** no bias-rule synthesis, no JadeCap-vs-TTrades reconciliation, no 2022 midnight-open / Power 3 folding, no strategy/backtest/NT8 code.
+
+**Artifact:** `src/quant_research/utils/transcript_ingest.py` (`BIAS_LEXICON_EXTENSION`); `tests/utils/test_transcript_ingest.py`; `docs/ict_bias_concept_maps/{jadecap_primary,ttrades_supplement}.json`; feature commit `15c31fd`; git_sha stamp commit `8112098`.
+
+---
+
 ## Entry template
 
 Copy from `## YYYY-MM-DD` through **`Artifact:`** for each new hypothesis or baseline record.
