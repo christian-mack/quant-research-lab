@@ -174,6 +174,65 @@ BIAS_LEXICON: dict[str, tuple[str, ...]] = {
     ),
 }
 
+# Extended daily-bias lexicon: NEW concept groups capturing TTrades' mechanical vocabulary,
+# which the ICT-standard ``BIAS_LEXICON`` under-collected. These are ADDITIVE groups (the base
+# groups above are left untouched and remain reproducible); they are merged into the per-video
+# concept maps alongside the originals. Same matcher and short-token discipline apply: every
+# token is boundary-guarded by ``_compile_keyword`` (no matches inside larger words) and bare
+# two-letter abbreviations (e.g. "eq", "po3") are deliberately omitted in favor of multiword or
+# safe forms. ``cisd`` and ``smt`` are 3+ chars and safe under the boundary guards.
+BIAS_LEXICON_EXTENSION: dict[str, tuple[str, ...]] = {
+    "delivery": (
+        "change in state of delivery",
+        "change in the state of delivery",
+        "state of delivery",
+        "cisd",
+    ),
+    "smt": (
+        "smt",
+        "divergence",
+    ),
+    "candle_mechanics": (
+        "wick",
+        "shallow wick",
+        "large wick",
+        "small wick",
+        "candle close",
+        "candle closure",
+        "closure",
+        "close above",
+        "close below",
+        "close near",
+        "body of the candle",
+    ),
+    "day_type": (
+        "continuation",
+        "reversal",
+        "reversal day",
+        "continuation day",
+    ),
+    "protected_swing": (
+        "protected swing",
+        "protected high",
+        "protected low",
+    ),
+    "eq_targets": (
+        "equilibrium",
+        "previous day high",
+        "previous day low",
+        "pdh",
+        "pdl",
+        "draw on liquidity",
+        "opposing liquidity",
+    ),
+    "power_of_three": (
+        "power of three",
+        "accumulation",
+        "manipulation",
+        "distribution",
+    ),
+}
+
 VALID_ERAS = frozenset({"2022", "2016", "other"})
 VALID_ROLES = frozenset({"primary", "supplement"})
 MANIFEST_COLUMNS = ("video_id", "title", "url", "era", "concept_tags")

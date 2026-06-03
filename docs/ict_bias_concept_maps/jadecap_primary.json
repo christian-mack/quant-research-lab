@@ -6,7 +6,7 @@
   "role": "primary",
   "corpus": "bias",
   "primary": true,
-  "git_sha": "75c84e5",
+  "git_sha": "7088d32",
   "concepts": {
     "bias_core": [
       {
@@ -3470,6 +3470,242 @@
             "start": 209.68,
             "end": 214.56,
             "text": "Now when it comes to premium discount"
+          }
+        ]
+      }
+    ],
+    "delivery": [],
+    "smt": [],
+    "candle_mechanics": [],
+    "day_type": [],
+    "protected_swing": [],
+    "eq_targets": [],
+    "power_of_three": [
+      {
+        "video_id": "x4FJVEZUXhc",
+        "creator": "jadecap",
+        "role": "primary",
+        "start": 78.64,
+        "text": "premium discount and power of three. So,",
+        "matched_keywords": [
+          "power of three"
+        ],
+        "end": 84.479,
+        "context": [
+          {
+            "start": 75.2,
+            "end": 78.64,
+            "text": "daily bias. And you don't need to"
+          },
+          {
+            "start": 77.04,
+            "end": 81.60000000000001,
+            "text": "confuse yourself. We're looking for"
+          },
+          {
+            "start": 78.64,
+            "end": 84.479,
+            "text": "premium discount and power of three. So,"
+          },
+          {
+            "start": 81.6,
+            "end": 87.119,
+            "text": "what is premium discount? So, very"
+          },
+          {
+            "start": 84.479,
+            "end": 90.32,
+            "text": "quickly, I'm going to go over just our"
+          }
+        ]
+      },
+      {
+        "video_id": "x4FJVEZUXhc",
+        "creator": "jadecap",
+        "role": "primary",
+        "start": 400.639,
+        "text": "is power of three. So what exactly is",
+        "matched_keywords": [
+          "power of three"
+        ],
+        "end": 406.319,
+        "context": [
+          {
+            "start": 396.56,
+            "end": 400.639,
+            "text": "essentially avoiding those trades. Now"
+          },
+          {
+            "start": 398.88,
+            "end": 403.84,
+            "text": "the next point that I want to get into"
+          },
+          {
+            "start": 400.639,
+            "end": 406.319,
+            "text": "is power of three. So what exactly is"
+          },
+          {
+            "start": 403.84,
+            "end": 409.039,
+            "text": "power of three? Well, very quickly"
+          },
+          {
+            "start": 406.319,
+            "end": 410.40000000000003,
+            "text": "trying to explain this power of three"
+          }
+        ]
+      },
+      {
+        "video_id": "x4FJVEZUXhc",
+        "creator": "jadecap",
+        "role": "primary",
+        "start": 403.84,
+        "text": "power of three? Well, very quickly",
+        "matched_keywords": [
+          "power of three"
+        ],
+        "end": 409.039,
+        "context": [
+          {
+            "start": 398.88,
+            "end": 403.84,
+            "text": "the next point that I want to get into"
+          },
+          {
+            "start": 400.639,
+            "end": 406.319,
+            "text": "is power of three. So what exactly is"
+          },
+          {
+            "start": 403.84,
+            "end": 409.039,
+            "text": "power of three? Well, very quickly"
+          },
+          {
+            "start": 406.319,
+            "end": 410.40000000000003,
+            "text": "trying to explain this power of three"
+          },
+          {
+            "start": 409.039,
+            "end": 412.15999999999997,
+            "text": "basically happens on every single"
+          }
+        ]
+      },
+      {
+        "video_id": "x4FJVEZUXhc",
+        "creator": "jadecap",
+        "role": "primary",
+        "start": 406.319,
+        "text": "trying to explain this power of three",
+        "matched_keywords": [
+          "power of three"
+        ],
+        "end": 410.40000000000003,
+        "context": [
+          {
+            "start": 400.639,
+            "end": 406.319,
+            "text": "is power of three. So what exactly is"
+          },
+          {
+            "start": 403.84,
+            "end": 409.039,
+            "text": "power of three? Well, very quickly"
+          },
+          {
+            "start": 406.319,
+            "end": 410.40000000000003,
+            "text": "trying to explain this power of three"
+          },
+          {
+            "start": 409.039,
+            "end": 412.15999999999997,
+            "text": "basically happens on every single"
+          },
+          {
+            "start": 410.4,
+            "end": 413.67999999999995,
+            "text": "candle, but for the purposes of this"
+          }
+        ]
+      },
+      {
+        "video_id": "x4FJVEZUXhc",
+        "creator": "jadecap",
+        "role": "primary",
+        "start": 668.16,
+        "text": "manipulation lower,",
+        "matched_keywords": [
+          "manipulation"
+        ],
+        "end": 672.88,
+        "context": [
+          {
+            "start": 663.44,
+            "end": 668.1600000000001,
+            "text": "doesn't make sense when I'm bullish."
+          },
+          {
+            "start": 666.0,
+            "end": 670.64,
+            "text": "When I'm bullish, I actually want to see"
+          },
+          {
+            "start": 668.16,
+            "end": 672.88,
+            "text": "manipulation lower,"
+          },
+          {
+            "start": 670.64,
+            "end": 675.1999999999999,
+            "text": "maybe even the news release spike lower."
+          },
+          {
+            "start": 672.88,
+            "end": 677.68,
+            "text": "That way, I can position myself long,"
+          }
+        ]
+      },
+      {
+        "video_id": "x4FJVEZUXhc",
+        "creator": "jadecap",
+        "role": "primary",
+        "start": 700.079,
+        "text": "don't get that manipulation lower and",
+        "matched_keywords": [
+          "manipulation"
+        ],
+        "end": 704.959,
+        "context": [
+          {
+            "start": 695.92,
+            "end": 700.079,
+            "text": "charts like this, for example, let's say"
+          },
+          {
+            "start": 697.44,
+            "end": 702.24,
+            "text": "if I did have a bullish bias, but we"
+          },
+          {
+            "start": 700.079,
+            "end": 704.959,
+            "text": "don't get that manipulation lower and"
+          },
+          {
+            "start": 702.24,
+            "end": 707.12,
+            "text": "the market is trading up here into a"
+          },
+          {
+            "start": 704.959,
+            "end": 709.8389999999999,
+            "text": "premium, right? So, that premium might"
           }
         ]
       }

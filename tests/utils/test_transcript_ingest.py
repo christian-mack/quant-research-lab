@@ -11,6 +11,7 @@ from pathlib import Path
 
 from quant_research.utils.transcript_ingest import (
     BIAS_LEXICON,
+    BIAS_LEXICON_EXTENSION,
     CONCEPT_LEXICON,
     BiasManifestRow,
     ManifestRow,
@@ -473,6 +474,62 @@ def test_build_bias_concept_map_single_video_metadata_and_primary_flag() -> None
     core_hits = bias_map["concepts"]["bias_core"]
     assert any("daily bias" in hit["matched_keywords"] for hit in core_hits)
     assert all(hit["creator"] == "jadecap" and hit["role"] == "primary" for hit in core_hits)
+
+
+# --------------------------------------------------------------------------------------------
+# Extended bias lexicon (TTrades mechanical vocabulary): word-boundary guard correctness
+# --------------------------------------------------------------------------------------------
+def test_extended_lexicon_cisd_matches_token_not_inside_word() -> None:
+    segments = _segments("we saw a CISD here", "the discisding noise", "cisding along")
+    hits = find_keyword_hits(segments, ["cisd"], context=0)
+    assert [h["start"] for h in hits] == [0.0]
+
+
+def test_extended_lexicon_smt_matches_token_not_inside_word() -> None:
+    segments = _segments("an SMT divergence formed", "the smt held", "transmit the order")
+    hits = find_keyword_hits(segments, ["smt"], context=0)
+    assert [h["start"] for h in hits] == [0.0, 1.0]
+
+
+def test_extended_lexicon_wick_does_not_match_inside_wicked() -> None:
+    segments = _segments("that was a wicked move", "long upper wick rejection")
+    hits = find_keyword_hits(segments, ["wick"], context=0)
+    assert [h["start"] for h in hits] == [1.0]
+
+
+def test_extended_lexicon_body_of_the_candle_phrase_matches() -> None:
+    segments = _segments("close into the body of the candle", "body of  the  candle again")
+    hits = find_keyword_hits(segments, ["body of the candle"], context=0)
+    assert [h["start"] for h in hits] == [0.0, 1.0]
+
+
+def test_extended_lexicon_reversal_and_continuation_match() -> None:
+    segments = _segments("expecting a reversal day", "a continuation higher")
+    rev = find_keyword_hits(segments, ["reversal"], context=0)
+    cont = find_keyword_hits(segments, ["continuation"], context=0)
+    assert [h["start"] for h in rev] == [0.0]
+    assert [h["start"] for h in cont] == [1.0]
+
+
+def test_extended_lexicon_has_expected_new_groups() -> None:
+    expected = {
+        "delivery",
+        "smt",
+        "candle_mechanics",
+        "day_type",
+        "protected_swing",
+        "eq_targets",
+        "power_of_three",
+    }
+    assert set(BIAS_LEXICON_EXTENSION) == expected
+    # Extension groups must not collide with the base lexicon group names.
+    assert set(BIAS_LEXICON_EXTENSION).isdisjoint(set(BIAS_LEXICON))
+
+
+def test_extended_lexicon_omits_bare_two_letter_tokens() -> None:
+    flat = {kw for kws in BIAS_LEXICON_EXTENSION.values() for kw in kws}
+    assert "eq" not in flat
+    assert "po3" not in flat
 
 
 def test_build_bias_concept_map_supplement_sets_primary_false() -> None:

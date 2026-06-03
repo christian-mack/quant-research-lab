@@ -6,7 +6,7 @@
   "role": "supplement",
   "corpus": "bias",
   "primary": false,
-  "git_sha": "75c84e5",
+  "git_sha": "7088d32",
   "concepts": {
     "bias_core": [
       {
@@ -2644,6 +2644,5247 @@
           }
         ]
       }
-    ]
+    ],
+    "delivery": [
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 134.04,
+        "text": "change in the state of delivery, which",
+        "matched_keywords": [
+          "change in the state of delivery",
+          "state of delivery"
+        ],
+        "end": 137.67999999999998,
+        "context": [
+          {
+            "start": 130.36,
+            "end": 134.04000000000002,
+            "text": "that higher time frame candle. So as we"
+          },
+          {
+            "start": 132.36,
+            "end": 135.72000000000003,
+            "text": "zoom in here, you can see we have a"
+          },
+          {
+            "start": 134.04,
+            "end": 137.67999999999998,
+            "text": "change in the state of delivery, which"
+          },
+          {
+            "start": 135.72,
+            "end": 139.4,
+            "text": "confirms this higher time frame wick,"
+          },
+          {
+            "start": 137.68,
+            "end": 141.24,
+            "text": "and then we can trade the body of the"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 420.08,
+        "text": "Either a change in the state of delivery",
+        "matched_keywords": [
+          "change in the state of delivery",
+          "state of delivery"
+        ],
+        "end": 424.2,
+        "context": [
+          {
+            "start": 415.84,
+            "end": 420.08,
+            "text": "previous day's low, which is that"
+          },
+          {
+            "start": 417.6,
+            "end": 421.88,
+            "text": "important level. Then we need what?"
+          },
+          {
+            "start": 420.08,
+            "end": 424.2,
+            "text": "Either a change in the state of delivery"
+          },
+          {
+            "start": 421.88,
+            "end": 426.68,
+            "text": "on the hourly time frame if earlier in"
+          },
+          {
+            "start": 424.2,
+            "end": 427.76,
+            "text": "the day, or if into New York, a change"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 426.68,
+        "text": "in the state of delivery on the",
+        "matched_keywords": [
+          "state of delivery"
+        ],
+        "end": 430.28000000000003,
+        "context": [
+          {
+            "start": 421.88,
+            "end": 426.68,
+            "text": "on the hourly time frame if earlier in"
+          },
+          {
+            "start": 424.2,
+            "end": 427.76,
+            "text": "the day, or if into New York, a change"
+          },
+          {
+            "start": 426.68,
+            "end": 430.28000000000003,
+            "text": "in the state of delivery on the"
+          },
+          {
+            "start": 427.76,
+            "end": 432.76,
+            "text": "15-minute or 5-minute time frame."
+          },
+          {
+            "start": 430.28,
+            "end": 435.23999999999995,
+            "text": "So let's see what happens."
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 437.32,
+        "text": "state of delivery.",
+        "matched_keywords": [
+          "state of delivery"
+        ],
+        "end": 440.4,
+        "context": [
+          {
+            "start": 432.76,
+            "end": 437.32,
+            "text": "Here you can see we have an SMT at the"
+          },
+          {
+            "start": 435.24,
+            "end": 438.76,
+            "text": "previous day low with a change in the"
+          },
+          {
+            "start": 437.32,
+            "end": 440.4,
+            "text": "state of delivery."
+          },
+          {
+            "start": 438.76,
+            "end": 443.12,
+            "text": "So now we have everything set up with a"
+          },
+          {
+            "start": 440.4,
+            "end": 444.96,
+            "text": "small wick to see a reversal trade back"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 522.36,
+        "text": "in the state of delivery, and then it",
+        "matched_keywords": [
+          "state of delivery"
+        ],
+        "end": 525.84,
+        "context": [
+          {
+            "start": 518.0,
+            "end": 522.36,
+            "text": "to review, sweeping out our previous"
+          },
+          {
+            "start": 520.039,
+            "end": 523.5989999999999,
+            "text": "day's low, has a lower time frame change"
+          },
+          {
+            "start": 522.36,
+            "end": 525.84,
+            "text": "in the state of delivery, and then it"
+          },
+          {
+            "start": 523.599,
+            "end": 527.6400000000001,
+            "text": "can look back towards that EQ."
+          },
+          {
+            "start": 525.84,
+            "end": 530.0,
+            "text": "On a bullish day or on this bullish"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 577.08,
+        "text": "in the state of delivery. Now is this",
+        "matched_keywords": [
+          "state of delivery"
+        ],
+        "end": 581.76,
+        "context": [
+          {
+            "start": 573.36,
+            "end": 577.08,
+            "text": "You can see price trades into this"
+          },
+          {
+            "start": 574.88,
+            "end": 579.0,
+            "text": "previous day high first and has a change"
+          },
+          {
+            "start": 577.08,
+            "end": 581.76,
+            "text": "in the state of delivery. Now is this"
+          },
+          {
+            "start": 579.0,
+            "end": 584.36,
+            "text": "bearish? Yes, this is bearish, but this"
+          },
+          {
+            "start": 581.76,
+            "end": 586.68,
+            "text": "can be still part of a retracement, not"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 595.52,
+        "text": "use a change in the state of delivery.",
+        "matched_keywords": [
+          "change in the state of delivery",
+          "state of delivery"
+        ],
+        "end": 599.76,
+        "context": [
+          {
+            "start": 591.12,
+            "end": 595.52,
+            "text": "higher, but I'm going to need to wait"
+          },
+          {
+            "start": 592.72,
+            "end": 597.76,
+            "text": "for what? That lower wick to form and"
+          },
+          {
+            "start": 595.52,
+            "end": 599.76,
+            "text": "use a change in the state of delivery."
+          },
+          {
+            "start": 597.76,
+            "end": 602.04,
+            "text": "So, let's see what happens. We do get"
+          },
+          {
+            "start": 599.76,
+            "end": 604.16,
+            "text": "this move lower, which is possible to"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 622.36,
+        "text": "a change in the state of delivery with",
+        "matched_keywords": [
+          "change in the state of delivery",
+          "state of delivery"
+        ],
+        "end": 626.84,
+        "context": [
+          {
+            "start": 618.0,
+            "end": 622.36,
+            "text": "this fair value up, sweep out one more"
+          },
+          {
+            "start": 619.76,
+            "end": 624.3199999999999,
+            "text": "time, and then what do we have? We have"
+          },
+          {
+            "start": 622.36,
+            "end": 626.84,
+            "text": "a change in the state of delivery with"
+          },
+          {
+            "start": 624.32,
+            "end": 628.4000000000001,
+            "text": "an ideal candle to closure. This is"
+          },
+          {
+            "start": 626.84,
+            "end": 631.08,
+            "text": "where I could take an entry on the open"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 705.6,
+        "text": "change in the state of delivery.",
+        "matched_keywords": [
+          "change in the state of delivery",
+          "state of delivery"
+        ],
+        "end": 710.72,
+        "context": [
+          {
+            "start": 701.92,
+            "end": 705.5999999999999,
+            "text": "we just going to use a closure like"
+          },
+          {
+            "start": 703.2,
+            "end": 707.6800000000001,
+            "text": "this? No, we want to wait for what? The"
+          },
+          {
+            "start": 705.6,
+            "end": 710.72,
+            "text": "change in the state of delivery."
+          },
+          {
+            "start": 707.68,
+            "end": 712.4799999999999,
+            "text": "So, let's see what happens here."
+          },
+          {
+            "start": 710.72,
+            "end": 713.8000000000001,
+            "text": "You can see we get this closure below,"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 850.28,
+        "text": "or a change in the state of delivery,",
+        "matched_keywords": [
+          "change in the state of delivery",
+          "state of delivery"
+        ],
+        "end": 854.04,
+        "context": [
+          {
+            "start": 845.04,
+            "end": 850.28,
+            "text": "high. Now, am I going to trust this yet?"
+          },
+          {
+            "start": 847.839,
+            "end": 852.2800000000001,
+            "text": "No, I need to wait for a closure through"
+          },
+          {
+            "start": 850.28,
+            "end": 854.04,
+            "text": "or a change in the state of delivery,"
+          },
+          {
+            "start": 852.28,
+            "end": 856.64,
+            "text": "which then confirms that this wick has"
+          },
+          {
+            "start": 854.04,
+            "end": 858.4399999999999,
+            "text": "been created."
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 878.24,
+        "text": "change in the state of delivery and SMT.",
+        "matched_keywords": [
+          "change in the state of delivery",
+          "state of delivery"
+        ],
+        "end": 882.92,
+        "context": [
+          {
+            "start": 874.4,
+            "end": 878.24,
+            "text": "as we have a nice reversal off the"
+          },
+          {
+            "start": 876.4,
+            "end": 881.24,
+            "text": "previous candle's high paired with a"
+          },
+          {
+            "start": 878.24,
+            "end": 882.92,
+            "text": "change in the state of delivery and SMT."
+          },
+          {
+            "start": 881.24,
+            "end": 885.9590000000001,
+            "text": "If I'm going to be trading a candle two,"
+          },
+          {
+            "start": 882.92,
+            "end": 887.0,
+            "text": "I do prefer to have SMT paired with it."
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 905.68,
+        "text": "state of delivery and continue back into",
+        "matched_keywords": [
+          "state of delivery"
+        ],
+        "end": 909.4399999999999,
+        "context": [
+          {
+            "start": 901.839,
+            "end": 905.6800000000001,
+            "text": "open, trade lower first into this low,"
+          },
+          {
+            "start": 904.56,
+            "end": 907.92,
+            "text": "and then we'll form a change in the"
+          },
+          {
+            "start": 905.68,
+            "end": 909.4399999999999,
+            "text": "state of delivery and continue back into"
+          },
+          {
+            "start": 907.92,
+            "end": 911.76,
+            "text": "the range. So, let's see what happens"
+          },
+          {
+            "start": 909.44,
+            "end": 911.7600000000001,
+            "text": "here."
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 939.88,
+        "text": "change in the state of delivery",
+        "matched_keywords": [
+          "change in the state of delivery",
+          "state of delivery"
+        ],
+        "end": 944.24,
+        "context": [
+          {
+            "start": 935.32,
+            "end": 939.88,
+            "text": "reached up into our previous day's high."
+          },
+          {
+            "start": 937.88,
+            "end": 941.52,
+            "text": "We have a nice V-shape reversal with a"
+          },
+          {
+            "start": 939.88,
+            "end": 944.24,
+            "text": "change in the state of delivery"
+          },
+          {
+            "start": 941.52,
+            "end": 946.28,
+            "text": "alongside an SMT, and then we displace"
+          },
+          {
+            "start": 944.24,
+            "end": 948.48,
+            "text": "lower throughout the day with a nice"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 979.4,
+        "text": "change in the state of delivery. Now,",
+        "matched_keywords": [
+          "change in the state of delivery",
+          "state of delivery"
+        ],
+        "end": 983.959,
+        "context": [
+          {
+            "start": 974.52,
+            "end": 979.4,
+            "text": "Nope, we kind of consolidate. We do take"
+          },
+          {
+            "start": 976.839,
+            "end": 981.36,
+            "text": "out this high here, and then we have a"
+          },
+          {
+            "start": 979.4,
+            "end": 983.959,
+            "text": "change in the state of delivery. Now,"
+          },
+          {
+            "start": 981.36,
+            "end": 985.6800000000001,
+            "text": "since this is during Asia session or"
+          },
+          {
+            "start": 983.959,
+            "end": 987.4799999999999,
+            "text": "early on to the day, this is when I"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 1026.079,
+        "text": "have a change in the state of delivery,",
+        "matched_keywords": [
+          "change in the state of delivery",
+          "state of delivery"
+        ],
+        "end": 1029.6399999999999,
+        "context": [
+          {
+            "start": 1021.959,
+            "end": 1026.079,
+            "text": "trade higher into that previous day's"
+          },
+          {
+            "start": 1023.76,
+            "end": 1027.64,
+            "text": "high or that previous candle's high,"
+          },
+          {
+            "start": 1026.079,
+            "end": 1029.6399999999999,
+            "text": "have a change in the state of delivery,"
+          },
+          {
+            "start": 1027.64,
+            "end": 1031.679,
+            "text": "which confirms that wick high, and I can"
+          },
+          {
+            "start": 1029.64,
+            "end": 1033.48,
+            "text": "look to trade the reversal if it has a"
+          }
+        ]
+      }
+    ],
+    "smt": [
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 362.6,
+        "text": "also have that SMT with dollar at the",
+        "matched_keywords": [
+          "smt"
+        ],
+        "end": 366.56,
+        "context": [
+          {
+            "start": 359.52,
+            "end": 362.59999999999997,
+            "text": "want to take a look at this with my"
+          },
+          {
+            "start": 360.72,
+            "end": 364.76000000000005,
+            "text": "indicator marking it out, you can see we"
+          },
+          {
+            "start": 362.6,
+            "end": 366.56,
+            "text": "also have that SMT with dollar at the"
+          },
+          {
+            "start": 364.76,
+            "end": 368.71999999999997,
+            "text": "reversal, that change in the state of"
+          },
+          {
+            "start": 366.56,
+            "end": 370.56,
+            "text": "delivery, and then we have the T-spot"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 432.76,
+        "text": "Here you can see we have an SMT at the",
+        "matched_keywords": [
+          "smt"
+        ],
+        "end": 437.32,
+        "context": [
+          {
+            "start": 427.76,
+            "end": 432.76,
+            "text": "15-minute or 5-minute time frame."
+          },
+          {
+            "start": 430.28,
+            "end": 435.23999999999995,
+            "text": "So let's see what happens."
+          },
+          {
+            "start": 432.76,
+            "end": 437.32,
+            "text": "Here you can see we have an SMT at the"
+          },
+          {
+            "start": 435.24,
+            "end": 438.76,
+            "text": "previous day low with a change in the"
+          },
+          {
+            "start": 437.32,
+            "end": 440.4,
+            "text": "state of delivery."
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 722.64,
+        "text": "counter trend, but we do have the SMT at",
+        "matched_keywords": [
+          "smt"
+        ],
+        "end": 728.08,
+        "context": [
+          {
+            "start": 718.0,
+            "end": 722.64,
+            "text": "see what happens."
+          },
+          {
+            "start": 720.28,
+            "end": 725.72,
+            "text": "You can see it is quite messy as we are"
+          },
+          {
+            "start": 722.64,
+            "end": 728.08,
+            "text": "counter trend, but we do have the SMT at"
+          },
+          {
+            "start": 725.72,
+            "end": 730.44,
+            "text": "this high as euro and dollar took out"
+          },
+          {
+            "start": 728.08,
+            "end": 732.76,
+            "text": "this high while GBP did not. And then we"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 878.24,
+        "text": "change in the state of delivery and SMT.",
+        "matched_keywords": [
+          "smt"
+        ],
+        "end": 882.92,
+        "context": [
+          {
+            "start": 874.4,
+            "end": 878.24,
+            "text": "as we have a nice reversal off the"
+          },
+          {
+            "start": 876.4,
+            "end": 881.24,
+            "text": "previous candle's high paired with a"
+          },
+          {
+            "start": 878.24,
+            "end": 882.92,
+            "text": "change in the state of delivery and SMT."
+          },
+          {
+            "start": 881.24,
+            "end": 885.9590000000001,
+            "text": "If I'm going to be trading a candle two,"
+          },
+          {
+            "start": 882.92,
+            "end": 887.0,
+            "text": "I do prefer to have SMT paired with it."
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 882.92,
+        "text": "I do prefer to have SMT paired with it.",
+        "matched_keywords": [
+          "smt"
+        ],
+        "end": 887.0,
+        "context": [
+          {
+            "start": 878.24,
+            "end": 882.92,
+            "text": "change in the state of delivery and SMT."
+          },
+          {
+            "start": 881.24,
+            "end": 885.9590000000001,
+            "text": "If I'm going to be trading a candle two,"
+          },
+          {
+            "start": 882.92,
+            "end": 887.0,
+            "text": "I do prefer to have SMT paired with it."
+          },
+          {
+            "start": 885.959,
+            "end": 888.8,
+            "text": "Now, let's talk about one more thing"
+          },
+          {
+            "start": 887.0,
+            "end": 890.959,
+            "text": "here. If we are looking for a"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 941.52,
+        "text": "alongside an SMT, and then we displace",
+        "matched_keywords": [
+          "smt"
+        ],
+        "end": 946.28,
+        "context": [
+          {
+            "start": 937.88,
+            "end": 941.52,
+            "text": "We have a nice V-shape reversal with a"
+          },
+          {
+            "start": 939.88,
+            "end": 944.24,
+            "text": "change in the state of delivery"
+          },
+          {
+            "start": 941.52,
+            "end": 946.28,
+            "text": "alongside an SMT, and then we displace"
+          },
+          {
+            "start": 944.24,
+            "end": 948.48,
+            "text": "lower throughout the day with a nice"
+          },
+          {
+            "start": 946.28,
+            "end": 950.6,
+            "text": "bearish closure. So, with a bearish"
+          }
+        ]
+      }
+    ],
+    "candle_mechanics": [
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 16.08,
+        "text": "candle closures as well as wick size. So",
+        "matched_keywords": [
+          "wick"
+        ],
+        "end": 19.799999999999997,
+        "context": [
+          {
+            "start": 12.36,
+            "end": 16.08,
+            "text": "we are going to talk about a simple"
+          },
+          {
+            "start": 14.04,
+            "end": 18.88,
+            "text": "daily framework. This is going to use"
+          },
+          {
+            "start": 16.08,
+            "end": 19.799999999999997,
+            "text": "candle closures as well as wick size. So"
+          },
+          {
+            "start": 18.88,
+            "end": 21.72,
+            "text": "if you haven't already seen my"
+          },
+          {
+            "start": 19.8,
+            "end": 23.28,
+            "text": "equilibrium video, my candle two and"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 21.72,
+        "text": "candle three closure video, I would",
+        "matched_keywords": [
+          "closure"
+        ],
+        "end": 25.64,
+        "context": [
+          {
+            "start": 18.88,
+            "end": 21.72,
+            "text": "if you haven't already seen my"
+          },
+          {
+            "start": 19.8,
+            "end": 23.28,
+            "text": "equilibrium video, my candle two and"
+          },
+          {
+            "start": 21.72,
+            "end": 25.64,
+            "text": "candle three closure video, I would"
+          },
+          {
+            "start": 23.28,
+            "end": 27.28,
+            "text": "watch those first. This is based off the"
+          },
+          {
+            "start": 25.64,
+            "end": 30.72,
+            "text": "fact that I'm either going to be looking"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 74.04,
+        "text": "wick to form a reversal and trade lower.",
+        "matched_keywords": [
+          "wick"
+        ],
+        "end": 77.88000000000001,
+        "context": [
+          {
+            "start": 70.4,
+            "end": 74.04,
+            "text": "previous day's high, which is our"
+          },
+          {
+            "start": 71.76,
+            "end": 76.60000000000001,
+            "text": "important level, and then have a shallow"
+          },
+          {
+            "start": 74.04,
+            "end": 77.88000000000001,
+            "text": "wick to form a reversal and trade lower."
+          },
+          {
+            "start": 76.6,
+            "end": 79.96,
+            "text": "Now if you don't know why we want a"
+          },
+          {
+            "start": 77.88,
+            "end": 81.72,
+            "text": "shallow wick, a shallow wick supports"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 77.88,
+        "text": "shallow wick, a shallow wick supports",
+        "matched_keywords": [
+          "shallow wick",
+          "wick"
+        ],
+        "end": 81.72,
+        "context": [
+          {
+            "start": 74.04,
+            "end": 77.88000000000001,
+            "text": "wick to form a reversal and trade lower."
+          },
+          {
+            "start": 76.6,
+            "end": 79.96,
+            "text": "Now if you don't know why we want a"
+          },
+          {
+            "start": 77.88,
+            "end": 81.72,
+            "text": "shallow wick, a shallow wick supports"
+          },
+          {
+            "start": 79.96,
+            "end": 84.08,
+            "text": "expansion lower so we can trade this"
+          },
+          {
+            "start": 81.72,
+            "end": 85.67999999999999,
+            "text": "lower in the reversal day. If we have a"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 84.08,
+        "text": "large wick, then we're going to want to",
+        "matched_keywords": [
+          "large wick",
+          "wick"
+        ],
+        "end": 87.6,
+        "context": [
+          {
+            "start": 79.96,
+            "end": 84.08,
+            "text": "expansion lower so we can trade this"
+          },
+          {
+            "start": 81.72,
+            "end": 85.67999999999999,
+            "text": "lower in the reversal day. If we have a"
+          },
+          {
+            "start": 84.08,
+            "end": 87.6,
+            "text": "large wick, then we're going to want to"
+          },
+          {
+            "start": 85.68,
+            "end": 89.88000000000001,
+            "text": "wait for candle three or the following"
+          },
+          {
+            "start": 87.6,
+            "end": 91.32,
+            "text": "candle to trade the continuation. If you"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 89.88,
+        "text": "haven't already seen my video on wick",
+        "matched_keywords": [
+          "wick"
+        ],
+        "end": 93.28,
+        "context": [
+          {
+            "start": 85.68,
+            "end": 89.88000000000001,
+            "text": "wait for candle three or the following"
+          },
+          {
+            "start": 87.6,
+            "end": 91.32,
+            "text": "candle to trade the continuation. If you"
+          },
+          {
+            "start": 89.88,
+            "end": 93.28,
+            "text": "haven't already seen my video on wick"
+          },
+          {
+            "start": 91.32,
+            "end": 94.8,
+            "text": "size, please check that out. But"
+          },
+          {
+            "start": 93.28,
+            "end": 96.56,
+            "text": "essentially, over this previous day"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 98.0,
+        "text": "delivery to confirm the wick of this",
+        "matched_keywords": [
+          "wick"
+        ],
+        "end": 101.72,
+        "context": [
+          {
+            "start": 94.8,
+            "end": 98.0,
+            "text": "high, we're going to want to see a lower"
+          },
+          {
+            "start": 96.56,
+            "end": 100.12,
+            "text": "time frame change in the state of"
+          },
+          {
+            "start": 98.0,
+            "end": 101.72,
+            "text": "delivery to confirm the wick of this"
+          },
+          {
+            "start": 100.12,
+            "end": 103.56,
+            "text": "daily candle and then trade it back"
+          },
+          {
+            "start": 101.72,
+            "end": 105.72,
+            "text": "lower. I'm generally going to be looking"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 127.8,
+        "text": "delivery intraday to confirm the wick of",
+        "matched_keywords": [
+          "wick"
+        ],
+        "end": 132.35999999999999,
+        "context": [
+          {
+            "start": 123.72,
+            "end": 127.8,
+            "text": "close. And similar to a reversal, I will"
+          },
+          {
+            "start": 126.32,
+            "end": 130.35999999999999,
+            "text": "be using a change in the state of"
+          },
+          {
+            "start": 127.8,
+            "end": 132.35999999999999,
+            "text": "delivery intraday to confirm the wick of"
+          },
+          {
+            "start": 130.36,
+            "end": 134.04000000000002,
+            "text": "that higher time frame candle. So as we"
+          },
+          {
+            "start": 132.36,
+            "end": 135.72000000000003,
+            "text": "zoom in here, you can see we have a"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 135.72,
+        "text": "confirms this higher time frame wick,",
+        "matched_keywords": [
+          "wick"
+        ],
+        "end": 139.4,
+        "context": [
+          {
+            "start": 132.36,
+            "end": 135.72000000000003,
+            "text": "zoom in here, you can see we have a"
+          },
+          {
+            "start": 134.04,
+            "end": 137.67999999999998,
+            "text": "change in the state of delivery, which"
+          },
+          {
+            "start": 135.72,
+            "end": 139.4,
+            "text": "confirms this higher time frame wick,"
+          },
+          {
+            "start": 137.68,
+            "end": 141.24,
+            "text": "and then we can trade the body of the"
+          },
+          {
+            "start": 139.4,
+            "end": 142.76000000000002,
+            "text": "higher time frame candle. So let's get"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 174.36,
+        "text": "ideal candle two closure. Now looking at",
+        "matched_keywords": [
+          "closure"
+        ],
+        "end": 179.8,
+        "context": [
+          {
+            "start": 169.88,
+            "end": 174.35999999999999,
+            "text": "candles into that fair value gap. Now"
+          },
+          {
+            "start": 172.2,
+            "end": 177.2,
+            "text": "this low is protected. So this is an"
+          },
+          {
+            "start": 174.36,
+            "end": 179.8,
+            "text": "ideal candle two closure. Now looking at"
+          },
+          {
+            "start": 177.2,
+            "end": 181.44,
+            "text": "this, if we're expecting a continuation,"
+          },
+          {
+            "start": 179.8,
+            "end": 183.12,
+            "text": "what do we need to mark out?"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 226.6,
+        "text": "I don't want to see a closure below that",
+        "matched_keywords": [
+          "closure"
+        ],
+        "end": 230.48,
+        "context": [
+          {
+            "start": 222.6,
+            "end": 226.6,
+            "text": "chart below that. So if I'm using the"
+          },
+          {
+            "start": 224.6,
+            "end": 228.32,
+            "text": "daily, the time frame pairing with that,"
+          },
+          {
+            "start": 226.6,
+            "end": 230.48,
+            "text": "I don't want to see a closure below that"
+          },
+          {
+            "start": 228.32,
+            "end": 233.44,
+            "text": "EQ level. Not that it can't reverse and"
+          },
+          {
+            "start": 230.48,
+            "end": 235.04,
+            "text": "expand, it's just less probable. So as"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 243.24,
+        "text": "larger wick, back to the daily open, but",
+        "matched_keywords": [
+          "wick"
+        ],
+        "end": 248.56,
+        "context": [
+          {
+            "start": 239.4,
+            "end": 243.24,
+            "text": "higher. So where would we want to see"
+          },
+          {
+            "start": 241.16,
+            "end": 246.0,
+            "text": "this trade to? Well, because it has a"
+          },
+          {
+            "start": 243.24,
+            "end": 248.56,
+            "text": "larger wick, back to the daily open, but"
+          },
+          {
+            "start": 246.0,
+            "end": 250.68,
+            "text": "our previous day's high or beyond that."
+          },
+          {
+            "start": 248.56,
+            "end": 253.12,
+            "text": "And there you can see we have our open,"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 263.08,
+        "text": "or this lower wick, and then trade",
+        "matched_keywords": [
+          "wick"
+        ],
+        "end": 267.68,
+        "context": [
+          {
+            "start": 258.04,
+            "end": 263.08000000000004,
+            "text": "continuation and what you want to see."
+          },
+          {
+            "start": 260.76,
+            "end": 265.28,
+            "text": "You want to see price open, make a low"
+          },
+          {
+            "start": 263.08,
+            "end": 267.68,
+            "text": "or this lower wick, and then trade"
+          },
+          {
+            "start": 265.28,
+            "end": 269.44,
+            "text": "higher through its previous day's high."
+          },
+          {
+            "start": 267.68,
+            "end": 271.6,
+            "text": "Now how far beyond this previous day's"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 271.6,
+        "text": "wick size of this reversal. With a large",
+        "matched_keywords": [
+          "wick"
+        ],
+        "end": 275.76000000000005,
+        "context": [
+          {
+            "start": 267.68,
+            "end": 271.6,
+            "text": "Now how far beyond this previous day's"
+          },
+          {
+            "start": 269.44,
+            "end": 274.16,
+            "text": "high we go is really dependent on the"
+          },
+          {
+            "start": 271.6,
+            "end": 275.76000000000005,
+            "text": "wick size of this reversal. With a large"
+          },
+          {
+            "start": 274.16,
+            "end": 277.32000000000005,
+            "text": "wick, I'm not expecting much of a range"
+          },
+          {
+            "start": 275.76,
+            "end": 279.15999999999997,
+            "text": "beyond this level, but with a small"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 274.16,
+        "text": "wick, I'm not expecting much of a range",
+        "matched_keywords": [
+          "wick"
+        ],
+        "end": 277.32000000000005,
+        "context": [
+          {
+            "start": 269.44,
+            "end": 274.16,
+            "text": "high we go is really dependent on the"
+          },
+          {
+            "start": 271.6,
+            "end": 275.76000000000005,
+            "text": "wick size of this reversal. With a large"
+          },
+          {
+            "start": 274.16,
+            "end": 277.32000000000005,
+            "text": "wick, I'm not expecting much of a range"
+          },
+          {
+            "start": 275.76,
+            "end": 279.15999999999997,
+            "text": "beyond this level, but with a small"
+          },
+          {
+            "start": 277.32,
+            "end": 281.59999999999997,
+            "text": "wick, we can get an expansion. Let's"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 277.32,
+        "text": "wick, we can get an expansion. Let's",
+        "matched_keywords": [
+          "wick"
+        ],
+        "end": 281.59999999999997,
+        "context": [
+          {
+            "start": 274.16,
+            "end": 277.32000000000005,
+            "text": "wick, I'm not expecting much of a range"
+          },
+          {
+            "start": 275.76,
+            "end": 279.15999999999997,
+            "text": "beyond this level, but with a small"
+          },
+          {
+            "start": 277.32,
+            "end": 281.59999999999997,
+            "text": "wick, we can get an expansion. Let's"
+          },
+          {
+            "start": 279.16,
+            "end": 283.92,
+            "text": "take a look at another continuation."
+          },
+          {
+            "start": 281.6,
+            "end": 286.44,
+            "text": "So here we are on USDCAD, and what do we"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 283.92,
+        "text": "have? We have a candle two closure, a",
+        "matched_keywords": [
+          "closure"
+        ],
+        "end": 288.72,
+        "context": [
+          {
+            "start": 279.16,
+            "end": 283.92,
+            "text": "take a look at another continuation."
+          },
+          {
+            "start": 281.6,
+            "end": 286.44,
+            "text": "So here we are on USDCAD, and what do we"
+          },
+          {
+            "start": 283.92,
+            "end": 288.72,
+            "text": "have? We have a candle two closure, a"
+          },
+          {
+            "start": 286.44,
+            "end": 290.48,
+            "text": "nice bearish close. So if we're looking"
+          },
+          {
+            "start": 288.72,
+            "end": 293.36,
+            "text": "for a continuation, what do we want to"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 327.36,
+        "text": "candle two closure? No.",
+        "matched_keywords": [
+          "closure"
+        ],
+        "end": 332.44,
+        "context": [
+          {
+            "start": 322.76,
+            "end": 327.36,
+            "text": "value gap, so I can simply remove it."
+          },
+          {
+            "start": 325.68,
+            "end": 330.56,
+            "text": "Now right here, let's see, do we have a"
+          },
+          {
+            "start": 327.36,
+            "end": 332.44,
+            "text": "candle two closure? No."
+          },
+          {
+            "start": 330.56,
+            "end": 334.64,
+            "text": "Do we have a candle two closure? No. But"
+          },
+          {
+            "start": 332.44,
+            "end": 337.36,
+            "text": "we have a candle three closure, which is"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 330.56,
+        "text": "Do we have a candle two closure? No. But",
+        "matched_keywords": [
+          "closure"
+        ],
+        "end": 334.64,
+        "context": [
+          {
+            "start": 325.68,
+            "end": 330.56,
+            "text": "Now right here, let's see, do we have a"
+          },
+          {
+            "start": 327.36,
+            "end": 332.44,
+            "text": "candle two closure? No."
+          },
+          {
+            "start": 330.56,
+            "end": 334.64,
+            "text": "Do we have a candle two closure? No. But"
+          },
+          {
+            "start": 332.44,
+            "end": 337.36,
+            "text": "we have a candle three closure, which is"
+          },
+          {
+            "start": 334.64,
+            "end": 338.2,
+            "text": "ideal as we form a new protected swing"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 332.44,
+        "text": "we have a candle three closure, which is",
+        "matched_keywords": [
+          "closure"
+        ],
+        "end": 337.36,
+        "context": [
+          {
+            "start": 327.36,
+            "end": 332.44,
+            "text": "candle two closure? No."
+          },
+          {
+            "start": 330.56,
+            "end": 334.64,
+            "text": "Do we have a candle two closure? No. But"
+          },
+          {
+            "start": 332.44,
+            "end": 337.36,
+            "text": "we have a candle three closure, which is"
+          },
+          {
+            "start": 334.64,
+            "end": 338.2,
+            "text": "ideal as we form a new protected swing"
+          },
+          {
+            "start": 337.36,
+            "end": 340.12,
+            "text": "here."
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 340.12,
+        "text": "time frame wick has formed, right?",
+        "matched_keywords": [
+          "wick"
+        ],
+        "end": 343.56,
+        "context": [
+          {
+            "start": 337.36,
+            "end": 340.12,
+            "text": "here."
+          },
+          {
+            "start": 338.2,
+            "end": 342.08,
+            "text": "So now I can anticipate that this higher"
+          },
+          {
+            "start": 340.12,
+            "end": 343.56,
+            "text": "time frame wick has formed, right?"
+          },
+          {
+            "start": 342.08,
+            "end": 345.15999999999997,
+            "text": "Because this is what I look for at the"
+          },
+          {
+            "start": 343.56,
+            "end": 347.08,
+            "text": "reversal, either on the lower time"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 347.08,
+        "text": "frame using a candle closure. I can look",
+        "matched_keywords": [
+          "candle closure",
+          "closure"
+        ],
+        "end": 350.84,
+        "context": [
+          {
+            "start": 343.56,
+            "end": 347.08,
+            "text": "reversal, either on the lower time"
+          },
+          {
+            "start": 345.16,
+            "end": 349.16,
+            "text": "frame, the hourly, or the lower time"
+          },
+          {
+            "start": 347.08,
+            "end": 350.84,
+            "text": "frame using a candle closure. I can look"
+          },
+          {
+            "start": 349.16,
+            "end": 353.32000000000005,
+            "text": "for price to trade into this previous"
+          },
+          {
+            "start": 350.84,
+            "end": 354.79999999999995,
+            "text": "day low or even lower."
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 440.4,
+        "text": "small wick to see a reversal trade back",
+        "matched_keywords": [
+          "small wick",
+          "wick"
+        ],
+        "end": 444.96,
+        "context": [
+          {
+            "start": 437.32,
+            "end": 440.4,
+            "text": "state of delivery."
+          },
+          {
+            "start": 438.76,
+            "end": 443.12,
+            "text": "So now we have everything set up with a"
+          },
+          {
+            "start": 440.4,
+            "end": 444.96,
+            "text": "small wick to see a reversal trade back"
+          },
+          {
+            "start": 443.12,
+            "end": 447.52,
+            "text": "into the range. Where could we look for"
+          },
+          {
+            "start": 444.96,
+            "end": 449.71999999999997,
+            "text": "this to trade to? Back towards the EQ or"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 549.44,
+        "text": "three closure and a new protected swing,",
+        "matched_keywords": [
+          "closure"
+        ],
+        "end": 554.7600000000001,
+        "context": [
+          {
+            "start": 545.04,
+            "end": 549.4399999999999,
+            "text": "to actually align it with a bias. So"
+          },
+          {
+            "start": 547.24,
+            "end": 552.36,
+            "text": "here you can see we have an ideal candle"
+          },
+          {
+            "start": 549.44,
+            "end": 554.7600000000001,
+            "text": "three closure and a new protected swing,"
+          },
+          {
+            "start": 552.36,
+            "end": 556.88,
+            "text": "which is bullish. So ideally I want to"
+          },
+          {
+            "start": 554.76,
+            "end": 558.88,
+            "text": "frame to the upside here. Let's drop"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 592.72,
+        "text": "for what? That lower wick to form and",
+        "matched_keywords": [
+          "wick"
+        ],
+        "end": 597.76,
+        "context": [
+          {
+            "start": 589.28,
+            "end": 592.72,
+            "text": "to be a retracement to then trade it"
+          },
+          {
+            "start": 591.12,
+            "end": 595.52,
+            "text": "higher, but I'm going to need to wait"
+          },
+          {
+            "start": 592.72,
+            "end": 597.76,
+            "text": "for what? That lower wick to form and"
+          },
+          {
+            "start": 595.52,
+            "end": 599.76,
+            "text": "use a change in the state of delivery."
+          },
+          {
+            "start": 597.76,
+            "end": 602.04,
+            "text": "So, let's see what happens. We do get"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 624.32,
+        "text": "an ideal candle to closure. This is",
+        "matched_keywords": [
+          "closure"
+        ],
+        "end": 628.4000000000001,
+        "context": [
+          {
+            "start": 619.76,
+            "end": 624.3199999999999,
+            "text": "time, and then what do we have? We have"
+          },
+          {
+            "start": 622.36,
+            "end": 626.84,
+            "text": "a change in the state of delivery with"
+          },
+          {
+            "start": 624.32,
+            "end": 628.4000000000001,
+            "text": "an ideal candle to closure. This is"
+          },
+          {
+            "start": 626.84,
+            "end": 631.08,
+            "text": "where I could take an entry on the open"
+          },
+          {
+            "start": 628.4,
+            "end": 633.4,
+            "text": "of candle three to trade it higher, or I"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 633.4,
+        "text": "two closure. I could look to the",
+        "matched_keywords": [
+          "closure"
+        ],
+        "end": 637.0,
+        "context": [
+          {
+            "start": 628.4,
+            "end": 633.4,
+            "text": "of candle three to trade it higher, or I"
+          },
+          {
+            "start": 631.08,
+            "end": 635.12,
+            "text": "could do what? This is an hourly candle"
+          },
+          {
+            "start": 633.4,
+            "end": 637.0,
+            "text": "two closure. I could look to the"
+          },
+          {
+            "start": 635.12,
+            "end": 639.5600000000001,
+            "text": "five-minute to trade a five-minute"
+          },
+          {
+            "start": 637.0,
+            "end": 642.12,
+            "text": "continuation in candle three. But you"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 685.4,
+        "text": "Now, I want to have a small wick, and",
+        "matched_keywords": [
+          "small wick",
+          "wick"
+        ],
+        "end": 688.8,
+        "context": [
+          {
+            "start": 681.16,
+            "end": 685.4,
+            "text": "I'm on the hourly chart, we're using the"
+          },
+          {
+            "start": 683.04,
+            "end": 687.1999999999999,
+            "text": "10:00 a.m. high to frame a reversal."
+          },
+          {
+            "start": 685.4,
+            "end": 688.8,
+            "text": "Now, I want to have a small wick, and"
+          },
+          {
+            "start": 687.2,
+            "end": 690.2,
+            "text": "then I can trade it lower. So, let's"
+          },
+          {
+            "start": 688.8,
+            "end": 692.0,
+            "text": "drop down to the lower time frames and"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 699.52,
+        "text": "small wick. But what confirms that? Are",
+        "matched_keywords": [
+          "small wick",
+          "wick"
+        ],
+        "end": 703.1999999999999,
+        "context": [
+          {
+            "start": 695.4,
+            "end": 699.52,
+            "text": "Now, ideally, we want this candle's high"
+          },
+          {
+            "start": 697.44,
+            "end": 701.9200000000001,
+            "text": "to form early into the candle and have a"
+          },
+          {
+            "start": 699.52,
+            "end": 703.1999999999999,
+            "text": "small wick. But what confirms that? Are"
+          },
+          {
+            "start": 701.92,
+            "end": 705.5999999999999,
+            "text": "we just going to use a closure like"
+          },
+          {
+            "start": 703.2,
+            "end": 707.6800000000001,
+            "text": "this? No, we want to wait for what? The"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 701.92,
+        "text": "we just going to use a closure like",
+        "matched_keywords": [
+          "closure"
+        ],
+        "end": 705.5999999999999,
+        "context": [
+          {
+            "start": 697.44,
+            "end": 701.9200000000001,
+            "text": "to form early into the candle and have a"
+          },
+          {
+            "start": 699.52,
+            "end": 703.1999999999999,
+            "text": "small wick. But what confirms that? Are"
+          },
+          {
+            "start": 701.92,
+            "end": 705.5999999999999,
+            "text": "we just going to use a closure like"
+          },
+          {
+            "start": 703.2,
+            "end": 707.6800000000001,
+            "text": "this? No, we want to wait for what? The"
+          },
+          {
+            "start": 705.6,
+            "end": 710.72,
+            "text": "change in the state of delivery."
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 710.72,
+        "text": "You can see we get this closure below,",
+        "matched_keywords": [
+          "closure"
+        ],
+        "end": 713.8000000000001,
+        "context": [
+          {
+            "start": 705.6,
+            "end": 710.72,
+            "text": "change in the state of delivery."
+          },
+          {
+            "start": 707.68,
+            "end": 712.4799999999999,
+            "text": "So, let's see what happens here."
+          },
+          {
+            "start": 710.72,
+            "end": 713.8000000000001,
+            "text": "You can see we get this closure below,"
+          },
+          {
+            "start": 712.48,
+            "end": 715.88,
+            "text": "which forms a change in the state of"
+          },
+          {
+            "start": 713.8,
+            "end": 718.0,
+            "text": "delivery, which then protects this high,"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 781.48,
+        "text": "do have a sweep here, and then a closure",
+        "matched_keywords": [
+          "closure"
+        ],
+        "end": 785.28,
+        "context": [
+          {
+            "start": 777.0,
+            "end": 781.48,
+            "text": "15-minute time frame. So, here you can"
+          },
+          {
+            "start": 779.08,
+            "end": 784.08,
+            "text": "see we've had three bearish candles. We"
+          },
+          {
+            "start": 781.48,
+            "end": 785.28,
+            "text": "do have a sweep here, and then a closure"
+          },
+          {
+            "start": 784.08,
+            "end": 787.32,
+            "text": "forming a change in the state of"
+          },
+          {
+            "start": 785.28,
+            "end": 789.4,
+            "text": "delivery. Following these two expansion"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 806.0,
+        "text": "lower. If it has a small wick, then we",
+        "matched_keywords": [
+          "small wick",
+          "wick"
+        ],
+        "end": 810.44,
+        "context": [
+          {
+            "start": 801.72,
+            "end": 806.0,
+            "text": "it lower. So, we could anticipate price"
+          },
+          {
+            "start": 804.08,
+            "end": 808.44,
+            "text": "to sweep out this high and then trade it"
+          },
+          {
+            "start": 806.0,
+            "end": 810.44,
+            "text": "lower. If it has a small wick, then we"
+          },
+          {
+            "start": 808.44,
+            "end": 812.2,
+            "text": "can look to trade the reversal candle."
+          },
+          {
+            "start": 810.44,
+            "end": 813.6,
+            "text": "If it has a large wick, then we're not"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 810.44,
+        "text": "If it has a large wick, then we're not",
+        "matched_keywords": [
+          "large wick",
+          "wick"
+        ],
+        "end": 813.6,
+        "context": [
+          {
+            "start": 806.0,
+            "end": 810.44,
+            "text": "lower. If it has a small wick, then we"
+          },
+          {
+            "start": 808.44,
+            "end": 812.2,
+            "text": "can look to trade the reversal candle."
+          },
+          {
+            "start": 810.44,
+            "end": 813.6,
+            "text": "If it has a large wick, then we're not"
+          },
+          {
+            "start": 812.2,
+            "end": 815.12,
+            "text": "going to want to trade the reversal"
+          },
+          {
+            "start": 813.6,
+            "end": 817.12,
+            "text": "candle. We'll wait for the following"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 825.56,
+        "text": "here. We can't get the closure to form a",
+        "matched_keywords": [
+          "closure"
+        ],
+        "end": 829.8389999999999,
+        "context": [
+          {
+            "start": 821.24,
+            "end": 825.5600000000001,
+            "text": "bit better. And how can you see this?"
+          },
+          {
+            "start": 823.12,
+            "end": 827.6,
+            "text": "Well, we cannot form a continuation"
+          },
+          {
+            "start": 825.56,
+            "end": 829.8389999999999,
+            "text": "here. We can't get the closure to form a"
+          },
+          {
+            "start": 827.6,
+            "end": 832.52,
+            "text": "protected swing, so then we make a new"
+          },
+          {
+            "start": 829.839,
+            "end": 835.24,
+            "text": "high. And here you can see we also can't"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 847.839,
+        "text": "No, I need to wait for a closure through",
+        "matched_keywords": [
+          "closure"
+        ],
+        "end": 852.2800000000001,
+        "context": [
+          {
+            "start": 843.16,
+            "end": 847.8389999999999,
+            "text": "So, here you can see we run into this"
+          },
+          {
+            "start": 845.04,
+            "end": 850.28,
+            "text": "high. Now, am I going to trust this yet?"
+          },
+          {
+            "start": 847.839,
+            "end": 852.2800000000001,
+            "text": "No, I need to wait for a closure through"
+          },
+          {
+            "start": 850.28,
+            "end": 854.04,
+            "text": "or a change in the state of delivery,"
+          },
+          {
+            "start": 852.28,
+            "end": 856.64,
+            "text": "which then confirms that this wick has"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 852.28,
+        "text": "which then confirms that this wick has",
+        "matched_keywords": [
+          "wick"
+        ],
+        "end": 856.64,
+        "context": [
+          {
+            "start": 847.839,
+            "end": 852.2800000000001,
+            "text": "No, I need to wait for a closure through"
+          },
+          {
+            "start": 850.28,
+            "end": 854.04,
+            "text": "or a change in the state of delivery,"
+          },
+          {
+            "start": 852.28,
+            "end": 856.64,
+            "text": "which then confirms that this wick has"
+          },
+          {
+            "start": 854.04,
+            "end": 858.4399999999999,
+            "text": "been created."
+          },
+          {
+            "start": 856.64,
+            "end": 860.92,
+            "text": "You can see we struggle to close, but"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 914.2,
+        "text": "continuation, and this has a large wick.",
+        "matched_keywords": [
+          "large wick",
+          "wick"
+        ],
+        "end": 919.0400000000001,
+        "context": [
+          {
+            "start": 909.44,
+            "end": 911.7600000000001,
+            "text": "here."
+          },
+          {
+            "start": 912.959,
+            "end": 917.2399999999999,
+            "text": "You can see we are getting a"
+          },
+          {
+            "start": 914.2,
+            "end": 919.0400000000001,
+            "text": "continuation, and this has a large wick."
+          },
+          {
+            "start": 917.24,
+            "end": 920.5600000000001,
+            "text": "So, this is not a candle that I would be"
+          },
+          {
+            "start": 919.04,
+            "end": 922.76,
+            "text": "interested in trading back into the"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 946.28,
+        "text": "bearish closure. So, with a bearish",
+        "matched_keywords": [
+          "closure"
+        ],
+        "end": 950.6,
+        "context": [
+          {
+            "start": 941.52,
+            "end": 946.28,
+            "text": "alongside an SMT, and then we displace"
+          },
+          {
+            "start": 944.24,
+            "end": 948.48,
+            "text": "lower throughout the day with a nice"
+          },
+          {
+            "start": 946.28,
+            "end": 950.6,
+            "text": "bearish closure. So, with a bearish"
+          },
+          {
+            "start": 948.48,
+            "end": 953.04,
+            "text": "candle two closure, we'd be looking for"
+          },
+          {
+            "start": 950.6,
+            "end": 956.36,
+            "text": "a continuation in candle three out of"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 948.48,
+        "text": "candle two closure, we'd be looking for",
+        "matched_keywords": [
+          "closure"
+        ],
+        "end": 953.04,
+        "context": [
+          {
+            "start": 944.24,
+            "end": 948.48,
+            "text": "lower throughout the day with a nice"
+          },
+          {
+            "start": 946.28,
+            "end": 950.6,
+            "text": "bearish closure. So, with a bearish"
+          },
+          {
+            "start": 948.48,
+            "end": 953.04,
+            "text": "candle two closure, we'd be looking for"
+          },
+          {
+            "start": 950.6,
+            "end": 956.36,
+            "text": "a continuation in candle three out of"
+          },
+          {
+            "start": 953.04,
+            "end": 958.92,
+            "text": "where? The T-spot or the EQ. We want to"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 1014.56,
+        "text": "formation that confirms the wick of this",
+        "matched_keywords": [
+          "wick"
+        ],
+        "end": 1017.959,
+        "context": [
+          {
+            "start": 1009.959,
+            "end": 1014.56,
+            "text": "continuation, I want to see price open,"
+          },
+          {
+            "start": 1012.68,
+            "end": 1016.4,
+            "text": "reach into a point of interest, have a"
+          },
+          {
+            "start": 1014.56,
+            "end": 1017.959,
+            "text": "formation that confirms the wick of this"
+          },
+          {
+            "start": 1016.4,
+            "end": 1020.12,
+            "text": "higher time frame candle, and then I can"
+          },
+          {
+            "start": 1017.959,
+            "end": 1021.959,
+            "text": "look to trade that continuation. In a"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 1027.64,
+        "text": "which confirms that wick high, and I can",
+        "matched_keywords": [
+          "wick"
+        ],
+        "end": 1031.679,
+        "context": [
+          {
+            "start": 1023.76,
+            "end": 1027.64,
+            "text": "high or that previous candle's high,"
+          },
+          {
+            "start": 1026.079,
+            "end": 1029.6399999999999,
+            "text": "have a change in the state of delivery,"
+          },
+          {
+            "start": 1027.64,
+            "end": 1031.679,
+            "text": "which confirms that wick high, and I can"
+          },
+          {
+            "start": 1029.64,
+            "end": 1033.48,
+            "text": "look to trade the reversal if it has a"
+          },
+          {
+            "start": 1031.679,
+            "end": 1035.0790000000002,
+            "text": "small enough wick. Now, I hope you"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 1031.679,
+        "text": "small enough wick. Now, I hope you",
+        "matched_keywords": [
+          "wick"
+        ],
+        "end": 1035.0790000000002,
+        "context": [
+          {
+            "start": 1027.64,
+            "end": 1031.679,
+            "text": "which confirms that wick high, and I can"
+          },
+          {
+            "start": 1029.64,
+            "end": 1033.48,
+            "text": "look to trade the reversal if it has a"
+          },
+          {
+            "start": 1031.679,
+            "end": 1035.0790000000002,
+            "text": "small enough wick. Now, I hope you"
+          },
+          {
+            "start": 1033.48,
+            "end": 1036.76,
+            "text": "enjoyed this video. If you have any"
+          },
+          {
+            "start": 1035.079,
+            "end": 1038.56,
+            "text": "questions, leave them in the comment"
+          }
+        ]
+      }
+    ],
+    "day_type": [
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 27.28,
+        "text": "for a reversal or for a continuation. If",
+        "matched_keywords": [
+          "continuation",
+          "reversal"
+        ],
+        "end": 32.4,
+        "context": [
+          {
+            "start": 23.28,
+            "end": 27.28,
+            "text": "watch those first. This is based off the"
+          },
+          {
+            "start": 25.64,
+            "end": 30.72,
+            "text": "fact that I'm either going to be looking"
+          },
+          {
+            "start": 27.28,
+            "end": 32.4,
+            "text": "for a reversal or for a continuation. If"
+          },
+          {
+            "start": 30.72,
+            "end": 34.28,
+            "text": "I'm looking for a reversal, I'm always"
+          },
+          {
+            "start": 32.4,
+            "end": 36.199999999999996,
+            "text": "going to frame that reversal off of"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 30.72,
+        "text": "I'm looking for a reversal, I'm always",
+        "matched_keywords": [
+          "reversal"
+        ],
+        "end": 34.28,
+        "context": [
+          {
+            "start": 25.64,
+            "end": 30.72,
+            "text": "fact that I'm either going to be looking"
+          },
+          {
+            "start": 27.28,
+            "end": 32.4,
+            "text": "for a reversal or for a continuation. If"
+          },
+          {
+            "start": 30.72,
+            "end": 34.28,
+            "text": "I'm looking for a reversal, I'm always"
+          },
+          {
+            "start": 32.4,
+            "end": 36.199999999999996,
+            "text": "going to frame that reversal off of"
+          },
+          {
+            "start": 34.28,
+            "end": 38.760000000000005,
+            "text": "previous day's high or previous day's"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 32.4,
+        "text": "going to frame that reversal off of",
+        "matched_keywords": [
+          "reversal"
+        ],
+        "end": 36.199999999999996,
+        "context": [
+          {
+            "start": 27.28,
+            "end": 32.4,
+            "text": "for a reversal or for a continuation. If"
+          },
+          {
+            "start": 30.72,
+            "end": 34.28,
+            "text": "I'm looking for a reversal, I'm always"
+          },
+          {
+            "start": 32.4,
+            "end": 36.199999999999996,
+            "text": "going to frame that reversal off of"
+          },
+          {
+            "start": 34.28,
+            "end": 38.760000000000005,
+            "text": "previous day's high or previous day's"
+          },
+          {
+            "start": 36.2,
+            "end": 41.28,
+            "text": "low. So here you can see we have had a"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 45.44,
+        "text": "reversal formed, and then I can look to",
+        "matched_keywords": [
+          "reversal"
+        ],
+        "end": 48.96,
+        "context": [
+          {
+            "start": 41.28,
+            "end": 45.44,
+            "text": "I'd be looking for the next day to open,"
+          },
+          {
+            "start": 43.2,
+            "end": 47.0,
+            "text": "trade into previous day high, have a"
+          },
+          {
+            "start": 45.44,
+            "end": 48.96,
+            "text": "reversal formed, and then I can look to"
+          },
+          {
+            "start": 47.0,
+            "end": 51.2,
+            "text": "trade it back into the range"
+          },
+          {
+            "start": 48.96,
+            "end": 52.480000000000004,
+            "text": "looking for that EQ or to the previous"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 53.68,
+        "text": "continuation, I'll look for price to",
+        "matched_keywords": [
+          "continuation"
+        ],
+        "end": 58.84,
+        "context": [
+          {
+            "start": 51.2,
+            "end": 53.68,
+            "text": "day's low."
+          },
+          {
+            "start": 52.48,
+            "end": 55.8,
+            "text": "Now if I'm going to be looking for a"
+          },
+          {
+            "start": 53.68,
+            "end": 58.84,
+            "text": "continuation, I'll look for price to"
+          },
+          {
+            "start": 55.8,
+            "end": 60.519999999999996,
+            "text": "open, trade lower first, respect the EQ"
+          },
+          {
+            "start": 58.84,
+            "end": 62.480000000000004,
+            "text": "of that previous day's range, and then"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 64.12,
+        "text": "example of a reversal would look like.",
+        "matched_keywords": [
+          "reversal"
+        ],
+        "end": 67.84,
+        "context": [
+          {
+            "start": 60.52,
+            "end": 64.12,
+            "text": "trade up and through that previous day's"
+          },
+          {
+            "start": 62.48,
+            "end": 66.36,
+            "text": "high. Let's take a look at what an"
+          },
+          {
+            "start": 64.12,
+            "end": 67.84,
+            "text": "example of a reversal would look like."
+          },
+          {
+            "start": 66.36,
+            "end": 70.4,
+            "text": "Here you can see we want to see price"
+          },
+          {
+            "start": 67.84,
+            "end": 71.76,
+            "text": "open, trade higher first into the"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 74.04,
+        "text": "wick to form a reversal and trade lower.",
+        "matched_keywords": [
+          "reversal"
+        ],
+        "end": 77.88000000000001,
+        "context": [
+          {
+            "start": 70.4,
+            "end": 74.04,
+            "text": "previous day's high, which is our"
+          },
+          {
+            "start": 71.76,
+            "end": 76.60000000000001,
+            "text": "important level, and then have a shallow"
+          },
+          {
+            "start": 74.04,
+            "end": 77.88000000000001,
+            "text": "wick to form a reversal and trade lower."
+          },
+          {
+            "start": 76.6,
+            "end": 79.96,
+            "text": "Now if you don't know why we want a"
+          },
+          {
+            "start": 77.88,
+            "end": 81.72,
+            "text": "shallow wick, a shallow wick supports"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 81.72,
+        "text": "lower in the reversal day. If we have a",
+        "matched_keywords": [
+          "reversal",
+          "reversal day"
+        ],
+        "end": 85.67999999999999,
+        "context": [
+          {
+            "start": 77.88,
+            "end": 81.72,
+            "text": "shallow wick, a shallow wick supports"
+          },
+          {
+            "start": 79.96,
+            "end": 84.08,
+            "text": "expansion lower so we can trade this"
+          },
+          {
+            "start": 81.72,
+            "end": 85.67999999999999,
+            "text": "lower in the reversal day. If we have a"
+          },
+          {
+            "start": 84.08,
+            "end": 87.6,
+            "text": "large wick, then we're going to want to"
+          },
+          {
+            "start": 85.68,
+            "end": 89.88000000000001,
+            "text": "wait for candle three or the following"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 87.6,
+        "text": "candle to trade the continuation. If you",
+        "matched_keywords": [
+          "continuation"
+        ],
+        "end": 91.32,
+        "context": [
+          {
+            "start": 84.08,
+            "end": 87.6,
+            "text": "large wick, then we're going to want to"
+          },
+          {
+            "start": 85.68,
+            "end": 89.88000000000001,
+            "text": "wait for candle three or the following"
+          },
+          {
+            "start": 87.6,
+            "end": 91.32,
+            "text": "candle to trade the continuation. If you"
+          },
+          {
+            "start": 89.88,
+            "end": 93.28,
+            "text": "haven't already seen my video on wick"
+          },
+          {
+            "start": 91.32,
+            "end": 94.8,
+            "text": "size, please check that out. But"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 112.28,
+        "text": "for a continuation, I want to see price",
+        "matched_keywords": [
+          "continuation"
+        ],
+        "end": 116.8,
+        "context": [
+          {
+            "start": 108.48,
+            "end": 112.28,
+            "text": "New York I will use the 5-minute or"
+          },
+          {
+            "start": 110.52,
+            "end": 114.08,
+            "text": "15-minute time frame. Now when looking"
+          },
+          {
+            "start": 112.28,
+            "end": 116.8,
+            "text": "for a continuation, I want to see price"
+          },
+          {
+            "start": 114.08,
+            "end": 119.2,
+            "text": "open up, respect the EQ of the previous"
+          },
+          {
+            "start": 116.8,
+            "end": 121.75999999999999,
+            "text": "day's range, and then trade higher. So"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 123.72,
+        "text": "close. And similar to a reversal, I will",
+        "matched_keywords": [
+          "reversal"
+        ],
+        "end": 127.8,
+        "context": [
+          {
+            "start": 119.2,
+            "end": 123.72,
+            "text": "we have an open, low, and then forming"
+          },
+          {
+            "start": 121.76,
+            "end": 126.32000000000001,
+            "text": "the body before we have a high and"
+          },
+          {
+            "start": 123.72,
+            "end": 127.8,
+            "text": "close. And similar to a reversal, I will"
+          },
+          {
+            "start": 126.32,
+            "end": 130.35999999999999,
+            "text": "be using a change in the state of"
+          },
+          {
+            "start": 127.8,
+            "end": 132.35999999999999,
+            "text": "delivery intraday to confirm the wick of"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 177.2,
+        "text": "this, if we're expecting a continuation,",
+        "matched_keywords": [
+          "continuation"
+        ],
+        "end": 181.44,
+        "context": [
+          {
+            "start": 172.2,
+            "end": 177.2,
+            "text": "this low is protected. So this is an"
+          },
+          {
+            "start": 174.36,
+            "end": 179.8,
+            "text": "ideal candle two closure. Now looking at"
+          },
+          {
+            "start": 177.2,
+            "end": 181.44,
+            "text": "this, if we're expecting a continuation,"
+          },
+          {
+            "start": 179.8,
+            "end": 183.12,
+            "text": "what do we need to mark out?"
+          },
+          {
+            "start": 181.44,
+            "end": 185.4,
+            "text": "Well, with all of these days, we're just"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 192.6,
+        "text": "a continuation, we want to see price",
+        "matched_keywords": [
+          "continuation"
+        ],
+        "end": 198.2,
+        "context": [
+          {
+            "start": 189.2,
+            "end": 192.6,
+            "text": "previous day high."
+          },
+          {
+            "start": 190.8,
+            "end": 194.52,
+            "text": "Now if we are bullish, we're looking for"
+          },
+          {
+            "start": 192.6,
+            "end": 198.2,
+            "text": "a continuation, we want to see price"
+          },
+          {
+            "start": 194.52,
+            "end": 199.92000000000002,
+            "text": "open, trade lower first, respect the EQ,"
+          },
+          {
+            "start": 198.2,
+            "end": 201.76,
+            "text": "and then trade higher through previous"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 258.04,
+        "text": "continuation and what you want to see.",
+        "matched_keywords": [
+          "continuation"
+        ],
+        "end": 263.08000000000004,
+        "context": [
+          {
+            "start": 255.16,
+            "end": 258.04,
+            "text": "on the left here."
+          },
+          {
+            "start": 256.72,
+            "end": 260.76000000000005,
+            "text": "So this is a good example of a"
+          },
+          {
+            "start": 258.04,
+            "end": 263.08000000000004,
+            "text": "continuation and what you want to see."
+          },
+          {
+            "start": 260.76,
+            "end": 265.28,
+            "text": "You want to see price open, make a low"
+          },
+          {
+            "start": 263.08,
+            "end": 267.68,
+            "text": "or this lower wick, and then trade"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 271.6,
+        "text": "wick size of this reversal. With a large",
+        "matched_keywords": [
+          "reversal"
+        ],
+        "end": 275.76000000000005,
+        "context": [
+          {
+            "start": 267.68,
+            "end": 271.6,
+            "text": "Now how far beyond this previous day's"
+          },
+          {
+            "start": 269.44,
+            "end": 274.16,
+            "text": "high we go is really dependent on the"
+          },
+          {
+            "start": 271.6,
+            "end": 275.76000000000005,
+            "text": "wick size of this reversal. With a large"
+          },
+          {
+            "start": 274.16,
+            "end": 277.32000000000005,
+            "text": "wick, I'm not expecting much of a range"
+          },
+          {
+            "start": 275.76,
+            "end": 279.15999999999997,
+            "text": "beyond this level, but with a small"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 279.16,
+        "text": "take a look at another continuation.",
+        "matched_keywords": [
+          "continuation"
+        ],
+        "end": 283.92,
+        "context": [
+          {
+            "start": 275.76,
+            "end": 279.15999999999997,
+            "text": "beyond this level, but with a small"
+          },
+          {
+            "start": 277.32,
+            "end": 281.59999999999997,
+            "text": "wick, we can get an expansion. Let's"
+          },
+          {
+            "start": 279.16,
+            "end": 283.92,
+            "text": "take a look at another continuation."
+          },
+          {
+            "start": 281.6,
+            "end": 286.44,
+            "text": "So here we are on USDCAD, and what do we"
+          },
+          {
+            "start": 283.92,
+            "end": 288.72,
+            "text": "have? We have a candle two closure, a"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 288.72,
+        "text": "for a continuation, what do we want to",
+        "matched_keywords": [
+          "continuation"
+        ],
+        "end": 293.36,
+        "context": [
+          {
+            "start": 283.92,
+            "end": 288.72,
+            "text": "have? We have a candle two closure, a"
+          },
+          {
+            "start": 286.44,
+            "end": 290.48,
+            "text": "nice bearish close. So if we're looking"
+          },
+          {
+            "start": 288.72,
+            "end": 293.36,
+            "text": "for a continuation, what do we want to"
+          },
+          {
+            "start": 290.48,
+            "end": 297.04,
+            "text": "mark out? We want to mark out the EQ as"
+          },
+          {
+            "start": 293.36,
+            "end": 299.68,
+            "text": "well as the previous day's low. Now when"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 343.56,
+        "text": "reversal, either on the lower time",
+        "matched_keywords": [
+          "reversal"
+        ],
+        "end": 347.08,
+        "context": [
+          {
+            "start": 340.12,
+            "end": 343.56,
+            "text": "time frame wick has formed, right?"
+          },
+          {
+            "start": 342.08,
+            "end": 345.15999999999997,
+            "text": "Because this is what I look for at the"
+          },
+          {
+            "start": 343.56,
+            "end": 347.08,
+            "text": "reversal, either on the lower time"
+          },
+          {
+            "start": 345.16,
+            "end": 349.16,
+            "text": "frame, the hourly, or the lower time"
+          },
+          {
+            "start": 347.08,
+            "end": 350.84,
+            "text": "frame using a candle closure. I can look"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 364.76,
+        "text": "reversal, that change in the state of",
+        "matched_keywords": [
+          "reversal"
+        ],
+        "end": 368.71999999999997,
+        "context": [
+          {
+            "start": 360.72,
+            "end": 364.76000000000005,
+            "text": "indicator marking it out, you can see we"
+          },
+          {
+            "start": 362.6,
+            "end": 366.56,
+            "text": "also have that SMT with dollar at the"
+          },
+          {
+            "start": 364.76,
+            "end": 368.71999999999997,
+            "text": "reversal, that change in the state of"
+          },
+          {
+            "start": 366.56,
+            "end": 370.56,
+            "text": "delivery, and then we have the T-spot"
+          },
+          {
+            "start": 368.72,
+            "end": 372.64000000000004,
+            "text": "marked up, which in this case is just"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 376.32,
+        "text": "take a look at a reversal. Here you can",
+        "matched_keywords": [
+          "reversal"
+        ],
+        "end": 380.71999999999997,
+        "context": [
+          {
+            "start": 372.64,
+            "end": 376.32,
+            "text": "search for that point of interest and"
+          },
+          {
+            "start": 374.48,
+            "end": 378.28000000000003,
+            "text": "look for it to trade lower. Now let's"
+          },
+          {
+            "start": 376.32,
+            "end": 380.71999999999997,
+            "text": "take a look at a reversal. Here you can"
+          },
+          {
+            "start": 378.28,
+            "end": 383.44,
+            "text": "see we have the EQ marked up and our"
+          },
+          {
+            "start": 380.72,
+            "end": 384.72,
+            "text": "previous day low is right here. So if"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 384.72,
+        "text": "continuation, what would we want to see?",
+        "matched_keywords": [
+          "continuation"
+        ],
+        "end": 389.68,
+        "context": [
+          {
+            "start": 380.72,
+            "end": 384.72,
+            "text": "previous day low is right here. So if"
+          },
+          {
+            "start": 383.44,
+            "end": 387.16,
+            "text": "we're going to be looking for a"
+          },
+          {
+            "start": 384.72,
+            "end": 389.68,
+            "text": "continuation, what would we want to see?"
+          },
+          {
+            "start": 387.16,
+            "end": 391.32000000000005,
+            "text": "Price open, trade higher first,"
+          },
+          {
+            "start": 389.68,
+            "end": 393.76,
+            "text": "respecting this fair value gap and the"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 411.44,
+        "text": "we looking for with a reversal? Well, we",
+        "matched_keywords": [
+          "reversal"
+        ],
+        "end": 415.84,
+        "context": [
+          {
+            "start": 406.4,
+            "end": 411.44,
+            "text": "is bullish. When price opens and makes a"
+          },
+          {
+            "start": 408.76,
+            "end": 413.64,
+            "text": "high first, that is bearish. So what are"
+          },
+          {
+            "start": 411.44,
+            "end": 415.84,
+            "text": "we looking for with a reversal? Well, we"
+          },
+          {
+            "start": 413.64,
+            "end": 417.59999999999997,
+            "text": "want to see price open, reach into that"
+          },
+          {
+            "start": 415.84,
+            "end": 420.08,
+            "text": "previous day's low, which is that"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 440.4,
+        "text": "small wick to see a reversal trade back",
+        "matched_keywords": [
+          "reversal"
+        ],
+        "end": 444.96,
+        "context": [
+          {
+            "start": 437.32,
+            "end": 440.4,
+            "text": "state of delivery."
+          },
+          {
+            "start": 438.76,
+            "end": 443.12,
+            "text": "So now we have everything set up with a"
+          },
+          {
+            "start": 440.4,
+            "end": 444.96,
+            "text": "small wick to see a reversal trade back"
+          },
+          {
+            "start": 443.12,
+            "end": 447.52,
+            "text": "into the range. Where could we look for"
+          },
+          {
+            "start": 444.96,
+            "end": 449.71999999999997,
+            "text": "this to trade to? Back towards the EQ or"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 459.92,
+        "text": "reversal. Now let's look at this once",
+        "matched_keywords": [
+          "reversal"
+        ],
+        "end": 463.96000000000004,
+        "context": [
+          {
+            "start": 455.16,
+            "end": 459.92,
+            "text": "the EQ and we have a nice move off of"
+          },
+          {
+            "start": 457.72,
+            "end": 462.36,
+            "text": "that previous day's low, which forms a"
+          },
+          {
+            "start": 459.92,
+            "end": 463.96000000000004,
+            "text": "reversal. Now let's look at this once"
+          },
+          {
+            "start": 462.36,
+            "end": 466.92,
+            "text": "again. If I'm looking for a"
+          },
+          {
+            "start": 463.96,
+            "end": 469.2,
+            "text": "continuation, what am I looking for?"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 463.96,
+        "text": "continuation, what am I looking for?",
+        "matched_keywords": [
+          "continuation"
+        ],
+        "end": 469.2,
+        "context": [
+          {
+            "start": 459.92,
+            "end": 463.96000000000004,
+            "text": "reversal. Now let's look at this once"
+          },
+          {
+            "start": 462.36,
+            "end": 466.92,
+            "text": "again. If I'm looking for a"
+          },
+          {
+            "start": 463.96,
+            "end": 469.2,
+            "text": "continuation, what am I looking for?"
+          },
+          {
+            "start": 466.92,
+            "end": 471.56,
+            "text": "Price to open, respect the EQ of the"
+          },
+          {
+            "start": 469.2,
+            "end": 473.24,
+            "text": "previous day, and then look for above"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 487.76,
+        "text": "a reversal or a retracement here. Let's",
+        "matched_keywords": [
+          "reversal"
+        ],
+        "end": 492.28,
+        "context": [
+          {
+            "start": 483.44,
+            "end": 487.76,
+            "text": "We do get a move into previous day high,"
+          },
+          {
+            "start": 485.68,
+            "end": 489.6,
+            "text": "and then we have it forming somewhat of"
+          },
+          {
+            "start": 487.76,
+            "end": 492.28,
+            "text": "a reversal or a retracement here. Let's"
+          },
+          {
+            "start": 489.6,
+            "end": 494.56,
+            "text": "see what happens."
+          },
+          {
+            "start": 492.28,
+            "end": 496.35999999999996,
+            "text": "And you can see a little bit of a messy"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 515.4,
+        "text": "an example of a reversal, right? So just",
+        "matched_keywords": [
+          "reversal"
+        ],
+        "end": 520.039,
+        "context": [
+          {
+            "start": 510.68,
+            "end": 515.4,
+            "text": "sweep out a protected swing, and then it"
+          },
+          {
+            "start": 512.479,
+            "end": 518.0,
+            "text": "will have its true move. So this is just"
+          },
+          {
+            "start": 515.4,
+            "end": 520.039,
+            "text": "an example of a reversal, right? So just"
+          },
+          {
+            "start": 518.0,
+            "end": 522.36,
+            "text": "to review, sweeping out our previous"
+          },
+          {
+            "start": 520.039,
+            "end": 523.5989999999999,
+            "text": "day's low, has a lower time frame change"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 527.64,
+        "text": "continuation, I want to see price open,",
+        "matched_keywords": [
+          "continuation"
+        ],
+        "end": 532.4,
+        "context": [
+          {
+            "start": 523.599,
+            "end": 527.6400000000001,
+            "text": "can look back towards that EQ."
+          },
+          {
+            "start": 525.84,
+            "end": 530.0,
+            "text": "On a bullish day or on this bullish"
+          },
+          {
+            "start": 527.64,
+            "end": 532.4,
+            "text": "continuation, I want to see price open,"
+          },
+          {
+            "start": 530.0,
+            "end": 535.04,
+            "text": "make a low, and then trade higher into"
+          },
+          {
+            "start": 532.4,
+            "end": 538.0799999999999,
+            "text": "previous day low or beyond. Now in this"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 584.36,
+        "text": "a full on reversal. Since I am still",
+        "matched_keywords": [
+          "reversal"
+        ],
+        "end": 589.28,
+        "context": [
+          {
+            "start": 579.0,
+            "end": 584.36,
+            "text": "bearish? Yes, this is bearish, but this"
+          },
+          {
+            "start": 581.76,
+            "end": 586.68,
+            "text": "can be still part of a retracement, not"
+          },
+          {
+            "start": 584.36,
+            "end": 589.28,
+            "text": "a full on reversal. Since I am still"
+          },
+          {
+            "start": 586.68,
+            "end": 591.12,
+            "text": "bullish, I still want to anticipate this"
+          },
+          {
+            "start": 589.28,
+            "end": 592.72,
+            "text": "to be a retracement to then trade it"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 604.16,
+        "text": "reversal back in towards the EQ of the",
+        "matched_keywords": [
+          "reversal"
+        ],
+        "end": 609.0,
+        "context": [
+          {
+            "start": 599.76,
+            "end": 604.16,
+            "text": "this move lower, which is possible to"
+          },
+          {
+            "start": 602.04,
+            "end": 606.88,
+            "text": "trade, right? This would be trading the"
+          },
+          {
+            "start": 604.16,
+            "end": 609.0,
+            "text": "reversal back in towards the EQ of the"
+          },
+          {
+            "start": 606.88,
+            "end": 611.92,
+            "text": "range or back into the points of"
+          },
+          {
+            "start": 609.0,
+            "end": 614.48,
+            "text": "interest around the EQ."
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 637.0,
+        "text": "continuation in candle three. But you",
+        "matched_keywords": [
+          "continuation"
+        ],
+        "end": 642.12,
+        "context": [
+          {
+            "start": 633.4,
+            "end": 637.0,
+            "text": "two closure. I could look to the"
+          },
+          {
+            "start": 635.12,
+            "end": 639.5600000000001,
+            "text": "five-minute to trade a five-minute"
+          },
+          {
+            "start": 637.0,
+            "end": 642.12,
+            "text": "continuation in candle three. But you"
+          },
+          {
+            "start": 639.56,
+            "end": 645.56,
+            "text": "can see how if you do have a bias you do"
+          },
+          {
+            "start": 642.12,
+            "end": 645.5600000000001,
+            "text": "want to come in and keep that"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 650.92,
+        "text": "reversal on previous day high, but that",
+        "matched_keywords": [
+          "reversal"
+        ],
+        "end": 656.36,
+        "context": [
+          {
+            "start": 646.48,
+            "end": 650.9200000000001,
+            "text": "with that bias. And you can see, yes, we"
+          },
+          {
+            "start": 649.04,
+            "end": 652.9599999999999,
+            "text": "do get a retracement here off the"
+          },
+          {
+            "start": 650.92,
+            "end": 656.36,
+            "text": "reversal on previous day high, but that"
+          },
+          {
+            "start": 652.96,
+            "end": 658.88,
+            "text": "is just a retracement to continue higher"
+          },
+          {
+            "start": 656.36,
+            "end": 660.92,
+            "text": "within this daily range. Now, this is a"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 669.12,
+        "text": "We're having a reversal form. So, if I",
+        "matched_keywords": [
+          "reversal"
+        ],
+        "end": 673.4,
+        "context": [
+          {
+            "start": 665.08,
+            "end": 669.12,
+            "text": "this expansion throughout the day and"
+          },
+          {
+            "start": 667.08,
+            "end": 671.44,
+            "text": "then right at 11:00, what are we having?"
+          },
+          {
+            "start": 669.12,
+            "end": 673.4,
+            "text": "We're having a reversal form. So, if I"
+          },
+          {
+            "start": 671.44,
+            "end": 675.4000000000001,
+            "text": "wanted to trade a reversal on a lower"
+          },
+          {
+            "start": 673.4,
+            "end": 677.12,
+            "text": "time frame, how would I do that? Well,"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 671.44,
+        "text": "wanted to trade a reversal on a lower",
+        "matched_keywords": [
+          "reversal"
+        ],
+        "end": 675.4000000000001,
+        "context": [
+          {
+            "start": 667.08,
+            "end": 671.44,
+            "text": "then right at 11:00, what are we having?"
+          },
+          {
+            "start": 669.12,
+            "end": 673.4,
+            "text": "We're having a reversal form. So, if I"
+          },
+          {
+            "start": 671.44,
+            "end": 675.4000000000001,
+            "text": "wanted to trade a reversal on a lower"
+          },
+          {
+            "start": 673.4,
+            "end": 677.12,
+            "text": "time frame, how would I do that? Well,"
+          },
+          {
+            "start": 675.4,
+            "end": 679.24,
+            "text": "it's the same, but instead of previous"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 683.04,
+        "text": "10:00 a.m. high to frame a reversal.",
+        "matched_keywords": [
+          "reversal"
+        ],
+        "end": 687.1999999999999,
+        "context": [
+          {
+            "start": 679.24,
+            "end": 683.04,
+            "text": "candle's high. So, here you can see if"
+          },
+          {
+            "start": 681.16,
+            "end": 685.4,
+            "text": "I'm on the hourly chart, we're using the"
+          },
+          {
+            "start": 683.04,
+            "end": 687.1999999999999,
+            "text": "10:00 a.m. high to frame a reversal."
+          },
+          {
+            "start": 685.4,
+            "end": 688.8,
+            "text": "Now, I want to have a small wick, and"
+          },
+          {
+            "start": 687.2,
+            "end": 690.2,
+            "text": "then I can trade it lower. So, let's"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 758.72,
+        "text": "trading a reversal candle on the daily",
+        "matched_keywords": [
+          "reversal"
+        ],
+        "end": 763.0,
+        "context": [
+          {
+            "start": 754.88,
+            "end": 758.72,
+            "text": "my previous video on trading candle two."
+          },
+          {
+            "start": 757.24,
+            "end": 760.92,
+            "text": "Then I'm going to generally focus on"
+          },
+          {
+            "start": 758.72,
+            "end": 763.0,
+            "text": "trading a reversal candle on the daily"
+          },
+          {
+            "start": 760.92,
+            "end": 764.88,
+            "text": "or four-hour time frame. Once you get a"
+          },
+          {
+            "start": 763.0,
+            "end": 766.56,
+            "text": "bit lower than the four-hour time frame,"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 808.44,
+        "text": "can look to trade the reversal candle.",
+        "matched_keywords": [
+          "reversal"
+        ],
+        "end": 812.2,
+        "context": [
+          {
+            "start": 804.08,
+            "end": 808.44,
+            "text": "to sweep out this high and then trade it"
+          },
+          {
+            "start": 806.0,
+            "end": 810.44,
+            "text": "lower. If it has a small wick, then we"
+          },
+          {
+            "start": 808.44,
+            "end": 812.2,
+            "text": "can look to trade the reversal candle."
+          },
+          {
+            "start": 810.44,
+            "end": 813.6,
+            "text": "If it has a large wick, then we're not"
+          },
+          {
+            "start": 812.2,
+            "end": 815.12,
+            "text": "going to want to trade the reversal"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 812.2,
+        "text": "going to want to trade the reversal",
+        "matched_keywords": [
+          "reversal"
+        ],
+        "end": 815.12,
+        "context": [
+          {
+            "start": 808.44,
+            "end": 812.2,
+            "text": "can look to trade the reversal candle."
+          },
+          {
+            "start": 810.44,
+            "end": 813.6,
+            "text": "If it has a large wick, then we're not"
+          },
+          {
+            "start": 812.2,
+            "end": 815.12,
+            "text": "going to want to trade the reversal"
+          },
+          {
+            "start": 813.6,
+            "end": 817.12,
+            "text": "candle. We'll wait for the following"
+          },
+          {
+            "start": 815.12,
+            "end": 819.36,
+            "text": "candle. Let's get on to the 15-minute"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 823.12,
+        "text": "Well, we cannot form a continuation",
+        "matched_keywords": [
+          "continuation"
+        ],
+        "end": 827.6,
+        "context": [
+          {
+            "start": 819.36,
+            "end": 823.12,
+            "text": "you can see the consolidation a little"
+          },
+          {
+            "start": 821.24,
+            "end": 825.5600000000001,
+            "text": "bit better. And how can you see this?"
+          },
+          {
+            "start": 823.12,
+            "end": 827.6,
+            "text": "Well, we cannot form a continuation"
+          },
+          {
+            "start": 825.56,
+            "end": 829.8389999999999,
+            "text": "here. We can't get the closure to form a"
+          },
+          {
+            "start": 827.6,
+            "end": 832.52,
+            "text": "protected swing, so then we make a new"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 832.52,
+        "text": "go form a new continuation. So, this is",
+        "matched_keywords": [
+          "continuation"
+        ],
+        "end": 837.4,
+        "context": [
+          {
+            "start": 827.6,
+            "end": 832.52,
+            "text": "protected swing, so then we make a new"
+          },
+          {
+            "start": 829.839,
+            "end": 835.24,
+            "text": "high. And here you can see we also can't"
+          },
+          {
+            "start": 832.52,
+            "end": 837.4,
+            "text": "go form a new continuation. So, this is"
+          },
+          {
+            "start": 835.24,
+            "end": 840.04,
+            "text": "just continuing consolidation, so I want"
+          },
+          {
+            "start": 837.4,
+            "end": 841.24,
+            "text": "to see another high ran out. So, putting"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 860.92,
+        "text": "I'm going to be trading a reversal, then",
+        "matched_keywords": [
+          "reversal"
+        ],
+        "end": 865.0,
+        "context": [
+          {
+            "start": 856.64,
+            "end": 860.92,
+            "text": "You can see we struggle to close, but"
+          },
+          {
+            "start": 858.44,
+            "end": 863.2,
+            "text": "then right away we close after. So, if"
+          },
+          {
+            "start": 860.92,
+            "end": 865.0,
+            "text": "I'm going to be trading a reversal, then"
+          },
+          {
+            "start": 863.2,
+            "end": 867.44,
+            "text": "I could look to trade this position"
+          },
+          {
+            "start": 865.0,
+            "end": 868.8,
+            "text": "here, put my stop on this high, and then"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 874.4,
+        "text": "as we have a nice reversal off the",
+        "matched_keywords": [
+          "reversal"
+        ],
+        "end": 878.24,
+        "context": [
+          {
+            "start": 870.92,
+            "end": 874.4,
+            "text": "out."
+          },
+          {
+            "start": 872.16,
+            "end": 876.4,
+            "text": "And there you can see this does work out"
+          },
+          {
+            "start": 874.4,
+            "end": 878.24,
+            "text": "as we have a nice reversal off the"
+          },
+          {
+            "start": 876.4,
+            "end": 881.24,
+            "text": "previous candle's high paired with a"
+          },
+          {
+            "start": 878.24,
+            "end": 882.92,
+            "text": "change in the state of delivery and SMT."
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 888.8,
+        "text": "continuation lower here, what do we want",
+        "matched_keywords": [
+          "continuation"
+        ],
+        "end": 893.68,
+        "context": [
+          {
+            "start": 885.959,
+            "end": 888.8,
+            "text": "Now, let's talk about one more thing"
+          },
+          {
+            "start": 887.0,
+            "end": 890.959,
+            "text": "here. If we are looking for a"
+          },
+          {
+            "start": 888.8,
+            "end": 893.68,
+            "text": "continuation lower here, what do we want"
+          },
+          {
+            "start": 890.959,
+            "end": 896.68,
+            "text": "to see? We want to see price open, trade"
+          },
+          {
+            "start": 893.68,
+            "end": 898.28,
+            "text": "higher first, and then into this low. If"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 896.68,
+        "text": "we're going to form a reversal off of",
+        "matched_keywords": [
+          "reversal"
+        ],
+        "end": 900.2399999999999,
+        "context": [
+          {
+            "start": 890.959,
+            "end": 896.68,
+            "text": "to see? We want to see price open, trade"
+          },
+          {
+            "start": 893.68,
+            "end": 898.28,
+            "text": "higher first, and then into this low. If"
+          },
+          {
+            "start": 896.68,
+            "end": 900.2399999999999,
+            "text": "we're going to form a reversal off of"
+          },
+          {
+            "start": 898.28,
+            "end": 901.8389999999999,
+            "text": "this previous four-hour low, how is that"
+          },
+          {
+            "start": 900.24,
+            "end": 904.5600000000001,
+            "text": "going to work out? Well, we're going to"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 914.2,
+        "text": "continuation, and this has a large wick.",
+        "matched_keywords": [
+          "continuation"
+        ],
+        "end": 919.0400000000001,
+        "context": [
+          {
+            "start": 909.44,
+            "end": 911.7600000000001,
+            "text": "here."
+          },
+          {
+            "start": 912.959,
+            "end": 917.2399999999999,
+            "text": "You can see we are getting a"
+          },
+          {
+            "start": 914.2,
+            "end": 919.0400000000001,
+            "text": "continuation, and this has a large wick."
+          },
+          {
+            "start": 917.24,
+            "end": 920.5600000000001,
+            "text": "So, this is not a candle that I would be"
+          },
+          {
+            "start": 919.04,
+            "end": 922.76,
+            "text": "interested in trading back into the"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 922.76,
+        "text": "reversal, I would rather trade the",
+        "matched_keywords": [
+          "reversal"
+        ],
+        "end": 927.16,
+        "context": [
+          {
+            "start": 919.04,
+            "end": 922.76,
+            "text": "interested in trading back into the"
+          },
+          {
+            "start": 920.56,
+            "end": 924.8,
+            "text": "range because if it was going to form a"
+          },
+          {
+            "start": 922.76,
+            "end": 927.16,
+            "text": "reversal, I would rather trade the"
+          },
+          {
+            "start": 924.8,
+            "end": 929.0,
+            "text": "following candle. So, here we are in our"
+          },
+          {
+            "start": 927.16,
+            "end": 930.959,
+            "text": "last example, and let's take a look at"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 937.88,
+        "text": "We have a nice V-shape reversal with a",
+        "matched_keywords": [
+          "reversal"
+        ],
+        "end": 941.52,
+        "context": [
+          {
+            "start": 933.32,
+            "end": 937.88,
+            "text": "You can see in the previous day we have"
+          },
+          {
+            "start": 935.32,
+            "end": 939.88,
+            "text": "reached up into our previous day's high."
+          },
+          {
+            "start": 937.88,
+            "end": 941.52,
+            "text": "We have a nice V-shape reversal with a"
+          },
+          {
+            "start": 939.88,
+            "end": 944.24,
+            "text": "change in the state of delivery"
+          },
+          {
+            "start": 941.52,
+            "end": 946.28,
+            "text": "alongside an SMT, and then we displace"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 950.6,
+        "text": "a continuation in candle three out of",
+        "matched_keywords": [
+          "continuation"
+        ],
+        "end": 956.36,
+        "context": [
+          {
+            "start": 946.28,
+            "end": 950.6,
+            "text": "bearish closure. So, with a bearish"
+          },
+          {
+            "start": 948.48,
+            "end": 953.04,
+            "text": "candle two closure, we'd be looking for"
+          },
+          {
+            "start": 950.6,
+            "end": 956.36,
+            "text": "a continuation in candle three out of"
+          },
+          {
+            "start": 953.04,
+            "end": 958.92,
+            "text": "where? The T-spot or the EQ. We want to"
+          },
+          {
+            "start": 956.36,
+            "end": 961.0,
+            "text": "see price open, trade higher first to"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 1009.959,
+        "text": "continuation, I want to see price open,",
+        "matched_keywords": [
+          "continuation"
+        ],
+        "end": 1014.56,
+        "context": [
+          {
+            "start": 1005.36,
+            "end": 1009.9590000000001,
+            "text": "can see we hit our two R. So, this is"
+          },
+          {
+            "start": 1008.079,
+            "end": 1012.68,
+            "text": "just a good example of when seeking a"
+          },
+          {
+            "start": 1009.959,
+            "end": 1014.56,
+            "text": "continuation, I want to see price open,"
+          },
+          {
+            "start": 1012.68,
+            "end": 1016.4,
+            "text": "reach into a point of interest, have a"
+          },
+          {
+            "start": 1014.56,
+            "end": 1017.959,
+            "text": "formation that confirms the wick of this"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 1017.959,
+        "text": "look to trade that continuation. In a",
+        "matched_keywords": [
+          "continuation"
+        ],
+        "end": 1021.959,
+        "context": [
+          {
+            "start": 1014.56,
+            "end": 1017.959,
+            "text": "formation that confirms the wick of this"
+          },
+          {
+            "start": 1016.4,
+            "end": 1020.12,
+            "text": "higher time frame candle, and then I can"
+          },
+          {
+            "start": 1017.959,
+            "end": 1021.959,
+            "text": "look to trade that continuation. In a"
+          },
+          {
+            "start": 1020.12,
+            "end": 1023.76,
+            "text": "reversal, I want to see price open,"
+          },
+          {
+            "start": 1021.959,
+            "end": 1026.079,
+            "text": "trade higher into that previous day's"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 1020.12,
+        "text": "reversal, I want to see price open,",
+        "matched_keywords": [
+          "reversal"
+        ],
+        "end": 1023.76,
+        "context": [
+          {
+            "start": 1016.4,
+            "end": 1020.12,
+            "text": "higher time frame candle, and then I can"
+          },
+          {
+            "start": 1017.959,
+            "end": 1021.959,
+            "text": "look to trade that continuation. In a"
+          },
+          {
+            "start": 1020.12,
+            "end": 1023.76,
+            "text": "reversal, I want to see price open,"
+          },
+          {
+            "start": 1021.959,
+            "end": 1026.079,
+            "text": "trade higher into that previous day's"
+          },
+          {
+            "start": 1023.76,
+            "end": 1027.64,
+            "text": "high or that previous candle's high,"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 1029.64,
+        "text": "look to trade the reversal if it has a",
+        "matched_keywords": [
+          "reversal"
+        ],
+        "end": 1033.48,
+        "context": [
+          {
+            "start": 1026.079,
+            "end": 1029.6399999999999,
+            "text": "have a change in the state of delivery,"
+          },
+          {
+            "start": 1027.64,
+            "end": 1031.679,
+            "text": "which confirms that wick high, and I can"
+          },
+          {
+            "start": 1029.64,
+            "end": 1033.48,
+            "text": "look to trade the reversal if it has a"
+          },
+          {
+            "start": 1031.679,
+            "end": 1035.0790000000002,
+            "text": "small enough wick. Now, I hope you"
+          },
+          {
+            "start": 1033.48,
+            "end": 1036.76,
+            "text": "enjoyed this video. If you have any"
+          }
+        ]
+      }
+    ],
+    "protected_swing": [
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 317.36,
+        "text": "new protected swing.",
+        "matched_keywords": [
+          "protected swing"
+        ],
+        "end": 321.16,
+        "context": [
+          {
+            "start": 313.36,
+            "end": 317.36,
+            "text": "will have a reaction, I'm going to wait"
+          },
+          {
+            "start": 315.28,
+            "end": 319.15999999999997,
+            "text": "for a swing to form in that area or a"
+          },
+          {
+            "start": 317.36,
+            "end": 321.16,
+            "text": "new protected swing."
+          },
+          {
+            "start": 319.16,
+            "end": 322.76000000000005,
+            "text": "So let's see what happens."
+          },
+          {
+            "start": 321.16,
+            "end": 325.68,
+            "text": "You can see we don't respect this fair"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 334.64,
+        "text": "ideal as we form a new protected swing",
+        "matched_keywords": [
+          "protected swing"
+        ],
+        "end": 338.2,
+        "context": [
+          {
+            "start": 330.56,
+            "end": 334.64,
+            "text": "Do we have a candle two closure? No. But"
+          },
+          {
+            "start": 332.44,
+            "end": 337.36,
+            "text": "we have a candle three closure, which is"
+          },
+          {
+            "start": 334.64,
+            "end": 338.2,
+            "text": "ideal as we form a new protected swing"
+          },
+          {
+            "start": 337.36,
+            "end": 340.12,
+            "text": "here."
+          },
+          {
+            "start": 338.2,
+            "end": 342.08,
+            "text": "So now I can anticipate that this higher"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 499.08,
+        "text": "yes, this is a protected swing, right?",
+        "matched_keywords": [
+          "protected swing"
+        ],
+        "end": 503.84,
+        "context": [
+          {
+            "start": 496.36,
+            "end": 499.08000000000004,
+            "text": "higher."
+          },
+          {
+            "start": 497.28,
+            "end": 501.96,
+            "text": "The one thing I do want to talk about,"
+          },
+          {
+            "start": 499.08,
+            "end": 503.84,
+            "text": "yes, this is a protected swing, right?"
+          },
+          {
+            "start": 501.96,
+            "end": 506.0,
+            "text": "But this swing is only protected until"
+          },
+          {
+            "start": 503.84,
+            "end": 508.4,
+            "text": "it hits liquidity. Once it hits"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 510.68,
+        "text": "sweep out a protected swing, and then it",
+        "matched_keywords": [
+          "protected swing"
+        ],
+        "end": 515.4,
+        "context": [
+          {
+            "start": 506.0,
+            "end": 510.68,
+            "text": "liquidity, this is a pattern I see often"
+          },
+          {
+            "start": 508.4,
+            "end": 512.4789999999999,
+            "text": "of taking out liquidity, then it will"
+          },
+          {
+            "start": 510.68,
+            "end": 515.4,
+            "text": "sweep out a protected swing, and then it"
+          },
+          {
+            "start": 512.479,
+            "end": 518.0,
+            "text": "will have its true move. So this is just"
+          },
+          {
+            "start": 515.4,
+            "end": 520.039,
+            "text": "an example of a reversal, right? So just"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 549.44,
+        "text": "three closure and a new protected swing,",
+        "matched_keywords": [
+          "protected swing"
+        ],
+        "end": 554.7600000000001,
+        "context": [
+          {
+            "start": 545.04,
+            "end": 549.4399999999999,
+            "text": "to actually align it with a bias. So"
+          },
+          {
+            "start": 547.24,
+            "end": 552.36,
+            "text": "here you can see we have an ideal candle"
+          },
+          {
+            "start": 549.44,
+            "end": 554.7600000000001,
+            "text": "three closure and a new protected swing,"
+          },
+          {
+            "start": 552.36,
+            "end": 556.88,
+            "text": "which is bullish. So ideally I want to"
+          },
+          {
+            "start": 554.76,
+            "end": 558.88,
+            "text": "frame to the upside here. Let's drop"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 827.6,
+        "text": "protected swing, so then we make a new",
+        "matched_keywords": [
+          "protected swing"
+        ],
+        "end": 832.52,
+        "context": [
+          {
+            "start": 823.12,
+            "end": 827.6,
+            "text": "Well, we cannot form a continuation"
+          },
+          {
+            "start": 825.56,
+            "end": 829.8389999999999,
+            "text": "here. We can't get the closure to form a"
+          },
+          {
+            "start": 827.6,
+            "end": 832.52,
+            "text": "protected swing, so then we make a new"
+          },
+          {
+            "start": 829.839,
+            "end": 835.24,
+            "text": "high. And here you can see we also can't"
+          },
+          {
+            "start": 832.52,
+            "end": 837.4,
+            "text": "go form a new continuation. So, this is"
+          }
+        ]
+      }
+    ],
+    "eq_targets": [
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 19.8,
+        "text": "equilibrium video, my candle two and",
+        "matched_keywords": [
+          "equilibrium"
+        ],
+        "end": 23.28,
+        "context": [
+          {
+            "start": 16.08,
+            "end": 19.799999999999997,
+            "text": "candle closures as well as wick size. So"
+          },
+          {
+            "start": 18.88,
+            "end": 21.72,
+            "text": "if you haven't already seen my"
+          },
+          {
+            "start": 19.8,
+            "end": 23.28,
+            "text": "equilibrium video, my candle two and"
+          },
+          {
+            "start": 21.72,
+            "end": 25.64,
+            "text": "candle three closure video, I would"
+          },
+          {
+            "start": 23.28,
+            "end": 27.28,
+            "text": "watch those first. This is based off the"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 43.2,
+        "text": "trade into previous day high, have a",
+        "matched_keywords": [
+          "previous day high"
+        ],
+        "end": 47.0,
+        "context": [
+          {
+            "start": 38.76,
+            "end": 43.199999999999996,
+            "text": "bullish day. We closed near the high."
+          },
+          {
+            "start": 41.28,
+            "end": 45.44,
+            "text": "I'd be looking for the next day to open,"
+          },
+          {
+            "start": 43.2,
+            "end": 47.0,
+            "text": "trade into previous day high, have a"
+          },
+          {
+            "start": 45.44,
+            "end": 48.96,
+            "text": "reversal formed, and then I can look to"
+          },
+          {
+            "start": 47.0,
+            "end": 51.2,
+            "text": "trade it back into the range"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 185.4,
+        "text": "previous day high and previous day low.",
+        "matched_keywords": [
+          "previous day high",
+          "previous day low"
+        ],
+        "end": 189.20000000000002,
+        "context": [
+          {
+            "start": 181.44,
+            "end": 185.4,
+            "text": "Well, with all of these days, we're just"
+          },
+          {
+            "start": 183.12,
+            "end": 187.72,
+            "text": "going to mark out the EQ as well as our"
+          },
+          {
+            "start": 185.4,
+            "end": 189.20000000000002,
+            "text": "previous day high and previous day low."
+          },
+          {
+            "start": 187.72,
+            "end": 190.8,
+            "text": "In this case, since we are bullish,"
+          },
+          {
+            "start": 189.2,
+            "end": 192.6,
+            "text": "previous day high."
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 189.2,
+        "text": "previous day high.",
+        "matched_keywords": [
+          "previous day high"
+        ],
+        "end": 192.6,
+        "context": [
+          {
+            "start": 185.4,
+            "end": 189.20000000000002,
+            "text": "previous day high and previous day low."
+          },
+          {
+            "start": 187.72,
+            "end": 190.8,
+            "text": "In this case, since we are bullish,"
+          },
+          {
+            "start": 189.2,
+            "end": 192.6,
+            "text": "previous day high."
+          },
+          {
+            "start": 190.8,
+            "end": 194.52,
+            "text": "Now if we are bullish, we're looking for"
+          },
+          {
+            "start": 192.6,
+            "end": 198.2,
+            "text": "a continuation, we want to see price"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 354.8,
+        "text": "through that previous day low as a first",
+        "matched_keywords": [
+          "previous day low"
+        ],
+        "end": 359.52000000000004,
+        "context": [
+          {
+            "start": 350.84,
+            "end": 354.79999999999995,
+            "text": "day low or even lower."
+          },
+          {
+            "start": 353.32,
+            "end": 356.64,
+            "text": "And you can see there we get a move"
+          },
+          {
+            "start": 354.8,
+            "end": 359.52000000000004,
+            "text": "through that previous day low as a first"
+          },
+          {
+            "start": 356.64,
+            "end": 360.71999999999997,
+            "text": "target and that expansion lower. If we"
+          },
+          {
+            "start": 359.52,
+            "end": 362.59999999999997,
+            "text": "want to take a look at this with my"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 370.56,
+        "text": "the equilibrium, in which case we will",
+        "matched_keywords": [
+          "equilibrium"
+        ],
+        "end": 374.48,
+        "context": [
+          {
+            "start": 366.56,
+            "end": 370.56,
+            "text": "delivery, and then we have the T-spot"
+          },
+          {
+            "start": 368.72,
+            "end": 372.64000000000004,
+            "text": "marked up, which in this case is just"
+          },
+          {
+            "start": 370.56,
+            "end": 374.48,
+            "text": "the equilibrium, in which case we will"
+          },
+          {
+            "start": 372.64,
+            "end": 376.32,
+            "text": "search for that point of interest and"
+          },
+          {
+            "start": 374.48,
+            "end": 378.28000000000003,
+            "text": "look for it to trade lower. Now let's"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 380.72,
+        "text": "previous day low is right here. So if",
+        "matched_keywords": [
+          "previous day low"
+        ],
+        "end": 384.72,
+        "context": [
+          {
+            "start": 376.32,
+            "end": 380.71999999999997,
+            "text": "take a look at a reversal. Here you can"
+          },
+          {
+            "start": 378.28,
+            "end": 383.44,
+            "text": "see we have the EQ marked up and our"
+          },
+          {
+            "start": 380.72,
+            "end": 384.72,
+            "text": "previous day low is right here. So if"
+          },
+          {
+            "start": 383.44,
+            "end": 387.16,
+            "text": "we're going to be looking for a"
+          },
+          {
+            "start": 384.72,
+            "end": 389.68,
+            "text": "continuation, what would we want to see?"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 435.24,
+        "text": "previous day low with a change in the",
+        "matched_keywords": [
+          "previous day low"
+        ],
+        "end": 438.76,
+        "context": [
+          {
+            "start": 430.28,
+            "end": 435.23999999999995,
+            "text": "So let's see what happens."
+          },
+          {
+            "start": 432.76,
+            "end": 437.32,
+            "text": "Here you can see we have an SMT at the"
+          },
+          {
+            "start": 435.24,
+            "end": 438.76,
+            "text": "previous day low with a change in the"
+          },
+          {
+            "start": 437.32,
+            "end": 440.4,
+            "text": "state of delivery."
+          },
+          {
+            "start": 438.76,
+            "end": 443.12,
+            "text": "So now we have everything set up with a"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 471.56,
+        "text": "previous day high.",
+        "matched_keywords": [
+          "previous day high"
+        ],
+        "end": 475.56,
+        "context": [
+          {
+            "start": 466.92,
+            "end": 471.56,
+            "text": "Price to open, respect the EQ of the"
+          },
+          {
+            "start": 469.2,
+            "end": 473.24,
+            "text": "previous day, and then look for above"
+          },
+          {
+            "start": 471.56,
+            "end": 475.56,
+            "text": "previous day high."
+          },
+          {
+            "start": 473.24,
+            "end": 477.64,
+            "text": "So let's see. Do we open and trade lower"
+          },
+          {
+            "start": 475.56,
+            "end": 479.92,
+            "text": "first? Yes, we have went into this fair"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 481.28,
+        "text": "previous day high.",
+        "matched_keywords": [
+          "previous day high"
+        ],
+        "end": 485.67999999999995,
+        "context": [
+          {
+            "start": 477.64,
+            "end": 481.28,
+            "text": "value gap here and closed over."
+          },
+          {
+            "start": 479.92,
+            "end": 483.44,
+            "text": "So let's see if we get a move into"
+          },
+          {
+            "start": 481.28,
+            "end": 485.67999999999995,
+            "text": "previous day high."
+          },
+          {
+            "start": 483.44,
+            "end": 487.76,
+            "text": "We do get a move into previous day high,"
+          },
+          {
+            "start": 485.68,
+            "end": 489.6,
+            "text": "and then we have it forming somewhat of"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 483.44,
+        "text": "We do get a move into previous day high,",
+        "matched_keywords": [
+          "previous day high"
+        ],
+        "end": 487.76,
+        "context": [
+          {
+            "start": 479.92,
+            "end": 483.44,
+            "text": "So let's see if we get a move into"
+          },
+          {
+            "start": 481.28,
+            "end": 485.67999999999995,
+            "text": "previous day high."
+          },
+          {
+            "start": 483.44,
+            "end": 487.76,
+            "text": "We do get a move into previous day high,"
+          },
+          {
+            "start": 485.68,
+            "end": 489.6,
+            "text": "and then we have it forming somewhat of"
+          },
+          {
+            "start": 487.76,
+            "end": 492.28,
+            "text": "a reversal or a retracement here. Let's"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 532.4,
+        "text": "previous day low or beyond. Now in this",
+        "matched_keywords": [
+          "previous day low"
+        ],
+        "end": 538.0799999999999,
+        "context": [
+          {
+            "start": 527.64,
+            "end": 532.4,
+            "text": "continuation, I want to see price open,"
+          },
+          {
+            "start": 530.0,
+            "end": 535.04,
+            "text": "make a low, and then trade higher into"
+          },
+          {
+            "start": 532.4,
+            "end": 538.0799999999999,
+            "text": "previous day low or beyond. Now in this"
+          },
+          {
+            "start": 535.04,
+            "end": 540.4,
+            "text": "next example, we are on GBPUSD,"
+          },
+          {
+            "start": 538.08,
+            "end": 542.84,
+            "text": "and I want to clarify the importance of"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 560.96,
+        "text": "have our previous day high right here.",
+        "matched_keywords": [
+          "previous day high"
+        ],
+        "end": 565.1600000000001,
+        "context": [
+          {
+            "start": 556.88,
+            "end": 560.96,
+            "text": "down to the hourly time frame. So here"
+          },
+          {
+            "start": 558.88,
+            "end": 563.48,
+            "text": "we are on the hourly time frame, and we"
+          },
+          {
+            "start": 560.96,
+            "end": 565.1600000000001,
+            "text": "have our previous day high right here."
+          },
+          {
+            "start": 563.48,
+            "end": 567.36,
+            "text": "And what do we want to see? Well,"
+          },
+          {
+            "start": 565.16,
+            "end": 570.0,
+            "text": "ideally we want to see price open, trade"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 574.88,
+        "text": "previous day high first and has a change",
+        "matched_keywords": [
+          "previous day high"
+        ],
+        "end": 579.0,
+        "context": [
+          {
+            "start": 571.16,
+            "end": 574.88,
+            "text": "So let's see what happens."
+          },
+          {
+            "start": 573.36,
+            "end": 577.08,
+            "text": "You can see price trades into this"
+          },
+          {
+            "start": 574.88,
+            "end": 579.0,
+            "text": "previous day high first and has a change"
+          },
+          {
+            "start": 577.08,
+            "end": 581.76,
+            "text": "in the state of delivery. Now is this"
+          },
+          {
+            "start": 579.0,
+            "end": 584.36,
+            "text": "bearish? Yes, this is bearish, but this"
+          }
+        ]
+      },
+      {
+        "video_id": "-KKuZb5Z5aU",
+        "creator": "ttrades",
+        "role": "supplement",
+        "start": 650.92,
+        "text": "reversal on previous day high, but that",
+        "matched_keywords": [
+          "previous day high"
+        ],
+        "end": 656.36,
+        "context": [
+          {
+            "start": 646.48,
+            "end": 650.9200000000001,
+            "text": "with that bias. And you can see, yes, we"
+          },
+          {
+            "start": 649.04,
+            "end": 652.9599999999999,
+            "text": "do get a retracement here off the"
+          },
+          {
+            "start": 650.92,
+            "end": 656.36,
+            "text": "reversal on previous day high, but that"
+          },
+          {
+            "start": 652.96,
+            "end": 658.88,
+            "text": "is just a retracement to continue higher"
+          },
+          {
+            "start": 656.36,
+            "end": 660.92,
+            "text": "within this daily range. Now, this is a"
+          }
+        ]
+      }
+    ],
+    "power_of_three": []
   }
 }
