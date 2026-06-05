@@ -256,6 +256,8 @@
 
 ## 2026-05-13 — Wave 0d DLL fix + Apex EOD account-class survey — RESULT-LOGGED
 
+**Status:** Numeric results **obsolete** for PA contract limits, TDD rows, and **tier-DLL** modeling — see **`docs/research-log.md` Wave 0e** (2026-05-17).
+
 **Wave:** Wave 0d
 
 **Date run completed:** 2026-05-13
@@ -285,6 +287,430 @@
 - `notebooks/validation/2026-05-13_wave0d_orb_opt3_account_class_survey.{md,json}`  
 - `notebooks/validation/2026-05-13_wave0d_account_class_survey.ipynb`  
 - `scripts/run_wave0d_orb_opt3_account_class_survey.py`
+
+**Caveat (Wave 0e — 2026-05-17):** Wave **0d** numeric survey and parameter rows are **obsolete** for firm-rule conclusions. Operator confirmed **May 2026** Apex tables: **correct TDD / eval+PA contract limits**, **PA tiers** = **maximum** mini contracts and **tiered DLL** from **prior session EOD** equity (strategy target qty capped per tier; **1 mini = 10 MNQ** in ORB+Opt3 research convention). Re-stated survey: **`docs/research-log.md` Wave 0e** + `notebooks/validation/2026-05-17_wave0e_orb_opt3_survey.{md,json}`.
+
+---
+
+## 2026-05-17 — Wave 0e — Tiered PA rules + bootstrap diagnosis + survey — PRE-REGISTERED
+
+**Wave:** Wave 0e
+
+**Structural rationale:** Wave **0d** combined **DLL session-pause** with an **incorrect** static PA parameterization (wrong PA/eval caps and TDD on several classes) and **no** modeling of **PA balance-tier** DLL / effective contract caps. Wave **0e** corrects the **two-phase simulator** (`lock = start + TDD`, post-lock floor = start), adds **tier-aware** effective MNQ qty (Apex **max mini × 10** vs target MNQ), **tiered DLL**, **demotion** on lower EOD tier, tracking of tier transitions and DLL pauses per tier; keeps `simulate_apex_50k_eod_two_phase` for flat replay. **Diagnoses** Wave **0d** block-20 **~17–18%** bootstrap survival on $50K q=1 (2023 trade-count conditional rates, block-1 vs block-20 gap). **Re-runs** account-class survey on verified tier tables with operator target/sweep MNQ grids; **joint gates**: funded 6y survival, bootstrap **≥ 80%** (block 20, 10k), eval **≥ 50%** (30 **calendar-day** windows), annual P&L vs **$36K / $60K / $100K** tiers.
+
+**Specification (summary):**
+
+- **Deliverable 1 — Simulator:** `simulate_apex_eod_two_phase` tiered mode: `balance_tiers` list `{min_balance, max_balance, max_contracts_mini, dll}`; `effective_mnq = min(target_qty_mnq, max_contracts_mini × mnq_per_mini)`; lock at **`lock_equity_threshold`** = start + TDD (no +$100); DLL pause (default); tier from **prior EOD** before each session; **tier_summary** in result.
+- **Deliverable 2 — Bootstrap diagnosis:** $50K **flat** `simulate_apex_50k_eod_two_phase` at **q=1 MNQ**, `block_length=20` vs **1**, **10,000** resamples; per replicate: 2023 trade count, survival, max DD proxy, annual P&L; compare count distribution to expectation; conditional survival when |2023 count − expected| ≤ **10%**; classify **(i)** fragility vs **(ii)** resampling artifact; **proposed** stratified / no-replacement revision **not** implemented pending operator approval.
+- **Deliverable 3 — Survey:** Four EOD classes; target MNQ grids: 25K **10,15,20**; 50K **20–40** sweep; 100K **30–60**; 150K **40–100**; funded tier sim on 6y ORB+Opt3; eval qty = min(target, eval mini cap × 10); eval DLL from tier at **starting** equity; bootstrap tiered `block_bootstrap_apex_eod_tiered_funded`.
+- **Deliverable 4 — Joint gates:** As in Wave 0d triple gate + economics; best passing combo by annual P&L or closest misses.
+- **Stops:** If diagnosis **(ii)** with strong bias → pause survey (not triggered by pre-defined flag alone); if **no** funded survival on 6y for any pair → escalate **strategy vs Apex EOD** framing; if **no** triple pass → primary Wave 1 finding.
+
+**Date pre-registered:** 2026-05-17  
+
+**Date run completed:** *(see RESULT-LOGGED below)*  
+
+**Artifact:** *(pending in PRE block)*  
+
+---
+
+## 2026-05-17 — Wave 0e — Tiered PA rules + bootstrap diagnosis + survey — RESULT-LOGGED
+
+**Wave:** Wave 0e (implements pre-registration above)
+
+**Date run completed:** 2026-05-17
+
+**Execution `git` metadata:** artifact `git_sha` = **`75c84e5ae8ce1edc1d19e4c0788144dc5f6dff7d`** (**`git_dirty`: true** at write).
+
+**Deliverable 1 — Code:** `simulate_apex_eod_two_phase` tiered path; `apex_tier_index_for_equity` handles equity **below** bottom published band and **gaps** between bands (conservative lower band); `block_bootstrap_apex_eod_tiered_funded`; `eval_pass_rate_calendar_days`; `diagnose_block_bootstrap_flat_funded_path`; tests in `tests/test_apex_eod_trailing.py`.
+
+**Deliverable 2 — Bootstrap diagnosis ($50K flat q=1, ORB+Opt3 799 trades, seed 42 / 43):**
+
+| Metric | Block 20 | Block 1 (iid trades) |
+|--------|----------|----------------------|
+| Unconditional funded survival | **0.5791** | **0.5878** |
+| Conditional survival (\|2023 count − expected\| ≤ 10%) | **~0.5818** | **~0.5901** |
+| 2023 trade-count mean (expected **223**) | **223.0** (sd **55.7**) | **222.8** (sd **12.5**) |
+
+**Gap (20 − 1):** **−0.0087** — block-20 **does not** raise survival vs iid; **low** Wave 0d **~17–18%** headline is **not reproduced** here under corrected flat $50K sim — this run’s **~58%** reflects **updated trail/TDD** and/or path definition vs the obsolete 0d parameter mix. **`methodology_bias_flag`:** **false** (conditional ≈ unconditional; no strong 2023-overweight artifact by pre-specified rule).
+
+**Diagnosis (pre-specified labels):** Primarily **(i) path / rule fragility signal** at **~58%** survival under current bootstrap — **not** **(ii)** resampling bias per coarse flags. (Wave 0d’s lower number is **not comparable** — obsolete parameters.)
+
+**Deliverable 3–4 — Survey (tiered PA, May 2026 operator tables):**
+
+- **Funded survival (6y tiered sim):** **no** **(account_class, target_qty_mnq)** pair **survived** (`stop_conditions.funded_survival_any_pair`: **false**) — **severity upgrade** vs Wave 0d headline “high q_max”; **tier caps + corrected rules** eliminate naive high-q funded survival on this log.
+- **Joint gates (funded + bootstrap ≥ 80% + eval ≥ 50%):** **none**.
+- **Operator STOP (survey):** Not triggered — diagnosis did **not** mandate pause before survey on methodology-artifact rule.
+
+**Mechanism vs Wave 0d (explicit):** Wave **0d** **inflated** funded `q_max` by **wrong PA/DLL/TDD** and treating **tier ceilings** as compatible with **static high DLL** assumptions. Wave **0e** ties **DLL and qty cap** to **tier from EOD equity** and **start + TDD lock** — historical ORB+Opt3 path **fails** funded survival for **all** surveyed sizes.
+
+**Artifacts:**  
+- `notebooks/validation/2026-05-17_wave0e_orb_opt3_survey.{md,json}`  
+- `notebooks/validation/2026-05-17_wave0e_orb_opt3_survey.ipynb`  
+- `scripts/run_wave0e_orb_opt3_survey.py`
+
+---
+
+## 2026-05-17 — Wave 0f — ORB+Opt3 failure profile + low-qty sweep — PRE-REGISTERED
+
+**Wave:** Wave 0f
+
+**Structural rationale:** Wave **0e** showed **no** funded survival at tier-ceiling-and-above target MNQ under corrected Apex tier rules. Before Wave **1** “strategy repairs,” pre-register **failure profiling** (which sessions/modes/year concentration) and a **sub–tier-1-ceiling** MNQ sweep to map the **lower** survivability surface against joint gates.
+
+**Specification (summary):**
+
+- **D1 — Failure enumeration:** For each **Wave 0e** **(account_class, target_qty_mnq)** pair, session-level tiered trace: first trailing-breach session, pre- vs post-lock, margins, tier, single-day vs DLL-heavy erosion heuristic, DLL pauses before breach.
+- **D2 — Loss distribution:** Per pair, full-session P&L distribution, worst 10/25/50 sessions, DLL-pause counts **by tier index**.
+- **D3 — Year attribution:** P&L, DLL pauses, tier time, failure year, demotion years; concentration vs spread across years.
+- **D4 — Low-qty sweep:** Per class, MNQ grid from **1** (or **5** / **10** min where stated) up to **tier-1 ceiling**: 25K **1,2,3,5,7,10**; 50K **1,2,5,10,15,20**; 100K **5,10,…,30**; 150K **10,…,40**. Each row: tiered funded sim, **30d** calendar eval, block-20 bootstrap **10k**, annual P&L, triple gate. Report lowest qty with funded pass; lowest with **all** gates; best economics among triple passes; gate failure histogram; gap to **$36K/yr** among near-misses.
+- **D5 — Diagnosis:** Binding mode, year concentration, min survivable qty + $/yr, likely repair lever.
+- **Stops:** $50K **q=1** funded fail → incompatible at any size; survivable qty with **&lt;$5K/yr** everywhere → operationally negligible; bootstrap **&lt;80%** when funded passes → fragility.
+
+**Date pre-registered:** 2026-05-17  
+
+**Date run completed:** 2026-05-17  
+
+**Artifact:** `notebooks/validation/2026-05-17_wave0f_orb_opt3_failure_profile.{md,json}`; `scripts/run_wave0f_orb_opt3_failure_profile.py`  
+
+---
+
+## 2026-05-17 — Wave 0f — ORB+Opt3 failure profile + low-qty sweep — RESULT-LOGGED
+
+**Wave:** Wave 0f (implements pre-registration above)
+
+**Date run completed:** 2026-05-17
+
+**Execution `git` metadata:** `git_sha` = **`75c84e5ae8ce1edc1d19e4c0788144dc5f6dff7d`** (**dirty** at artifact write).
+
+**Deliverable 1–3 (Wave 0e 19 pairs):**
+
+- **Primary failure mode (first breach):** **trailing_breach_pre_lock** on **all 19** pairs (post-lock not the first hit at these sizes).
+- **Heuristic tail shape:** **`lean_single_catastrophic_session`** on **all 19** (first breach session loss large vs class **TDD**; DLL pauses before breach typically small — see JSON per pair).
+- **Year concentration:** **First breach calendar year** — **2020** for **all 19** (early-window concentration **not** 2023-driven for this qty grid).
+
+**Deliverable 4 (low-qty sweep, 25 configurations):**
+
+- **$50K @ 1 MNQ funded survival:** **True** → **STOP “incompatible at any size”** is **false**.
+- **Lowest qty with funded survival:** **25K & 50K — 1 MNQ** (~**$1,014/yr** est.); **100K — 5 MNQ** (~**$5,071/yr**); **150K — 10 MNQ** (~**$10,142/yr**).
+- **Triple gate (funded + bootstrap ≥ 80% + eval ≥ 50%):** **none** in sweep.
+- **Gate histogram (first failing gate among funded-pass vs not):** **funded** failures **15**; among **10** funded-pass rows, **all** fail **bootstrap** next (**10**); **eval** **0** as first fail among rows that passed funded + bootstrap (**none** passed both).
+- **Operator STOP (~$5K/yr):** **25K / 50K** lowest survivable tier ≈ **$1K/yr** — **“survival possible but economically negligible”** at min size **without** strategy change; **100K/150K** min survivable **above** **$5K** but still **far** below **$36K** floor tier.
+
+**Deliverable 5 — Synthesis:**
+
+- **(a) Binding failure mode (high Wave 0e qty):** **Pre-lock trailing breach**, dominated by **large single-session loss** relative to trail in the profiled window (not DLL-cumulative-dominant by heuristic).
+- **(b) Regime concentration:** **2020** first-breach year for **all** Wave 0e pairs — failures **not** “all 2023” on this diagnostic.
+- **(c) Min survivable qty:** See Deliverable 4 table; **$50K** survives at **q=1**.
+- **(d) Repair levers:** **Sub-ceiling qty** restores **funded** survival but **bootstrap** stays **&lt;80%** here → **path hardening** (stops / tail / regime filter) before sizing up; year concentration in **2020** supports **evaluating regime gating** but **not** as a 2023-only narrative.
+
+**Artifacts:**  
+- `notebooks/validation/2026-05-17_wave0f_orb_opt3_failure_profile.{md,json}`  
+- `scripts/run_wave0f_orb_opt3_failure_profile.py`  
+- `simulate_apex_eod_two_phase_tiered_with_trace` in `src/quant_research/statistics/apex_eod_trailing.py`  
+
+---
+
+## 2026-05-17 — Wave 0g — 2020 data sanity + breach-session characterization + 2020-excluded survival re-grade — PRE-REGISTERED
+
+**Wave:** Wave 0g
+
+**Structural rationale:** Wave **0f** showed all **19** Wave **0e** funded-survival failures are **lean single catastrophic session, pre-lock breach**, with **first breach year = 2020** (not 2023-centric). Before Phase **3** regime-overlay design, **isolate whether 2020 is a data artifact**, **characterize the breaching sessions** for later overlay features, and **re-grade** ORB+Opt3 on a **2020-excluded** trade log to test viability under **non-COVID** conditions. **Phase 2 discipline:** diagnostics + re-grade only — **no** regime filter implementation and **no** strategy changes.
+
+**Specification:**
+
+- **Protocol / log:** Same six-year ORB+Opt3 MNQ trade log construction as Waves **0e** / **0f** (qty=1 path, `LatestEntryHourET=11`, continuous contract, segment split at operator export gaps).
+- **Deliverable 1 — Trade log sanity vs raw MNQ:**
+  - (a) Trades per **calendar year** (reporting key aligned to implementation: **`exit_cme_session_date` year**).
+  - (b) **Unique `count(cme_session_date)`** per calendar year from **RTH** bars in the protocol window.
+  - (c) Ratio **trades / sessions** per year; compare **2020** to other years (expected ballpark **~0.3–0.7** for this filter); flag **material mismatch** vs peer years.
+  - (d) **Unexpected** missing **RTH** session days in **2020** via continuous-contract calendar classification; **known** gaps (**2024-06-18–2024-07-31**, **2026-02-03–2026-03-11**) must **not** spuriously implicate **2020** undocumentedly.
+  - (e) **2020 monthly** trade count distribution; note **Feb–Apr** anomalies if present.
+  - **STOP:** If **2020** shows undocumented gaps, implausible trade counts, or ratio mismatch indicating incomplete **2020** data, **do not** proceed to D2–D4 — “2020 drives failures” may be artifact.
+- **Deliverable 2 — 2020 failure-session characterization:** For each of the **19** Wave **0e** pairs, take **first pre-lock breach session** (Wave **0f** enumeration); **de-duplicate** by calendar date. For each unique session, join bars and report: session / CME dates, session P&amp;L (per-MNQ), prior EOD balance / HWM, **margin to floor** at session open, trade count, stop type, stop time vs session open, ORB H/L and range ($), prior **ATR14** (RTH), overnight gap, full-session range, **range/ATR**, DOW, DOY. **Aggregate:** month/week concentration within **2020** vs Feb–Apr COVID window; common **signature** (ATR, gap, range/ATR) for Phase **3** framing — **2020 exclusion semantics** documented for operators.
+- **Deliverable 3 — 2020-excluded survival re-grade:** Remove trades with **`exit_ny_date` calendar year == 2020**. Confirm count drop ~proportional to **2020** share of six-year total. For **each** **(account_class, target_qty_mnq)** in Wave **0e** grid **and** Wave **0f** D4 low-qty sweep (**dedupe** `(class, qty)`):
+  - Tiered Apex **funded** survival on excluded log.
+  - **Bootstrap** funded survival (**block length 20**, **10000** resamples) on **2020-excluded** population only.
+  - **Eval** pass rate (rolling-window sim, inherited convention).
+  - **Annual P&amp;L** estimate (protocol year-fraction on excluded window).
+  - **Joint gates:** funded **pass** + bootstrap **≥ 80%** + eval **≥ 50%**.
+  - Compare to **six-year** Wave **0e** rows: configs moving **fail → pass**; for passes report **$/yr** and tier vs **$36K / $60K / $100K**; for failures report **binding** gate.
+- **Deliverable 4 — Operator diagnosis:** (a) **2020** log integrity yes/no. (b) **Regime signature** of breach sessions and realtime-identifiability (ATR, gap, range/ATR). (c–e) **2020-excluded** joint pass and best config / economics, or dominant failure mode if none.
+- **Additional STOP / surface rules (post-run):** If **every** configuration **fails funded** on excluded log → surface **fragility beyond 2020**. If joint pass but best **$/yr** **≪** Phase **2** economics floor → surface. If joint pass with **meaningful $/yr** (e.g. **&gt;~$20K/yr** on some row) → document as candidate Wave **1** baseline under Frame **B**.
+
+**Date pre-registered:** 2026-05-17
+
+**Date run completed:** 2026-05-17  
+
+**Artifact:** `notebooks/validation/2026-05-17_wave0g_orb_opt3_2020_exclusion.{md,json}`; `scripts/run_wave0g_orb_opt3_2020_exclusion.py`  
+
+---
+
+## 2026-05-17 — Wave 0g — 2020 data sanity + breach-session characterization + 2020-excluded survival re-grade — RESULT-LOGGED
+
+**Wave:** Wave 0g (implements pre-registration above)
+
+**Date run completed:** 2026-05-17
+
+**Execution `git` metadata:** `git_sha` = **`75c84e5ae8ce1edc1d19e4c0788144dc5f6dff7d`** (**dirty** at artifact write).
+
+**Deliverable 1 (sanity):**
+
+- **STOP (skip D2–D4):** **False** — proceed.
+- **2020** trades (exit **`cme_session_date`** year): **165**; RTH **sessions** in **2020:** **258**; **ratio ≈ 0.64** vs **median ~0.49** other years (excl. **2021** — see note) → **not** flagged as ratio anomaly vs peers.
+- **Unexpected missing RTH days in 2020:** **0**; **known** gaps ∩ **2020** calendar: **empty**.
+- **2021** shows **0** closed trades in this log while RTH bars exist — documented as **strategy / filter** behavior, not a raw **2020** integrity issue.
+- **2020** monthly trade counts (exit **NY** date) are **roughly uniform (~15–21/mo)** in JSON — **no** single-month **“few or many”** spike tied to Feb–Apr in this aggregation key.
+
+**Deliverable 2 (breach characterization):**
+
+- **Unique first-breach NY dates (Wave 0e × Wave 0f enumeration):** **2** — **2020-01-14**, **2020-01-15** (early January, **not** Feb–Apr COVID cluster).
+- **Coarse signature (from bar-backed diagnostics in artifact):** **orb_exit_stop** exits; intraday **range / prior ATR** **≈ 0.6–0.9** (not **range ≫ ATR** outliers on sampled days); **Phase 3** regime overlay still **deferred**.
+
+**Deliverable 3 (2020-excluded re-grade):**
+
+- **Exclusion:** drop **`exit_ny_date.year == 2020`**; **799 → 634** trades (**~20.7%** removed), in line with **2020** share.
+- **Configs swept:** **40** (**19** Wave **0e** + **21** additional low-qty Wave **0f** rows, deduped).
+- **Funded survival (2020-excluded):** **0 / 40** — **`any_funded_survival_excl`: false** (`stop_every_configuration_fails_funded_survival`: **true** per pre-registered surface rule).
+- **First-failing gate histogram (2020-excluded sweep):** **`funded`: 40** (all fail before bootstrap/eval binding).
+- **Joint triple-pass (funded + bootstrap ≥ 80% + eval ≥ 50%):** **none** (`joint_gate_passing_configs`: **[]**); **no** configs **newly** passing joint vs six-year Wave **0e** comparison.
+
+**Deliverable 4 (operator framing):**
+
+- **(a)** Six-year log **2020** integrity: **confirmed** under scripted checks — failures on **2020** dates are **not** attributed here to undocumented **2020** bar gaps.
+- **(b)** Breach sessions: **early Jan 2020**, **stop-out** profile; **range/ATR** **moderate** on sampled days — **not** a simple “only gap/ATR monsters” story from these two days alone; realtime overlay **TBD** Phase **3**.
+- **(c–e)** **No** configuration passes **joint gates** on the **2020-excluded** log; **funded** fails **universally** on the **2021–2026** subset — fragility is **not** explained away by dropping **2020**. ORB+Opt3 **Phase 2** effort should assume **path / tail** work remains **binding** unless strategy or rules change; **Frame B** “Wave **1** baseline from joint-pass **2020-excluded**” is **not** supported by this run.
+
+**Artifacts:**  
+- `notebooks/validation/2026-05-17_wave0g_orb_opt3_2020_exclusion.{md,json}`  
+- `scripts/run_wave0g_orb_opt3_2020_exclusion.py`  
+
+---
+
+## 2026-05-17 — Wave 0h — ORB+Opt3 chapter close-out + Phase 2 reframe (new-strategy search) — PRE-REGISTERED
+
+**Wave:** Wave 0h
+
+**Structural rationale:** Waves **0a–0g** establish that **ORB+Opt3** does **not** clear **joint** Apex EOD gates at sizes tested; failure mode is **pre-lock** single-session loss at scale and **bootstrap** fragility even when **funded** survives at small qty. **Operator decision:** close **ORB+Opt3 repair** within Phase **2**; reframe active work as **new-strategy search** per `docs/program-charter.md` (acceptable outcomes include **other approaches** discovered during research). This wave documents that decision with a **per-session loss tail** diagnostic vs class **TDD**, consolidated close-out prose, and kickoff / working-plan updates.
+
+**Specification:**
+
+- **D1 — Per-session loss distribution (qty=1 MNQ, six-year protocol trade log):**
+  - (a) Aggregate **realized** P&amp;L by **`exit_ny_date`** (sum `net_pnl`).
+  - (b) On **losing** sessions: count; mean/median loss; **75/90/95/99** percentiles of **absolute** loss; maximum single-session loss; **40-bin** histogram.
+  - (c) **Tail multiples** (e.g. p99 \|loss\| / median \|loss\| among losers).
+  - (d) **Apex comparison:** per account class (**25k / 50k / 100k / 150k**), report **TDD** (pre-lock trailing), **profit target** dollars, **margin to trailing floor** at open / textbook pre-lock peak (both = **TDD** under two-phase rules), percentiles of **absolute** session loss as **% of TDD**; repeat for illustrative **qty** **2, 5, 10** under linear scaling of the per-MNQ loss distribution.
+  - (e) **Back-of-envelope** proportional **stop** narrowing to bring **p99** **absolute** loss ≤ **50% TDD** at qty=1 (**no** WR/path model); report implied **%** stop reduction when factor **&lt; 1**.
+  - **STOP surface:** If **p99** abs loss at **MNQ=1** **≤** half **$50K** TDD, **document** — suggests unit-scale tail is **not** extreme vs that buffer (possible **stop-distance** revisit nuance) even if prior waves failed **joint** gates at higher qty.
+- **D2 — Close-out doc:** `docs/orb_opt3_phase2_closeout.md` (waves 0a–0h summary, structural conclusion, ruled out / not explored, production status).
+- **D3 — Phase 2 reframe:** Update **`docs/phase-2-kickoff.md`** and **`docs/current-working-plan.md`**: baseline is **not** “ORB must survive”; success = **at least one** strategy passing **funded + bootstrap ≥ 80% + eval ≥ 50%** + **≥ $36K/yr** (floor tier); Wave **0** graded ORB remains implicit **$0** joint-pass floor.
+- **D4 — Wave 1 operator agenda** in artifact JSON (strategy families, Apex screens, frequency floor, instruments) — **not** answered by implementation.
+
+**Date pre-registered:** 2026-05-17  
+
+**Date run completed:** 2026-05-17  
+
+**Artifact:** `notebooks/validation/2026-05-17_wave0h_orb_opt3_chapter_closeout.{md,json}`; `scripts/run_wave0h_orb_opt3_chapter_closeout.py`; `docs/orb_opt3_phase2_closeout.md`  
+
+---
+
+## 2026-05-17 — Wave 0h — ORB+Opt3 chapter close-out + Phase 2 reframe — RESULT-LOGGED
+
+**Wave:** Wave 0h (implements pre-registration above)
+
+**Date run completed:** 2026-05-17
+
+**Execution `git` metadata:** `git_sha` = **`75c84e5ae8ce1edc1d19e4c0788144dc5f6dff7d`** (**dirty** at artifact write).
+
+**Deliverable 1 (session loss tail, MNQ=1):**
+
+- **Unique `exit_ny_date` with trades:** **779**; **losing sessions:** **272**; **max trades / NY day:** **6** (**15** NY days multi-trade).
+- **Median** session P&amp;L (losers): **−$136.50**; **median \|loss\|:** **$136.50**; **p99 \|loss\|:** **~$520**; **worst** session: **−$789.50**; **p99 / median \|loss\|:** **~3.8×**.
+- **$50K TDD** = **$2,000** → **p99** abs loss **~26%** of TDD at **MNQ=1**; at **10 MNQ** linear scaling → **p99 ~$5,198** (**~260%** of TDD).
+- **STOP surface (pre-registered):** **True** — **p99 ≤** half **$50K** TDD (**$1,000**). **Interpretation:** unit-scale **percentile** tail is **moderate** vs **$50K** buffer; **joint-gate** failure remains explained by **qty**, **worst-day** mass (max **−$790** at qty=1), **path/bootstrap**, and **eval** — not by p99 alone. **Operator still closes** ORB repair; nuance **on record** for **Wave 1** screening.
+- **$25K:** p99 **~52%** of **$1K** TDD — **above** half-TDD; back-of-envelope **~3.8%** linear stop tighten to hit **50% TDD** cap on p99.
+
+**Deliverable 2–4:** See **`docs/orb_opt3_phase2_closeout.md`** (narrative), JSON **`deliverable_4_wave1_operator_agenda`**, and updates to **`docs/phase-2-kickoff.md`** / **`docs/current-working-plan.md`**.
+
+**Artifacts:**  
+- `notebooks/validation/2026-05-17_wave0h_orb_opt3_chapter_closeout.{md,json}`  
+- `scripts/run_wave0h_orb_opt3_chapter_closeout.py`  
+- `docs/orb_opt3_phase2_closeout.md`  
+
+---
+
+## 2026-05-26 — Wave 1 Stage 1 Track 1 — quant hypotheses (N=7) — PRE-REGISTERED
+
+**Wave:** Wave 1  
+**Status:** PRE-REGISTERED (spec fixed before screening code run; **Track 2** ICT batch is separate / later).  
+**Structural bundle:** First **quant-derived** coarse screen under Phase 2 joint-gate *discipline* adapted to a **fast kill** layer (DLL-style per-session cap + frequency + WR + R:R + year stability), **not** full funded + bootstrap + eval until Stage 2+.  
+
+**Protocol / data**
+
+- **Execution instrument:** **MNQ** only (Phase 2 **M8** MNQ scope); **cross-features** from **ES** and **RTY** permitted for **H8**, **H9**, **H10** when tape exists.  
+- **Loader extension:** `quant_research.data.data_loader` exposes `ES_CONTRACT_GLOB` / `RTY_CONTRACT_GLOB`; `quant_research.research_wave1.instrument_pipeline.load_continuous_rth_mnq_style` stitches **any** `*.Last.txt` band to RTH + `cme_session_date` like MNQ.  
+- **Evaluation window:** calendar **2021-01-01** – **2025-12-31** (Frame B: **2020 excluded**); gates use exit-date year in **America/New_York** where daily attribution applies.  
+- **Segmentation:** `split_dataframe_at_operator_export_gaps` on MNQ (fresh path per segment — no positions across known export holes).  
+- **Simplifications (Stage 1 coarse):** **$0** commission/slippage; minute-bar **pessimistic** stop vs target when both touch; **H8** macro calendar filter omitted if no calendar data (**documented**).  
+
+**Hypotheses (operational specs — summary; full detail in operator charter for this track)**
+
+| ID | Idea (short) | Parameter sweep |
+|----|----------------|-----------------|
+| **H1** | Opening-drive exhaustion after large normalized OR; fade; stop extreme+2; target 50% retrace; time exit RTH; 1 trade/session | **X** ∈ {8, 10, 12} pts |
+| **H2** | Lunch (11:30–13:30 **ET**) VWAP ± 1.5× morning ATR fade; target VWAP; time 13:30 | stop **8 / 10 / 12** pts |
+| **H8** | ES–NQ % divergence &gt; **0.3%** &gt; **15** min; fade leader on **MNQ**; stop **8–10**; target ½ gap closure; ≤2 trades/session | stop **8 / 10** |
+| **H9** | NQ flat 20m (**0.2%** range); RTY impulse **&gt;0.3%** → directional MNQ entry; stop NQ flat range opp side; tgt **1.5×** range; 30m time | — |
+| **H10** | ES level touch + 5m rejection; MNQ direction with ES; stop NQ 30m extreme; tgt prior NQ swing; ≤2/session; ES 10pt “clean” filter | — |
+| **H11** | 15m OR (**09:30–09:45 ET**) + 5m close breakout **09:45–10:30**; tgt **1×** range; time **11:00** | — |
+| **H12** | Weekly midpoint (**Mon–Thu** path); Wed/Thu only; **&gt;20** pts + **30** min extension + **5m** rejection **&gt;30%** retracement toward mid | — |
+
+**Screening gates (binary; SURVIVE = all pass)**
+
+1. **Per-session worst loss (DLL-style screening):** `qty_design = round( $30k / avg_annual_pnl_usd @ MNQ=1 )` (min **1** if positive annual); if **avg annual ≤ 0** → **fail**. **Pass** if worst CME-session sum of scaled `net_pnl` at `qty_design` is **&gt; −$1,000** (strictly better than **−$1k** one-session loss).  
+2. **Frequency:** average **closed trades / calendar week** over **2021–2025** ≥ **3**.  
+3. **Win rate:** ≥ **60%** on non-zero closed trades (years filter).  
+4. **R:R:** `avg_win / avg_loss` ∈ **[0.8, 1.5]** (loss as positive magnitude).  
+5. **Years:** **&gt;0** P&amp;L in **≥4** of **2021–2025** (strictly profitable years).  
+
+**Statistics (pre-registered for this track)**
+
+- **Sharpe (reporting):** **daily** realized USD P&amp;L at **qty=1**, **sqrt(252)** — document trade-level alternative in artifact.  
+- **Deflated Sharpe:** **N = 7** hypotheses; trial SR vector uses **0** substitution **only** for Var(SR̂) across trials when a trial SR is undefined; per-hypothesis **PSR/DSR** omitted if no daily series.  
+- **Bootstrap:** **circular block** length **20** sessions on session P&amp;L sums; **1000** resamples; **95% CI** on **mean annual** P&amp;L proxy (total / 5); **flag** if CI crosses **0** for any **SURVIVE**.  
+
+**Date pre-registered:** 2026-05-26  
+
+---
+
+## 2026-05-26 — Wave 1 Stage 1 Track 1 — RESULT-LOGGED
+
+**Wave:** Wave 1 (implements PRE-REGISTERED block above)  
+**Date run completed:** 2026-05-26  
+
+**Execution `git` metadata:** `git_sha` = **`75c84e5ae8ce1edc1d19e4c0788144dc5f6dff7d`** (workspace **dirty** at run — see local `git status` for tip commit at archival time).  
+
+**Data / pipeline**
+
+- **MNQ:** loaded; **4** gap-split segments in **2021–2025** window.  
+- **ES / RTY:** **0** files matching `ES *.Last.txt` and `RTY *.Last.txt` under `data/raw/` → **H8** (needs ES), **H9** (needs RTY), **H10** (needs ES) **blocked** (no cross-instrument sim). Economic-calendar filter for **H8** **not** applied (pre-registered fallback).  
+
+**Survivors (all 5 gates):** **NONE**  
+
+**Per-hypothesis (best sweep where applicable)**
+
+| ID | Selected variant | Outcome | Primary gate failure(s) |
+|----|------------------|---------|-------------------------|
+| H1 | **X=12** | KILLED | **G1** (negative mean annual @ qty=1); **G2**; **G3**; **G4**; **G5** |
+| H2 | **stop=12** | KILLED | **G1**; **G3**; **G4**; **G5** (**G2** pass) |
+| H8 | — | KILLED / **BLOCKED** | No ES tape (+ **G1–G5** degenerate on empty log) |
+| H9 | — | KILLED / **BLOCKED** | No RTY tape |
+| H10 | — | KILLED / **BLOCKED** | No ES tape |
+| H11 | — | KILLED | **G1** only — passes **G2–G5** (notable: **~62%** WR, R:R in band, **5/5** profitable years at qty=1; **worst session ~−$1,272** at **qty=3** $30K/yr heuristic vs **$1k** screen) |
+| H12 | — | KILLED | **G1** (tail at sized qty), **G2**, **G3**, **G4** (**G5** pass) |
+
+**Deflated Sharpe (N=7):** Large across-trial SR variance (negative H1/H2 vs positive H11/H12); **expected_max_SR** under null ≈ **3.92**; **H11/H12** PSR vs that benchmark **≈1** — multiple-testing mass is **material**, but **does not rescue** **H11** because **Gate 1** fails on session tail at economics.  
+
+**Bootstrap (mean annual, qty=1):** **H11** / **H12** CIs **exclude 0** (edge **not** weak on this axis); still **killed** on other gates / **G1**.  
+
+**STOP surfaces (pre-registered)**
+
+- **All seven killed** at Stage 1 coarse screen → Phase 2 search leans on **Track 2 (ICT)** and/or **new quant families** until one clears gates.  
+- **ES/RTY export** required to **unblock** **H8–H10** re-runs.  
+
+**Artifacts:**  
+- `notebooks/validation/2026-05-26_wave1_stage1_track1_quant_screen.md`  
+- `notebooks/validation/2026-05-26_wave1_stage1_track1_quant_screen.json`  
+- `scripts/run_wave1_stage1_track1_screening.py`  
+- Code: `src/quant_research/research_wave1/` (sims + metrics + instrument pipeline), `src/quant_research/data/data_loader.py` (ES/RTY globs)  
+
+---
+
+## 2026-05-29 — Wave 1 Stage 1 Track 1b — H8b MES–MNQ divergence — PRE-REGISTERED
+
+**Wave:** Wave 1 (Track **1b** extension — cross-instrument batch)  
+**Status:** PRE-REGISTERED (spec fixed before screening run; **H9/H10 deferred** until RTY export).  
+**Supersedes:** Track 1 **H8** (“fade the leader”) — **not executed**; replaced by **H8b** below.
+
+**Protocol / data**
+
+- **Execution instrument:** **MNQ**; cross-feature **MES** (micro ES — operator export under `data/raw/mes/`).  
+- **Loader:** `MES_CONTRACT_GLOB = "mes/MES *.Last.txt"`, `MNQ_CONTRACT_GLOB = "mnq/MNQ *.Last.txt"`; continuous contract + RTH + `cme_session_date` via `instrument_pipeline.load_continuous_rth_mnq_style`.  
+- **Evaluation window:** calendar **2021-01-01** – **2025-12-31** (Frame B: **2020 excluded**); exit **America/New_York** date convention (same as Track 1).  
+- **Segmentation:** MNQ `split_dataframe_at_operator_export_gaps`; MES filtered to segment session dates; **inner join** on timestamp (sessions without aligned MES bars excluded).  
+- **Macro calendar filter:** omitted (no FOMC/NFP/CPI calendar — same fallback as Track 1).  
+- **Data coverage (pre-run inventory):** MES **26** contract files; RTH first bar **2020-01-02** CT (not materially post-2020); last bar **2026-05-26**. MES **covers** operator-known MNQ export holes **Jun–Jul 2024** and **Feb–Mar 2026** but MNQ execution still absent on those days. **MES-only unexpected missing days in 2021–2025 eval window** surfaced (Apr 2023 cluster, Nov 2023, Feb/Jul/Aug 2025) — **STOP surface** documented; screen proceeds on overlap-only bars.
+
+**H8b operational specification — MES–MNQ divergence, trade WITH leader**
+
+- **Monitoring:** MNQ % and MES % change from respective **09:30 ET** RTH opens each session.  
+- **Divergence:** `|MNQ% − MES%| > 0.3%` sustained **≥ 15** consecutive minutes.  
+- **Leader:** larger signed % change (MES or MNQ).  
+- **Direction (H8b — catch-up, not fade):**  
+  - MES% **>** MNQ% → **MNQ LONG** (MNQ catches up to higher MES).  
+  - MES% **<** MNQ% → **MNQ SHORT** (MNQ catches down to lower MES).  
+- **Entry:** MNQ close when divergence first sustained 15 minutes.  
+- **Stop sweep:** **8 / 10** MNQ points against trade direction.  
+- **Target:** signed gap `MNQ% − MES%` narrows by **≥ 50%** vs entry gap.  
+- **Time exit:** RTH end (**16:00 ET**); **≤ 2** trades/session.
+
+**Screening gates (identical to Track 1)**
+
+1. Per-session worst loss **< $1,000** at qty for **$30K/yr** design (fail if avg annual ≤ 0 @ qty=1).  
+2. Frequency **≥ 3** trades/week (2021–2025).  
+3. Win rate **≥ 60%**.  
+4. R:R **∈ [0.8, 1.5]**.  
+5. Profitable (**> 0**) in **≥ 4 of 5** years **2021–2025**.
+
+**Statistics**
+
+- Daily Sharpe @ qty=1, **√252**; bootstrap **block 20**, **1000** resamples on session P&amp;L.  
+- **Joint deflated Sharpe @ N=5** after run: **H1, H2, H8b, H11, H12** (excludes never-run H8 fade, blocked H9/H10). Compare **H11 PSR** vs Track 1 **N=7**.
+
+**Deferred:** **H9** (RTY lead), **H10** (ES/MES S/R) until RTY data added.
+
+**Date pre-registered:** 2026-05-29  
+
+---
+
+## 2026-05-29 — Wave 1 Stage 1 Track 1b — H8b — RESULT-LOGGED
+
+**Wave:** Wave 1 Track **1b** (implements PRE-REGISTERED block above)  
+**Date run completed:** 2026-05-29  
+
+**Data / pipeline**
+
+- **MES:** **26** files (`mes/MES *.Last.txt`); RTH **629,048** bars; **2020-01-02** – **2026-05-26** CT.  
+- **MNQ:** **26** files (`mnq/MNQ *.Last.txt`); **4** gap-split segments in eval window; **1,551** overlapping CME session dates with MES.  
+- **Coverage asymmetry (STOP surfaced):** MES has **10** unexpected missing days in **2021–2025** not present in MNQ (Apr 2023 cluster, Nov 2023, Feb/Jul/Aug 2025). MES **fills** MNQ export holes **Jun–Jul 2024** and **Feb–Mar 2026** but MNQ cannot execute on those days. Screen ran on **inner-joined** overlap only.  
+- **Macro filter:** not applied (no calendar). **H9/H10:** deferred (RTY pending).
+
+**H8b outcome:** **KILLED** (best sweep **stop=10**; **stop=8** also killed)
+
+| Gate | Result | Gap |
+|------|--------|-----|
+| G1 | **FAIL** | avg annual **−$1,744** @ qty=1 (non-positive → fail by spec) |
+| G2 | **PASS** | **~5.8** trades/week |
+| G3 | **FAIL** | win rate **~9.1%** (need ≥60%) |
+| G4 | **FAIL** | R:R **~6.83** (need 0.8–1.5) |
+| G5 | **FAIL** | **1/5** profitable years (need ≥4) |
+
+**Notable:** H8b “trade with divergence” produces **strongly negative** edge (opposite of catch-up hypothesis). **~1,501** trades in gate years; bootstrap mean-annual CI **excludes zero** on the loss side (**−$2,530** to **−$843**). **Not** a conditional Stage-2 candidate (fails G3–G5, not just G1).
+
+**Sharpe / bootstrap (H8b, stop=10):** daily SR **≈ −2.38**; bootstrap mean annual **−$1,744** (CI95 excludes 0).
+
+**Joint deflated Sharpe @ N=5** (H1, H2, H8b, H11, H12 — actually-run hypotheses):
+
+- Var(trial SR) **≈ 13.95** (vs **≈ 8.00** at N=7 with three zero-blocked slots)  
+- E[max SR \| null] **≈ 4.45** (vs **≈ 3.92** at N=7)  
+- **H11 PSR demoted:** **≈ 0.685 @ N=5** vs **≈ 1.000 @ N=7** — prior “clean PSR” for H11 was **partially an artifact** of N=7 including three never-run zero-SR slots  
+- **H12 PSR:** **≈ 0.774 @ N=5** vs **≈ 0.999 @ N=7**
+
+**Survivors (Track 1 + 1b):** still **NONE** (0/5 run hypotheses clear all five gates).
+
+**Artifacts:**  
+- `notebooks/validation/2026-05-29_wave1_stage1_track1b_h8b_screen.{md,json}`  
+- `scripts/run_wave1_stage1_track1b_h8b_screening.py`  
+- Code: `simulate_h8b` in `track1_hypothesis_sims.py`; `MES_CONTRACT_GLOB` / `MNQ_CONTRACT_GLOB` in `data_loader.py`; `deflated_sharpe_joint_from_trial_stats` in `track1_metrics.py`
 
 ---
 
@@ -329,6 +755,8 @@
 **Out of scope:** no bias-rule synthesis, no JadeCap-vs-TTrades reconciliation, no 2022 midnight-open / Power 3 folding, no strategy/backtest/NT8 code.
 
 **Artifact:** `src/quant_research/utils/transcript_ingest.py` (`BIAS_LEXICON_EXTENSION`); `tests/utils/test_transcript_ingest.py`; `docs/ict_bias_concept_maps/{jadecap_primary,ttrades_supplement}.json`; feature commit `15c31fd`; git_sha stamp commit `8112098`.
+
+---
 
 ## 2026-06-02 — TTrades CISD + SMT confirmation primitives ingested (distinct `cisd_smt` mini-corpus) — PROVENANCE / RESULT-LOGGED
 

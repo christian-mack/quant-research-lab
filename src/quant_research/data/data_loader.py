@@ -49,7 +49,22 @@ Spaces and the literal ``.Last.txt`` suffix are intentional and match the
 NT8 default export naming. Other futures symbols (MES, NQ, ES) follow the
 same shape; pass an alternate pattern to :func:`discover_contract_files` to
 load them.
+
+When exports live in instrument subfolders (``data/raw/mnq/``, ``data/raw/mes/``),
+use :data:`MNQ_CONTRACT_GLOB` / :data:`MES_CONTRACT_GLOB` instead.
 """
+
+MNQ_CONTRACT_GLOB = "mnq/MNQ *.Last.txt"
+"""Glob for MNQ NT8 exports under ``data/raw/mnq/``."""
+
+MES_CONTRACT_GLOB = "mes/MES *.Last.txt"
+"""Glob for CME Micro E-mini S&P 500 (``MES``) NT8 exports under ``data/raw/mes/``."""
+
+ES_CONTRACT_GLOB = "ES *.Last.txt"
+"""Glob for CME E-mini S&P 500 (``ES``) NT8 exports under ``data/raw/``."""
+
+RTY_CONTRACT_GLOB = "RTY *.Last.txt"
+"""Glob for CME E-mini Russell 2000 (``RTY``) NT8 exports under ``data/raw/``."""
 
 CANONICAL_COLUMNS = (
     "timestamp",
