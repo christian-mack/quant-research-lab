@@ -1,0 +1,132 @@
+{
+  "protocol_window": [
+    "2020-01-01",
+    "2026-06-30"
+  ],
+  "summaries": {
+    "MNQ": {
+      "instrument": "MNQ",
+      "rth_bar_count": 599533,
+      "ct_first_bar": "2020-01-02 08:30:00-06:00",
+      "ct_last_bar": "2026-04-17 14:59:00-05:00",
+      "n_session_dates": 1561,
+      "first_session_date": "2020-01-02",
+      "last_session_date": "2026-04-17"
+    },
+    "MES": {
+      "instrument": "MES",
+      "rth_bar_count": 629048,
+      "ct_first_bar": "2020-01-02 08:30:00-06:00",
+      "ct_last_bar": "2026-05-26 14:59:00-05:00",
+      "n_session_dates": 1639,
+      "first_session_date": "2020-01-02",
+      "last_session_date": "2026-05-26"
+    },
+    "MYM": {
+      "instrument": "MYM",
+      "rth_bar_count": 632947,
+      "ct_first_bar": "2020-01-02 08:30:00-06:00",
+      "ct_last_bar": "2026-06-04 14:59:00-05:00",
+      "n_session_dates": 1650,
+      "first_session_date": "2020-01-02",
+      "last_session_date": "2026-06-04"
+    }
+  },
+  "gaps": {
+    "MNQ": [
+      {
+        "from": "2024-06-14",
+        "to": "2024-08-01",
+        "calendar_days": 48
+      },
+      {
+        "from": "2026-01-30",
+        "to": "2026-03-12",
+        "calendar_days": 41
+      }
+    ],
+    "MES": [
+      {
+        "from": "2023-04-05",
+        "to": "2023-04-17",
+        "calendar_days": 12
+      }
+    ],
+    "MYM": [
+      {
+        "from": "2023-04-05",
+        "to": "2023-04-17",
+        "calendar_days": 12
+      }
+    ]
+  },
+  "overlap": {
+    "mnq_mes_mym_inner": 1551,
+    "mnq_mes_inner": 1551,
+    "mnq_mym_inner": 1555
+  },
+  "mym_covers_known_mnq_gaps": [
+    {
+      "mnq_gap": [
+        "2024-06-18",
+        "2024-07-31"
+      ],
+      "mym_session_dates_in_window": 32,
+      "mym_covers": true
+    },
+    {
+      "mnq_gap": [
+        "2026-02-03",
+        "2026-03-11"
+      ],
+      "mym_session_dates_in_window": 27,
+      "mym_covers": true
+    }
+  ],
+  "shared_span_mnq_mym": [
+    "2020-01-02",
+    "2026-04-17"
+  ],
+  "mym_missing_vs_mnq_count": 6,
+  "mym_missing_vs_mnq_sample": [
+    "2023-04-06",
+    "2023-04-10",
+    "2023-04-11",
+    "2023-04-12",
+    "2023-04-13",
+    "2023-04-14"
+  ],
+  "mnq_missing_vs_mym_count": 61,
+  "mnq_missing_vs_mym_sample": [
+    "2024-06-17",
+    "2024-06-18",
+    "2024-06-19",
+    "2024-06-20",
+    "2024-06-21",
+    "2024-06-24",
+    "2024-06-25",
+    "2024-06-26",
+    "2024-06-27",
+    "2024-06-28",
+    "2024-07-01",
+    "2024-07-02",
+    "2024-07-03",
+    "2024-07-04",
+    "2024-07-05",
+    "2024-07-08",
+    "2024-07-09",
+    "2024-07-10",
+    "2024-07-11",
+    "2024-07-12",
+    "2024-07-15",
+    "2024-07-16",
+    "2024-07-17",
+    "2024-07-18",
+    "2024-07-19",
+    "2024-07-22",
+    "2024-07-23",
+    "2024-07-24",
+    "2024-07-25",
+    "2024-07-26"
+  ]
+}

@@ -60,6 +60,14 @@ MNQ_CONTRACT_GLOB = "mnq/MNQ *.Last.txt"
 MES_CONTRACT_GLOB = "mes/MES *.Last.txt"
 """Glob for CME Micro E-mini S&P 500 (``MES``) NT8 exports under ``data/raw/mes/``."""
 
+MYM_CONTRACT_GLOB = "mym/MYM *.Last.txt"
+"""Glob for CME Micro E-mini Dow ($0.50) (``MYM``) NT8 exports under ``data/raw/mym/``.
+
+Added for Wave 1 Track 2 (ICT) cross-instrument SMT work: MNQ (Nasdaq) vs
+MES (S&P) vs MYM (Dow) at micro size. MYM raw files follow the same NT8
+export shape as MNQ/MES and stitch through ``instrument_pipeline`` identically.
+"""
+
 ES_CONTRACT_GLOB = "ES *.Last.txt"
 """Glob for CME E-mini S&P 500 (``ES``) NT8 exports under ``data/raw/``."""
 

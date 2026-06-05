@@ -772,6 +772,54 @@
 
 ---
 
+## 2026-06-04 — Wave 1 Track 2 — Phase 1 ICT primitives + MYM data prep — PRE-REGISTERED
+
+**Wave:** Wave 1, Track 2 (ICT-derived hypotheses)
+**Status:** PRE-REGISTERED (scope fixed before build). **NOT** a backtest/edge claim — this is infrastructure: five standalone, unit-tested ICT **primitives** built before the daily-bias module (Phase 2) or the Spec A liquidity-sweep reversal strategy (Phase 3), per the strategy-chat "primitives first" review.
+
+**Structural rationale:** Track 1 (quant hypotheses) produced **0 survivors** (research-log 2026-05-26 / 2026-05-29). Track 2 operationalizes ICT-derived hypotheses. The flagship is **Spec A** (sweep → MSS → displacement/FVG → OTE entry), gated by a daily **bias module** derived from TTrades' mechanical framework (CISD, SMT, EQ-respect; TTrades = mechanical primary per 2026-06-02 decision). Each primitive is unit-tested in isolation against the worked examples cited in the source specs before any module/strategy depends on it.
+
+**Scope (Phase 1 only):**
+
+- **Data prep:** Process **MYM** (Micro Dow) raw exports through the MNQ-style pipeline (UTC→CT, continuous contract via data-boundary fallback, session classification). Verify coverage, gaps, and MNQ/MES/MYM overlap. SMT can fall back to MES-vs-MNQ only if MYM is short/gappy.
+- **Five primitives** under `src/quant_research/ict/`, each with pytest coverage incl. boundary conditions (first/last bar, session transitions, missing data) per ai-project-instructions Section 4:
+  1. **PD-array / level marking** — PDH, PDL, prior-day EQ `(PDH+PDL)/2` per session, daily TF.
+  2. **FVG detection + midpoint** — 3-candle imbalance, both directions, top/bottom/midpoint, parameterized TF.
+  3. **CISD detection** (load-bearing) — opening price of the FIRST opposing-close candle in the run; fires on close beyond it; exposes the order-block zone.
+  4. **SMT detection** — cross-instrument divergence at swing points (MNQ vs MES vs MYM).
+  5. **Liquidity sweep** — trades through a level by `>=` configurable ticks then closes back inside within N bars; tick threshold and N are **[MANUAL OBS]** config (no source value), not hardcoded.
+
+**Stop conditions (pre-registered):** MYM coverage/quality issues → surface MES-only vs wait; any primitive not validatable against source-cited worked examples → STOP at that primitive; CISD ambiguity against transcript examples → surface (load-bearing); FVG count implausible on a sanity slice → surface.
+
+**Date pre-registered:** 2026-06-04
+
+---
+
+## 2026-06-04 — Wave 1 Track 2 — Phase 1 ICT primitives + MYM data prep — RESULT-LOGGED
+
+**Wave:** Wave 1, Track 2 (implements PRE-REGISTERED block above)
+**Date run completed:** 2026-06-04
+
+**MYM data prep:** `MYM_CONTRACT_GLOB` added to `data_loader`; 26 quarterly files (03-20…06-26) run through the same pipeline as MES. MYM RTH coverage **632,947 bars / 1,650 session dates / 2020-01-02 → 2026-06-04** — materially the same length as MNQ (1,561; ends 2026-04-17) and MES (1,639; ends 2026-05-26), in fact longer. MYM's **only** >4-day session gap is **2023-04-05→04-17** (6 sessions), the *same* Apr-2023 cluster MES has (research-log Track 1b) — **not** MYM-specific. MYM does **not** have the MNQ export holes (2024-06/07, 2026-02/03) and covers them. Overlap **MNQ∩MES∩MYM = 1,551 = MNQ∩MES (1,551)** → MYM adds zero session loss. **Decision: full three-instrument SMT (MNQ/MES/MYM); MES-only fallback not needed.** No surprise in processing (parallel to MES) → no lessons-log entry per Section 6.
+
+**Primitives — all five VALIDATED CLEANLY** (no stop condition fired):
+
+| # | Primitive | Module | Tests | Validation |
+|---|-----------|--------|-------|------------|
+| 1 | PD-arrays (PDH/PDL/EQ) | `ict/pd_arrays.py` | 6 | hand-built sequences; first-day null; null-session-date exclusion |
+| 2 | FVG + midpoint | `ict/fvg.py` | 11 | hand-built bull/bear zones; no-gap/touch reject; **real MNQ Mar-2024 counts plausible** (81/16/5.4 per session at 1m/5m/15m) |
+| 3 | CISD (load-bearing) | `ict/cisd.py` | 13 | transcript @47/49/61/80/163s; **first-candle-of-series** rule; sweep-wick fallback; strict close-beyond. **Unambiguous** |
+| 4 | SMT | `ict/smt.py` | 13 | bull/bear divergence; aligned→none; equal-low→none; 3-instrument; **"8:35 NASDAQ takes the lows" (@312s)** |
+| 5 | Liquidity sweep | `ict/liquidity_sweep.py` | 15 | single/multi-bar sweep; continuation→none; N-window boundary; tick-threshold filter; [MANUAL OBS] config |
+
+**Suite at completion:** **305 passed, 31 skipped** (skips pre-existing real-data tests on flat `data/raw/MNQ 03-26.Last.txt` path); ruff clean.
+
+**Next (not in this phase):** Phase 2 assembles the bias module from primitives 1/3/4 (+EQ respect); Phase 3 assembles Spec A from primitives 2/5 (+MSS, OTE). Both remain separate operator-gated prompts.
+
+**Artifacts:** `notebooks/validation/2026-06-04_wave1_track2_phase1_ict_primitives.md`; `src/quant_research/ict/`; `tests/ict/`; `scripts/verify_mym_coverage.py` + `scripts/_mym_coverage_report.json`; `src/quant_research/data/data_loader.py` (`MYM_CONTRACT_GLOB`).
+
+---
+
 ## Entry template
 
 Copy from `## YYYY-MM-DD` through **`Artifact:`** for each new hypothesis or baseline record.
