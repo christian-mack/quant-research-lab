@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-08  
 **Wave:** P2-W2  
-**git_sha:** `0585f9e9413e416357c041b086fbabe6bcd513c3`  
+**git_sha:** `307cecb2fc0edc2e5af3591892677654488e2eb7`  
 **Status:** RESULT-LOGGED (Gate #1 only; OOS sealed)
 
 ## Data precondition
