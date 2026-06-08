@@ -1,7 +1,7 @@
 # P2-W2 forensic — verdict validity check
 
 **Date:** 2026-06-08  
-**git_sha:** `800c5ccbcf21a5292794d427f69aaf04d5d669a3`  
+**git_sha:** `b833904965ee273e67933ee31e6209eaba0fd9fe`  
 **Type:** Diagnosis only — no screen rerun, no OOS unseal, no strategy edits.
 
 ## Part A — Sign convention (reversion cluster)
