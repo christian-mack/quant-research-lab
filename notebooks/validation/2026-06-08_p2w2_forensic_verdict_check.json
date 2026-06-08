@@ -1,0 +1,402 @@
+{
+  "git_sha": "800c5ccbcf21a5292794d427f69aaf04d5d669a3",
+  "part_a": {
+    "h3_samples": [
+      {
+        "session_date": "2020-01-02",
+        "signal_time": "2020-01-02T10:25:00-05:00",
+        "bar_o": 8808.0,
+        "bar_h": 8817.75,
+        "bar_l": 8803.25,
+        "bar_c": 8815.75,
+        "or_hi": 8852.25,
+        "or_lo": 8815.5,
+        "or_mid": 8833.875,
+        "false_breakout_side": "below_or_low",
+        "false_extreme": 8802.5,
+        "entry_direction": "long",
+        "thesis_direction": "long",
+        "sign_verdict": "SIGN CORRECT",
+        "entry_price": 8815.75,
+        "stop_price": 8805.75,
+        "target_price": 8833.875,
+        "exit_reason": "stop",
+        "net_pnl": -22.48,
+        "thesis_narrative": "5m closed back inside OR after false breakdown below OR-low \u2192 LONG failure back toward OR mid.",
+        "actual_narrative": "Entry LONG at 8815.75 after reclaim above OR-low 8815.50."
+      },
+      {
+        "session_date": "2020-05-25",
+        "signal_time": "2020-05-25T11:00:00-04:00",
+        "bar_o": 9528.25,
+        "bar_h": 9528.75,
+        "bar_l": 9524.0,
+        "bar_c": 9525.25,
+        "or_hi": 9528.0,
+        "or_lo": 9513.5,
+        "or_mid": 9520.75,
+        "false_breakout_side": "above_or_high",
+        "false_extreme": 9532.0,
+        "entry_direction": "short",
+        "thesis_direction": "short",
+        "sign_verdict": "SIGN CORRECT",
+        "entry_price": 9525.25,
+        "stop_price": 9534.0,
+        "target_price": 9520.75,
+        "exit_reason": "stop",
+        "net_pnl": -19.98,
+        "thesis_narrative": "5m closed back inside OR after false breakout above OR-high \u2192 SHORT failure back toward OR mid.",
+        "actual_narrative": "Entry SHORT at 9525.25 after reclaim below OR-high 9528.00."
+      },
+      {
+        "session_date": "2020-10-02",
+        "signal_time": "2020-10-02T10:35:00-04:00",
+        "bar_o": 11441.0,
+        "bar_h": 11461.0,
+        "bar_l": 11421.75,
+        "bar_c": 11422.75,
+        "or_hi": 11429.5,
+        "or_lo": 11300.75,
+        "or_mid": 11365.125,
+        "false_breakout_side": "above_or_high",
+        "false_extreme": 11468.75,
+        "entry_direction": "short",
+        "thesis_direction": "short",
+        "sign_verdict": "SIGN CORRECT",
+        "entry_price": 11422.75,
+        "stop_price": 11432.75,
+        "target_price": 11365.125,
+        "exit_reason": "stop",
+        "net_pnl": -22.48,
+        "thesis_narrative": "5m closed back inside OR after false breakout above OR-high \u2192 SHORT failure back toward OR mid.",
+        "actual_narrative": "Entry SHORT at 11422.75 after reclaim below OR-high 11429.50."
+      },
+      {
+        "session_date": "2021-02-26",
+        "signal_time": "2021-02-26T10:40:00-05:00",
+        "bar_o": 12835.5,
+        "bar_h": 12912.75,
+        "bar_l": 12828.75,
+        "bar_c": 12896.75,
+        "or_hi": 13031.75,
+        "or_lo": 12859.25,
+        "or_mid": 12945.5,
+        "false_breakout_side": "below_or_low",
+        "false_extreme": 12751.5,
+        "entry_direction": "long",
+        "thesis_direction": "long",
+        "sign_verdict": "SIGN CORRECT",
+        "entry_price": 12896.75,
+        "stop_price": 12886.75,
+        "target_price": 12945.5,
+        "exit_reason": "stop",
+        "net_pnl": -22.48,
+        "thesis_narrative": "5m closed back inside OR after false breakdown below OR-low \u2192 LONG failure back toward OR mid.",
+        "actual_narrative": "Entry LONG at 12896.75 after reclaim above OR-low 12859.25."
+      },
+      {
+        "session_date": "2021-07-26",
+        "signal_time": "2021-07-26T10:10:00-04:00",
+        "bar_o": 15111.0,
+        "bar_h": 15117.25,
+        "bar_l": 15091.0,
+        "bar_c": 15100.75,
+        "or_hi": 15101.0,
+        "or_lo": 15040.25,
+        "or_mid": 15070.625,
+        "false_breakout_side": "above_or_high",
+        "false_extreme": 15116.5,
+        "entry_direction": "short",
+        "thesis_direction": "short",
+        "sign_verdict": "SIGN CORRECT",
+        "entry_price": 15100.75,
+        "stop_price": 15110.75,
+        "target_price": 15070.625,
+        "exit_reason": "stop",
+        "net_pnl": -22.48,
+        "thesis_narrative": "5m closed back inside OR after false breakout above OR-high \u2192 SHORT failure back toward OR mid.",
+        "actual_narrative": "Entry SHORT at 15100.75 after reclaim below OR-high 15101.00."
+      },
+      {
+        "session_date": "2021-12-28",
+        "signal_time": "2021-12-28T10:20:00-05:00",
+        "bar_o": 16508.25,
+        "bar_h": 16536.0,
+        "bar_l": 16491.25,
+        "bar_c": 16535.25,
+        "or_hi": 16611.5,
+        "or_lo": 16520.75,
+        "or_mid": 16566.125,
+        "false_breakout_side": "below_or_low",
+        "false_extreme": 16504.25,
+        "entry_direction": "long",
+        "thesis_direction": "long",
+        "sign_verdict": "SIGN CORRECT",
+        "entry_price": 16535.25,
+        "stop_price": 16525.25,
+        "target_price": 16566.125,
+        "exit_reason": "stop",
+        "net_pnl": -22.48,
+        "thesis_narrative": "5m closed back inside OR after false breakdown below OR-low \u2192 LONG failure back toward OR mid.",
+        "actual_narrative": "Entry LONG at 16535.25 after reclaim above OR-low 16520.75."
+      },
+      {
+        "session_date": "2022-05-27",
+        "signal_time": "2022-05-27T10:05:00-04:00",
+        "bar_o": 12544.75,
+        "bar_h": 12547.0,
+        "bar_l": 12515.0,
+        "bar_c": 12532.25,
+        "or_hi": 12532.25,
+        "or_lo": 12401.5,
+        "or_mid": 12466.875,
+        "false_breakout_side": "above_or_high",
+        "false_extreme": 12546.0,
+        "entry_direction": "short",
+        "thesis_direction": "short",
+        "sign_verdict": "SIGN CORRECT",
+        "entry_price": 12532.25,
+        "stop_price": 12542.25,
+        "target_price": 12466.875,
+        "exit_reason": "stop",
+        "net_pnl": -22.48,
+        "thesis_narrative": "5m closed back inside OR after false breakout above OR-high \u2192 SHORT failure back toward OR mid.",
+        "actual_narrative": "Entry SHORT at 12532.25 after reclaim below OR-high 12532.25."
+      },
+      {
+        "session_date": "2022-10-19",
+        "signal_time": "2022-10-19T10:50:00-04:00",
+        "bar_o": 11231.0,
+        "bar_h": 11231.0,
+        "bar_l": 11195.25,
+        "bar_c": 11207.75,
+        "or_hi": 11213.25,
+        "or_lo": 11110.25,
+        "or_mid": 11161.75,
+        "false_breakout_side": "above_or_high",
+        "false_extreme": 11284.5,
+        "entry_direction": "short",
+        "thesis_direction": "short",
+        "sign_verdict": "SIGN CORRECT",
+        "entry_price": 11207.75,
+        "stop_price": 11217.75,
+        "target_price": 11161.75,
+        "exit_reason": "stop",
+        "net_pnl": -22.48,
+        "thesis_narrative": "5m closed back inside OR after false breakout above OR-high \u2192 SHORT failure back toward OR mid.",
+        "actual_narrative": "Entry SHORT at 11207.75 after reclaim below OR-high 11213.25."
+      },
+      {
+        "session_date": "2023-03-17",
+        "signal_time": "2023-03-17T10:10:00-04:00",
+        "bar_o": 12778.5,
+        "bar_h": 12781.25,
+        "bar_l": 12749.25,
+        "bar_c": 12758.0,
+        "or_hi": 12763.75,
+        "or_lo": 12691.0,
+        "or_mid": 12727.375,
+        "false_breakout_side": "above_or_high",
+        "false_extreme": 12810.0,
+        "entry_direction": "short",
+        "thesis_direction": "short",
+        "sign_verdict": "SIGN CORRECT",
+        "entry_price": 12758.0,
+        "stop_price": 12768.0,
+        "target_price": 12727.375,
+        "exit_reason": "stop",
+        "net_pnl": -22.48,
+        "thesis_narrative": "5m closed back inside OR after false breakout above OR-high \u2192 SHORT failure back toward OR mid.",
+        "actual_narrative": "Entry SHORT at 12758.00 after reclaim below OR-high 12763.75."
+      },
+      {
+        "session_date": "2023-08-17",
+        "signal_time": "2023-08-17T10:20:00-04:00",
+        "bar_o": 14897.75,
+        "bar_h": 14913.75,
+        "bar_l": 14896.0,
+        "bar_c": 14910.25,
+        "or_hi": 15008.0,
+        "or_lo": 14907.5,
+        "or_mid": 14957.75,
+        "false_breakout_side": "below_or_low",
+        "false_extreme": 14888.25,
+        "entry_direction": "long",
+        "thesis_direction": "long",
+        "sign_verdict": "SIGN CORRECT",
+        "entry_price": 14910.25,
+        "stop_price": 14900.25,
+        "target_price": 14957.75,
+        "exit_reason": "stop",
+        "net_pnl": -22.48,
+        "thesis_narrative": "5m closed back inside OR after false breakdown below OR-low \u2192 LONG failure back toward OR mid.",
+        "actual_narrative": "Entry LONG at 14910.25 after reclaim above OR-low 14907.50."
+      }
+    ],
+    "h3_aggregate_sign": "SIGN CORRECT",
+    "flip_table": [
+      {
+        "n": 726,
+        "as_is_net": -5.340192837465565,
+        "flipped_net": 1.3801928374655639,
+        "id": "H-2"
+      },
+      {
+        "n": 738,
+        "as_is_net": -19.609403794037938,
+        "flipped_net": 15.649403794037942,
+        "id": "H-3"
+      },
+      {
+        "n": 46,
+        "as_is_net": -3.338695652173912,
+        "flipped_net": -0.6213043478260866,
+        "id": "H-4"
+      },
+      {
+        "n": 282,
+        "as_is_net": -12.793829787234042,
+        "flipped_net": 8.833829787234041,
+        "id": "H-6"
+      }
+    ],
+    "flip_caveat": "Arithmetic direction flip on booked trades; upper-biased; not tradable.",
+    "flip_positive_count": 3
+  },
+  "part_b": {
+    "H-1": {
+      "predicates": [
+        "S1: session has >=40 RTH bars",
+        "S2: 09:30\u201310:30 window has >=20 bars",
+        "S3: trend day \u2014 >=12pt extension by 10:30, dominant side, no full retrace through open",
+        "S4: 10:00\u201312:00 scan window >=5 bars",
+        "S5: micro-pullback 25\u201360% of leg + resumption close (continuation entry)"
+      ],
+      "counts": {
+        "S0_all_sessions": 1561,
+        "S1_min_session_bars_ge_40": 1561,
+        "S2_open_window_bars_ge_20": 1561,
+        "S3_trend_day_gate": 41,
+        "S4_scan_window_ge_5_bars": 41,
+        "S5_pullback_trigger_fired": 12
+      },
+      "funnel_rows": [
+        {
+          "stage": "S1_min_session_bars_ge_40",
+          "passing_sessions": 1561,
+          "pass_rate_vs_prior": 1.0,
+          "pass_rate_vs_S0": 1.0
+        },
+        {
+          "stage": "S2_open_window_bars_ge_20",
+          "passing_sessions": 1561,
+          "pass_rate_vs_prior": 1.0,
+          "pass_rate_vs_S0": 1.0
+        },
+        {
+          "stage": "S3_trend_day_gate",
+          "passing_sessions": 41,
+          "pass_rate_vs_prior": 0.02626521460602178,
+          "pass_rate_vs_S0": 0.02626521460602178
+        },
+        {
+          "stage": "S4_scan_window_ge_5_bars",
+          "passing_sessions": 41,
+          "pass_rate_vs_prior": 1.0,
+          "pass_rate_vs_S0": 0.02626521460602178
+        },
+        {
+          "stage": "S5_pullback_trigger_fired",
+          "passing_sessions": 12,
+          "pass_rate_vs_prior": 0.2926829268292683,
+          "pass_rate_vs_S0": 0.007687379884689302
+        }
+      ],
+      "choke_point": "S3_trend_day_gate",
+      "choke_classification": "too_strict_threshold",
+      "choke_note": "S3 collapses ~87% of sessions: requires >=12pt one-sided move by 10:30 with no material cross-back through open \u2014 far stricter than 'trend micro-pullback' in pre-reg (~300\u2013500/yr). S5 adds another ~30% drop. Choke is (a) too-strict threshold on trend-day definition, not a sign bug.",
+      "projected_vs_actual": {
+        "projected_trades_per_yr": "300\u2013500",
+        "actual_total": 12,
+        "ratio_to_projection": 0.006666666666666667
+      }
+    },
+    "H-4": {
+      "predicates": [
+        "S1: session >=30 RTH bars",
+        "S2: 09:30\u201309:45 opening window >=5 bars (evaluated every session)",
+        "S3: >=09:45 bar exists for entry",
+        "S4: |close_0944 - open_0930| >= 10pt",
+        "S5: close within 2pt of window extreme (imbalance efficiency)",
+        "S6: fade entry at first post-0945 close"
+      ],
+      "counts": {
+        "S0_all_sessions": 1561,
+        "S1_min_session_bars_ge_30": 1561,
+        "S2_opening_5_15_bars_ge_5": 1560,
+        "S3_post_open_bar_exists": 1560,
+        "S4_abs_move_ge_10pt": 1270,
+        "S5_close_near_extreme_efficiency": 81,
+        "S6_trade_fired": 81
+      },
+      "funnel_rows": [
+        {
+          "stage": "S1_min_session_bars_ge_30",
+          "passing_sessions": 1561,
+          "pass_rate_vs_prior": 1.0
+        },
+        {
+          "stage": "S2_opening_5_15_bars_ge_5",
+          "passing_sessions": 1560,
+          "pass_rate_vs_prior": 0.9993593850096092
+        },
+        {
+          "stage": "S3_post_open_bar_exists",
+          "passing_sessions": 1560,
+          "pass_rate_vs_prior": 1.0
+        },
+        {
+          "stage": "S4_abs_move_ge_10pt",
+          "passing_sessions": 1270,
+          "pass_rate_vs_prior": 0.8141025641025641
+        },
+        {
+          "stage": "S5_close_near_extreme_efficiency",
+          "passing_sessions": 81,
+          "pass_rate_vs_prior": 0.06377952755905512
+        },
+        {
+          "stage": "S6_trade_fired",
+          "passing_sessions": 81,
+          "pass_rate_vs_prior": 1.0
+        }
+      ],
+      "sessions_zero_candidates": 1480,
+      "zero_candidate_reasons": {
+        "thin_session": 1,
+        "no_post_0945_bar": 0,
+        "move_lt_10pt": 290,
+        "efficiency_fail": 1189
+      },
+      "choke_point": "S5_close_near_extreme_efficiency",
+      "choke_classification": "too_strict_threshold",
+      "choke_note": "Window is evaluated every session (S2 passes ~100% of viable sessions). S4 (10pt move) passes 81% of sessions; S5 (close within 2pt of extreme) collapses 1270\u219281 (6.4%) \u2014 primary choke. Combined ~5% session pass \u2192 ~77 trades/6yr vs ~250/yr projected. Choke is (a) tunable thresholds (especially S5 efficiency), not wrong session boundary.",
+      "window_boundary_check": {
+        "opening_window": "09:30 <= t < 09:45 ET",
+        "entry_bar": "first bar with t >= 09:45 ET",
+        "sessions_with_opening_window": 1560
+      },
+      "projected_vs_actual": {
+        "projected_trades_per_yr": "~250",
+        "actual_total": 81
+      }
+    }
+  },
+  "summary_lines": [
+    "**H-1:** verdict **VOID** \u2014 needs fix+rerun (frequency choke: thesis never tested at projected rate; 12 fires vs ~1,800+ projected)",
+    "**H-2:** verdict **TRUSTWORTHY (true negative)** \u2014 sign correct (fade VWAP excursion); 726 IS trades; flipped net $1.38/tr (weak / not sign-bug corroboration)",
+    "**H-3:** verdict **TRUSTWORTHY (true negative)** \u2014 SIGN CORRECT on all 10 samples; low WR is failed fade mechanics (95% stop-out in samples), not sign inversion; flipped IS net $15.65/tr is arithmetic artifact (upper-biased; sign audit says CORRECT)",
+    "**H-4:** verdict **VOID** \u2014 needs fix+rerun (frequency choke: 10pt+efficiency filters; 81 fires vs ~1,500 projected)",
+    "**H-6:** verdict **TRUSTWORTHY (true negative)** \u2014 sign correct (short PDH rejection / long PDL rejection); flipped IS net $8.83/tr (upper-biased; rejection-fade loses with correct sign, not inversion)"
+  ]
+}
