@@ -1,8 +1,10 @@
-"""Bar-level simulators for P2-W2 hypotheses H-1 … H-4, H-6."""
+"""Bar-level simulators for P2-W2 hypotheses H-1 … H-4, H-6, H-7."""
 
 from __future__ import annotations
 
 import datetime as dt
+from collections.abc import Iterator
+from dataclasses import dataclass
 
 import polars as pl
 
@@ -26,6 +28,109 @@ H2_STOP_CAP = 8.0
 H3_STOP_CAP = 10.0
 H4_STOP_CAP = 10.0
 H6_STOP_CAP = 8.0
+H7_STOP_PTS = 10.0
+H7_TARGET_PTS = 20.0
+
+
+@dataclass(frozen=True, slots=True)
+class H3H7ReclaimSignal:
+    """Shared OR-extreme false-breakout reclaim trigger for H-3 (fade) and H-7 (continuation)."""
+
+    cme_session_date: dt.date
+    session_bars: pl.DataFrame
+    anchor_ts: object
+    entry_px: float
+    false_dir: int
+    false_extreme: float
+    or_hi: float
+    or_lo: float
+    or_mid: float
+
+
+def iter_h3_h7_reclaim_signals(mnq_et: pl.DataFrame) -> Iterator[H3H7ReclaimSignal]:
+    """Yield at most one reclaim signal per session (H-3 / H-7 shared trigger)."""
+    for sdate in sorted(mnq_et["cme_session_date"].unique().drop_nulls().to_list()):
+        sdf = mnq_et.filter(pl.col("cme_session_date") == sdate).sort("timestamp")
+        if sdf.height < 40:
+            continue
+        or_bars = sdf.filter(
+            (pl.col("ts_et").dt.time() >= T_ET_OPEN)
+            & (pl.col("ts_et").dt.time() < T_ET_1000)
+        )
+        if or_bars.height < 10:
+            continue
+        or_hi = float(or_bars["high"].max())
+        or_lo = float(or_bars["low"].min())
+        or_mid = 0.5 * (or_hi + or_lo)
+        if or_hi - or_lo < 2.0:
+            continue
+
+        bars5 = (
+            sdf.with_columns(pl.col("ts_et").dt.truncate("5m").alias("b5"))
+            .group_by("b5", maintain_order=True)
+            .agg(
+                pl.first("timestamp").alias("anchor_ts"),
+                pl.first("ts_et").alias("anchor_et"),
+                pl.max("high").alias("h5"),
+                pl.min("low").alias("l5"),
+                pl.last("close").alias("c5"),
+            )
+        )
+        false_extreme = 0.0
+        false_dir = 0
+        fired = False
+        for k in range(bars5.height):
+            if fired:
+                break
+            tb = bars5["b5"][k]
+            if tb.time() < T_ET_1000:
+                continue
+            cc = float(bars5["c5"][k])
+            anchors = bars5["anchor_ts"][k]
+            if false_dir == 0:
+                if cc > or_hi:
+                    false_dir = 1
+                    false_extreme = float(bars5["h5"][k])
+                elif cc < or_lo:
+                    false_dir = -1
+                    false_extreme = float(bars5["l5"][k])
+                continue
+            if false_dir == 1 and cc <= or_hi:
+                yield H3H7ReclaimSignal(
+                    cme_session_date=sdate,
+                    session_bars=sdf,
+                    anchor_ts=anchors,
+                    entry_px=cc,
+                    false_dir=false_dir,
+                    false_extreme=false_extreme,
+                    or_hi=or_hi,
+                    or_lo=or_lo,
+                    or_mid=or_mid,
+                )
+                fired = True
+            elif false_dir == -1 and cc >= or_lo:
+                yield H3H7ReclaimSignal(
+                    cme_session_date=sdate,
+                    session_bars=sdf,
+                    anchor_ts=anchors,
+                    entry_px=cc,
+                    false_dir=false_dir,
+                    false_extreme=false_extreme,
+                    or_hi=or_hi,
+                    or_lo=or_lo,
+                    or_mid=or_mid,
+                )
+                fired = True
+            else:
+                if false_dir == 1:
+                    false_extreme = max(false_extreme, float(bars5["h5"][k]))
+                else:
+                    false_extreme = min(false_extreme, float(bars5["l5"][k]))
+
+
+def count_h3_h7_reclaim_triggers(mnq_et: pl.DataFrame) -> int:
+    """Count shared reclaim triggers (parity check for H-3 vs H-7 detection)."""
+    return sum(1 for _ in iter_h3_h7_reclaim_signals(mnq_et))
 
 
 def prepare_et_frame(mnq_rth: pl.DataFrame) -> pl.DataFrame:
@@ -232,93 +337,62 @@ def simulate_h2(mnq_et: pl.DataFrame) -> list[P2Trade]:
 def simulate_h3(mnq_et: pl.DataFrame) -> list[P2Trade]:
     """H-3: failed-breakout fast reclaim (stop cap 10pt, 1 trade/session)."""
     trades: list[P2Trade] = []
-    for sdate in sorted(mnq_et["cme_session_date"].unique().drop_nulls().to_list()):
-        sdf = mnq_et.filter(pl.col("cme_session_date") == sdate).sort("timestamp")
-        if sdf.height < 40:
-            continue
-        or_bars = sdf.filter(
-            (pl.col("ts_et").dt.time() >= T_ET_OPEN)
-            & (pl.col("ts_et").dt.time() < T_ET_1000)
-        )
-        if or_bars.height < 10:
-            continue
-        or_hi = float(or_bars["high"].max())
-        or_lo = float(or_bars["low"].min())
-        or_mid = 0.5 * (or_hi + or_lo)
-        if or_hi - or_lo < 2.0:
-            continue
-
-        bars5 = (
-            sdf.with_columns(pl.col("ts_et").dt.truncate("5m").alias("b5"))
-            .group_by("b5", maintain_order=True)
-            .agg(
-                pl.first("timestamp").alias("anchor_ts"),
-                pl.first("ts_et").alias("anchor_et"),
-                pl.max("high").alias("h5"),
-                pl.min("low").alias("l5"),
-                pl.last("close").alias("c5"),
+    for sig in iter_h3_h7_reclaim_signals(mnq_et):
+        entry_px = sig.entry_px
+        if sig.false_dir == 1:
+            stop_px = entry_px + min(
+                H3_STOP_CAP, max(2.0, sig.false_extreme + 2.0 - entry_px)
             )
+            direction = -1
+        else:
+            stop_px = entry_px - min(
+                H3_STOP_CAP, max(2.0, entry_px - (sig.false_extreme - 2.0))
+            )
+            direction = 1
+        rest = sig.session_bars.filter(pl.col("timestamp") >= sig.anchor_ts)
+        tr = simulate_p2_trade(
+            rest,
+            entry_idx=0,
+            direction=direction,
+            entry_price=entry_px,
+            stop_px=stop_px,
+            target_px=sig.or_mid,
+            cme_session_date=sig.cme_session_date,
+            max_et_time_exit=T_ET_1200,
+            hypothesis_id="H-3",
         )
-        false_extreme = 0.0
-        false_dir = 0
-        fired = False
-        for k in range(bars5.height):
-            if fired:
-                break
-            tb = bars5["b5"][k]
-            if tb.time() < T_ET_1000:
-                continue
-            cc = float(bars5["c5"][k])
-            anchors = bars5["anchor_ts"][k]
-            if false_dir == 0:
-                if cc > or_hi:
-                    false_dir = 1
-                    false_extreme = float(bars5["h5"][k])
-                elif cc < or_lo:
-                    false_dir = -1
-                    false_extreme = float(bars5["l5"][k])
-                continue
-            if false_dir == 1 and cc <= or_hi:
-                entry_px = cc
-                stop_px = entry_px + min(H3_STOP_CAP, max(2.0, false_extreme + 2.0 - entry_px))
-                rest = sdf.filter(pl.col("timestamp") >= anchors)
-                tr = simulate_p2_trade(
-                    rest,
-                    entry_idx=0,
-                    direction=-1,
-                    entry_price=entry_px,
-                    stop_px=stop_px,
-                    target_px=or_mid,
-                    cme_session_date=sdate,
-                    max_et_time_exit=T_ET_1200,
-                    hypothesis_id="H-3",
-                )
-                if tr is not None:
-                    trades.append(tr)
-                fired = True
-            elif false_dir == -1 and cc >= or_lo:
-                entry_px = cc
-                stop_px = entry_px - min(H3_STOP_CAP, max(2.0, entry_px - (false_extreme - 2.0)))
-                rest = sdf.filter(pl.col("timestamp") >= anchors)
-                tr = simulate_p2_trade(
-                    rest,
-                    entry_idx=0,
-                    direction=1,
-                    entry_price=entry_px,
-                    stop_px=stop_px,
-                    target_px=or_mid,
-                    cme_session_date=sdate,
-                    max_et_time_exit=T_ET_1200,
-                    hypothesis_id="H-3",
-                )
-                if tr is not None:
-                    trades.append(tr)
-                fired = True
-            else:
-                if false_dir == 1:
-                    false_extreme = max(false_extreme, float(bars5["h5"][k]))
-                else:
-                    false_extreme = min(false_extreme, float(bars5["l5"][k]))
+        if tr is not None:
+            trades.append(tr)
+    return trades
+
+
+def simulate_h7(mnq_et: pl.DataFrame) -> list[P2Trade]:
+    """H-7: OR-extreme reclaim continuation — H-3 trigger, inverted direction, fixed 10/20."""
+    trades: list[P2Trade] = []
+    for sig in iter_h3_h7_reclaim_signals(mnq_et):
+        entry_px = sig.entry_px
+        if sig.false_dir == 1:
+            direction = 1
+            stop_px = entry_px - H7_STOP_PTS
+            target_px = entry_px + H7_TARGET_PTS
+        else:
+            direction = -1
+            stop_px = entry_px + H7_STOP_PTS
+            target_px = entry_px - H7_TARGET_PTS
+        rest = sig.session_bars.filter(pl.col("timestamp") >= sig.anchor_ts)
+        tr = simulate_p2_trade(
+            rest,
+            entry_idx=0,
+            direction=direction,
+            entry_price=entry_px,
+            stop_px=stop_px,
+            target_px=target_px,
+            cme_session_date=sig.cme_session_date,
+            max_et_time_exit=T_ET_1200,
+            hypothesis_id="H-7",
+        )
+        if tr is not None:
+            trades.append(tr)
     return trades
 
 
@@ -460,6 +534,8 @@ def run_hypothesis(
             part = simulate_h2(mnq_et)
         elif hypothesis_id == "H-3":
             part = simulate_h3(mnq_et)
+        elif hypothesis_id == "H-7":
+            part = simulate_h7(mnq_et)
         elif hypothesis_id == "H-4":
             part = simulate_h4(mnq_et)
         elif hypothesis_id == "H-6":

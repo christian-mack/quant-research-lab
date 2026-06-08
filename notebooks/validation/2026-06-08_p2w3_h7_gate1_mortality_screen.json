@@ -1,0 +1,186 @@
+{
+  "wave": "P2-W3",
+  "hypothesis": "H-7",
+  "screen": "gate1_mortality_is_only",
+  "date": "2026-06-08",
+  "git": {
+    "git_sha": "0c1877552f1a1e4dfe29f17b9ecb27d6b7c16554",
+    "git_dirty": true
+  },
+  "mnq_dataset": {
+    "data_root": "C:\\Users\\chris\\Documents\\Trading\\quant-research-lab\\data\\raw",
+    "pattern": "mnq/MNQ *.Last.txt",
+    "contract_file_count": 26,
+    "rth_bar_count": 599533,
+    "session_date_count": 1561,
+    "first_bar_ct": "2020-01-02T08:30:00-06:00",
+    "last_bar_ct": "2026-04-17T14:59:00-05:00",
+    "first_session": "2020-01-02",
+    "last_session": "2026-04-17",
+    "passed": true
+  },
+  "spec": {
+    "stop_pts": 10.0,
+    "target_pts": 20.0,
+    "time_stop": "12:00 ET (T_ET_1200) \u2014 same as H-3",
+    "max_trades_per_session": 1
+  },
+  "h3_crosscheck": {
+    "trigger_count": 1253,
+    "h3_total": 1230,
+    "h7_total": 1253,
+    "h3_anchor": 1230,
+    "h3_geometry_rejects": 23,
+    "verdict": "PASS \u2014 1,253 shared triggers; H-7 maps all; H-3 drops 23 on structural geometry"
+  },
+  "inversion_proof": [
+    {
+      "session_date": "2020-01-02",
+      "status": "OK",
+      "h3_direction": "long",
+      "h7_direction": "short",
+      "entry_price_h3": 8815.75,
+      "entry_price_h7": 8815.75,
+      "same_entry_bar": true,
+      "inverted": true
+    },
+    {
+      "session_date": "2020-05-25",
+      "status": "OK",
+      "h3_direction": "short",
+      "h7_direction": "long",
+      "entry_price_h3": 9525.25,
+      "entry_price_h7": 9525.25,
+      "same_entry_bar": true,
+      "inverted": true
+    },
+    {
+      "session_date": "2020-10-02",
+      "status": "OK",
+      "h3_direction": "short",
+      "h7_direction": "long",
+      "entry_price_h3": 11422.75,
+      "entry_price_h7": 11422.75,
+      "same_entry_bar": true,
+      "inverted": true
+    },
+    {
+      "session_date": "2021-02-26",
+      "status": "OK",
+      "h3_direction": "long",
+      "h7_direction": "short",
+      "entry_price_h3": 12896.75,
+      "entry_price_h7": 12896.75,
+      "same_entry_bar": true,
+      "inverted": true
+    },
+    {
+      "session_date": "2021-07-26",
+      "status": "OK",
+      "h3_direction": "short",
+      "h7_direction": "long",
+      "entry_price_h3": 15100.75,
+      "entry_price_h7": 15100.75,
+      "same_entry_bar": true,
+      "inverted": true
+    }
+  ],
+  "harness": {
+    "passed": true,
+    "checks": [
+      {
+        "check_id": "V1",
+        "name": "Geometry coherence",
+        "passed": true,
+        "message": "0/1253 filled trades fail entry-time geometry",
+        "details": {
+          "incoherent_filled": 0,
+          "n_trades": 1253,
+          "geometry_reject_rate": 0.0,
+          "has_bracket_columns": true,
+          "samples": []
+        }
+      },
+      {
+        "check_id": "V2",
+        "name": "Causal sequencing",
+        "passed": true,
+        "message": "All trades exit at/after entry",
+        "details": {
+          "violations": [],
+          "n_trades": 1253
+        }
+      },
+      {
+        "check_id": "V3",
+        "name": "Cost application",
+        "passed": true,
+        "message": "0/1253 zero-commission; 0 net/gross mismatches",
+        "details": {
+          "zero_commission_trades": 0,
+          "net_gross_mismatches": 0
+        }
+      },
+      {
+        "check_id": "V4",
+        "name": "Magnitude sanity",
+        "passed": true,
+        "message": "Avg net 44.66 ticks/trade (surface > 50.0)",
+        "details": {
+          "avg_net_ticks": 44.65931364724661,
+          "n_trades": 1253,
+          "total_net_usd": 27979.06
+        }
+      },
+      {
+        "check_id": "V5",
+        "name": "Hand-computation spot check",
+        "passed": true,
+        "message": "T1=ok T2=ok T5_reject=ok",
+        "details": {}
+      },
+      {
+        "check_id": "V6",
+        "name": "Dual-touch exposure",
+        "passed": true,
+        "message": "Skipped (need bars + entry_bar for dual-touch analysis)",
+        "details": {}
+      }
+    ]
+  },
+  "partition": {
+    "total_trades": 1253,
+    "is_trade_count": 751,
+    "oos_trade_count": 502,
+    "is_fraction": 0.6,
+    "is_oos_boundary_last_is_exit": "2023-08-28T11:00:00-05:00",
+    "is_oos_boundary_first_oos_entry": "2023-08-30T09:15:00-05:00"
+  },
+  "oos_sealed_count": 502,
+  "gate1": {
+    "is_trade_count": 751,
+    "gross_expectancy_per_trade": 22.826897470039945,
+    "cost_per_trade": 1.98,
+    "net_expectancy_per_trade": 20.84689747003995,
+    "win_rate": 0.748335552596538,
+    "avg_win_net": 34.86519572953737,
+    "avg_loss_net": -20.837142857142855,
+    "max_single_trade_loss_net": 22.48,
+    "p95_single_trade_loss_net": 22.48,
+    "verdict": "SURVIVOR",
+    "verdict_reason": "net expectancy > 0"
+  },
+  "trades_per_yr": 198.89537157757496,
+  "protocol_yfrac": 6.299794661190965,
+  "flip_crosscheck": {
+    "h3_flip_is_net_upper_biased": 15.65,
+    "h7_is_net_walked": 20.84689747003995,
+    "gap_vs_flip": 5.196897470039948,
+    "narrative": "H-3 arithmetic flip (upper-biased): **+$15.65/trade** on IS. H-7 walked continuation exits (10pt stop / 20pt target): **$20.85/trade** on IS. Gap vs flip: **$+5.20/trade**. Large shortfall vs +$15.65 is expected (flip does not re-walk bars); a result near or above the flip would warrant skeptical exit-walk review."
+  },
+  "summary": {
+    "verdict": "SURVIVOR",
+    "net_expectancy_per_trade": 20.84689747003995,
+    "is_trade_count": 751
+  }
+}

@@ -1882,6 +1882,44 @@ kill; V4 tripwire on >15 ticks/tr → audit before believing.
 
 ---
 
+## 2026-06-08 — P2-W3 / H-7 Gate #1 mortality screen (IS partition) — RESULT-LOGGED
+
+**Wave:** P2-W3 (implements pre-registration block above)
+
+**Date run completed:** 2026-06-08
+
+**Scope:** Gate **#1** only — net-of-cost per-trade expectancy on **IS (60%)**; **OOS 40% sealed.** No sizing / deflated Sharpe / walk-forward.
+
+**Data precondition:** **PASS** — `data/raw/mnq/MNQ *.Last.txt`, **26** contract files, **599,533** RTH bars, **1,561** session dates, **2020-01-02 → 2026-04-17** CT.
+
+**Harness:** V1–V6 **PASS** on H-7 run.
+
+**H-3 trigger parity:** **PASS** — **1,253** shared reclaim triggers (identical detection); H-3 maps **1,230** trades (**23** structural geometry rejects); H-7 maps all **1,253** (fixed **10/20** pt bracket). Inversion proof on five forensic dates: all **True** (opposite direction, same reclaim bar close).
+
+**Gate #1 verdict:** **SURVIVOR** — net **+$20.85/trade** on **751** IS trades.
+
+| Metric | Value |
+|--------|-------|
+| Total / IS / OOS (sealed) | **1,253** / **751** / **502** |
+| IS/OOS boundary (last IS exit) | **2023-08-28** 11:00 CT |
+| Gross expectancy/trade | **+$22.83** |
+| Cost/trade | **$1.98** |
+| **Net expectancy/trade** | **+$20.85** |
+| Win rate (net) | **74.8%** |
+| Avg win / avg loss (net) | **+$34.87** / **−$20.84** |
+| Max / P95 single-trade loss (net) | **$22.48** / **$22.48** |
+| Trades/yr (protocol) | **198.9** |
+
+**Stop / target / time:** fixed **10 pt** stop, **20 pt** (2R) target; **12:00 ET** time stop (same as H-3).
+
+**Flip motivation cross-check:** H-3 arithmetic flip (upper-biased) **+$15.65/trade** IS vs H-7 walked continuation **+$20.85/trade** IS (gap **+$5.20**). Result **above** the flip warrants skeptical exit-walk review per pre-registration note; not treated as confirmation of flip arithmetic.
+
+**Next authorized step:** Gate **#2** (max sustainable qty at **10 pt** stop) on IS — only because Gate **#1** cleared.
+
+**Artifacts:** `notebooks/validation/2026-06-08_p2w3_h7_gate1_mortality_screen.{md,json}`; `scripts/run_p2w3_h7_gate1_mortality_screen.py`; `src/quant_research/research_p2w2/hypothesis_sims.py`
+
+---
+
 ## Entry template
 
 Copy from `## YYYY-MM-DD` through **`Artifact:`** for each new hypothesis or baseline record.
