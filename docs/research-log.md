@@ -820,6 +820,983 @@
 
 ---
 
+## 2026-06-05 — Wave 1 Track 2 — Phase 2 daily bias module (assembly) — PRE-REGISTERED
+
+**Wave:** Wave 1, Track 2 (ICT-derived hypotheses) — Phase 2 (bias module assembly).
+**Status:** PRE-REGISTERED (logic + diagnostics + variants fixed before building/running).
+**NOT** a backtest / edge claim. This assembles the five Phase-1 primitives
+(research-log 2026-06-04) into a daily bias **state machine** that emits
+`long` / `short` / `no-clear-bias` per session, and reports diagnostics on the
+assembled module's behavior. No strategy P&L is computed here (that is Phase 3,
+Spec A).
+
+**Source precedence:** TTrades mechanical framework is canonical
+(`docs/ict/bias_module_spec.md`; TTrades = mechanical primary per 2026-06-02
+decision). JadeCap premium/discount + PO3 are NOT built into this module.
+
+**Strategy-chat decisions encoded (fixed, not free parameters):**
+
+1. **Direction is confirmed, not seeded.** No ex-ante continuation-vs-reversal
+   prediction. **Both** directions are armed each session; whichever path
+   completes its confirmation chain via CISD dictates the bias. The
+   continuation-vs-reversal seed proxy is **DEFERRED** (optional later
+   experiment), not built now.
+2. **EQ-respect is canonical** = closure past 50% of the **prior-day** range
+   against bias = invalidation. The operator's FVG-midpoint variant is a
+   separately-tested Phase-3 extension, **NOT** in this module.
+3. **No-clear-bias day → emit `no-clear-bias`** (strategy stands down).
+
+**State machine (per session, no look-ahead; uses only session-N intraday bars +
+prior-day levels):**
+
+1. **Mark reference levels** (Primitive 1, `pd_arrays`): PDH, PDL, prior-day EQ
+   `(PDH+PDL)/2` from the prior RTH session. First session of data → no prior
+   levels → `no-clear-bias`.
+2. **Pairing timeframe (parameterized):** session 1m RTH bars are resampled
+   (Primitive 2 `resample_ohlc`) to the pairing TF on which CISD is detected.
+   **Primary = 5m** (per spec "5m into NY"); **one variant = 15m**. No broad TF
+   sweep (would inflate deflated-Sharpe N).
+3. **Arm both directions** on the pairing-TF bars:
+   - **Bullish path:** (a) **sweep** of a downside reference — PDL or the
+     opening-range low (min low of the first `OPENING_RANGE_MINUTES`=30 of RTH,
+     scanned after the OR forms) — via Primitive 5 `detect_sweep(side="low")`;
+     then (b) **bullish CISD** fires after the sweep on the pairing TF (Primitive
+     3, anchored at the swing low) — closes above the first down-close candle's
+     open; then (c) **EQ respected** (operationalized below); then (d) **SMT**
+     bullish divergence at the low (Primitive 4, MNQ vs MES/MYM).
+   - **Bearish path:** symmetric (sweep PDH / OR-high → bearish CISD → EQ
+     respected → bearish SMT at the high).
+4. **EQ-respect (operationalization — modeling choice, flagged):** for the
+   bullish path it holds iff, **at/after the CISD fire bar**, some bar **closes
+   at/above** prior-day EQ (price reclaims/holds the prior-day midpoint) **and**
+   from that first reclaim through session end **no bar closes strictly below**
+   prior-day EQ (an opposing EQ closure = invalidation). Bearish is the mirror
+   (reclaim = close at/below EQ; invalidation = close strictly above EQ). This is
+   the canonical "closure-past-50%-against-bias = invalidation" rule made causal;
+   it is a modeling decision (the spec gives the rule, not the exact reclaim
+   sequencing).
+5. **Emit bias:** `long` iff the bullish path completes and the bearish does not;
+   `short` iff bearish completes and bullish does not; **`no-clear-bias`**
+   otherwise — i.e. neither completes (incl. consolidation/range, which produces
+   no clean sweep→CISD→EQ chain), **both** complete (ambiguous), or an opposing
+   EQ closure invalidates a forming path. No separate range detector is added
+   (would be an extra free parameter); range = chain-incompletion.
+6. **SMT as a configurable confirmation tier (the pre-registered VARIANT axis):**
+   - `smt_required=False` (**PRIMARY**): bias fires on sweep+CISD+EQ; SMT is
+     computed and logged present/absent but does **not** gate.
+   - `smt_required=True` (**VARIANT**): bias fires only with SMT confirmation on
+     the winning path.
+   SMT uses pairing-TF MNQ/MES/MYM aligned bars: prior window = session open to
+   the sweep bar; current window = sweep bar to the CISD fire. Sessions without
+   aligned MES/MYM bars → SMT not evaluable (absent); under `smt_required=True`
+   those cannot fire.
+
+**Pre-registered configs (the ONLY ones run; no other free parameters):**
+
+| Config | pairing TF | smt_required | Role |
+|---|---|---|---|
+| **C1** | **5m** | **False** | **PRIMARY** |
+| C2 | 5m | True | SMT-tier variant |
+| C3 | 15m | False | TF variant |
+| C4 | 15m | True | TF × SMT variant |
+
+Structural (non-swept, documented) constants: `OPENING_RANGE_MINUTES=30`,
+sweep `penetration_ticks=1`, sweep `close_back_within_bars=3` (Primitive 5
+[MANUAL OBS] defaults), MNQ `tick_size=0.25`, SMT instruments = MNQ/MES/MYM.
+
+**Diagnostic outputs (the Phase-2 deliverable), over the full 6-year MNQ set
+(MES/MYM for SMT):**
+
+- (a) **Bias distribution** overall (fraction long/short/no-clear-bias).
+- (b) **Bias distribution by year** (2020–2026); stability vs regime-dependence.
+- (c) **Confirmation-chain attrition:** of sessions that start a directional path
+  (a sweep occurs), how many reach CISD, EQ-respect, SMT; where the chain most
+  often breaks (the binding filter).
+- (d) **SMT impact:** how many clear-bias sessions (under `smt_required=False`)
+  flip to no-clear-bias under `smt_required=True`.
+- (e) **TTrades worked-example validation:** the spec's worked examples are
+  transcript-described day **types** (continuation @193/258s; reversal
+  @45/64s), not labeled real-MNQ dates, so they are reproduced as **synthetic**
+  sessions faithful to the described geometry and the module must classify them
+  as the transcript describes. (Honest limitation: no real-MNQ ground-truth
+  labels exist in the corpus.)
+
+**Unit tests (pre-registered):** synthetic continuation day → expected bias;
+synthetic reversal day → expected bias; consolidation/range day → no-clear-bias;
+opposing EQ closure invalidates a forming bias; `smt_required` True-vs-False
+toggle behaves correctly; no look-ahead (session-N bias unchanged by presence of
+session N+1 bars).
+
+**Stop conditions (pre-registered):**
+
+- Any TTrades worked example **misclassified** by the assembled module → **STOP,
+  surface** (interaction logic wrong; primitives validated individually).
+- No-clear-bias **dominates (>70%)** under the PRIMARY config (C1) → **surface
+  (do not stop)** — frequency finding for strategy-chat.
+- Bias distribution **wildly unstable** across years (e.g. ~90% one direction in
+  one year, ~90% the other in another) → **surface** (possible trend artifact).
+- Confirmation chain attrites to **<50 clear-bias sessions** in the 6-year set
+  under C1 → **surface** (insufficient for downstream statistical test).
+
+**Date pre-registered:** 2026-06-05
+
+---
+
+## 2026-06-05 — Wave 1 Track 2 — Phase 2 daily bias module (assembly) — RESULT-LOGGED
+
+**Wave:** Wave 1, Track 2 (implements the PRE-REGISTERED block above).
+**Date run completed:** 2026-06-05
+**Execution `git` metadata:** `git_sha` = `0db224fc2bd1ef320064fb04c9a9a3d9d095e366` (workspace
+dirty at run; clean-tree SHA in the commit that adds this entry).
+
+**Build:** `src/quant_research/ict/bias_module.py` — daily state machine assembling
+Primitives 1/2/3/4/5. `BiasConfig` exposes only the two pre-registered axes
+(`pairing_timeframe`, `smt_required`); all else structural. 13 unit tests
+(`tests/ict/test_bias_module.py`): continuation→long, reversal→short, range→no-clear,
+opposing-EQ-closure invalidation, OR-low reference, SMT required/optional toggle,
+no-look-ahead (session-N bias unchanged by N+1 bars), pure combinators. Full suite
+**318 passed, 31 skipped** (same data-keyed skips as Phase 1); ruff clean.
+
+**Data:** MNQ 599,533 / MES 629,048 / MYM 632,947 RTH bars (2020-01-01→2026-06-30);
+**1,561** MNQ sessions classified. SMT three-instrument (MNQ/MES/MYM).
+
+**(a) Bias distribution (overall):**
+
+| Config | TF | SMT req | long | short | no-clear-bias |
+|---|---|---|---|---|---|
+| **C1 (PRIMARY)** | 5m | False | 218 (14.0%) | 165 (10.6%) | **1,178 (75.5%)** |
+| C2 | 5m | True | 96 (6.1%) | 73 (4.7%) | 1,392 (89.2%) |
+| C3 | 15m | False | 240 (15.4%) | 159 (10.2%) | 1,162 (74.4%) |
+| C4 | 15m | True | 89 (5.7%) | 57 (3.7%) | 1,415 (90.6%) |
+
+**383** clear-bias sessions over 6 years under C1 (well above the 50-session floor).
+
+**(b) By year (C1):** no-clear-bias 70–79% every year; long-share of clear sessions
+**45–64%** across full years (2026 partial, n=47, 71%). Balanced, not a one-direction
+trend artifact.
+
+**(c) Confirmation-chain attrition (C1):** 1,561 sessions → **sweep 1,333** →
+**CISD 817** → **EQ-respect 383** → **SMT 169**. Largest losses: **sweep→CISD −516**
+and **CISD→EQ −434**. The binding filters are **CISD confirmation** and **EQ-respect**
+(roughly halves at each); the initial sweep is common (85% of sessions).
+
+**(d) SMT impact (5m):** of 383 clear sessions, winning-path SMT present on only **169**;
+requiring SMT flips **214 (55.9%)** to no-clear-bias — roughly halving frequency.
+
+**(e) Worked examples:** continuation→long, reversal→short, consolidation→no-clear all
+**classified correctly** — assembly logic self-consistent with the transcript day-types.
+(Honest limit: synthetic day-types faithful to transcript geometry; no real-MNQ
+ground-truth labels exist.)
+
+**Stop conditions:**
+- Worked example misclassified (STOP): **NO** — all correct, Phase 3 may proceed.
+- No-clear-bias dominates >70% (**SURFACE, not stop**): **YES (75.5%)** — the module
+  stands down on ~3 of 4 sessions; weigh downstream trade frequency / eval pass-rate
+  in strategy chat.
+- Year instability: **NO** (long-share 45–64%, no ~90% flips).
+- <50 clear-bias sessions: **NO** (383 — sufficient for downstream tests).
+
+**Operator decision still open (for strategy chat):** SMT tier (C1 vs C2). Optional
+SMT gives 383 clear sessions (~64/yr); required SMT gives 169 (~28/yr). Pairing TF
+5m vs 15m barely moves the distribution (15m slightly more long-biased).
+
+**Artifacts:**
+- `notebooks/validation/2026-06-05_wave1_track2_phase2_bias_module.{md,json}`
+- `src/quant_research/ict/bias_module.py`; `tests/ict/test_bias_module.py`
+- `scripts/run_wave1_track2_phase2_bias_module.py`
+
+---
+
+## 2026-06-06 — Wave 1 Track 2 — Phase 3a bias/entry architecture diagnostic — RESULT-LOGGED
+
+**Wave:** Wave 1, Track 2 — Phase 3a (source-material diagnostic only; **no strategy code**).
+**Status:** RESULT-LOGGED
+**Purpose:** Resolve structural ambiguity between Phase 2 bias (TTrades: sweep → CISD →
+EQ → SMT) and Spec A setup (2022: sweep → MSS → FVG → OTE) before Phase 3 assembly.
+
+**Method:** Direct transcript extraction at cited timestamps from processed JSON
+(TTrades CISD + daily bias; 2022 Ep 6/12/25/38/41). Term cross-search: **zero**
+"state of delivery" in 2022 sample; **zero** "market structure shift" in TTrades bias
+supplement.
+
+**Findings (Q1–Q4):**
+
+| Q | Result | Confidence |
+|---|---|---|
+| **Q1 MSS vs CISD** | **Distinct** computable mechanics (swing break vs close beyond first opposing candle open). Same narrative role; may co-occur; not interchangeable. | High |
+| **Q2 Bias/entry** | **Corpora split:** 2022 Spec A ≈ **Architecture A** (one manipulation leg → MSS → FVG → OTE). TTrades daily bias ≈ **Architecture C** (pairing-TF CISD confirms bias; entry via candle 2/3 or lower-TF CISD/OB). @622 shows possible **later sub-leg** entry within bias. **Plug-in unresolved in source.** | Medium |
+| **Q3 Timeframes** | TTrades: hourly/30m early → 15m/5m NY for CISD; 5m for entry. 2022: 15m/50m FVG context, 5m OTE execution (Ep 41). Bias TF ≠ entry TF in both. | High (TTrades); Medium (2022) |
+| **Q4 Corpora differ** | **Yes** — different confirmation terms, entry mechanics, bias framing. Two-corpus build is valid per operator precedence but **must not conflate CISD with MSS**. | High |
+
+**Stop conditions:**
+- MSS ≠ CISD for Spec A entry → **SURFACED** (Phase 3 needs MSS primitive; do not relabel CISD). Phase 2 bias module **not invalidated** for TTrades gate purpose.
+- Q2 ambiguous → **SURFACED** for operator: same manipulation leg vs later same-session setup after bias time.
+- Phase 2 rework → **Not required** unless operator pivots to TTrades-only entry (drops Spec A OTE flagship).
+
+**Recommendation for Phase 3 (operator sign-off):** **Two-layer model** — (1) Phase 2 bias
+gate unchanged; (2) Spec A entry detector uses **MSS + FVG + OTE** per 2022, in bias
+direction only. Pre-register **conservative** default: entry setup begins **at or after**
+bias emission time. Do **not** use Phase 2 CISD fire as MSS substitute.
+
+**Artifact:** `notebooks/validation/2026-06-06_wave1_track2_phase3a_architecture.md`
+
+---
+
+## 2026-06-06 — Wave 1 Track 2 — Phase 3 steps 0–1 (definitions + MSS) — PRE-REGISTERED
+
+**Wave:** Wave 1, Track 2 — Phase 3 steps 0–1
+**Status:** PRE-REGISTERED
+**Purpose:** Resolve six Spec A underspecifications from 2022 mentorship source (step 0),
+then build unit-tested MSS primitive (step 1) for standalone OTE strategy assembly (step 2).
+
+**Scope:**
+- **Step 0:** Extract precise definitions D0.1–D0.6 from Ep 6/12/25/38/41; deliver
+  definitions report; STOP if D0.1, D0.3, or D0.6 unresolvable even provisionally.
+- **Step 1:** `src/quant_research/ict/mss.py` + `tests/ict/test_mss.py` using D0.4
+  lookback default; validate against Ep 6/12 worked geometries; MSS ≠ CISD test required.
+
+**Pre-registered mechanical defaults (summary):**
+- D0.1 OTE leg: displacement leg low→high (long) / high→low (short).
+- D0.2 Entry FVG: first in-leg FVG on correct PD side (`[MANUAL OBS]` tie-break).
+- D0.3 Displacement extreme: running min/max sweep-penetration → MSS bar.
+- D0.4 MSS swing lookback: penetration-anchored, max 100-bar fallback (`[MANUAL OBS]`).
+- D0.5 Stop buffer: 1 tick (2-tick FVG-arm variant); swept arm `[MANUAL OBS]`.
+- D0.6 Target: nearest unbroken opposing liquidity pool (fractal + PDH/PDL) (`[MANUAL OBS]`).
+
+**Pass/fail (step 1):** MSS primitive unit tests pass; Ep 6 @1416/@1110 and Ep 12 @2247
+geometries reproduce; MSS and CISD independence demonstrated; no look-ahead in
+displacement leg.
+
+**Date pre-registered:** 2026-06-06
+
+---
+
+## 2026-06-06 — Wave 1 Track 2 — Phase 3 steps 0–1 (definitions + MSS) — RESULT-LOGGED
+
+**Wave:** Wave 1, Track 2 — Phase 3 steps 0–1 (implements pre-registration above)
+**Status:** RESULT-LOGGED
+**Date run completed:** 2026-06-06
+
+**Step 0 — Definitions:** **COMPLETE.** All six items resolved with mechanical defaults.
+Stop condition **not triggered** (D0.1, D0.3, D0.6 provisionally specified).
+
+| ID | Default | `[MANUAL OBS]` |
+|---|---|---|
+| D0.1 OTE leg | Displacement leg endpoints | — |
+| D0.2 Entry FVG | First in-leg FVG, correct PD side; nearest-OTE tie-break | tie-break |
+| D0.3 Displacement extreme | Running extreme `[penetration, MSS bar]` | — |
+| D0.4 MSS lookback | `max(0, penetration − 100 bars)` through MSS candidate | fallback cap |
+| D0.5 Stop buffer | 1 tick beyond reference (FVG c2 / swept extreme) | swept-arm ticks |
+| D0.6 Target | Nearest unbroken opposing fractal swing or PDH/PDL | pool ranking |
+
+**Step 1 — MSS primitive:** **COMPLETE.** `11/11` tests pass (`tests/ict/test_mss.py`).
+Ep 6 bullish/bearish and Ep 12 short-term-low-broken geometries validated. MSS vs CISD
+independence tests pass. Displacement leg causal at MSS bar close (no look-ahead).
+
+**Artifacts:**
+- `notebooks/validation/2026-06-06_wave1_track2_phase3_step0_definitions.md`
+- `src/quant_research/ict/mss.py`
+- `tests/ict/test_mss.py`
+
+**Next:** Phase 3 step 2 — standalone OTE strategy assembly (operator-gated).
+
+---
+
+## 2026-06-06 — Wave 1 Track 2 — Phase 3 step 2 (standalone OTE assembly) — PRE-REGISTERED
+
+**Wave:** Wave 1, Track 2 — Phase 3 step 2
+**Status:** PRE-REGISTERED
+**Purpose:** Assemble self-contained Spec A OTE strategy (sweep → MSS → FVG → OTE) with
+no bias gate; unconstrained RTH collection for step-3 backtest and step-4 constraint/overlap
+analysis.
+
+**Strategy logic (structural chain):**
+1. Sweep reference levels: PDL, PDH, recent swing high/low (`penetration_ticks=1`,
+   `close_back_within_bars=3`).
+2. MSS in sweep reversal direction (3-bar fractal; D0.4 lookback).
+3. Displacement leg `[penetration, MSS bar]` (D0.3).
+4. FVG: earliest in-leg gap on correct PD side (D0.2); tie-break nearest-OTE (variant).
+5. OTE limit at 70.5% of displacement leg (D0.1); 62% first-touch (variant).
+6. Stop A/B graded separately: swept extreme (primary) vs FVG c2 ± 1 tick (variant).
+7. Target fork: nearest pool (primary) vs far PDH/PDL/fractal pool (variant); time exit
+   16:00 ET if open.
+8. **No** bias gate; **no** session-window cap; **no** one-setup-per-session limit.
+
+**Pre-registered variants (deflation N = 4 axes, not swept beyond):**
+
+| Axis | Primary | Variant |
+|---|---|---|
+| Target | `nearest` | `far` |
+| Stop arm | `swept_extreme` (A) | `fvg_c2` (B) |
+| OTE entry | `ote_705` | `ote_62` |
+| FVG tie-break | `earliest` | `nearest_ote` |
+
+**Structural constants (fixed):** OTE band 62–79%, 3-bar fractal, 100-bar MSS fallback,
+`penetration_ticks=1`, `close_back_within_bars=3`.
+
+**Pass/fail:** `ote_strategy.py` unit tests pass; long/short E2E; no-setup guards;
+direction from sweep/MSS only; no look-ahead; target fork wired; multiple setups/session.
+
+**Date pre-registered:** 2026-06-06
+
+---
+
+## 2026-06-06 — Wave 1 Track 2 — Phase 3 step 2 (standalone OTE assembly) — RESULT-LOGGED
+
+**Wave:** Wave 1, Track 2 — Phase 3 step 2 (implements pre-registration above)
+**Status:** RESULT-LOGGED
+**Date run completed:** 2026-06-06
+
+**Result:** **COMPLETE.** Standalone OTE strategy assembled and unit-tested.
+
+| Check | Outcome |
+|---|---|
+| Step-0 definitions implementable | **Yes** — no stop condition |
+| `tests/ict/test_ote_strategy.py` | **12/12 pass** (94/94 ICT suite) |
+| Long / short E2E | **Pass** — entry, stop A, both targets |
+| No-setup guards | **Pass** — no MSS, no FVG, no fill |
+| Direction self-contained | **Pass** — from sweep/MSS only |
+| Target fork | **Pass** — nearest ≠ far on test geometry |
+| Multi-setup / session | **Pass** — `scan_setups` unconstrained |
+
+**Implementation judgment calls (surfaced):**
+1. **FVG confirmation timing:** eligible when `c3_index <= mss_index + 1` (FVG may
+   confirm one bar after MSS when c2 is the MSS candle) — causal, not look-ahead.
+2. **Target pool “unbroken”:** fractal pool taken if `max(high)` / `min(low)` **after
+   swing confirmation** through signal has not traded through the level (not full-session
+   max, which over-disqualifies pools touched before confirmation).
+3. **D0.1/D0.2 interaction:** `fvg_ote_conflict` flag when OTE limit lies >4 ticks outside
+   selected FVG zone — observed on test geometry (common; logged, not blocking).
+
+**Artifacts:**
+- `src/quant_research/ict/ote_strategy.py`
+- `tests/ict/test_ote_strategy.py`
+
+**Next:** Phase 3 step 3 — 6-year backtest with rich tagging (no constraints applied at
+collection; variants tagged for step-4 analysis).
+
+---
+
+## 2026-06-06 — Wave 1 Track 2 — Phase 3 step 3 (standalone OTE backtest) — PRE-REGISTERED
+
+**Wave:** Wave 1, Track 2 — Phase 3 step 3
+**Status:** PRE-REGISTERED
+**Purpose:** Run unconstrained 6-year MNQ RTH backtest of standalone OTE (no bias gate) with
+rich per-trade tagging so step 4 can apply pre-registered constraints and bias-overlap analysis
+without re-running the backtest.
+
+**Data scope:**
+- MNQ RTH continuous, protocol window 2020-01-01 → 2026-04-19 (Wave 0 MNQ protocol end)
+- MES/MYM loaded for bias-module SMT tagging only
+- P&L denominated per MNQ contract (qty=1; sizing in step 4)
+
+**Collection mode:** UNCONSTRAINED — all valid setups, all RTH times, multiple setups per
+session; no bias gate, no time window beyond RTH, no one-setup-per-session cap.
+
+**Trade logs (5):** primary + four single-axis flips (not full grid):
+1. **primary:** target=nearest, stop=swept_extreme, entry=ote_705, fvg_tiebreak=earliest
+2. **target_far:** primary with target=far
+3. **stop_fvg_c2:** primary with stop=fvg_c2
+4. **entry_ote_62:** primary with entry=ote_62
+5. **fvg_nearest_ote:** primary with fvg_tiebreak=nearest_ote
+
+**Per-trade tags (required):** entry/exit timestamps, direction, prices, exit reason,
+session date, entry time-of-day, setup-number-in-session, bias C1/C2 verdict + agree flag,
+both stop arms + R, both target levels + counterfactual outcomes, fvg_ote_conflict + dual
+entry prices, displacement leg size, sweep depth, FVG size.
+
+**Diagnostics:** (a) frequency, (b) headline economics primary, (c) fvg_ote_conflict on real
+data, (d) target fork preview, (e) bias overlap preview, (f) time-of-day preview.
+
+**Stop conditions:**
+- Total setups < ~100 → surface (too infrequent)
+- fvg_ote_conflict > ~30% → surface (entry ambiguous)
+- Primary + all variant flips strongly negative → surface (no edge)
+- Annual P&L > $2K/MNQ → surface (strong positive signal)
+
+**Date pre-registered:** 2026-06-06
+
+---
+
+## 2026-06-06 — Wave 1 Track 2 — Phase 3 step 3 (standalone OTE backtest) — RESULT-LOGGED
+
+**Wave:** Wave 1, Track 2 — Phase 3 step 3 (implements pre-registration above)
+**Status:** RESULT-LOGGED
+**Date run completed:** 2026-06-06
+**git_sha:** `0db224fc2bd1ef320064fb04c9a9a3d9d095e366`
+
+**Result:** **COMPLETE.** Unconstrained 6-year MNQ RTH backtest executed; 5 trade logs
+written with full per-trade tagging for step-4 constraint/overlap analysis.
+
+### Stop-condition assessment
+
+| Condition | Triggered? | Finding |
+|---|---|---|
+| Setups < ~100 | **No** | 9,557 primary setups (~1,365/year) — strategy is **not** rare unconstrained |
+| fvg_ote_conflict > ~30% | **Yes** | **99.3%** of setups — entry definition ambiguous on nearly all trades |
+| All variants negative | **No** | Primary + target_far + entry_ote_62 positive; stop_fvg_c2 strongly negative |
+| Annual P&L > $2K/MNQ | **Yes** | Primary **$2,093/MNQ/yr** — first material standalone edge signal |
+
+### (a) Frequency
+
+- **9,557** primary setups over protocol window; **1,365/year**
+- **1,561** sessions with ≥1 trade (**100%** of sessions in data)
+- **98.5%** of trading sessions have multiple setups (avg **6.1**/session; max **14**)
+
+### (b) Headline economics (primary, qty=1 MNQ)
+
+- Total P&L **+$14,648**; annual **+$2,093**; WR **51.7%**; avg R **0.04**
+- Year-by-year: 2020 +$2,712; 2021 +$871; 2022 +$2,335; 2023 +$3,718; 2024 +$3,631;
+  2025 +$1,852; 2026 −$472 (partial year)
+
+### (c) FVG/OTE conflict (SURFACED)
+
+- **99.3%** of setups have OTE limit >4 ticks outside selected FVG zone
+- Counterfactual P&L on same stops/targets: OTE-entry total **+$14,648** vs FVG-zone entry
+  **+$220,760** (8,592 fills) — entry-price choice dominates economics; **must resolve
+  D0.1/D0.2 before step-4 screening**
+
+### (d) Target fork preview
+
+- **Nearest (primary):** WR 51.7%, annual +$2,093 — eval-relevant profile (higher WR, ~1R)
+- **Far (active log):** WR 34.6%, annual +$630, R:R ~1.9 — funded-relevant hypothesis weak
+  on raw P&L (2024–2026 negative)
+
+### (e) Bias overlap preview (C1)
+
+- Only **9.2%** of setups occur on bias-agreeing sessions
+- Agree subset: annual +$340 (WR 52.6%); disagree/no-bias: annual +$1,752 (WR 51.6%)
+- Standalone OTE edge does **not** require bias agreement in this preview
+
+### (f) Time-of-day preview
+
+- Best hours: **15:00 ET** (+$7,176 total, 55.2% WR), **12:00 ET** (+$4,004)
+- Weakest: **09:00 ET** (−$2,417, 39.3% WR) — morning window constraint worth testing in step 4
+
+### Variant economics (5 logs)
+
+| Variant | n | Annual P&L | WR |
+|---|---|---|---|
+| primary | 9,557 | +$2,093 | 51.7% |
+| target_far | 9,557 | +$630 | 34.6% |
+| stop_fvg_c2 | 9,557 | −$21,798 | 46.9% |
+| entry_ote_62 | 9,204 | +$8,844 | 57.4% |
+| fvg_nearest_ote | 9,557 | +$2,093 | 51.7% |
+
+Note: `fvg_nearest_ote` identical to primary on real data (tie-break did not change FVG selection).
+
+**Artifacts:**
+- `scripts/run_wave1_track2_phase3_step3_ote_backtest.py`
+- `notebooks/validation/2026-06-06_wave1_track2_phase3_step3_ote_backtest.{md,json}`
+- `notebooks/validation/2026-06-06_wave1_track2_phase3_step3_ote_trades/{primary,target_far,stop_fvg_c2,entry_ote_62,fvg_nearest_ote}.json`
+
+**Next:** Phase 3 step 3b — entry-coherence forensic diagnostic (step 4 blocked until resolved).
+**Blocker surfaced:** resolve D0.1/D0.2 entry ambiguity (99% conflict) before interpreting
+screening results.
+
+---
+
+## 2026-06-06 — Wave 1 Track 2 — Phase 3 step 3b (entry-coherence diagnostic) — PRE-REGISTERED
+
+**Wave:** Wave 1, Track 2 — Phase 3 step 3b
+**Status:** PRE-REGISTERED
+**Purpose:** Forensic audit of step-3 standalone OTE economics. NOT screening. Determine
+whether any cost-surviving, artifact-free edge exists once entry is coherent. **Blocks step 4.**
+
+**Diagnostics:**
+1. Why D0.1 (OTE 70.5%) and D0.2 (FVG) disagree (median ~46 ticks) — trace 50 setups
+2. Audit FVG-zone $220k counterfactual for look-ahead / fill timing artifact
+3. Audit entry_ote_62 4× outperformance for fill artifact
+4. Re-evaluate all 5 configs net of commission ($1.98 RT) and 1-tick slippage model
+5. If fixable: re-run coherent entry alternatives cost-inclusive
+
+**Stop conditions:**
+- No config survives realistic costs with coherent entry → surface; pivot ICT track
+- Incoherence is definitional (operator decision) → surface; do not guess
+- Config survives costs with verified no-look-ahead → surface as real candidate for step 4
+
+**Date pre-registered:** 2026-06-06
+
+---
+
+## 2026-06-06 — Wave 1 Track 2 — Phase 3 step 3b (entry-coherence diagnostic) — RESULT-LOGGED
+
+**Wave:** Wave 1, Track 2 — Phase 3 step 3b (implements pre-registration above)
+**Status:** RESULT-LOGGED
+**Date run completed:** 2026-06-06
+**git_sha:** `0db224fc2bd1ef320064fb04c9a9a3d9d095e366`
+
+**Result:** **COMPLETE.** Forensic diagnostic confirms step-3 standalone OTE economics are
+**not trustworthy** for screening. **Step 4 blocked.**
+
+### Verdicts
+
+| Diagnostic | Finding |
+|---|---|
+| **D1 — Entry incoherence** | **Definitional, not a code bug.** 99.3% conflict; median 46 ticks (mean 71). On 50/50 traced setups: OTE 70.5% sits in **premium** half, earliest eligible FVG in **discount** half — opposite PD sides by construction (Ep 38: OTE vs FVG are **alternative** entry styles). Not fixable by window tweak; **operator must choose** entry mode. |
+| **D2 — FVG-zone $220k** | **Artifact (price substitution, not look-ahead).** 30/30 top trades bar-valid. Fair-timing re-sim $220,575 vs $220,760 — timing is not the driver. Inflation from ~46-tick-different entry with fixed stop/target. **Discard.** |
+| **D3 — entry_ote_62** | **Partially real** (bar-valid fills, better entry geometry). 13.5 vs 3.1 gross ticks/trade. Still incoherent FVG+OTE assembly — not cleared. |
+| **D4 — Costs** | Primary: **−$1,186/MNQ/yr** (−1.74 net ticks/trade) comm+slip. Gross +3.1 ticks/trade cannot cover $1.98 RT. target_far −$2,735/yr; stop_fvg_c2 −$25,029/yr. entry_ote_62 +$5,673/yr but incoherent. |
+| **D5 — Coherent re-run** | OTE-only (70.5%, no FVG gate): **−$1,186/yr** cost-inclusive. FVG-only: +$28,549/yr but **untrusted** (targets resolved at OTE entry price). |
+
+### Stop conditions
+
+- **No cost-surviving coherent edge:** **TRIGGERED**
+- **Definitional decision required:** **TRIGGERED** (OTE-only vs FVG-only vs unified rule)
+- **Proceed to step 4:** **NO**
+
+**Artifacts:**
+- `scripts/run_wave1_track2_phase3_step3b_diagnostic.py`
+- `notebooks/validation/2026-06-06_wave1_track2_phase3_step3b_diagnostic.{md,json}`
+
+**Next:** Phase 3 step 3c — coherent cost-inclusive entry rebuilds (OTE-only, windowed OTE,
+FVG-only with correct target pairing).
+
+---
+
+## 2026-06-06 — Wave 1 Track 2 — Phase 3 step 3c (coherent entry rebuilds) — PRE-REGISTERED
+
+**Wave:** Wave 1, Track 2 — Phase 3 step 3c
+**Status:** PRE-REGISTERED
+**Purpose:** Clean test of whether any **coherent** ICT entry has cost-surviving edge on MNQ.
+NOT step-4 screening. Targets/stops resolved from **actual** entry price (fixes step-3b
+artifact).
+
+**Running configuration count (deflation N):**
+- Step 3: **5** (primary + 4 single-flip incoherent logs)
+- Step 3b: **+1** unique (FVG-only mis-paired; OTE-only duplicates 3c C1)
+- Step 3c: **+9** (C1×2 + C2 windows×2 bands + C3×1)
+- **Total N after 3c: 15**
+
+**Configs (all cost-inclusive primary):**
+1. **C1 OTE-only** full RTH: 70.5% and 62% (anchor reproduces 3b −$1,186/yr)
+2. **C2 OTE-only** session windows W1/W2/W3 × 70.5% and 62% (report all, no cherry-pick)
+3. **C3 FVG-only** full RTH: zone touch; targets/stops from FVG entry
+
+**Costs:** $1.98 RT commission; 1-tick slip stop/time; half-tick target.
+
+**Stop conditions:**
+- C3 >10 net ticks/trade → audit 30 trades before reporting edge
+- Any config cost-surviving + DLL-fit → step-4 candidate
+- All negative/marginal → ICT track reassessment
+
+**Date pre-registered:** 2026-06-06
+
+---
+
+## 2026-06-06 — Wave 1 Track 2 — Phase 3 step 3c (coherent entry rebuilds) — RESULT-LOGGED
+
+**Wave:** Wave 1, Track 2 — Phase 3 step 3c (implements pre-registration above)
+**Status:** RESULT-LOGGED
+**Date run completed:** 2026-06-06
+**git_sha:** `0db224fc2bd1ef320064fb04c9a9a3d9d095e366`
+
+**Deflation N (standalone OTE search):** step 3 **5** + step 3b **1** + step 3c **9** = **15 total**
+
+**Result:** **COMPLETE.** No configuration cleared for step-4 screening.
+
+### Cost-inclusive headline (comm+slippage, qty=1 MNQ)
+
+| Config | n | Annual net | Net ticks/trade | DLL @ $30K/yr |
+|---|---:|---:|---:|---|
+| C1 OTE 70.5% full | 13,012 | **−$2,410** | −2.59 | No |
+| C1 OTE 62% full | 12,491 | **+$5,099** | +5.71 | No |
+| C2 W1 OTE 62% | 2,776 | +$609 | +3.07 | No |
+| C2 W2 OTE 62% | 8,601 | +$4,355 | +7.09 | No |
+| C2 W3 OTE 62% | 6,503 | +$2,763 | +5.95 | No |
+| C2 W1 OTE 70.5% | 2,914 | −$1,776 | −8.53 | No |
+| C2 W2 OTE 70.5% | 8,886 | −$1,334 | −2.10 | No |
+| C2 W3 OTE 70.5% | 6,756 | −$189 | −0.39 | No |
+| C3 FVG-only full | 8,080 | **+$26,185** | **+45.37** | **Yes** |
+
+### Key findings
+
+1. **C1 OTE 70.5%** does not reproduce step-3b −$1,186 anchor: true OTE-only scan finds **13,012** setups (vs 9,557
+   combined-with-FVG gate). Extra marginal setups worsen economics to −$2,410/yr.
+2. **OTE 62%** is the only OTE-band mode with sustained positive net P&L (+$5,099/yr full; +$4,355 W2), but
+   **fails Apex tier-1 DLL** at $30K/yr sizing (max session loss −$3,409 at qty 5.88).
+3. **Session windows** do not rescue OTE 70.5% (all negative). OTE 62% positive in all three windows but
+   marginal in W1 (+$609/yr).
+4. **C3 FVG-only** with correct target pairing: **+$26,185/yr**, 45.4 net ticks/trade — barely changed from
+   step-3b mis-paired FVG-only ($28,549). Step-3 counterfactual inflation was on **combined** logs, not FVG-only
+   pairing error. **30/30** top-trade bar audit passed; median target distance 89 ticks. Magnitude still
+   implausible for intraday MNQ — **not authorized for step 4** without independent validation.
+
+### Stop conditions
+
+- C3 >10 net ticks/trade: **TRIGGERED** (45.4); audit 30/30 bar-reachable — magnitude still suspect
+- Cost-surviving artifact-free candidate for step 4: **NOT MET**
+- All OTE 70.5% configs negative: **YES**
+
+**Artifacts:**
+- `scripts/run_wave1_track2_phase3_step3c_coherent_rebuild.py`
+- `notebooks/validation/2026-06-06_wave1_track2_phase3_step3c_coherent_rebuild.{md,json}`
+- `src/quant_research/ict/ote_strategy.py` (`entry_style`: `ote_only` / `fvg_only`)
+
+**Next:** Operator decision — (a) independent validation of FVG-only magnitude, (b) pursue OTE 62% with DLL-
+constrained sizing, (c) pivot to bias-gated two-layer path, or (d) ICT track reassessment. Step 4 **not authorized**.
+
+---
+
+## 2026-06-07 — Wave 1 engine topology + integrity audit — RESULT-LOGGED
+
+**Wave:** Wave 1 (cross-track infrastructure)
+**Type:** Read-only investigation (no code changes)
+**Trigger:** Step 3 FVG/OTE artifacts ($220k counterfactual, $26k FVG-only) from incoherent entry-stop-target
+geometry; concern that fill engine may also silently deflate strategies with real edge (Track 1 KILLED
+hypotheses, OTE 70.5% net-negative).
+
+**Questions addressed:** Engine topology (Q1), blast radius (Q2), geometry invariants (Q3), intrabar
+stop-vs-target (Q4), bar sequencing (Q5), hand-computed ground truth (Q6), cost application (Q7).
+
+**Findings:**
+
+1. **Three fill paradigms** — not one engine:
+   - **M4 `BacktestEngine`** → Wave 0 ORB+Opt3 only (`engine.py`, `fill_resolution.py`, `trade_ledger.py`).
+   - **Track 1 bespoke** → H1/H2/H8b/H11/H12 (`track1_hypothesis_sims.simulate_trade_intraday`).
+   - **OTE bespoke** → Track 2 step 3/3b/3c (`ote_strategy._find_entry_fill` + step3 `_simulate_exit`).
+   - **Bias module:** no fill engine.
+
+2. **Blast radius:** All listed backtest results map to one of the three paradigms above. Track 1 KILLED
+   results do **not** share code with OTE or M4, but share the **stop-first dual-touch** simplification class
+   with OTE. FVG-specific geometry bug (45.7% wrong-side stop) does **not** apply to Track 1 at that rate.
+
+3. **Geometry guard:** **Absent.** 45.7% of FVG-only setups (2021–2025, n=6,474) have stop on wrong side of
+   entry; engine books them. Confirms step 3 artifact root.
+
+4. **Intrabar pessimism:** OTE/Track1 use stop-first when both touched (~4.9% of FVG sample trades).
+   Portfolio deflation ~1–2 ticks/trade (borderline vs materiality threshold). H11: 0% dual-hit. M4 ORB uses
+   path-based pivot resolution (different rule).
+
+5. **Hand computation:** 11/11 synthetic + real MNQ traces match engine **to the tick** — no arithmetic bugs;
+   issues are specification/design.
+
+6. **Costs:** M4 per-fill (default $0); Track 1 $0 coarse; OTE gross in step 3, costs post-hoc in 3b/3c.
+
+**Verdict:** Implementations are internally consistent but **not trustworthy for research pass/fail** until
+P0 geometry invariant and fill-paradigm consolidation. Inflation (unguarded geometry) primary; deflation
+(stop-first dual-touch) secondary.
+
+**Stop conditions:**
+- Hand P&L mismatch: **NOT triggered**
+- Intrabar deflation >2 ticks/trade: **BORDERLINE**
+- Incoherent geometry unprevented: **TRIGGERED**
+
+**Artifact:** `notebooks/validation/2026-06-07_wave1_engine_integrity_audit.md` (git_sha
+`0db224fc2bd1ef320064fb04c9a9a3d9d095e366`)
+
+**Next:** Operator review → P0 geometry guard + fill-engine unification scope (fixes **not** started this pass).
+
+---
+
+## 2026-06-07 — Wave 1 engine remediation (P0 geometry + P1 OTE→M4) — PRE-REGISTERED
+
+**Wave:** Wave 1 (cross-track infrastructure)
+**Type:** Engine fix + validation re-run
+**Trigger:** Engine integrity audit (2026-06-07): 45.7% FVG-only wrong-side stops booked;
+OTE fill logic in untested run-script; three fill paradigms.
+
+**Scope:**
+- **P0:** Structural geometry invariant — reject if long stop ≥ entry or target ≤ entry
+  (mirror for short). Enforce in M4 bracket validation + OTE setup assembly; count rejects.
+- **P1:** Consolidate OTE execution onto M4 BacktestEngine; unified cost model ($1.98 RT,
+  tag slippage: 0 entry, 1 tick stop/time, ½ tick target). Signal logic unchanged in
+  `ote_strategy.py`; fills in tested `ote_execution.py`.
+- **P2 DEFERRED:** Dual-touch stop-first rule not recalibrated.
+
+**Validation re-run (post-fix):**
+- OTE 62% full RTH, OTE 70.5% full, FVG-only full — 2020–2026 protocol; Frame B eval
+  2021–2025 (2020/2026 partial).
+- Compare to step 3c baselines (+$5,099 OTE 62%, −$2,410 OTE 70.5%, +$26,185 FVG-only).
+
+**Stop conditions:**
+- OTE 62% geometry reject rate >30%
+- Clean OTE 62% Frame B flips negative
+- FVG-only does not collapse post-guard
+- M4 vs hand-trace P&L mismatch on traced trades
+
+**Date pre-registered:** 2026-06-07
+
+---
+
+## 2026-06-07 — Wave 1 engine remediation (P0 geometry + P1 OTE→M4) — RESULT-LOGGED
+
+**Wave:** Wave 1 (cross-track infrastructure)
+**Type:** Engine fix + validation re-run
+**Result:** P0/P1 implemented; clean re-run complete. FVG artifact diagnosis **confirmed**.
+Geometry guard rejects **45.6%** of OTE 62% sweep-chain attempts (>30% stop — surfaced).
+
+**Clean numbers (Frame B 2021–2025, comm+slip, M4 engine):**
+| Config | Step 3c | Clean M4 | Δ |
+|--------|--------:|---------:|--:|
+| OTE 62% | $5,099/yr | **$4,629/yr** | −$469 |
+| OTE 70.5% | −$2,410/yr | **$11,155/yr** | +$13,565 ⚠ |
+| FVG-only | $26,185/yr | **$2,798/yr** | −$23,386 |
+
+**Key findings:**
+1. FVG-only collapsed from +$26k to +$2.8k — confirms geometry inflation was primary artifact.
+2. OTE 62% remains **positive** but lower (−9%); still fails Apex tier-1 DLL at $30K/yr sizing
+   (max session loss −$3,855 at qty 6.48).
+3. OTE 62% geometry reject rate **45.6%** — economics were partly geometry-inflated; clean number
+   still positive.
+4. OTE 70.5% **flipped strongly positive** vs step 3c — **requires operator review** (M4 fill path
+   vs step 3c bespoke sim divergence, not just geometry guard).
+5. P2 dual-touch unchanged.
+
+**Stop conditions:**
+- OTE 62% reject >30%: **TRIGGERED** (45.6%)
+- OTE 62% Frame B negative: **NOT triggered** ($4,629)
+- FVG collapse: **NOT triggered** (artifact confirmed)
+- Hand-trace mismatch: **NOT tested in this re-run** (unit tests pass)
+
+**Artifact:** `notebooks/validation/2026-06-07_wave1_engine_remediation_and_ote_rerun.{md,json}`
+
+**Next:** Operator decision on OTE 70.5% parity anomaly; whether OTE 62% ($4.6K Frame B) warrants
+account-class survey given DLL breach; P2 only if within ~1 tick/trade of threshold.
+
+---
+
+## 2026-06-07 — Wave 1 geometry-guard causality + validation harness — PRE-REGISTERED
+
+**Wave:** Wave 1 (cross-track infrastructure)
+**Type:** Guard verification (A) + standing harness (B)
+**Trigger:** OTE 70.5% +$13,565/yr swing post-remediation with 36.5% geometry rejects;
+need causality proof before trusting as DLL-fitting candidate.
+
+**Deliverable A:** Guard causality (A1), rejected vs kept characterization (A2),
+wrong-side mechanism (A3), OTE 70.5% verdict (A4).
+
+**Deliverable B:** `validation.py` V1–V6 harness wired into M4 BacktestEngine;
+convention in ai-project-instructions.
+
+**Stop conditions:** Guard peek; rejected population winning; stop logic bug; harness fail on clean log.
+
+**Date pre-registered:** 2026-06-07
+
+---
+
+## 2026-06-07 — Wave 1 geometry-guard causality + validation harness — RESULT-LOGGED
+
+**Wave:** Wave 1 (cross-track infrastructure)
+**Result:** Harness operational (159 tests pass; V1–V6 wired into M4). OTE 70.5% **SUSPECT**
+— do not proceed to account-class survey until M4/bespoke parity resolved.
+
+**A1 Causality:** PASS — `check_trade_geometry` uses entry/stop/target only; unit test confirms
+same decision regardless of post-entry path.
+
+**A2 Selection bias:** Rejected wrong-side (n=18,667) hypothetical avg net **+$19.48/trade**
+(90.3% WR) — guard excludes artifact-class “stop on profit side” winners. Kept (n=12,978)
+bespoke-sim avg net **-$3.99/trade**. Structural: rejected entry-vs-stop **-43.9 ticks** vs
+kept **+62.4 ticks** (known at entry).
+
+**A3 Mechanism:** 20/20 traces = **shallow_retracement_vs_swept_stop** (not stop-placement bug).
+
+**M4 vs bespoke parity (500 kept sample):** **0/500** exact matches; avg net diff **+$7.70**;
+max **$218.44**. +$11,155 Frame B likely M4 fill-path divergence from step 3c, not geometry
+selection alone.
+
+**Harness on OTE 70.5% log:** FAIL (V1 — trade-log bracket join incomplete for subset; V2–V5 pass).
+
+**Stop conditions triggered:** rejected_winning (artifact exclusion, expected); harness_fail (V1);
+guard_peek NOT triggered; stop_logic_bug NOT triggered.
+
+**Artifact:** `notebooks/validation/2026-06-07_wave1_guard_verification_and_harness.{md,json}`
+
+**Date pre-registered:** 2026-06-07
+
+---
+
+## 2026-06-07 — Wave 1 guard fix + parity + harness-clean OTE — PRE-REGISTERED
+
+**Wave:** Wave 1 (cross-track infrastructure)
+**Type:** Guard correctness fix + M4/bespoke parity + clean OTE re-run
+**Trigger:** V1 harness FAIL (55% false incoherent on bad trade-log join); kept OTE 70.5%
+population loses -$51,793; M4/bespoke 0/500 parity.
+
+**Parts:** (1) Ledger-boundary geometry guard, stop/target in trade log, V1 must pass.
+(2) Hand-trace parity resolution (~30 trades). (3) OTE 70.5%, 62%, FVG-only re-run with
+passing harness only.
+
+**Stop conditions:** V1 still fails post-fix; hand matches neither engine; any genuine edge.
+
+**Date pre-registered:** 2026-06-07
+
+---
+
+## 2026-06-07 — Wave 1 guard fix + parity + harness-clean OTE — RESULT-LOGGED
+
+**Wave:** Wave 1 (cross-track infrastructure)
+**Status:** RESULT-LOGGED
+**git_sha:** `0db224fc2bd1ef320064fb04c9a9a3d9d095e366`
+**Artifact:** `notebooks/validation/2026-06-07_wave1_guard_fix_parity_clean_ote.md` (+ `.json`)
+
+**Part 1 — Guard fix:** Root cause was trade log missing stop/target columns (V1 used broken setup join → 55% false incoherent). Fix: bracket fields on `SimulatedFill` → `TradeLedger._finalize_round()` rejects incoherent geometry before booking; stop/target/entry_bar on every row. **V1 now passes: 0 incoherent fills in all three configs.**
+
+**Part 2 — Parity:** M4 authoritative. Hand trace (M4-equivalent stop-first + tag slippage + $1.98 RT) matches M4 on 61/90 sampled trades; bespoke legacy sim matches 1/90 (omits exit slippage, ~$7–11/trade divergence).
+
+**Part 3 — Harness-clean OTE (Frame B 2021–2025, 1 MNQ, comm+slip, V1–V6 PASS):**
+
+| Config | Booked | Annual net/MNQ | Ticks/tr | WR | DLL fit |
+|--------|--------|----------------|----------|-----|---------|
+| OTE 70.5% | 10,680 | +$1,122 | +0.17 | 46.1% | NO (−$14,433 worst session) |
+| OTE 62% | 10,859 | +$975 | +0.36 | 40.3% | NO (−$19,123 worst session) |
+| FVG-only | 6,878 | +$2,750 | +4.52 | 35.1% | NO (−$8,535 worst session) |
+
+**Verdict:** OTE setup **closed — no trustworthy coherent edge**. Prior +$11,155 OTE 70.5% and FVG-only artifact were wrong-side-stop / harness-join artifacts. Clean booked populations are near breakeven or modestly positive but **fail Apex tier-1 DLL** at $30K/yr sizing. **Pivot:** H7 opening gap or TTrades CISD entry with harness enforced from first run.
+
+**Date run completed:** 2026-06-07
+
+---
+
+## 2026-06-07 — Wave 1 Track 2 — Phase 3 step 3d (realistic exit-structure test) — PRE-REGISTERED
+
+**Wave:** Wave 1, Track 2 — Phase 3 step 3d
+**Type:** Pre-registered exit-structure variant test (harness-enforced)
+**Trigger:** Clean harness-passing OTE re-run closed strategy as no-edge as built (OTE705
++$1,122/yr, 0.17 ticks/tr). Operator hypothesis: exit structure (swept-extreme stop +
+nearest-pool target ≈ 1:1) masks entry edge; 62.7% of coherent trades have stop > 10 pts.
+
+**Entry (frozen):** OTE 70.5% full RTH — same sweep → MSS → displacement → OTE entry as
+clean baseline. OTE 62% deferred until 70.5% results logged.
+
+**Pre-registered combinations (5 — bounded, not grid):**
+- **C-base:** S1 swept extreme + T1 nearest pool (reference)
+- **C-1:** S1 + T4 fixed 2R (structural stop, forced 2:1)
+- **C-2:** S2 fixed 10pt + T2 fixed 15pt (1.5R tradeable)
+- **C-3:** S3 1.0×ATR(14) + T3 2.0×ATR(14) (regime-adaptive 2:1)
+- **C-4:** S2 fixed 10pt + T4 fixed 2R (= 20pt target)
+
+**Running configuration count (deflation N):**
+- Step 3: **5** | Step 3b: **+1** → 6 | Step 3c: **+9** → 15 | Step 3d: **+5** → **20 total**
+
+**Gate:** M4 engine, comm+slip, harness V1–V6 must pass before reporting economics.
+Frame B 2021–2025 primary; full protocol + 2020/2026 partial separate.
+
+**Stop conditions:** Harness-clean multi-year edge + DLL fit → survey candidate; all combos
+near-zero despite reachable targets → OTE entry closed definitively; 2022-only edge → regime
+kill; V4 tripwire on >15 ticks/tr → audit before believing.
+
+**Date pre-registered:** 2026-06-07
+
+---
+
+## 2026-06-07 — Wave 1 Track 2 — Phase 3 step 3d (realistic exit-structure test) — RESULT-LOGGED
+
+**Wave:** Wave 1, Track 2 — Phase 3 step 3d (implements pre-registration above)
+**Status:** RESULT-LOGGED
+**git_sha:** `0db224fc2bd1ef320064fb04c9a9a3d9d095e366`
+**Artifact:** `notebooks/validation/2026-06-07_wave1_track2_phase3_step3d_exit_structure.{md,json}`
+**Deflation N:** **20** (step3 5 + step3b 1 + step3c 9 + step3d 5)
+
+**Entry frozen:** OTE 70.5% `ote_only` — 12,978 setups passed scan. All 5 combos: harness V1–V6 PASS, 0 incoherent booked trades.
+
+| Combo | Stop + Target | Booked | WR | Ticks/tr | Annual/MNQ | Target hit | DLL |
+|-------|---------------|--------|-----|----------|------------|------------|-----|
+| C-base | S1 + T1 | 10,680 | 46.1% | +0.17 | +$1,122 | 44.3% | NO |
+| C-1 | S1 + T4 (2R) | 10,680 | 34.7% | −1.48 | −$519 | 30.9% | NO |
+| C-2 | S2 10pt + T2 15pt | 11,270 | 41.7% | +1.82 | +$1,946 | 40.2% | NO |
+| C-3 | S3 ATR + T3 2×ATR | 11,277 | 30.7% | −4.90 | −$4,033 | 29.4% | NO |
+| C-4 | S2 10pt + T4 2R | 11,270 | 33.5% | −1.02 | −$732 | 31.2% | NO |
+
+**Diagnostic answers:**
+1. **Exit recover edge?** **No.** Best combo C-2 (+$1,946/yr, 1.82 ticks/tr) fails Apex tier-1 DLL; three of five combos are Frame-B losers.
+2. **Target-hit vs baseline:** Baseline already hit targets 44% of the time — problem was ~1:1 R:R (median stop ≈ target distance), not unreachable targets. Forced 2R (C-1/C-4) *lowers* target-hit to ~31% and worsens net.
+3. **Year concentration:** Not a pure 2022 artifact — C-2 spreads across years but remains too small for account viability.
+
+**Verdict:** OTE **entry has no persistent account-viable edge** independent of exit structure. OTE closes definitively; pivot to H7 opening gap or TTrades CISD. OTE 62% secondary deferred (not run — 70.5% sufficient to kill).
+
+**Date run completed:** 2026-06-07
+
+---
+
+## 2026-06-08 — ORB+Opt3 account-class survey ($50K / $100K / $150K floor-income) — PRE-REGISTERED
+
+**Wave:** Account-class survey (post–Wave 0h; not a new edge hypothesis)
+**Structural rationale:** ORB+Opt3 edge is **settled** (~$1,014/yr/MNQ Python M6). Production cut on **$50K** was a **loss-tail vs DLL/TDD** sizing problem, not an edge problem. Larger Apex EOD classes raise trailing DD and profit targets; this survey tests whether the **validated Wave 0 trade log**, sized into larger DD room, clears **$36K/yr floor** net of eval economics at **max sustainable qty** under **R(q)** + **DLL** + **consistency** + **contract-cap** constraints.
+**Specification:**
+- **Input log:** Wave 0 graded ORB+Opt3 qty=1 trade log (six-year MNQ protocol 2020-01-01 → 2026-04-19); re-run M4 engine only if log diverges **>10%** from ~$1,014/yr/MNQ anchor.
+- **Account classes (operator May 2026):** **$50K** TDD **$2K**, target **$3K**, tier-1 DLL **$1K**; **$100K** TDD **$3K**, target **$6K**, tier-1 DLL **$1,750**; **$150K** TDD **$4K**, target **$9K**, tier-1 DLL **$2,500**. PA tier tables from Wave **0e** (`run_wave0e_orb_opt3_survey.py`); eval caps **6 / 8 / 12** mini.
+- **Max sustainable qty:** For each class, largest integer **MNQ** such that **R(q) = max(1.5×DD(q), DD(q)+$500) ≤ class TDD** using path **EOD peak-to-trough DD(q)** (flag if ≠ linear **q×DD(1)**); also bound by **worst-session loss ≤ tier-1 DLL**, **consistency** (max NY-day profit ≤ 30% of total backtest profit at q), **PA contract cap** (bottom-tier max mini × 10), and **Gate A** tiered funded survival — report binding constraint; take **MIN**.
+- **Funded economics at q_max:** gross and net-of-payout (first **$25K** at 100%, remainder **90%** per annual payout simplification); year-by-year calendar P&amp;L.
+- **Eval:** rolling **30 trading-session** windows (Gate B default); pass rate to class profit target without TDD/DLL breach; **eval fee / pass rate** = expected cost per funded account (fees: operator table **$167 / $207 / $297** for 50K/100K/150K — flagged if not on help center).
+- **Floor gate:** net funded **≥ $36K/yr** AND eval pass rate **≥ 50%**.
+- **Harness:** validation report on any fresh backtest run.
+**Primary metric:** Cross-class table — q_max, binding constraint, net $/yr, eval pass rate, eval cost/funded acct, clears floor?, tier reached.
+**Pass/fail:** Deployable if **any** class clears floor + eval ≥ 50%; structural wall if **none** and DLL/TDD binds across classes.
+**Date pre-registered:** 2026-06-08
+
+---
+
+## 2026-06-08 — ORB+Opt3 account-class survey ($50K / $100K / $150K floor-income) — RESULT-LOGGED
+
+**Wave:** Account-class survey (implements pre-registration above)
+**Input:** **Fresh backtest** from `data/raw/mnq/` (26 NT8 exports via `MNQ_CONTRACT_GLOB`); qty=1 ORB+Opt3, 799 trades, **$1,014.16/yr/MNQ** (0% anchor divergence). Eval: **30 trading-session** rolling windows (Gate B default).
+**Harness:** **FAIL V1** geometry on all 5 segments (528/528 etc. filled trades flagged — ORB bracket/geometry vs harness V1; V2–V6 pass). Trade log economics match Wave 0; harness fail noted, not a reproduction divergence.
+**Consistency (new vs artifact run):** Best NY session **+$3,896** = **61%** of six-year total profit → **strict max sust qty = 0** all classes under 30% consistency rule at mnq=1. Ex-consistency qty (DLL × Gate A): **1 / 2 / 3 MNQ**.
+**Cross-class headline:**
+
+| Class | strict q_max | binding | net $/yr (ex-consistency qty) | eval pass (30 sess) | Clears floor? |
+|-------|-------------|---------|------------------------------|---------------------|---------------|
+| $50K | **0** | **consistency** | **$1,014** @ 1 MNQ | **2.0%** | **NO** |
+| $100K | **0** | **consistency** | **$2,028** @ 2 MNQ | **2.0%** | **NO** |
+| $150K | **0** | **consistency** | **$3,042** @ 3 MNQ | **2.0%** | **NO** |
+
+**Gate A funded q_max:** $50K **7** MNQ (~$7,099/yr), $100K **11** (~$11,156/yr), $150K **15** (~$15,212/yr) — all **&lt; $36K floor** (gaps **$21K–$29K**).
+**Verdict:** **NO** class clears **$36K/yr net + eval ≥ 50%**. Structural wall confirmed on fresh log: **consistency + DLL + low edge density**; larger classes raise Gate A ceiling but **cannot close income gap**.
+**Artifact:** `notebooks/validation/2026-06-08_orb_account_class_survey.{md,json}`; `scripts/run_orb_account_class_survey.py`
+**Date run completed:** 2026-06-08 (re-run with `data/raw/mnq`)
+
+---
+
+## 2026-06-08 — P2-W2 — tight-loss-tail / arbitrage-resistant hypotheses (N=6) — PRE-REGISTERED
+
+**Wave:** P2-W2  
+**Status:** PRE-REGISTERED (no backtest run; spec fixed before screening code).  
+**Baseline:** Wave 0 graded ORB+Opt3 (max sustainable qty). ORB is reference, not an income path — closed at **~2%** eval pass at income size; loss tail caps sustainable qty at **5–15 MNQ**.
+
+**Structural rationale:** Tight uniform per-trade loss tail (sizes toward **30+ MNQ** within the **$1K DLL**) → arbitrage-resistant (capacity-constrained / operationally messy / impact-bound) → sufficient frequency for eval-window survival. The **loss-tail-to-edge ratio** against the DD/DLL envelope is the binding constraint, not edge existence alone.
+
+**Protocol / data**
+
+- **Costs (every trade):** **$1.98** RT commission + slippage **1 tick** on stop/time exits, **0.5 tick** on target. Per-MNQ, **$2/pt**. No cost-free numbers.  
+- **Apex $50K EOD (corrected):** TDD **$2K** (not $3K), target **$3K**, DLL **$1K** (session-pause). **R(q)** sizing against the **$2K** TDD ceiling per kickoff.  
+- **Sizing:** max sustainable qty per kickoff methodology — stop-after-first-loss bound for single-trade-session configs; path-dependent DD sim for multi-trade configs.  
+- **Partition:** IS/OOS **60/40** by trade count, chronological. Gate **#1** and sizing run on **IS only**; OOS sealed until a candidate clears all IS gates.  
+- **Harness:** **V1–V6** mandatory and passing on every run (mechanical trust only).  
+- **Data precondition (blocks first backtest):** confirm raw MNQ loader resolves to the real six-year dataset — ORB survey silently fell back. **H-5** additionally **BLOCKED** pending economic-calendar data (not in repo).
+
+**Hypotheses (operational specs — summary)**
+
+| ID | Idea (short) | Stop / session rule | Target qty | Frequency | Risk / notes |
+|----|----------------|---------------------|------------|-----------|--------------|
+| **H-1** | Trend micro-pullback continuation; minutes-scale, impact-bound (not daily momentum) | stop **≤ 8–9 pt** vol-gated; stop-after-first-loss | **~30 MNQ** | **300–500/yr** | regime-dependent (needs trend day); cost drag is kill risk |
+| **H-2** | Liquidity-vacuum reversion **~11:30–13:30 ET**; thin pocket can't absorb size | stop **6–8 pt**; **1–2** trades/window | **~25–30 MNQ** | **200–350/yr** | is reversion — justify via thin-liquidity structure, not curve fit |
+| **H-3** | Failed-breakout fast reclaim; trapped breakout stops fuel reversal | stop **≤ 8–10 pt**; stop-after-first-loss | **~25–30 MNQ** | **250–400/yr** | ≈OTE — tight-reclaim vs swept-extreme stop distinction must hold or it fails identically |
+| **H-4** | Opening-auction imbalance reversion (RTH first **5–15 min**) | stop **8–10 pt**; single trade/session | **~33–40 MNQ** | **~250/yr** | ≈ORB — best tail but **1** window/session = eval variance lottery |
+| **H-5** | Post-event vol-collapse drift | tight stop; **1** trade/event | **~30 MNQ** | **&lt; 150/yr** | **BLOCKED** (no calendar data); freq too low standalone — portfolio supplement only |
+| **H-6** | Prior-session level first-test rejection (PDH/PDL/settle) | tight stop; **1–2** trades/session | **~20–30 MNQ** | **250–400/yr** | weakest moat — most-watched, closest to a clean known pattern |
+
+**Screening gates and decision rules (IS)**
+
+1. **Per-trade expectancy:** net-of-cost per-trade expectancy **&gt; 0** at stop cap → **DEAD** if **≤ 0** (no further budget).  
+2. **Max sustainable qty** at stop cap under **R(q)** / DLL / kickoff sizing rule.  
+3. **Floor economics:** **≥ $36K/yr** at that qty; profitable **≥ 4/6** yrs.  
+4. **OOS + deflated Sharpe + bootstrap CI + walk-forward** — survivors only.
+
+**Primary metric:** net-of-cost graded annual P&amp;L at max sustainable qty (all hypotheses).
+
+**Secondary metrics:** eval pass rate (rolling **30-day** sim), trades/yr, deflated Sharpe (running **N = 13**).
+
+**Statistics (pre-registered for this wave)**
+
+- **Deflated Sharpe:** wave-local **N = 6**; running quant-search **N = Track 1 (7) + W2 (6) = 13**. ICT/OTE configs (**20**) excluded — separate search family (transcript-derived primitives), does not inflate this family's FDR. ORB survey configs excluded — characterization of a known edge, not novel-edge search. Correction applied against running **N = 13**; wave-local **N = 6** reported alongside.
+
+**Correlation accounting:** **H-2 / H-3 / H-4 / H-6** are an overshoot-fade/reversion cluster and will correlate. A single survivor must be shown **not** to be the cluster's shared edge relabeled (variant-multiplicity lesson). **H-1** (continuation) is the only structurally orthogonal entry.
+
+**Date pre-registered:** 2026-06-08
+
+---
+
 ## Entry template
 
 Copy from `## YYYY-MM-DD` through **`Artifact:`** for each new hypothesis or baseline record.
