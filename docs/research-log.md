@@ -1827,6 +1827,61 @@ kill; V4 tripwire on >15 ticks/tr → audit before believing.
 
 ---
 
+## 2026-06-08 — P2-W3 — OR-extreme reclaim continuation (N=1) — PRE-REGISTERED
+
+**Wave:** P2-W3  
+**Hypothesis:** **H-7** (single-hypothesis wave; canonical id — no prior **H-7** in this log)  
+**Status:** PRE-REGISTERED (no backtest run; spec fixed before screening code).  
+**Baseline:** Wave 0 graded ORB+Opt3 (max sustainable qty), unchanged.
+
+**Structural rationale:** When price breaks an opening-range extreme, reverses back through it intrabar, and a **5m** bar closes back across the extreme, that reclaim marks **CONTINUATION** in the breakout direction — not reversion back into the range. Enter in the breakout direction on the reclaim; stop tight on the reclaim level (the failed-reversal pivot). W2 **H-3** registered the opposite thesis (failed-breakout reclaim → fade into range) and produced **95%** stop-out / **4.6%** win rate on **738** IS trades — sign audit confirmed entries were on the reversion side as designed (forensic **2026-06-08**, git **`b833904`**). The uniformity of the stop-out is the signature of trading the wrong side of a real directional tendency: the reclaim resolves **as continuation**. The broader W2 reversion/fade cluster (**H-2**, **H-3**, **H-6**) was also negative, consistent with fade being structurally dead on MNQ intraday at realistic cost. **H-7** tests the inverse directly and cleanly.
+
+**Motivation note (not a pre-registered metric):** An arithmetic direction-flip of H-3's IS trades showed **+$15.65/trade**. This is **UPPER-BIASED** and not tradable — it negates gross P&amp;L on the original entry/exit prices without re-walking bars, so stops and targets do not swap correctly. It motivates **H-7**; it does **not** set its expected edge. **H-7**'s edge must come from a real IS run with exits walked on the continuation geometry.
+
+**Design-brief alignment:** Tight uniform loss tail (stop on reclaim level, **~8–10 pt** cap, stop-after-first-loss session) → sizes toward **30+ MNQ** within **$1K DLL**; continuation-after-failed-counter is impact-bound / turnover-driven, not a clean scalable factor (arbitrage-resistant); frequency depends on reclaim event rate — **report trades/yr explicitly** (first-class constraint); W2 **H-3** fired **1,230** times over six years so frequency is expected adequate.
+
+**Relationship to prior hypotheses:** **H-7** supersedes W2 **H-1** (continuation thesis whose trend-day gate was too strict — **12** fires / 6yr, closed). **H-7** uses **H-3**'s reclaim trigger with **inverted direction** rather than **H-1**'s trend-gate trigger. **H-1** is **not** carried forward.
+
+**Protocol / data**
+
+- **Costs (every trade):** **$1.98** RT commission + slippage **1 tick** on stop/time exits, **0.5 tick** on target. Per-MNQ, **$2/pt**. No cost-free numbers.  
+- **Apex $50K EOD (corrected):** TDD **$2K**, target **$3K**, DLL **$1K** (session-pause). **R(q)** sizing against **$2K** TDD ceiling per kickoff.  
+- **Sizing:** max sustainable qty per kickoff methodology — stop-after-first-loss bound.  
+- **Partition:** IS/OOS **60/40** by trade count, chronological. Gate **#1** and sizing run on **IS only**; OOS sealed until **H-7** clears all IS gates.  
+- **Harness:** **V1–V6** mandatory and passing on every run (mechanical trust only).  
+- **Data precondition (blocks first backtest):** confirm raw MNQ loader resolves to the real six-year dataset (print path, bar count, range) — do not run on fallback.
+
+**H-7 operational specification — OR-extreme reclaim continuation**
+
+| Field | Spec |
+|-------|------|
+| **Trigger** | Price breaks **09:30–10:00 ET** OR high or low; later **5m** close reclaims back across the broken extreme (same bar construction as W2 **H-3**, **opposite** direction) |
+| **Direction** | **WITH** the original breakout (continuation), not fade into range |
+| **Entry** | On reclaim **5m** close, in breakout direction |
+| **Stop** | Tight on reclaim level / failed-reversal pivot; cap **~8–10 pt** |
+| **Target** | Continuation geometry TBD at implementation — must be locked before Gate **#1** run |
+| **Session rule** | Stop-after-first-loss; **≤ 1** trade/session |
+| **Frequency (report)** | Trades/yr is a **first-class** reported constraint (H-3 analog **~205/yr** over six years) |
+
+**Screening gates and decision rules (IS)**
+
+1. **Per-trade expectancy:** net-of-cost per-trade expectancy **&gt; 0** at stop cap → **DEAD** if **≤ 0** (no further budget).  
+2. **Max sustainable qty** at stop cap under **R(q)** / DLL / kickoff sizing rule.  
+3. **Floor economics:** **≥ $36K/yr** at that qty; profitable **≥ 4/6** yrs.  
+4. **OOS + deflated Sharpe + bootstrap CI + walk-forward** — only if IS gates clear.
+
+**Primary metric:** net-of-cost graded annual P&amp;L at max sustainable qty.
+
+**Secondary metrics:** eval pass rate (rolling **30-day** sim), trades/yr, deflated Sharpe (running **N = 14**).
+
+**Statistics (pre-registered for this wave)**
+
+- **Deflated Sharpe:** wave-local **N = 1**; running quant-search **N = Track 1 (7) + W2 (6) + W3 (1) = 14**. **H-7** increments **N** as a **new** structural thesis (continuation), **not** a free rerun of **H-3** — a sign-corrected rerun of a registered hypothesis would not increment, but this is a distinct thesis on the opposite side of the market and is counted. ICT/OTE configs (**20**) and ORB survey configs remain excluded per W2 rationale (separate search family / known-edge characterization). Correction applied against running **N = 14**; wave-local **N = 1** reported alongside.
+
+**Date pre-registered:** 2026-06-08
+
+---
+
 ## Entry template
 
 Copy from `## YYYY-MM-DD` through **`Artifact:`** for each new hypothesis or baseline record.
