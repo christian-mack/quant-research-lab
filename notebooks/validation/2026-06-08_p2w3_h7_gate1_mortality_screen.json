@@ -4,7 +4,7 @@
   "screen": "gate1_mortality_is_only",
   "date": "2026-06-08",
   "git": {
-    "git_sha": "0c1877552f1a1e4dfe29f17b9ecb27d6b7c16554",
+    "git_sha": "86bd753b69f800d78850bc922775befa6b280fb5",
     "git_dirty": true
   },
   "mnq_dataset": {
