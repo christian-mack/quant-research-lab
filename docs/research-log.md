@@ -1797,6 +1797,36 @@ kill; V4 tripwire on >15 ticks/tr → audit before believing.
 
 ---
 
+## 2026-06-08 — P2-W2 Gate #1 mortality screen (IS partition) — RESULT-LOGGED
+
+**Wave:** P2-W2 (implements pre-registration block above)
+
+**Date run completed:** 2026-06-08
+
+**Scope:** Gate **#1** only — net-of-cost per-trade expectancy on **IS (60%)**; **H-5** skipped (BLOCKED). **OOS 40% sealed.** No sizing / deflated Sharpe / walk-forward.
+
+**Data precondition:** **PASS** — `data/raw/mnq/MNQ *.Last.txt`, **26** contract files, **599,533** RTH bars, **1,561** session dates, **2020-01-02 → 2026-04-17** CT. No Wave-0-artifact fallback.
+
+**Harness:** V1–V6 **PASS** all five configs (V4 threshold **50** ticks — accommodates pre-registered **10pt** stop cap).
+
+**Gate #1 survivors:** **NONE** (0/5)
+
+| ID | IS trades | Net $/trade | Gross $/trade | Cost $/trade | WR (net) | Verdict |
+|----|-----------|-------------|---------------|--------------|----------|---------|
+| **H-1** | 7 | **−$17.69** | −$15.71 | $1.98 | 0.0% | **DEAD** |
+| **H-2** | 726 | **−$5.34** | −$3.36 | $1.98 | 23.1% | **DEAD** |
+| **H-3** | 738 | **−$19.61** | −$17.63 | $1.98 | 4.6% | **DEAD** |
+| **H-4** | 46 | **−$3.34** | −$1.36 | $1.98 | 21.7% | **DEAD** |
+| **H-6** | 282 | **−$12.79** | −$10.81 | $1.98 | 4.3% | **DEAD** |
+
+**IS/OOS boundaries (last IS exit):** H-1 **2024-03-01**; H-2 **2023-06-15**; H-3 **2023-08-17**; H-4 **2023-06-26**; H-6 **2023-05-31** (America/Chicago offset timestamps in artifact).
+
+**Operator flags:** **H-1** frequency **12** total trades over six years — below pre-registered **300–500/yr** band even if edge existed; gate #1 kill is moot for sizing. **H-2** least-negative net (**−$5.34**) but still **DEAD**; reversion cluster (**H-2/H-3/H-4/H-6**) uniformly net-negative on IS. **No survivor** → wave **Gate #2–#4 not authorized** on these specs without operator redesign.
+
+**Artifacts:** `notebooks/validation/2026-06-08_p2w2_gate1_mortality_screen.{md,json}`; `scripts/run_p2w2_gate1_mortality_screen.py`; `src/quant_research/research_p2w2/`
+
+---
+
 ## Entry template
 
 Copy from `## YYYY-MM-DD` through **`Artifact:`** for each new hypothesis or baseline record.

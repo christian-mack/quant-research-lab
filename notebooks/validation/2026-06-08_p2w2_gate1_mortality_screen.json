@@ -1,0 +1,513 @@
+{
+  "wave": "P2-W2",
+  "screen": "gate1_mortality_is_only",
+  "date": "2026-06-08",
+  "git": {
+    "git_sha": "0585f9e9413e416357c041b086fbabe6bcd513c3",
+    "git_dirty": true
+  },
+  "protocol": {
+    "start": "2020-01-01",
+    "end_inclusive": "2026-04-19",
+    "is_fraction": 0.6,
+    "oos_sealed": true
+  },
+  "mnq_dataset": {
+    "data_root": "C:\\Users\\chris\\Documents\\Trading\\quant-research-lab\\data\\raw",
+    "pattern": "mnq/MNQ *.Last.txt",
+    "contract_file_count": 26,
+    "contract_file_sample": [
+      "mnq/MNQ 03-20.Last.txt",
+      "mnq/MNQ 03-21.Last.txt",
+      "mnq/MNQ 03-22.Last.txt",
+      "mnq/MNQ 03-23.Last.txt",
+      "mnq/MNQ 03-24.Last.txt"
+    ],
+    "rth_bar_count": 599533,
+    "session_date_count": 1561,
+    "first_bar_ct": "2020-01-02T08:30:00-06:00",
+    "last_bar_ct": "2026-04-17T14:59:00-05:00",
+    "first_session": "2020-01-02",
+    "last_session": "2026-04-17",
+    "passed": true
+  },
+  "hypotheses": {
+    "H-1": {
+      "stopped": false,
+      "total_trades": 12,
+      "partition": {
+        "total_trades": 12,
+        "is_trade_count": 7,
+        "oos_trade_count": 5,
+        "is_fraction": 0.6,
+        "is_oos_boundary_last_is_exit": "2024-03-01T09:46:00-06:00",
+        "is_oos_boundary_first_oos_entry": "2024-11-28T09:22:00-06:00"
+      },
+      "oos_sealed_count": 5,
+      "harness": {
+        "passed": true,
+        "checks": [
+          {
+            "check_id": "V1",
+            "name": "Geometry coherence",
+            "passed": true,
+            "message": "0/12 filled trades fail entry-time geometry",
+            "details": {
+              "incoherent_filled": 0,
+              "n_trades": 12,
+              "geometry_reject_rate": 0.0,
+              "has_bracket_columns": true,
+              "samples": []
+            }
+          },
+          {
+            "check_id": "V2",
+            "name": "Causal sequencing",
+            "passed": true,
+            "message": "All trades exit at/after entry",
+            "details": {
+              "violations": [],
+              "n_trades": 12
+            }
+          },
+          {
+            "check_id": "V3",
+            "name": "Cost application",
+            "passed": true,
+            "message": "0/12 zero-commission; 0 net/gross mismatches",
+            "details": {
+              "zero_commission_trades": 0,
+              "net_gross_mismatches": 0
+            }
+          },
+          {
+            "check_id": "V4",
+            "name": "Magnitude sanity",
+            "passed": true,
+            "message": "Avg net -37.71 ticks/trade (surface > 50.0)",
+            "details": {
+              "avg_net_ticks": -37.71,
+              "n_trades": 12,
+              "total_net_usd": -226.26
+            }
+          },
+          {
+            "check_id": "V5",
+            "name": "Hand-computation spot check",
+            "passed": true,
+            "message": "T1=ok T2=ok T5_reject=ok",
+            "details": {}
+          },
+          {
+            "check_id": "V6",
+            "name": "Dual-touch exposure",
+            "passed": true,
+            "message": "Skipped (need bars + entry_bar for dual-touch analysis)",
+            "details": {}
+          }
+        ]
+      },
+      "gate1": {
+        "is_trade_count": 7,
+        "gross_expectancy_per_trade": -15.714285714285714,
+        "cost_per_trade": 1.9800000000000002,
+        "net_expectancy_per_trade": -17.694285714285716,
+        "win_rate": 0.0,
+        "avg_win_net": 0.0,
+        "avg_loss_net": -17.694285714285716,
+        "max_single_trade_loss_net": 20.48,
+        "p95_single_trade_loss_net": 20.48,
+        "verdict": "DEAD",
+        "verdict_reason": "net expectancy <= 0"
+      },
+      "operational_spec_ref": "docs/research-log.md P2-W2 pre-registration"
+    },
+    "H-2": {
+      "stopped": false,
+      "total_trades": 1210,
+      "partition": {
+        "total_trades": 1210,
+        "is_trade_count": 726,
+        "oos_trade_count": 484,
+        "is_fraction": 0.6,
+        "is_oos_boundary_last_is_exit": "2023-06-15T10:36:00-05:00",
+        "is_oos_boundary_first_oos_entry": "2023-06-16T10:30:00-05:00"
+      },
+      "oos_sealed_count": 484,
+      "harness": {
+        "passed": true,
+        "checks": [
+          {
+            "check_id": "V1",
+            "name": "Geometry coherence",
+            "passed": true,
+            "message": "0/1210 filled trades fail entry-time geometry",
+            "details": {
+              "incoherent_filled": 0,
+              "n_trades": 1210,
+              "geometry_reject_rate": 0.0,
+              "has_bracket_columns": true,
+              "samples": []
+            }
+          },
+          {
+            "check_id": "V2",
+            "name": "Causal sequencing",
+            "passed": true,
+            "message": "All trades exit at/after entry",
+            "details": {
+              "violations": [],
+              "n_trades": 1210
+            }
+          },
+          {
+            "check_id": "V3",
+            "name": "Cost application",
+            "passed": true,
+            "message": "0/1210 zero-commission; 0 net/gross mismatches",
+            "details": {
+              "zero_commission_trades": 0,
+              "net_gross_mismatches": 0
+            }
+          },
+          {
+            "check_id": "V4",
+            "name": "Magnitude sanity",
+            "passed": true,
+            "message": "Avg net -13.82 ticks/trade (surface > 50.0)",
+            "details": {
+              "avg_net_ticks": -13.822809917355373,
+              "n_trades": 1210,
+              "total_net_usd": -8362.800000000001
+            }
+          },
+          {
+            "check_id": "V5",
+            "name": "Hand-computation spot check",
+            "passed": true,
+            "message": "T1=ok T2=ok T5_reject=ok",
+            "details": {}
+          },
+          {
+            "check_id": "V6",
+            "name": "Dual-touch exposure",
+            "passed": true,
+            "message": "Skipped (need bars + entry_bar for dual-touch analysis)",
+            "details": {}
+          }
+        ]
+      },
+      "gate1": {
+        "is_trade_count": 726,
+        "gross_expectancy_per_trade": -3.3601928374655645,
+        "cost_per_trade": 1.98,
+        "net_expectancy_per_trade": -5.340192837465565,
+        "win_rate": 0.23140495867768596,
+        "avg_win_net": 38.23130952380953,
+        "avg_loss_net": -18.458494623655913,
+        "max_single_trade_loss_net": 18.48,
+        "p95_single_trade_loss_net": 18.48,
+        "verdict": "DEAD",
+        "verdict_reason": "net expectancy <= 0"
+      },
+      "operational_spec_ref": "docs/research-log.md P2-W2 pre-registration"
+    },
+    "H-3": {
+      "stopped": false,
+      "total_trades": 1230,
+      "partition": {
+        "total_trades": 1230,
+        "is_trade_count": 738,
+        "oos_trade_count": 492,
+        "is_fraction": 0.6,
+        "is_oos_boundary_last_is_exit": "2023-08-17T09:20:00-05:00",
+        "is_oos_boundary_first_oos_entry": "2023-08-18T10:05:00-05:00"
+      },
+      "oos_sealed_count": 492,
+      "harness": {
+        "passed": true,
+        "checks": [
+          {
+            "check_id": "V1",
+            "name": "Geometry coherence",
+            "passed": true,
+            "message": "0/1230 filled trades fail entry-time geometry",
+            "details": {
+              "incoherent_filled": 0,
+              "n_trades": 1230,
+              "geometry_reject_rate": 0.0,
+              "has_bracket_columns": true,
+              "samples": []
+            }
+          },
+          {
+            "check_id": "V2",
+            "name": "Causal sequencing",
+            "passed": true,
+            "message": "All trades exit at/after entry",
+            "details": {
+              "violations": [],
+              "n_trades": 1230
+            }
+          },
+          {
+            "check_id": "V3",
+            "name": "Cost application",
+            "passed": true,
+            "message": "0/1230 zero-commission; 0 net/gross mismatches",
+            "details": {
+              "zero_commission_trades": 0,
+              "net_gross_mismatches": 0
+            }
+          },
+          {
+            "check_id": "V4",
+            "name": "Magnitude sanity",
+            "passed": true,
+            "message": "Avg net -40.40 ticks/trade (surface > 50.0)",
+            "details": {
+              "avg_net_ticks": -40.40065040650407,
+              "n_trades": 1230,
+              "total_net_usd": -24846.4
+            }
+          },
+          {
+            "check_id": "V5",
+            "name": "Hand-computation spot check",
+            "passed": true,
+            "message": "T1=ok T2=ok T5_reject=ok",
+            "details": {}
+          },
+          {
+            "check_id": "V6",
+            "name": "Dual-touch exposure",
+            "passed": true,
+            "message": "Skipped (need bars + entry_bar for dual-touch analysis)",
+            "details": {}
+          }
+        ]
+      },
+      "gate1": {
+        "is_trade_count": 738,
+        "gross_expectancy_per_trade": -17.62940379403794,
+        "cost_per_trade": 1.9800000000000004,
+        "net_expectancy_per_trade": -19.609403794037938,
+        "win_rate": 0.04607046070460705,
+        "avg_win_net": 24.902352941176474,
+        "avg_loss_net": -21.759119318181817,
+        "max_single_trade_loss_net": 22.48,
+        "p95_single_trade_loss_net": 22.48,
+        "verdict": "DEAD",
+        "verdict_reason": "net expectancy <= 0"
+      },
+      "operational_spec_ref": "docs/research-log.md P2-W2 pre-registration"
+    },
+    "H-4": {
+      "stopped": false,
+      "total_trades": 77,
+      "partition": {
+        "total_trades": 77,
+        "is_trade_count": 46,
+        "oos_trade_count": 31,
+        "is_fraction": 0.6,
+        "is_oos_boundary_last_is_exit": "2023-06-26T08:47:00-05:00",
+        "is_oos_boundary_first_oos_entry": "2023-07-20T08:45:00-05:00"
+      },
+      "oos_sealed_count": 31,
+      "harness": {
+        "passed": true,
+        "checks": [
+          {
+            "check_id": "V1",
+            "name": "Geometry coherence",
+            "passed": true,
+            "message": "0/77 filled trades fail entry-time geometry",
+            "details": {
+              "incoherent_filled": 0,
+              "n_trades": 77,
+              "geometry_reject_rate": 0.0,
+              "has_bracket_columns": true,
+              "samples": []
+            }
+          },
+          {
+            "check_id": "V2",
+            "name": "Causal sequencing",
+            "passed": true,
+            "message": "All trades exit at/after entry",
+            "details": {
+              "violations": [],
+              "n_trades": 77
+            }
+          },
+          {
+            "check_id": "V3",
+            "name": "Cost application",
+            "passed": true,
+            "message": "0/77 zero-commission; 0 net/gross mismatches",
+            "details": {
+              "zero_commission_trades": 0,
+              "net_gross_mismatches": 0
+            }
+          },
+          {
+            "check_id": "V4",
+            "name": "Magnitude sanity",
+            "passed": true,
+            "message": "Avg net -10.99 ticks/trade (surface > 50.0)",
+            "details": {
+              "avg_net_ticks": -10.985974025974025,
+              "n_trades": 77,
+              "total_net_usd": -422.96
+            }
+          },
+          {
+            "check_id": "V5",
+            "name": "Hand-computation spot check",
+            "passed": true,
+            "message": "T1=ok T2=ok T5_reject=ok",
+            "details": {}
+          },
+          {
+            "check_id": "V6",
+            "name": "Dual-touch exposure",
+            "passed": true,
+            "message": "Skipped (need bars + entry_bar for dual-touch analysis)",
+            "details": {}
+          }
+        ]
+      },
+      "gate1": {
+        "is_trade_count": 46,
+        "gross_expectancy_per_trade": -1.358695652173913,
+        "cost_per_trade": 1.9800000000000006,
+        "net_expectancy_per_trade": -3.338695652173912,
+        "win_rate": 0.21739130434782608,
+        "avg_win_net": 65.57000000000001,
+        "avg_loss_net": -22.480000000000004,
+        "max_single_trade_loss_net": 22.48,
+        "p95_single_trade_loss_net": 22.48,
+        "verdict": "DEAD",
+        "verdict_reason": "net expectancy <= 0"
+      },
+      "operational_spec_ref": "docs/research-log.md P2-W2 pre-registration"
+    },
+    "H-6": {
+      "stopped": false,
+      "total_trades": 470,
+      "partition": {
+        "total_trades": 470,
+        "is_trade_count": 282,
+        "oos_trade_count": 188,
+        "is_fraction": 0.6,
+        "is_oos_boundary_last_is_exit": "2023-05-31T09:14:00-05:00",
+        "is_oos_boundary_first_oos_entry": "2023-06-01T08:38:00-05:00"
+      },
+      "oos_sealed_count": 188,
+      "harness": {
+        "passed": true,
+        "checks": [
+          {
+            "check_id": "V1",
+            "name": "Geometry coherence",
+            "passed": true,
+            "message": "0/470 filled trades fail entry-time geometry",
+            "details": {
+              "incoherent_filled": 0,
+              "n_trades": 470,
+              "geometry_reject_rate": 0.0,
+              "has_bracket_columns": true,
+              "samples": []
+            }
+          },
+          {
+            "check_id": "V2",
+            "name": "Causal sequencing",
+            "passed": true,
+            "message": "All trades exit at/after entry",
+            "details": {
+              "violations": [],
+              "n_trades": 470
+            }
+          },
+          {
+            "check_id": "V3",
+            "name": "Cost application",
+            "passed": true,
+            "message": "0/470 zero-commission; 0 net/gross mismatches",
+            "details": {
+              "zero_commission_trades": 0,
+              "net_gross_mismatches": 0
+            }
+          },
+          {
+            "check_id": "V4",
+            "name": "Magnitude sanity",
+            "passed": true,
+            "message": "Avg net -25.54 ticks/trade (surface > 50.0)",
+            "details": {
+              "avg_net_ticks": -25.542978723404257,
+              "n_trades": 470,
+              "total_net_usd": -6002.6
+            }
+          },
+          {
+            "check_id": "V5",
+            "name": "Hand-computation spot check",
+            "passed": true,
+            "message": "T1=ok T2=ok T5_reject=ok",
+            "details": {}
+          },
+          {
+            "check_id": "V6",
+            "name": "Dual-touch exposure",
+            "passed": true,
+            "message": "Skipped (need bars + entry_bar for dual-touch analysis)",
+            "details": {}
+          }
+        ]
+      },
+      "gate1": {
+        "is_trade_count": 282,
+        "gross_expectancy_per_trade": -10.813829787234043,
+        "cost_per_trade": 1.98,
+        "net_expectancy_per_trade": -12.793829787234042,
+        "win_rate": 0.0425531914893617,
+        "avg_win_net": 112.52,
+        "avg_loss_net": -18.36333333333333,
+        "max_single_trade_loss_net": 18.48,
+        "p95_single_trade_loss_net": 18.48,
+        "verdict": "DEAD",
+        "verdict_reason": "net expectancy <= 0"
+      },
+      "operational_spec_ref": "docs/research-log.md P2-W2 pre-registration"
+    }
+  },
+  "summary": {
+    "H-1": {
+      "verdict": "DEAD",
+      "net_expectancy_per_trade": -17.694285714285716,
+      "is_trade_count": 7
+    },
+    "H-2": {
+      "verdict": "DEAD",
+      "net_expectancy_per_trade": -5.340192837465565,
+      "is_trade_count": 726
+    },
+    "H-3": {
+      "verdict": "DEAD",
+      "net_expectancy_per_trade": -19.609403794037938,
+      "is_trade_count": 738
+    },
+    "H-4": {
+      "verdict": "DEAD",
+      "net_expectancy_per_trade": -3.338695652173912,
+      "is_trade_count": 46
+    },
+    "H-6": {
+      "verdict": "DEAD",
+      "net_expectancy_per_trade": -12.793829787234042,
+      "is_trade_count": 282
+    }
+  }
+}
