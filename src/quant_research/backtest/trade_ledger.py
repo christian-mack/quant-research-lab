@@ -8,6 +8,8 @@ from typing import Any
 
 import polars as pl
 
+from quant_research.backtest.geometry import check_trade_geometry
+from quant_research.backtest.provenance import provenance_marker_for_ledger
 from quant_research.backtest.schema import empty_trade_log, trade_log_schema
 from quant_research.backtest.types import OrderSide, SimulatedFill
 
@@ -21,6 +23,8 @@ class _OpenRound:
     entry_vwap: float
     entry_time: Any
     entry_bar: int
+    stop_price: float | None
+    target_price: float | None
     commission: float
     gross_pnl: float
     exit_vwap_numer: float
@@ -33,9 +37,18 @@ class _OpenRound:
 class TradeLedger:
     """One completed row per flat-to-flat cycle (supports scale-in / partials)."""
 
-    def __init__(self, dollars_per_point: float) -> None:
+    def __init__(
+        self,
+        dollars_per_point: float,
+        *,
+        enforce_geometry: bool = False,
+        ledger_seal: object | None = None,
+    ) -> None:
         self.dollars_per_point = dollars_per_point
+        self.enforce_geometry = enforce_geometry
+        self._ledger_seal = ledger_seal
         self.rows: list[dict[str, Any]] = []
+        self.geometry_rejects: dict[str, int] = {}
         self._next_trade_id = 1
         self._open: _OpenRound | None = None
 
@@ -85,8 +98,11 @@ class TradeLedger:
         sha = git_sha if git_sha is not None else os.environ.get("MFA_GIT_SHA", "")
         if not self.rows:
             return empty_trade_log()
+        marker = provenance_marker_for_ledger(self._ledger_seal)
         for r in self.rows:
             r["mfa_git_sha"] = sha
+            if not r.get("mfa_engine_provenance"):
+                r["mfa_engine_provenance"] = marker
         return pl.DataFrame(self.rows, schema=trade_log_schema())
 
     def _start_round(
@@ -106,6 +122,8 @@ class TradeLedger:
             entry_vwap=fill.price,
             entry_time=fill.timestamp,
             entry_bar=bar_index,
+            stop_price=fill.bracket_stop,
+            target_price=fill.bracket_target,
             commission=comm,
             gross_pnl=0.0,
             exit_vwap_numer=0.0,
@@ -211,9 +229,26 @@ class TradeLedger:
         reason = o.exit_reason or "close"
         if reason == "end_of_series_flatten":
             reason = "flatten"
+
+        if (
+            self.enforce_geometry
+            and o.stop_price is not None
+            and o.target_price is not None
+        ):
+            reject = check_trade_geometry(
+                direction, o.entry_vwap, o.stop_price, o.target_price
+            )
+            if reject is not None:
+                self.geometry_rejects[reject.reason] = (
+                    self.geometry_rejects.get(reject.reason, 0) + 1
+                )
+                return
+
         net = o.gross_pnl - o.commission
         exit_bar = o.exit_bar if o.exit_bar is not None else o.entry_bar
         bars_held = exit_bar - o.entry_bar
+        stop_px = o.stop_price if o.stop_price is not None else float("nan")
+        target_px = o.target_price if o.target_price is not None else float("nan")
         self.rows.append(
             {
                 "trade_id": o.trade_id,
@@ -223,12 +258,16 @@ class TradeLedger:
                 "direction": direction,
                 "quantity": o.report_qty,
                 "entry_price": o.entry_vwap,
+                "stop_price": stop_px,
+                "target_price": target_px,
                 "exit_price": exit_px,
                 "gross_pnl": o.gross_pnl,
                 "commission": o.commission,
                 "net_pnl": net,
                 "exit_reason": reason,
+                "entry_bar": int(o.entry_bar),
                 "bars_held": int(bars_held),
                 "mfa_git_sha": "",
+                "mfa_engine_provenance": provenance_marker_for_ledger(self._ledger_seal),
             }
         )

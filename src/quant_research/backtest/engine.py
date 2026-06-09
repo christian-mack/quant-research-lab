@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import warnings
 from collections.abc import Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import polars as pl
 
@@ -13,15 +13,18 @@ from quant_research.backtest.fill_resolution import (
     fill_pending_market_at_open,
     resolve_stop_limit_for_bar,
     synthetic_market_fill,
+    validate_bracket_geometry_in_orders,
     validate_order_request,
 )
 from quant_research.backtest.omat import StrategyModule, collect_orders_for_bar
+from quant_research.backtest.provenance import engine_ledger_seal
 from quant_research.backtest.session_hygiene import (
     in_entry_deadzone_et,
     is_flatten_time_et,
 )
 from quant_research.backtest.specs import BacktestConfig, MarketFillTiming
 from quant_research.backtest.trade_ledger import TradeLedger
+from quant_research.backtest.validation import ValidationReport, validate_backtest_result
 from quant_research.backtest.types import (
     BarContext,
     OrderRequest,
@@ -40,6 +43,9 @@ class BacktestResult:
     trade_log: pl.DataFrame
     fills: list[SimulatedFill]
     account: Account
+    validation_report: ValidationReport | None = None
+    bars: pl.DataFrame | None = None
+    geometry_rejects: dict[str, int] = field(default_factory=dict)
 
 
 def _reconcile_owner(
@@ -109,6 +115,9 @@ class BacktestEngine:
         self,
         bars: pl.DataFrame,
         modules: Sequence[StrategyModule],
+        *,
+        initial_working: list[QueuedOrder] | None = None,
+        run_validation: bool = True,
     ) -> BacktestResult:
         if self.config.fill_model.market_fill_timing != MarketFillTiming.OPEN_OF_NEXT_BAR:
             msg = "only MarketFillTiming.OPEN_OF_NEXT_BAR is implemented"
@@ -126,9 +135,15 @@ class BacktestEngine:
 
         df = bars.sort("timestamp")
         account = Account(self.config.run.initial_cash, self.config.instrument)
-        ledger = TradeLedger(self.config.instrument.tick_value)
+        ledger = TradeLedger(
+            self.config.instrument.tick_value,
+            enforce_geometry=self.config.enforce_trade_geometry,
+            ledger_seal=engine_ledger_seal(),
+        )
         pending_market: list[QueuedOrder] = []
-        working: list[QueuedOrder] = []
+        working: list[QueuedOrder] = list(initial_working or [])
+        if initial_working:
+            self._next_order_id = max(w.order_id for w in initial_working) + 1
         prev_close: float | None = None
         all_fills: list[SimulatedFill] = []
         position_owner: str | None = None
@@ -177,6 +192,30 @@ class BacktestEngine:
             )
             if before_s != 0 and account.position_qty == 0:
                 working.clear()
+
+            if (
+                self.config.fill_model.same_bar_exit_after_entry
+                and before_s == 0
+                and account.position_qty != 0
+            ):
+                position_owner = self._same_bar_bracket_after_entry(
+                    entry_fills=sf,
+                    mod_list=mod_list,
+                    account=account,
+                    ledger=ledger,
+                    position_owner=position_owner,
+                    bar_index=i,
+                    ts=ts,
+                    o=o,
+                    h=h,
+                    low_px=low_px,
+                    c=c,
+                    prev_close=prev_close,
+                    working=working,
+                    all_fills=all_fills,
+                )
+                if account.position_qty == 0:
+                    working.clear()
 
             hygiene = self.config.session.intraday_hygiene
             suppress_entry = (
@@ -240,7 +279,22 @@ class BacktestEngine:
         )
 
         trade_log = ledger.to_dataframe()
-        return BacktestResult(trade_log=trade_log, fills=all_fills, account=account)
+        validation = None
+        if run_validation:
+            validation = validate_backtest_result(
+                trade_log,
+                config=self.config,
+                fills=all_fills,
+                bars=df,
+            )
+        return BacktestResult(
+            trade_log=trade_log,
+            fills=all_fills,
+            account=account,
+            validation_report=validation,
+            bars=df,
+            geometry_rejects=dict(ledger.geometry_rejects),
+        )
 
     def _force_session_hygiene_flatten(
         self,
@@ -329,12 +383,69 @@ class BacktestEngine:
         all_fills.append(fill)
         return _reconcile_owner(pq, position_owner, fill, account.position_qty)
 
+    def _same_bar_bracket_after_entry(
+        self,
+        *,
+        entry_fills: list[SimulatedFill],
+        mod_list: list[StrategyModule],
+        account: Account,
+        ledger: TradeLedger,
+        position_owner: str | None,
+        bar_index: int,
+        ts: object,
+        o: float,
+        h: float,
+        low_px: float,
+        c: float,
+        prev_close: float | None,
+        working: list[QueuedOrder],
+        all_fills: list[SimulatedFill],
+    ) -> str | None:
+        """Arm bracket exits via ``on_entry_fill`` and evaluate on the entry bar."""
+        id_to_mod = {m.module_id: m for m in mod_list}
+        for fill in entry_fills:
+            mod = id_to_mod.get(fill.module_id)
+            if mod is None:
+                continue
+            handler = getattr(mod.strategy, "on_entry_fill", None)
+            if handler is None:
+                continue
+            ctx = BarContext(
+                bar_index,
+                ts,
+                o,
+                h,
+                low_px,
+                c,
+                0.0,
+                position_qty=account.position_qty,
+                avg_entry_price=account.avg_entry,
+            )
+            extra = handler(fill, ctx)
+            if extra:
+                self._route_orders(extra, [], working)
+        if not working:
+            return position_owner
+        sf2, _ = resolve_stop_limit_for_bar(
+            working, o, h, low_px, c, prev_close, ts, self.config
+        )
+        working.clear()
+        return _apply_fills(
+            sf2,
+            account=account,
+            ledger=ledger,
+            owner=position_owner,
+            bar_index=bar_index,
+            all_fills=all_fills,
+        )
+
     def _route_orders(
         self,
         orders: list[OrderRequest],
         pending_market: list[QueuedOrder],
         working: list[QueuedOrder],
     ) -> None:
+        validate_bracket_geometry_in_orders(orders, config=self.config)
         for req in orders:
             validate_order_request(req)
             if req.dedupe_tag:

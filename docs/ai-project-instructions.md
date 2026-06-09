@@ -138,6 +138,7 @@ No claims of strategy performance are made without:
 - Slippage and commissions configurable; default values match NT8 for reproduction, realistic values for strategy evaluation
 - Trade logs include full context: entry time, exit time, module, direction, quantity, entry price, exit price, P&L, exit reason
 - Every backtest result commits with the code version that produced it (git SHA in output metadata)
+- **Validation harness (V1–V7):** No strategy backtest result is presented as trustworthy without an accompanying passing validation report from `quant_research.backtest.validation`. The M4 `BacktestEngine` emits this automatically on every run. **V7** asserts the result was produced by the M4 `BacktestEngine` path (`mfa_engine_provenance` stamp on every trade row); any strategy using a bespoke or script-local fill path fails V7 by construction. Strategy modules supply **signal logic only**; all fills route through `engine.py`. High geometry reject rates (>20% surface default), implausible net ticks/trade (>15 for intraday MNQ), or elevated dual-touch exposure (>10%) are surfaced in the report — not buried. A result presented without a passing validation report is, by convention, untrusted.
 
 ### Pre-Registration for New Hypotheses
 
@@ -244,19 +245,23 @@ Agents should not add lessons log entries silently. The operator should see and 
   - AfternoonMR: 14:00-16:00 ET (currently, subject to V2 replacement)
   - Range: ETH + RTH (currently, subject to V2 replacement)
 
-### Prop Firm Compliance (Apex EOD $50K class — research defaults)
+### Prop Firm Compliance (Apex EOD — research defaults)
 
-All strategy logic must respect **research-track** Apex Trader Funding **$50K EOD** constraints used in Phase 2 grading:
+Phase 2 grading references **Apex Trader Funding** **EOD** rules. The **$50K** class (corrected in Wave 0c) uses:
 
 - **Starting balance:** **$50,000**
-- **Pre-lock trailing drawdown:** **$2,000** below the **equity high-water mark** (floor starts at **$48,000** when HWM is $50K; floor rises **$1-for-$1** with new highs)
-- **Lock:** when HWM reaches **$52,000**, the drawdown floor **locks permanently at $50,000** (post-lock breach if equity **&lt; $50,000**)
-- **Eval profit target:** **+$3,000** vs start (account reaches **$53,000**)
-- **Daily loss limit (DLL):** **$1,000** per **America/New_York** calendar day on **realized** P&amp;L (breach when cumulative day total is **strictly below −$1,000** in simulation). **Firm behavior:** hitting the DLL **pauses trading for the rest of the session**; the account **does not** fail solely due to DLL — see [Apex Help Center](https://apextraderfunding.com/help-center/). Research code models this as **same-day P&amp;L freeze after the breach trade** in `simulate_apex_eod_two_phase` / `simulate_eval_window_eod` (Wave 0d+).
-- Max contracts: 60 MNQ on $50K account, 80 MNQ on $100K account (full-size NQ equivalents)
-- Consistency rule: no single trading day may be >30% of total profit
+- **Pre-lock trailing drawdown:** **$2,000** below **equity HWM** (floor rises with HWM until lock).
+- **Lock:** when HWM reaches **starting balance + trailing DD** (e.g. **$52,000** on **$50K** / **$2K** trail), drawdown floor **locks** at **starting balance** (e.g. **$50,000** post-lock breach threshold).
+- **Eval profit target:** class-specific (e.g. **+$3,000** vs start for **$50K** → **$53,000** equity).
+- **Daily loss limit (DLL):** class- and **tier-dependent** on **PA** (per operator May 2026 tables). Per **America/New_York** calendar day on **realized** P&amp;L: when cumulative day P&amp;L would cross **strictly below −DLL**, apply that fill then **pause** further same-day P&amp;L for equity (session pause — not account termination). Implemented in `simulate_apex_eod_two_phase` / `simulate_eval_window_eod` (Wave 0d+ flat DLL; Wave **0e+** tiered DLL from **prior EOD** tier).
+- **PA balance tiers (Wave 0e+):** published bands give **max mini contracts** and **DLL** for that band. Strategy target size in **MNQ** is **capped** at **max_mini × 10** (ORB+Opt3 log convention: **1 mini = 10 MNQ**). Tier is fixed for a session from **prior** session EOD equity; **demotion** when equity falls to a lower band.
+- **Eval simulation:** rolling **30 calendar-day** windows (NY) for Wave 0e survey — see `eval_pass_rate_calendar_days`.
 
-These are production constraints. Research code may explore strategies that violate them, but any proposed live deployment must verify compliance. **Older docs** that cite **$3,000** trail and **starting balance + $100** lock describe a **superseded** research mistake — see `docs/lessons-log.md` (**Wave 0c correction**).
+Older docs citing **$3,000** trail and **starting balance + $100** lock describe a **superseded** mistake (Wave 0c correction). **Wave 0d** survey numbers are **obsolete** for PA caps / tier DLL (Wave 0e).
+
+#### Max contracts (legacy line — use tier tables for PA)
+
+- Research may cite rough **MNQ** ceilings; **authoritative** per-class limits are the **operator-verified EOD** eval + PA **mini** caps and **PA tier tables** in `docs/research-log.md` Wave 0e / runner `scripts/run_wave0e_orb_opt3_survey.py`.
 
 ### NT8 Integration
 

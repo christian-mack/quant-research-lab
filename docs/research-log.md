@@ -1882,6 +1882,32 @@ kill; V4 tripwire on >15 ticks/tr → audit before believing.
 
 ---
 
+## 2026-06-08 — M4 validation harness V7 engine provenance guard — RESULT-LOGGED
+
+**Wave:** Cross-track infrastructure (Wave 1 harness extension; closes P2-W2/W3 bypass class)
+
+**Date run completed:** 2026-06-08
+
+**Trigger:** P2-W3 H-7 forensic (`021d430`) — bespoke `simulate_p2_trade` passed V1–V6 while carrying entry-bar look-ahead; third script-local fill bypass after OTE and Track 1 (lessons-log 2026-06-08).
+
+**Implementation:**
+
+- `src/quant_research/backtest/provenance.py` — `M4_ENGINE_PROVENANCE_MARKER` + engine-issued ledger seal (singleton identity).
+- `TradeLedger` stamps `mfa_engine_provenance` on every finalized row when constructed with the engine seal.
+- `BacktestEngine` passes `engine_ledger_seal()` at ledger construction (sole producer path).
+- `validation.py` **V7** — fails logs missing column or foreign marker; reports offending `trade_id` indices.
+- Schema: `mfa_engine_provenance` column added to canonical trade log.
+
+**Tests:** M4 engine run → V7 PASS; fabricated / mixed / missing-marker logs → V7 FAIL with indices; V1–V6 regression green.
+
+**Convention:** `docs/ai-project-instructions.md` updated — trustworthy results require passing **V1–V7**; strategy modules supply signal logic only; fills route through `engine.py`.
+
+**Implication:** P2-W2/W3 harness PASS status downgraded to "coherent bespoke walker" — V7 would fail those runs by construction. No P2 quant result trusted until re-run on M4 engine.
+
+**Artifact:** `src/quant_research/backtest/{provenance,validation,trade_ledger,schema,engine}.py`; `tests/backtest/test_validation.py`; `docs/ai-project-instructions.md`; draft lessons note `docs/drafts/2026-06-08_lessons-log-v7-provenance-draft.md` (approval pending)
+
+---
+
 ## 2026-06-08 — P2-W3 / H-7 Gate #1 mortality screen (IS partition) — RESULT-LOGGED
 
 **Wave:** P2-W3 (implements pre-registration block above)

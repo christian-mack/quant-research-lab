@@ -14,13 +14,17 @@ def trade_log_schema() -> dict[str, pl.DataType]:
         "direction": pl.Utf8,
         "quantity": pl.Int32,
         "entry_price": pl.Float64,
+        "stop_price": pl.Float64,
+        "target_price": pl.Float64,
         "exit_price": pl.Float64,
         "gross_pnl": pl.Float64,
         "commission": pl.Float64,
         "net_pnl": pl.Float64,
         "exit_reason": pl.Utf8,
+        "entry_bar": pl.Int32,
         "bars_held": pl.Int32,
         "mfa_git_sha": pl.Utf8,
+        "mfa_engine_provenance": pl.Utf8,
     }
 
 

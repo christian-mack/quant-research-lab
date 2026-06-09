@@ -72,6 +72,7 @@ def trades_to_harness_log(
                 "entry_bar": 0,
                 "bars_held": t.bars_held,
                 "mfa_git_sha": git_sha,
+                "mfa_engine_provenance": "",
             }
         )
     schema = {**trade_log_schema()}
