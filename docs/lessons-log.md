@@ -24,6 +24,48 @@
 
 ## Entries
 
+## 2026-06-08 — P2 quant waves ran on bespoke walker outside M4; entry-bar look-ahead inflated H-7; consolidate fills + add provenance guard
+
+**Phase:** 2 (Flux V2)
+**Context:** P2-W2 (H-1..H-6, tight-tail/arbitrage-resistant wave) returned all negatives; P2-W3 promoted a single continuation hypothesis (H-7) — the directional inverse of W2 H-3's OR-extreme reclaim trigger. H-7 cleared Gate #1 at net **$20.85/trade**, **74.8%** WR on a fixed **10pt-stop / 20pt-target** bracket. Per the pre-registered "near-or-above-flip → skeptical exit review" rule, an exit-integrity forensic was run before advancing to sizing.
+**Finding:** H-7's edge was a **look-ahead artifact**, not signal. Entry price was the reclaim **5m bar CLOSE** (minute 5 of the bucket), but the bracket walker began at **minute 1 of the SAME bar** — evaluating minutes 1–4 against a bracket priced at a close that had not yet occurred. **429 of 751** IS trades (**57%**) exited on the entry bar itself. Correcting the walk to start at entry+1 collapsed the result: net **$20.85 → −$2.41/trade**, WR **74.8% → 35.0%** (~break-even-minus-cost at 2R; no edge). The inversion thesis dies with it — both the reversion (H-3) and continuation (H-7) sides of the OR-reclaim trigger are now negative on clean geometry.
+
+**Root cause:** H-7 and all of W2 did **NOT** route through the vetted M4 `BacktestEngine`. They used a bespoke walker, `simulate_p2_trade`, in `research_p2w2/costs.py`. This is the **third** time a script-local fill paradigm has carried a bug the M4 engine already solves — OTE (wrong-side-stop geometry, no test caught it), Track 1 (own bar walker), now W2/W3 (entry-bar look-ahead). The M4 engine itself has been correct every time it was actually used (Wave 0 ORB reproduced NT8 within **6.8%**). The recurring failure is **bypass of the engine**, not the engine.
+
+**Harness gap:** V1–V6 validate that **a** ledger is internally coherent; they do **not** verify the result came from the M4 engine path. So "harness PASS" on a bespoke walker certifies coherence of code that should not exist — a green light on the wrong engine. This is why passing harnesses have accompanied contaminated results twice (OTE **70.5%** deflation, now H-7).
+
+**Implication:** No W-series quant result is trusted until its strategy routes through `engine.py`. W2 verdicts (all negative) do not flip — a WR-inflating bug cannot rescue a negative; true numbers are equal-or-worse. But their harness status is downgraded to **"coherent walker, unvetted path."** Remediation = the same P1 consolidation already done for OTE: all P2 quant strategies onto the M4 engine, single cost model in engine config, delete the bespoke walker. Add **V7** to the harness: assert the result originated from the M4 engine path; fail otherwise. Closes the bypass bug-class at run time instead of via forensic. **H-7 closed. Do not rerun.** OR-reclaim is dead both directions.
+**Artifact:** `notebooks/validation/2026-06-08_p2w3_h7_exit_integrity_forensic.md` (git `021d430`); H-7 gate #1 (git `86bd753`); W2 mortality screen (git `307cecb`); H-7 impl walker `research_p2w2/costs.py::simulate_p2_trade`.
+
+## 2026-06-07 — Strategy execution must live in tested modules; geometry guard engine-wide
+
+**Phase:** Wave 1 (cross-track infrastructure)
+**Context:** Engine integrity audit found OTE P&L computed in an untested run-script walker;
+45.7% of FVG-only setups had stop on wrong side of entry with no rejection guard.
+**Finding:** (a) Fill/P&L logic in run-scripts bypasses test coverage — the geometry inflation
+bug had no unit test because `_simulate_exit` lived only in `scripts/`. (b) A structural geometry
+invariant (stop on loss side, target on profit side) must be enforced at engine bracket submission,
+not per-strategy ad hoc.
+**Implication:** All strategy execution routes through M4 BacktestEngine or equivalently tested
+modules. Geometry guard is engine-wide via `validate_bracket_geometry_in_orders`. Run-scripts
+may orchestrate data load and reporting only.
+**Artifact:** `src/quant_research/backtest/geometry.py`; `src/quant_research/ict/ote_execution.py`;
+`notebooks/validation/2026-06-07_wave1_engine_remediation_and_ote_rerun.md` — **DRAFT for operator approval**
+
+## 2026-06-07 — Mandatory validation harness on every backtest (V1–V6)
+
+**Phase:** Wave 1 (cross-track infrastructure)
+**Context:** FVG-only ($26k) and step-3 ($220k) artifacts passed undetected because no standing
+verification existed; each result required forensic re-litigation.
+**Finding:** A reusable harness (`validation.py`) checking geometry coherence, causal sequencing,
+cost application, magnitude sanity, hand-computation spot checks, and dual-touch exposure catches
+artifact-class results on first pass. M4 engine emits report automatically.
+**Implication:** No strategy result is presented as trustworthy without passing V1–V6.
+Convention added to `ai-project-instructions.md`. High reject rates and implausible magnitudes
+are surfaced, not buried.
+**Artifact:** `src/quant_research/backtest/validation.py`; `tests/backtest/test_validation.py` —
+**DRAFT for operator approval**
+
 ## 2026-06-01 — nbconvert silently used the anaconda base kernel, faking "no transcript"
 
 **Phase:** Parallel track (ICT ingestion)
@@ -31,6 +73,38 @@
 **Finding:** nbconvert defaulted to the `python3` kernelspec, which resolves to `C:\Users\chris\anaconda3` (no `youtube-transcript-api` / `yt-dlp`), so the fetch helpers' dependency guards returned `None` — a silent capability failure, not a video/network failure. Registering the `.venv` as kernel `quant-venv` and passing `--ExecutePreprocessor.kernel_name=quant-venv` fixed it.
 **Implication:** Notebook executions in this repo must pin the `.venv` kernel; a missing-dependency path that's indistinguishable from a real retrieval failure is a footgun worth a one-line guard or a startup assertion that the expected backends are importable.
 **Artifact:** `notebooks/exploration/2026-06-01_ict_daily_bias_extraction.ipynb`; commit `6848990`.
+
+## 2026-05-17 — Wave 0h: ORB+Opt3 Phase 2 repair closed; unit tail moderate vs $50K TDD; Phase 2 = new-strategy search
+
+**Phase:** 2  
+**Context:** Waves **0e–0g** showed **ORB+Opt3** fails **joint** Apex EOD gates (funded + bootstrap + eval) at tested configs; **0g** ruled out **2020**-only artifact on funded survival. **Wave 0h** closes the repair thread per operator: session-loss tail at **MNQ=1** (p99 **~$520**, max **~−$790**) is **moderate vs $50K** TDD but **scales linearly** to **>100%** of TDD by **~5–10 MNQ** at upper percentiles.  
+**Finding:** **ORB+Opt3 repair** is **deprioritized**; **Phase 2** reframes to **new-strategy search** for at least one approach clearing **joint gates** + **≥$36K/yr** floor. Pre-registered **STOP surface** (**p99** ≤ half **$50K** TDD) **fired** — **stop-distance-only** rescue was **not** the obvious missing piece at unit scale for **$50K**, but **does not** overturn **bootstrap/eval/qty** evidence.  
+**Implication:** Keep **ORB+Opt3** live until a **replacement** exists; use **`docs/orb_opt3_phase2_closeout.md`** + **Wave 0h** JSON as the chapter boundary; **Wave 1** = operator-led hypothesis queue (see **deliverable_4** agenda). Charter **Phase 2** formal “X% vs ORB” gate may need **numeric realignment** with operator — kickoff now centers **joint gates + economics floor** on **any** candidate strategy.  
+**Artifact:** `docs/orb_opt3_phase2_closeout.md`; `notebooks/validation/2026-05-17_wave0h_orb_opt3_chapter_closeout.{md,json}`; `docs/research-log.md` Wave 0h; `docs/phase-2-kickoff.md`; `docs/current-working-plan.md`.
+
+## 2026-05-17 — Wave 0g: 2020 log OK; breach days early Jan (not COVID window); excluding 2020 still zero funded survival
+
+**Phase:** 2  
+**Context:** Wave **0f** tied Wave **0e** failures to **2020** first-breach sessions. Wave **0g** sanity-checks the six-year ORB+Opt3 log vs MNQ RTH bars, characterizes **de-duplicated** breach sessions, and re-runs tiered funded + bootstrap + eval on trades with **2020** exits removed.  
+**Finding:** **2020** shows **no** undocumented raw gaps in the scripted check; **trades/session** ratio is **in line** with other years (excluding **2021**, which has **zero** closed trades in this strategy log while bars exist — **gating**, not a data hole). **Two** unique first-breach NY dates (**2020-01-14**, **2020-01-15**): **early January**, **not** Feb–Apr **2020**; **`orb_exit_stop`** exits; **range / prior ATR ~0.6–0.9** on sampled days — **not** a clean “only range≫ATR days” signature. **2020-excluded** re-grade (**40** configs = Wave **0e** + deduped Wave **0f** low-qty): **all** rows **fail funded** first (**40** / **40**); **no** joint triple-pass; fragility is **not** removed by dropping **2020**.  
+**Implication:** Treat **2020** as **useful OOD stress** for later **Phase 3** regime narrative, but **Frame B** screening **cannot** hand-wave risk as “only COVID/2020”; **path hardening / structural change** (or different strategy) remains on the critical path. Regime overlay is **deferred** to Phase **3** per scope — these diagnostics define **what** was excluded, not a live filter.  
+**Artifact:** `notebooks/validation/2026-05-17_wave0g_orb_opt3_2020_exclusion.{md,json}`; `docs/research-log.md` Wave 0g RESULT; `scripts/run_wave0g_orb_opt3_2020_exclusion.py`.
+
+## 2026-05-17 — Wave 0f: pre-lock tail breaches in 2020 at high qty; low qty funds but bootstrap blocks
+
+**Phase:** 2  
+**Context:** Wave **0e** tier-ceiling grid had **no** funded survival. Wave **0f** traces session-level failures and sweeps **sub–tier-1-ceiling** MNQ.  
+**Finding:** For **all 19** Wave **0e** pairs, the **first** trailing breach is **pre-lock**, with a **large first-breach session loss** vs **TDD** (heuristic “single day” not DLL-cumulative-dominant). **First breach year** is **2020** for **all 19** — not a 2023-only failure profile on this test. **Low-qty sweep:** **$50K** (and **$25K**) **fund** at **1 MNQ** (~**$1,014/yr**); **100K** from **5 MNQ**, **150K** from **10 MNQ**. **No** row passes **all three** gates; among configurations that **pass funded**, **bootstrap &lt;80%** is the **binding** next failure (**10** / **10** in sweep).  
+**Implication:** **Sizing alone** can restore **funded** survival at **small** MNQ but does **not** clear **robustness** (bootstrap) or **eval** at joint thresholds; Wave **1** should prioritize **tail control / path hardening** before scaling, and treat **early-sample** stress (here **2020**) as a first-class regime in repair design—not only **2023** narratives.  
+**Artifact:** `notebooks/validation/2026-05-17_wave0f_orb_opt3_failure_profile.{md,json}`; `docs/research-log.md` Wave 0f RESULT.
+
+## 2026-05-17 — Wave 0e: Apex PA tiers are max contracts + tiered DLL; lock at start + TDD
+
+**Phase:** 2  
+**Context:** Operator confirmed **May 2026** Apex **EOD** parameters for **25K / 50K / 100K / 150K** research classes. Prior survey (**Wave 0d**) used **wrong** PA contract caps and TDD on some rows and modeled **static** DLL / sizing, not **balance-tier** rules.  
+**Finding:** PA tier tables state **maximum** mini contracts allowed in each **EOD balance band**, not a required minimum; research ORB+Opt3 convention sizes in **MNQ** with **1 mini = 10 MNQ** when applying caps. **DLL** and effective cap depend on **tier implied by prior session EOD equity** before the next session (tier fixed intraday; demotion when equity drops bands). **Lock** is at **starting balance + trailing DD** (no +$100 research offset). Sub-table equity (below the lowest published band or between bands) must map to a tier for simulation — **conservative** choice is **bottom band** caps/DLL (see `apex_tier_index_for_equity`).  
+**Implication:** Funded and bootstrap studies **must** use `simulate_apex_eod_two_phase` **tiered** mode (`balance_tiers`, `target_qty_mnq`) for multi-class PA work; **`simulate_apex_50k_eod_two_phase`** stays for flat **$50K** replay (Wave **0a–0c** / legacy). Wave **0d** numeric survey is **obsolete**; Wave **0e** artifacts are the current baseline.  
+**Artifact:** `docs/research-log.md` Wave 0e; `src/quant_research/statistics/apex_eod_trailing.py`; `notebooks/validation/2026-05-17_wave0e_orb_opt3_survey.{md,json}`.
 
 ## 2026-05-13 — Wave 0d: Apex EOD DLL is session pause, not account death
 
