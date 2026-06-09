@@ -1984,6 +1984,8 @@ kill; V4 tripwire on >15 ticks/tr → audit before believing.
 
 **Artifacts:** `notebooks/validation/2026-06-08_p2_m4_gate1_rerun.{md,json}`; `scripts/run_p2_m4_gate1_rerun.py`; `src/quant_research/research_p2w2/{hypothesis_sims,p2_execution,p2_setup,metrics,costs}.py`
 
+**Execution `git` SHA:** `1fe521b`
+
 ---
 
 ## Entry template

@@ -1,0 +1,707 @@
+{
+  "wave": "P2-W2/W3",
+  "screen": "m4_engine_gate1_rerun_is_only",
+  "date": "2026-06-08",
+  "git": {
+    "git_sha": "1fe521b034d900dbc8aa3750d54af81f44d65195",
+    "git_dirty": true
+  },
+  "mnq_dataset": {
+    "contract_file_count": 26,
+    "rth_bar_count": 599533,
+    "session_date_count": 1561,
+    "first_session": "2020-01-02",
+    "last_session": "2026-04-17"
+  },
+  "hypotheses": {
+    "H-1": {
+      "stopped": false,
+      "harness_passed": true,
+      "harness_failed": [],
+      "total_trades": 12,
+      "setups_scanned": 12,
+      "geometry_rejects": {},
+      "partition": {
+        "total_trades": 12,
+        "is_trade_count": 7,
+        "oos_trade_count": 5,
+        "is_fraction": 0.6,
+        "is_oos_boundary_last_is_exit": "2024-03-01T17:01:00+00:00",
+        "is_oos_boundary_first_oos_entry": "2024-11-28T15:23:00+00:00"
+      },
+      "oos_sealed_count": 5,
+      "harness": {
+        "passed": true,
+        "checks": [
+          {
+            "check_id": "V1",
+            "name": "Geometry coherence",
+            "passed": true,
+            "message": "0/12 filled trades fail entry-time geometry",
+            "details": {
+              "incoherent_filled": 0,
+              "n_trades": 12,
+              "geometry_reject_rate": 0.0,
+              "has_bracket_columns": true,
+              "samples": []
+            }
+          },
+          {
+            "check_id": "V2",
+            "name": "Causal sequencing",
+            "passed": true,
+            "message": "All trades exit at/after entry",
+            "details": {
+              "violations": [],
+              "n_trades": 12
+            }
+          },
+          {
+            "check_id": "V3",
+            "name": "Cost application",
+            "passed": true,
+            "message": "0/12 zero-commission; 0 net/gross mismatches",
+            "details": {
+              "zero_commission_trades": 0,
+              "net_gross_mismatches": 0
+            }
+          },
+          {
+            "check_id": "V4",
+            "name": "Magnitude sanity",
+            "passed": true,
+            "message": "Avg net -27.63 ticks/trade (surface > 50.0)",
+            "details": {
+              "avg_net_ticks": -27.62666666666667,
+              "n_trades": 12,
+              "total_net_usd": -165.76000000000002
+            }
+          },
+          {
+            "check_id": "V5",
+            "name": "Hand-computation spot check",
+            "passed": true,
+            "message": "T1=ok T2=ok T5_reject=ok",
+            "details": {}
+          },
+          {
+            "check_id": "V6",
+            "name": "Dual-touch exposure",
+            "passed": true,
+            "message": "Skipped (need bars + entry_bar for dual-touch analysis)",
+            "details": {}
+          },
+          {
+            "check_id": "V7",
+            "name": "Engine provenance",
+            "passed": true,
+            "message": "All 12 trades carry M4 engine provenance",
+            "details": {
+              "n_trades": 12,
+              "offending_trade_ids": [],
+              "expected_marker": "m4_backtest_engine@v1",
+              "foreign_samples": []
+            }
+          }
+        ]
+      },
+      "harness_v7_pass": true,
+      "gate1": {
+        "is_trade_count": 7,
+        "gross_expectancy_per_trade": 26.785714285714285,
+        "cost_per_trade": 1.9800000000000002,
+        "net_expectancy_per_trade": 24.805714285714284,
+        "win_rate": 0.5714285714285714,
+        "avg_win_net": 79.895,
+        "avg_loss_net": -48.64666666666667,
+        "max_single_trade_loss_net": 115.48,
+        "p95_single_trade_loss_net": 106.83,
+        "verdict": "SURVIVOR",
+        "verdict_reason": "net expectancy > 0"
+      },
+      "trades_per_yr": 1.904823989569752,
+      "walker_anchor": {
+        "is_trades": 7,
+        "net_per_trade": -17.69,
+        "win_rate": 0.0
+      },
+      "delta_net_vs_walker": 42.495714285714286
+    },
+    "H-2": {
+      "stopped": false,
+      "harness_passed": true,
+      "harness_failed": [],
+      "total_trades": 1210,
+      "setups_scanned": 1210,
+      "geometry_rejects": {},
+      "partition": {
+        "total_trades": 1210,
+        "is_trade_count": 726,
+        "oos_trade_count": 484,
+        "is_fraction": 0.6,
+        "is_oos_boundary_last_is_exit": "2023-06-15T17:31:00+00:00",
+        "is_oos_boundary_first_oos_entry": "2023-06-16T15:31:00+00:00"
+      },
+      "oos_sealed_count": 484,
+      "harness": {
+        "passed": true,
+        "checks": [
+          {
+            "check_id": "V1",
+            "name": "Geometry coherence",
+            "passed": true,
+            "message": "0/1210 filled trades fail entry-time geometry",
+            "details": {
+              "incoherent_filled": 0,
+              "n_trades": 1210,
+              "geometry_reject_rate": 0.0,
+              "has_bracket_columns": true,
+              "samples": []
+            }
+          },
+          {
+            "check_id": "V2",
+            "name": "Causal sequencing",
+            "passed": true,
+            "message": "All trades exit at/after entry",
+            "details": {
+              "violations": [],
+              "n_trades": 1210
+            }
+          },
+          {
+            "check_id": "V3",
+            "name": "Cost application",
+            "passed": true,
+            "message": "0/1210 zero-commission; 0 net/gross mismatches",
+            "details": {
+              "zero_commission_trades": 0,
+              "net_gross_mismatches": 0
+            }
+          },
+          {
+            "check_id": "V4",
+            "name": "Magnitude sanity",
+            "passed": true,
+            "message": "Avg net -7.00 ticks/trade (surface > 50.0)",
+            "details": {
+              "avg_net_ticks": -7.000495867768594,
+              "n_trades": 1210,
+              "total_net_usd": -4235.299999999999
+            }
+          },
+          {
+            "check_id": "V5",
+            "name": "Hand-computation spot check",
+            "passed": true,
+            "message": "T1=ok T2=ok T5_reject=ok",
+            "details": {}
+          },
+          {
+            "check_id": "V6",
+            "name": "Dual-touch exposure",
+            "passed": true,
+            "message": "Skipped (need bars + entry_bar for dual-touch analysis)",
+            "details": {}
+          },
+          {
+            "check_id": "V7",
+            "name": "Engine provenance",
+            "passed": true,
+            "message": "All 1210 trades carry M4 engine provenance",
+            "details": {
+              "n_trades": 1210,
+              "offending_trade_ids": [],
+              "expected_marker": "m4_backtest_engine@v1",
+              "foreign_samples": []
+            }
+          }
+        ]
+      },
+      "harness_v7_pass": true,
+      "gate1": {
+        "is_trade_count": 726,
+        "gross_expectancy_per_trade": 0.9228650137741047,
+        "cost_per_trade": 1.98,
+        "net_expectancy_per_trade": -1.057134986225895,
+        "win_rate": 0.45867768595041325,
+        "avg_win_net": 69.84432432432432,
+        "avg_loss_net": -61.13394402035623,
+        "max_single_trade_loss_net": 330.98,
+        "p95_single_trade_loss_net": 160.67999999999998,
+        "verdict": "DEAD",
+        "verdict_reason": "net expectancy <= 0"
+      },
+      "trades_per_yr": 192.06975228161667,
+      "walker_anchor": {
+        "is_trades": 726,
+        "net_per_trade": -5.34,
+        "win_rate": 0.231
+      },
+      "delta_net_vs_walker": 4.282865013774105
+    },
+    "H-3": {
+      "stopped": false,
+      "harness_passed": true,
+      "harness_failed": [],
+      "total_trades": 1226,
+      "setups_scanned": 1253,
+      "geometry_rejects": {
+        "target_unreachable": 23
+      },
+      "partition": {
+        "total_trades": 1226,
+        "is_trade_count": 735,
+        "oos_trade_count": 491,
+        "is_fraction": 0.6,
+        "is_oos_boundary_last_is_exit": "2023-08-17T16:01:00+00:00",
+        "is_oos_boundary_first_oos_entry": "2023-08-18T15:10:00+00:00"
+      },
+      "oos_sealed_count": 491,
+      "harness": {
+        "passed": true,
+        "checks": [
+          {
+            "check_id": "V1",
+            "name": "Geometry coherence",
+            "passed": true,
+            "message": "0/1226 filled trades fail entry-time geometry",
+            "details": {
+              "incoherent_filled": 0,
+              "n_trades": 1226,
+              "geometry_reject_rate": 0.018025078369905956,
+              "has_bracket_columns": true,
+              "samples": []
+            }
+          },
+          {
+            "check_id": "V2",
+            "name": "Causal sequencing",
+            "passed": true,
+            "message": "All trades exit at/after entry",
+            "details": {
+              "violations": [],
+              "n_trades": 1226
+            }
+          },
+          {
+            "check_id": "V3",
+            "name": "Cost application",
+            "passed": true,
+            "message": "0/1226 zero-commission; 0 net/gross mismatches",
+            "details": {
+              "zero_commission_trades": 0,
+              "net_gross_mismatches": 0
+            }
+          },
+          {
+            "check_id": "V4",
+            "name": "Magnitude sanity",
+            "passed": true,
+            "message": "Avg net -8.03 ticks/trade (surface > 50.0)",
+            "details": {
+              "avg_net_ticks": -8.026884176182708,
+              "n_trades": 1226,
+              "total_net_usd": -4920.4800000000005
+            }
+          },
+          {
+            "check_id": "V5",
+            "name": "Hand-computation spot check",
+            "passed": true,
+            "message": "T1=ok T2=ok T5_reject=ok",
+            "details": {}
+          },
+          {
+            "check_id": "V6",
+            "name": "Dual-touch exposure",
+            "passed": true,
+            "message": "Skipped (need bars + entry_bar for dual-touch analysis)",
+            "details": {}
+          },
+          {
+            "check_id": "V7",
+            "name": "Engine provenance",
+            "passed": true,
+            "message": "All 1226 trades carry M4 engine provenance",
+            "details": {
+              "n_trades": 1226,
+              "offending_trade_ids": [],
+              "expected_marker": "m4_backtest_engine@v1",
+              "foreign_samples": []
+            }
+          }
+        ]
+      },
+      "harness_v7_pass": true,
+      "gate1": {
+        "is_trade_count": 735,
+        "gross_expectancy_per_trade": 0.9795918367346939,
+        "cost_per_trade": 1.9800000000000002,
+        "net_expectancy_per_trade": -1.0004081632653095,
+        "win_rate": 0.48027210884353744,
+        "avg_win_net": 86.04124645892351,
+        "avg_loss_net": -81.43418848167539,
+        "max_single_trade_loss_net": 782.48,
+        "p95_single_trade_loss_net": 256.95500000000004,
+        "verdict": "DEAD",
+        "verdict_reason": "net expectancy <= 0"
+      },
+      "trades_per_yr": 194.60951760104302,
+      "walker_anchor": {
+        "is_trades": 738,
+        "net_per_trade": -19.61,
+        "win_rate": 0.046
+      },
+      "delta_net_vs_walker": 18.60959183673469
+    },
+    "H-4": {
+      "stopped": false,
+      "harness_passed": true,
+      "harness_failed": [],
+      "total_trades": 77,
+      "setups_scanned": 81,
+      "geometry_rejects": {
+        "target_unreachable": 4
+      },
+      "partition": {
+        "total_trades": 77,
+        "is_trade_count": 46,
+        "oos_trade_count": 31,
+        "is_fraction": 0.6,
+        "is_oos_boundary_last_is_exit": "2023-06-26T16:01:00+00:00",
+        "is_oos_boundary_first_oos_entry": "2023-07-20T13:46:00+00:00"
+      },
+      "oos_sealed_count": 31,
+      "harness": {
+        "passed": true,
+        "checks": [
+          {
+            "check_id": "V1",
+            "name": "Geometry coherence",
+            "passed": true,
+            "message": "0/77 filled trades fail entry-time geometry",
+            "details": {
+              "incoherent_filled": 0,
+              "n_trades": 77,
+              "geometry_reject_rate": 0.047058823529411764,
+              "has_bracket_columns": true,
+              "samples": []
+            }
+          },
+          {
+            "check_id": "V2",
+            "name": "Causal sequencing",
+            "passed": true,
+            "message": "All trades exit at/after entry",
+            "details": {
+              "violations": [],
+              "n_trades": 77
+            }
+          },
+          {
+            "check_id": "V3",
+            "name": "Cost application",
+            "passed": true,
+            "message": "0/77 zero-commission; 0 net/gross mismatches",
+            "details": {
+              "zero_commission_trades": 0,
+              "net_gross_mismatches": 0
+            }
+          },
+          {
+            "check_id": "V4",
+            "name": "Magnitude sanity",
+            "passed": true,
+            "message": "Avg net 74.13 ticks/trade (surface > 150.0)",
+            "details": {
+              "avg_net_ticks": 74.13090909090909,
+              "n_trades": 77,
+              "total_net_usd": 2854.04
+            }
+          },
+          {
+            "check_id": "V5",
+            "name": "Hand-computation spot check",
+            "passed": true,
+            "message": "T1=ok T2=ok T5_reject=ok",
+            "details": {}
+          },
+          {
+            "check_id": "V6",
+            "name": "Dual-touch exposure",
+            "passed": true,
+            "message": "Skipped (need bars + entry_bar for dual-touch analysis)",
+            "details": {}
+          },
+          {
+            "check_id": "V7",
+            "name": "Engine provenance",
+            "passed": true,
+            "message": "All 77 trades carry M4 engine provenance",
+            "details": {
+              "n_trades": 77,
+              "offending_trade_ids": [],
+              "expected_marker": "m4_backtest_engine@v1",
+              "foreign_samples": []
+            }
+          }
+        ]
+      },
+      "harness_v7_pass": true,
+      "gate1": {
+        "is_trade_count": 46,
+        "gross_expectancy_per_trade": 25.902173913043477,
+        "cost_per_trade": 1.9800000000000006,
+        "net_expectancy_per_trade": 23.92217391304347,
+        "win_rate": 0.5869565217391305,
+        "avg_win_net": 156.76074074074074,
+        "avg_loss_net": -164.8484210526316,
+        "max_single_trade_loss_net": 322.98,
+        "p95_single_trade_loss_net": 307.22999999999996,
+        "verdict": "SURVIVOR",
+        "verdict_reason": "net expectancy > 0"
+      },
+      "trades_per_yr": 12.222620599739242,
+      "walker_anchor": {
+        "is_trades": 46,
+        "net_per_trade": -3.34,
+        "win_rate": 0.217
+      },
+      "delta_net_vs_walker": 27.26217391304347
+    },
+    "H-6": {
+      "stopped": false,
+      "harness_passed": true,
+      "harness_failed": [],
+      "total_trades": 470,
+      "setups_scanned": 472,
+      "geometry_rejects": {
+        "target_unreachable": 2
+      },
+      "partition": {
+        "total_trades": 470,
+        "is_trade_count": 282,
+        "oos_trade_count": 188,
+        "is_fraction": 0.6,
+        "is_oos_boundary_last_is_exit": "2023-05-31T19:59:00+00:00",
+        "is_oos_boundary_first_oos_entry": "2023-06-01T13:39:00+00:00"
+      },
+      "oos_sealed_count": 188,
+      "harness": {
+        "passed": true,
+        "checks": [
+          {
+            "check_id": "V1",
+            "name": "Geometry coherence",
+            "passed": true,
+            "message": "0/470 filled trades fail entry-time geometry",
+            "details": {
+              "incoherent_filled": 0,
+              "n_trades": 470,
+              "geometry_reject_rate": 0.004219409282700422,
+              "has_bracket_columns": true,
+              "samples": []
+            }
+          },
+          {
+            "check_id": "V2",
+            "name": "Causal sequencing",
+            "passed": true,
+            "message": "All trades exit at/after entry",
+            "details": {
+              "violations": [],
+              "n_trades": 470
+            }
+          },
+          {
+            "check_id": "V3",
+            "name": "Cost application",
+            "passed": true,
+            "message": "0/470 zero-commission; 0 net/gross mismatches",
+            "details": {
+              "zero_commission_trades": 0,
+              "net_gross_mismatches": 0
+            }
+          },
+          {
+            "check_id": "V4",
+            "name": "Magnitude sanity",
+            "passed": true,
+            "message": "Avg net -22.79 ticks/trade (surface > 50.0)",
+            "details": {
+              "avg_net_ticks": -22.78553191489362,
+              "n_trades": 470,
+              "total_net_usd": -5354.600000000001
+            }
+          },
+          {
+            "check_id": "V5",
+            "name": "Hand-computation spot check",
+            "passed": true,
+            "message": "T1=ok T2=ok T5_reject=ok",
+            "details": {}
+          },
+          {
+            "check_id": "V6",
+            "name": "Dual-touch exposure",
+            "passed": true,
+            "message": "Skipped (need bars + entry_bar for dual-touch analysis)",
+            "details": {}
+          },
+          {
+            "check_id": "V7",
+            "name": "Engine provenance",
+            "passed": true,
+            "message": "All 470 trades carry M4 engine provenance",
+            "details": {
+              "n_trades": 470,
+              "offending_trade_ids": [],
+              "expected_marker": "m4_backtest_engine@v1",
+              "foreign_samples": []
+            }
+          }
+        ]
+      },
+      "harness_v7_pass": true,
+      "gate1": {
+        "is_trade_count": 282,
+        "gross_expectancy_per_trade": -18.336879432624112,
+        "cost_per_trade": 1.98,
+        "net_expectancy_per_trade": -20.316879432624127,
+        "win_rate": 0.4326241134751773,
+        "avg_win_net": 210.01180327868855,
+        "avg_loss_net": -195.94250000000002,
+        "max_single_trade_loss_net": 819.48,
+        "p95_single_trade_loss_net": 589.0549999999995,
+        "verdict": "DEAD",
+        "verdict_reason": "net expectancy <= 0"
+      },
+      "trades_per_yr": 74.60560625814863,
+      "walker_anchor": {
+        "is_trades": 282,
+        "net_per_trade": -12.79,
+        "win_rate": 0.043
+      },
+      "delta_net_vs_walker": -7.526879432624128
+    },
+    "H-7": {
+      "stopped": false,
+      "harness_passed": true,
+      "harness_failed": [],
+      "total_trades": 1250,
+      "setups_scanned": 1253,
+      "geometry_rejects": {},
+      "partition": {
+        "total_trades": 1250,
+        "is_trade_count": 750,
+        "oos_trade_count": 500,
+        "is_fraction": 0.6,
+        "is_oos_boundary_last_is_exit": "2023-08-30T16:01:00+00:00",
+        "is_oos_boundary_first_oos_entry": "2023-08-31T15:25:00+00:00"
+      },
+      "oos_sealed_count": 500,
+      "harness": {
+        "passed": true,
+        "checks": [
+          {
+            "check_id": "V1",
+            "name": "Geometry coherence",
+            "passed": true,
+            "message": "0/1250 filled trades fail entry-time geometry",
+            "details": {
+              "incoherent_filled": 0,
+              "n_trades": 1250,
+              "geometry_reject_rate": 0.0,
+              "has_bracket_columns": true,
+              "samples": []
+            }
+          },
+          {
+            "check_id": "V2",
+            "name": "Causal sequencing",
+            "passed": true,
+            "message": "All trades exit at/after entry",
+            "details": {
+              "violations": [],
+              "n_trades": 1250
+            }
+          },
+          {
+            "check_id": "V3",
+            "name": "Cost application",
+            "passed": true,
+            "message": "0/1250 zero-commission; 0 net/gross mismatches",
+            "details": {
+              "zero_commission_trades": 0,
+              "net_gross_mismatches": 0
+            }
+          },
+          {
+            "check_id": "V4",
+            "name": "Magnitude sanity",
+            "passed": true,
+            "message": "Avg net -1.23 ticks/trade (surface > 50.0)",
+            "details": {
+              "avg_net_ticks": -1.2304000000000002,
+              "n_trades": 1250,
+              "total_net_usd": -769.0000000000001
+            }
+          },
+          {
+            "check_id": "V5",
+            "name": "Hand-computation spot check",
+            "passed": true,
+            "message": "T1=ok T2=ok T5_reject=ok",
+            "details": {}
+          },
+          {
+            "check_id": "V6",
+            "name": "Dual-touch exposure",
+            "passed": true,
+            "message": "Skipped (need bars + entry_bar for dual-touch analysis)",
+            "details": {}
+          },
+          {
+            "check_id": "V7",
+            "name": "Engine provenance",
+            "passed": true,
+            "message": "All 1250 trades carry M4 engine provenance",
+            "details": {
+              "n_trades": 1250,
+              "offending_trade_ids": [],
+              "expected_marker": "m4_backtest_engine@v1",
+              "foreign_samples": []
+            }
+          }
+        ]
+      },
+      "harness_v7_pass": true,
+      "gate1": {
+        "is_trade_count": 750,
+        "gross_expectancy_per_trade": -2.03,
+        "cost_per_trade": 1.98,
+        "net_expectancy_per_trade": -4.010000000000003,
+        "win_rate": 0.45866666666666667,
+        "avg_win_net": 87.95459302325581,
+        "avg_loss_net": -81.93073891625615,
+        "max_single_trade_loss_net": 585.48,
+        "p95_single_trade_loss_net": 286.48,
+        "verdict": "DEAD",
+        "verdict_reason": "net expectancy <= 0"
+      },
+      "trades_per_yr": 198.41916558018252,
+      "walker_anchor": {
+        "is_trades": 751,
+        "net_per_trade": 20.85,
+        "win_rate": 0.748
+      },
+      "delta_net_vs_walker": -24.860000000000007
+    }
+  },
+  "stop_reasons": [
+    "H-1 flipped negative\u2192positive (walker $-17.69 \u2192 M4 $24.81)",
+    "H-4 flipped negative\u2192positive (walker $-3.34 \u2192 M4 $23.92)"
+  ],
+  "h7_forensic_anchor": -2.41
+}
