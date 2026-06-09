@@ -7,6 +7,7 @@
 - **Append only** — never delete or rewrite past entries; add a correction as a new note if something was wrong.
 - **Pre-register before the run** that would decide pass/fail on the primary metric (except exploratory notes clearly labeled as such).
 - **Waves:** Group hypotheses into **Wave 0**, **Wave 1**, … for **multiple-comparisons / deflated Sharpe** accounting: use **N = number of distinct hypotheses tested in that wave** (including any that were run after optional early stops, unless a sequential testing protocol was pre-registered).
+- **Per-instrument N:** MNQ and MES maintain **separate** running quant-search **N** for deflated Sharpe — not a pooled total. See **2026-06-08** methodology convention entry below and `docs/phase-2-kickoff.md`.
 - **Status line** must move forward: `PRE-REGISTERED` → `RUN-PENDING` → `RESULT-LOGGED` (or `ABANDONED` with reason).
 
 **Related:** `docs/phase-2-kickoff.md`, `docs/current-working-plan.md`, `docs/lessons-log.md`, `docs/ai-project-instructions.md`
@@ -2009,6 +2010,45 @@ Reversion/fade family dead on MNQ intraday at realistic cost. Note: original wal
 **Artifacts:** `notebooks/validation/2026-06-08_p2_m4_gate1_rerun.{md,json}`; `scripts/run_p2_m4_gate1_rerun.py`; `src/quant_research/research_p2w2/{hypothesis_sims,p2_execution,p2_setup,metrics,costs}.py`
 
 **Execution `git` SHA:** `1fe521b`
+
+---
+
+## 2026-06-08 — MNQ + MES dual-instrument search — methodology convention
+
+**Wave:** Cross-wave methodology (not a hypothesis wave)
+**Type:** Standing convention — per-instrument deflated-Sharpe **N** + dual-instrument run preconditions
+
+**Convention:** MNQ + MES dual-instrument search (parallel discovery surfaces)
+
+- **MNQ** and **MES** are treated as **two independent search surfaces**, each with its own **running quant-search N** for deflated-Sharpe correction.
+- A survivor is deflated against the count of hypotheses tried on **its instrument only** — **not** a pooled total. *Rationale:* deflated Sharpe corrects for the number of trials in the search family that produced the result; the MNQ search space and the MES search space are separate families.
+- Each hypothesis is **pre-registered per instrument** it is tried on. An idea that fails on one instrument and is subsequently tried on the other **increments the other instrument's running N** (no cross-instrument salvage / no peeking).
+- **Goal framing:** MES is a **genuine parallel discovery surface** (find edge that may exist on MES and not MNQ via their **~5–15% structural residual**), **not** a robustness check on MNQ.
+- **Caution:** MES starts at **N = 0**, so identical ideas receive **lighter deflation** on MES than MNQ. An MES-only survivor may be partly a lighter-correction artifact; require **walk-forward + structural rationale** before trusting an MES-only result.
+
+**Per-instrument economics (mandatory in every graded run):**
+
+| Instrument | Point value | Tick value |
+|------------|-------------|------------|
+| **MNQ** | **$2/pt** | **$0.50/tick** |
+| **MES** | **$5/pt** | **$1.25/tick** |
+
+- **Cost convention unchanged:** **$1.98 RT** + slippage **1 tick** stop/time, **0.5 tick** target — slippage in **ticks** (not hardcoded dollars).
+- **max sustainable qty** computed **per instrument** against that instrument's DLL/TDD headroom (same stop in points → larger dollar risk on MES → generally lower MES qty).
+
+**Running quant-search N (as of 2026-06-08):**
+
+| Instrument | Running N | Composition |
+|------------|-----------|-------------|
+| **MNQ** | **13** | Track 1: **7** + W2: **6** (all tested-negative) |
+| **MES** | **0** | No hypotheses tried on MES yet |
+
+**Dual-instrument run preconditions (standing hard-stop):**
+
+- Every dual-instrument run **hard-stops** unless **both** loaders resolve to real datasets (print path, contract file count, bar count, date range, session alignment for each).
+- MES point value (**$5/pt**) and tick value (**$1.25**) must be **verified in the engine cost config** before any MES economic number is trusted — a wrong **$/pt** silently corrupts all MES P&amp;L. Print the configured values in the precondition block.
+
+**Artifact:** `docs/phase-2-kickoff.md` (Research methodology principles → MNQ + MES dual-instrument search)
 
 ---
 
