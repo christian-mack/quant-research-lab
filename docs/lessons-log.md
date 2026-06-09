@@ -24,6 +24,20 @@
 
 ## Entries
 
+## 2026-06-08 — P2 quant strategies consolidated onto M4 engine; V7 holds; full W2/W3 wave is a clean negative — two apparent "survivors" are frequency artifacts, not edge
+
+**Phase:** 2 (Flux V2)
+**Context:** After V7 (engine-provenance guard) landed, all P2 quant strategies (W2 H-1..H-6, W3 H-7) were migrated off the bespoke `simulate_p2_trade` walker onto the M4 `BacktestEngine` and re-run on IS under V1–V7. This both confirms the migration and re-scores every W2/W3 verdict on trusted rails.
+**Finding:**
+- **Migration verified.** `simulate_p2_trade` deleted; every strategy passes V7 (provenance seal present). H-7 reproduced the forensic's corrected number: walker **$20.85/tr** → M4 **−$4.01/tr** (forensic estimate was **−$2.41**; gap is the engine walking real exits vs the negate-gross approximation — right direction, right magnitude). The entry-bar look-ahead is structurally gone, not patched.
+- **Clean negatives confirmed:** H-2 (**−$1.06**), H-3 (**−$1.00**), H-6 (**−$20.32**), H-7 (**−$4.01**). The OR-extreme reclaim family is dead **both** directions (reversion H-3 and continuation H-7). Reversion cluster (H-2/H-3/H-6) dead on MNQ intraday at realistic cost.
+- **Two strategies flipped negative→positive on the M4 engine** (H-1 **−$17.69 → +$24.81**; H-4 **−$3.34 → +$23.92**) and tripped the migration stop condition. These are **not** edge. H-1 fires **1.9 trades/yr** (7 IS trades), H-4 **12.2/yr** (46 IS trades) — both were VOID-on-frequency in the W2 forensic (entry conjunctions choked far below projected rate; thesis never tested at adequate N). The walker's look-ahead had randomly assigned outcomes to those few trades; removing it reassigned them. A positive per-trade number on **n ≤ 46** at **< 13 trades/yr** is noise on a sample too small to carry a sign, not investigable edge — and below the program's **80/yr** frequency floor regardless. The W2 forensic already closed the loosening path: H-4's efficiency filter **is** the thesis, H-1's trend-day gate **is** the thesis; relaxing either makes a different, weaker strategy.
+**Implication:**
+- **W2/W3 wave CLOSED:** zero deployable edge. Reversion dead, continuation dead; the two "survivors" are frequency artifacts. Logging H-1/H-4 as survivors would be the mirror of the H-7 mistake — trusting a number whose mechanism (1.9 / 12.2 trades/yr) cannot support it.
+- **Infrastructure status RESTORED:** one fill path (M4 engine), bypass bug-class closed by V7, every result reproducible on the vetted engine. The three bugs (OTE, Track 1, W2/W3) were all engine **bypass**, not engine fault; the engine reproduced NT8 within **6.8%** whenever actually used.
+- **Exhausted ground:** OR-reclaim (both directions), the broader reversion/fade family, and ORB are now all closed. The next wave requires **new** structural ground, not another variant of these triggers.
+**Artifact:** `notebooks/validation/2026-06-08_p2_m4_gate1_rerun.md` (git `1fe521b`); V7 guard (git `fb264ac`); H-7 forensic (git `021d430`); W2 mortality screen (git `307cecb`).
+
 ## 2026-06-08 — P2 quant waves ran on bespoke walker outside M4; entry-bar look-ahead inflated H-7; consolidate fills + add provenance guard
 
 **Phase:** 2 (Flux V2)
