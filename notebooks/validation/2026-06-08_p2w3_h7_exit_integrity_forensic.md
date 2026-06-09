@@ -3,7 +3,7 @@
 **Date:** 2026-06-08  
 **Scope:** Diagnosis only — IS **751** trades; OOS sealed  
 **Gate #1 anchor:** net **$20.85/tr**, WR **74.8%**  
-**git_sha:** `0383f84adac8908a92a187de043711703a517443`  
+**git_sha:** `021d430df21ad66b89933309b09d26004c82d2c9`  
 **H-7 implementation ref:** `86bd753` (`simulate_p2_trade` walker)
 
 ## Summary verdict
