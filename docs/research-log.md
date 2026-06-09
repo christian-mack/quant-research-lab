@@ -1748,10 +1748,10 @@ kill; V4 tripwire on >15 ticks/tr → audit before believing.
 
 ---
 
-## 2026-06-08 — P2-W2 — tight-loss-tail / arbitrage-resistant hypotheses (N=6) — PRE-REGISTERED
+## 2026-06-08 — P2-W2 — tight-loss-tail / arbitrage-resistant hypotheses (N=6) — RESULT-LOGGED
 
 **Wave:** P2-W2  
-**Status:** PRE-REGISTERED (no backtest run; spec fixed before screening code).  
+**Status:** RESULT-LOGGED  
 **Baseline:** Wave 0 graded ORB+Opt3 (max sustainable qty). ORB is reference, not an income path — closed at **~2%** eval pass at income size; loss tail caps sustainable qty at **5–15 MNQ**.
 
 **Structural rationale:** Tight uniform per-trade loss tail (sizes toward **30+ MNQ** within the **$1K DLL**) → arbitrage-resistant (capacity-constrained / operationally messy / impact-bound) → sufficient frequency for eval-window survival. The **loss-tail-to-edge ratio** against the DD/DLL envelope is the binding constraint, not edge existence alone.
@@ -1795,6 +1795,24 @@ kill; V4 tripwire on >15 ticks/tr → audit before believing.
 
 **Date pre-registered:** 2026-06-08
 
+**Date run completed:** 2026-06-08
+
+**Result:** FAIL (wave). All six hypotheses negative or void on M4 engine (IS).
+
+Final verdicts on trusted M4 fill path (V1–V7 pass):
+
+- **H-1:** VOID-on-frequency (1.9 trades/yr, n=7). M4 net **+$24.81/tr** is a sample artifact, not edge; trend-day gate is the thesis, not tunable.
+- **H-2:** DEAD, net **−$1.06/tr** (726 IS). Thin-pocket reversion absent.
+- **H-3:** DEAD, net **−$1.00/tr** (735 IS). Failed-breakout fade absent.
+- **H-4:** VOID-on-frequency (12.2 trades/yr, n=46). M4 net **+$23.92/tr** is a sample artifact; efficiency filter is the thesis, not tunable. Below 80/yr floor.
+- **H-6:** DEAD, net **−$20.32/tr** (282 IS). Level-rejection fade absent.
+
+Reversion/fade family dead on MNQ intraday at realistic cost. Note: original walker run was on bespoke `simulate_p2_trade` (entry-bar look-ahead); these are the corrected M4-engine numbers.
+
+**Deflated Sharpe:** not reached — no candidate cleared Gate #1 net expectancy on the trusted engine, so no survivor advanced to the statistical battery. Running quant-search N unchanged in effect (no positive to deflate); count W2's 6 configs as tested-and-negative.
+
+**Artifact:** `notebooks/validation/2026-06-08_p2_m4_gate1_rerun.md` (git `1fe521b`); mortality screen (`307cecb`); forensic (`b833904`).
+
 ---
 
 ## 2026-06-08 — P2-W2 Gate #1 mortality screen (IS partition) — RESULT-LOGGED
@@ -1827,11 +1845,11 @@ kill; V4 tripwire on >15 ticks/tr → audit before believing.
 
 ---
 
-## 2026-06-08 — P2-W3 — OR-extreme reclaim continuation (N=1) — PRE-REGISTERED
+## 2026-06-08 — P2-W3 — OR-extreme reclaim continuation (N=1) — RESULT-LOGGED
 
 **Wave:** P2-W3  
 **Hypothesis:** **H-7** (single-hypothesis wave; canonical id — no prior **H-7** in this log)  
-**Status:** PRE-REGISTERED (no backtest run; spec fixed before screening code).  
+**Status:** RESULT-LOGGED  
 **Baseline:** Wave 0 graded ORB+Opt3 (max sustainable qty), unchanged.
 
 **Structural rationale:** When price breaks an opening-range extreme, reverses back through it intrabar, and a **5m** bar closes back across the extreme, that reclaim marks **CONTINUATION** in the breakout direction — not reversion back into the range. Enter in the breakout direction on the reclaim; stop tight on the reclaim level (the failed-reversal pivot). W2 **H-3** registered the opposite thesis (failed-breakout reclaim → fade into range) and produced **95%** stop-out / **4.6%** win rate on **738** IS trades — sign audit confirmed entries were on the reversion side as designed (forensic **2026-06-08**, git **`b833904`**). The uniformity of the stop-out is the signature of trading the wrong side of a real directional tendency: the reclaim resolves **as continuation**. The broader W2 reversion/fade cluster (**H-2**, **H-3**, **H-6**) was also negative, consistent with fade being structurally dead on MNQ intraday at realistic cost. **H-7** tests the inverse directly and cleanly.
@@ -1879,6 +1897,12 @@ kill; V4 tripwire on >15 ticks/tr → audit before believing.
 - **Deflated Sharpe:** wave-local **N = 1**; running quant-search **N = Track 1 (7) + W2 (6) + W3 (1) = 14**. **H-7** increments **N** as a **new** structural thesis (continuation), **not** a free rerun of **H-3** — a sign-corrected rerun of a registered hypothesis would not increment, but this is a distinct thesis on the opposite side of the market and is counted. ICT/OTE configs (**20**) and ORB survey configs remain excluded per W2 rationale (separate search family / known-edge characterization). Correction applied against running **N = 14**; wave-local **N = 1** reported alongside.
 
 **Date pre-registered:** 2026-06-08
+
+**Date run completed:** 2026-06-08
+
+**Result:** FAIL. OR-extreme reclaim **CONTINUATION**. Gate #1 SURVIVOR on bespoke walker (**+$20.85/tr**, 74.8% WR) traced to entry-bar look-ahead; corrected on M4 engine to net **−$4.01/tr**, 45.9% WR (V1–V7 pass). No edge. Inversion thesis closed — both reversion (W2 H-3) and continuation (H-7) sides of the OR-reclaim trigger are negative on clean geometry. **Do not rerun.**
+
+**Artifact:** `notebooks/validation/2026-06-08_p2_m4_gate1_rerun.md` (git `1fe521b`); H-7 gate #1 (`86bd753`); exit-integrity forensic (`021d430`).
 
 ---
 
