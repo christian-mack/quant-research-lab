@@ -28,9 +28,13 @@ class OrderRequest:
     #: Owning module (required for multi-module / OMAT runs).
     module_id: str = ""
     tag: str = ""
-    #: When set, any **working** order with the same ``module_id`` and tag is
-    #: removed before this request is queued (break-even stop replacement).
     dedupe_tag: str | None = None
+    #: When set with ``bracket_stop`` / ``bracket_target`` / ``bracket_direction``,
+    #: the engine validates trade geometry before accepting the order batch.
+    bracket_entry: float | None = None
+    bracket_stop: float | None = None
+    bracket_target: float | None = None
+    bracket_direction: str | None = None
 
 
 @dataclass(slots=True)
@@ -52,6 +56,10 @@ class SimulatedFill:
     commission: float
     module_id: str = ""
     tag: str = ""
+    #: Bracket anchor copied from the originating order (entry-time geometry).
+    bracket_stop: float | None = None
+    bracket_target: float | None = None
+    bracket_direction: str | None = None
 
 
 @dataclass(slots=True)

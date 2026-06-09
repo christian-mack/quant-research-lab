@@ -1944,6 +1944,46 @@ kill; V4 tripwire on >15 ticks/tr → audit before believing.
 
 **Artifacts:** `notebooks/validation/2026-06-08_p2w3_h7_gate1_mortality_screen.{md,json}`; `scripts/run_p2w3_h7_gate1_mortality_screen.py`; `src/quant_research/research_p2w2/hypothesis_sims.py`
 
+**Status note (2026-06-08):** Gate #1 **SURVIVOR** **VOID** — bespoke `simulate_p2_trade` entry-bar look-ahead (forensic `955dcbb`); see M4 re-run entry below.
+
+---
+
+## 2026-06-08 — P2-W2/W3 M4 engine migration + Gate #1 re-run (IS) — RESULT-LOGGED
+
+**Wave:** P2-W2 (H-1..H-6) + P2-W3 (H-7)
+
+**Date run completed:** 2026-06-08
+
+**Trigger:** V7 provenance guard (`fb264ac`) — trustworthy quant results require M4 `BacktestEngine` fill path; bespoke `simulate_p2_trade` deleted.
+
+**Migration:**
+
+- Signal logic unchanged in `research_p2w2/hypothesis_sims.py` (`scan_h*` → `P2Setup`).
+- Fills routed through `p2_execution.py` (`P2SetupRunner` + `BacktestEngine`); entry on reclaim 5m close; brackets arm entry+1.
+- Single cost model: **$1.98 RT** + slippage (1 tick stop/time, 0.5 tick target) via `P2_W2_BACKTEST_CONFIG`.
+- `simulate_p2_trade`, `P2Trade`, `trades_to_harness_log`, `run_hypothesis` walker **removed**; legacy gate1/forensic scripts **RETIRED** (loud exit → `run_p2_m4_gate1_rerun.py`).
+
+**Harness:** **V1–V7 PASS** on all six hypotheses (IS partition).
+
+**Gate #1 — M4 engine (IS 60%) vs bespoke walker anchor:**
+
+| ID | Walker net/tr | M4 net/tr | M4 WR | M4 IS trades | Verdict | V7 |
+|----|---------------|-----------|-------|--------------|---------|-----|
+| H-1 | −$17.69 | +$24.81 | 57.1% | 7 | SURVIVOR | PASS |
+| H-2 | −$5.34 | −$1.06 | 45.9% | 726 | DEAD | PASS |
+| H-3 | −$19.61 | −$1.00 | 48.0% | 735 | DEAD | PASS |
+| H-4 | −$3.34 | +$23.92 | 58.7% | 46 | SURVIVOR | PASS |
+| H-6 | −$12.79 | −$20.32 | 43.3% | 282 | DEAD | PASS |
+| H-7 | +$20.85 *(void)* | −$4.01 | 45.9% | 750 | DEAD | PASS |
+
+**H-7 proof-of-migration:** M4 **−$4.01/tr** ≠ walker **+$20.85/tr**; aligns with forensic corrected **−$2.41/tr** (next-bar bracket), not inflated gate.
+
+**REVIEW flags (not hard-stop):** H-1 and H-4 flipped negative→positive on M4 — low IS trade counts (7 / 46); do **not** treat as trusted edge without further validation.
+
+**W2/W3 corrected verdicts on trusted path:** H-2, H-3, H-6, H-7 **DEAD**; H-1/H-4 **SURVIVOR** on M4 but flagged for partition noise review. OOS **sealed**.
+
+**Artifacts:** `notebooks/validation/2026-06-08_p2_m4_gate1_rerun.{md,json}`; `scripts/run_p2_m4_gate1_rerun.py`; `src/quant_research/research_p2w2/{hypothesis_sims,p2_execution,p2_setup,metrics,costs}.py`
+
 ---
 
 ## Entry template

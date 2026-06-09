@@ -1,41 +1,44 @@
-"""IS/OOS partition and Gate #1 mortality metrics for P2-W2."""
+"""IS/OOS partition and Gate #1 mortality metrics for P2 (M4 trade log)."""
 
 from __future__ import annotations
 
-import datetime as dt
 from typing import Any
 
 import numpy as np
 import polars as pl
 
-from quant_research.backtest.schema import trade_log_schema
-from quant_research.backtest.validation import (
-    ValidationReport,
-    ValidationThresholds,
-    validate_backtest_result,
-)
+from quant_research.backtest.m6_metrics import protocol_year_fraction
+from quant_research.backtest.validation import ValidationThresholds
+from quant_research.research_p2w2.costs import P2_W2_BACKTEST_CONFIG
 
-# Pre-registered stop caps reach 10pt (= 40 ticks); avg loss near cap is plausible, not a bug.
 P2_W2_V4_TICK_THRESHOLD = 50.0
-from quant_research.research_p2w2.costs import P2Trade, P2_W2_BACKTEST_CONFIG
-
 IS_FRACTION = 0.60
 
 
-def split_is_oos(
-    trades: list[P2Trade],
+def split_is_oos_log(
+    trade_log: pl.DataFrame,
     *,
     is_fraction: float = IS_FRACTION,
-) -> tuple[list[P2Trade], list[P2Trade], dict[str, Any]]:
+) -> tuple[pl.DataFrame, pl.DataFrame, dict[str, Any]]:
     """Chronological 60/40 split by trade count."""
-    ordered = sorted(trades, key=lambda t: t.exit_time)
-    n = len(ordered)
+    if trade_log.is_empty():
+        empty = trade_log
+        return empty, empty, {
+            "total_trades": 0,
+            "is_trade_count": 0,
+            "oos_trade_count": 0,
+            "is_fraction": is_fraction,
+            "is_oos_boundary_last_is_exit": None,
+            "is_oos_boundary_first_oos_entry": None,
+        }
+    ordered = trade_log.sort("exit_time")
+    n = ordered.height
     n_is = int(n * is_fraction) if n else 0
-    is_trades = ordered[:n_is]
-    oos_trades = ordered[n_is:]
-    boundary_exit = is_trades[-1].exit_time if is_trades else None
-    boundary_entry = oos_trades[0].entry_time if oos_trades else None
-    return is_trades, oos_trades, {
+    is_log = ordered.head(n_is)
+    oos_log = ordered.tail(n - n_is)
+    boundary_exit = is_log["exit_time"][-1] if n_is else None
+    boundary_entry = oos_log["entry_time"][0] if oos_log.height else None
+    return is_log, oos_log, {
         "total_trades": n,
         "is_trade_count": n_is,
         "oos_trade_count": n - n_is,
@@ -45,60 +48,9 @@ def split_is_oos(
     }
 
 
-def trades_to_harness_log(
-    trades: list[P2Trade],
-    *,
-    git_sha: str,
-) -> pl.DataFrame:
-    """Build M4 trade log for validation harness."""
-    rows: list[dict[str, object]] = []
-    for i, t in enumerate(trades, start=1):
-        rows.append(
-            {
-                "trade_id": i,
-                "module_id": t.hypothesis_id.lower().replace("-", ""),
-                "entry_time": t.entry_time,
-                "exit_time": t.exit_time,
-                "direction": "long" if t.direction == 1 else "short",
-                "quantity": 1,
-                "entry_price": t.entry_price,
-                "stop_price": t.stop_price,
-                "target_price": t.target_price,
-                "exit_price": t.exit_price,
-                "gross_pnl": t.gross_pnl,
-                "commission": t.commission,
-                "net_pnl": t.net_pnl,
-                "exit_reason": t.exit_reason,
-                "entry_bar": 0,
-                "bars_held": t.bars_held,
-                "mfa_git_sha": git_sha,
-                "mfa_engine_provenance": "",
-            }
-        )
-    schema = {**trade_log_schema()}
-    return pl.DataFrame(rows, schema=schema) if rows else pl.DataFrame(schema=schema)
-
-
-def run_harness(
-    trades: list[P2Trade],
-    *,
-    git_sha: str,
-) -> ValidationReport:
-    """V1–V6 on the booked trade population."""
-    log = trades_to_harness_log(trades, git_sha=git_sha)
-    return validate_backtest_result(
-        log,
-        config=P2_W2_BACKTEST_CONFIG,
-        geometry_reject_rate=0.0,
-        thresholds=ValidationThresholds(
-            implausible_net_ticks_per_trade=P2_W2_V4_TICK_THRESHOLD,
-        ),
-    )
-
-
-def gate1_is_screen(is_trades: list[P2Trade]) -> dict[str, Any]:
+def gate1_is_screen_log(is_log: pl.DataFrame) -> dict[str, Any]:
     """Gate #1: net-of-cost per-trade expectancy on IS."""
-    if not is_trades:
+    if is_log.is_empty():
         return {
             "is_trade_count": 0,
             "gross_expectancy_per_trade": 0.0,
@@ -113,9 +65,9 @@ def gate1_is_screen(is_trades: list[P2Trade]) -> dict[str, Any]:
             "verdict_reason": "no IS trades",
         }
 
-    gross = np.array([t.gross_pnl for t in is_trades], dtype=np.float64)
-    comm = np.array([t.commission for t in is_trades], dtype=np.float64)
-    net = np.array([t.net_pnl for t in is_trades], dtype=np.float64)
+    gross = is_log["gross_pnl"].to_numpy()
+    comm = is_log["commission"].to_numpy()
+    net = is_log["net_pnl"].to_numpy()
     wins = net[net > 0]
     losses = net[net < 0]
     loss_mag = -net[net < 0]
@@ -124,7 +76,7 @@ def gate1_is_screen(is_trades: list[P2Trade]) -> dict[str, Any]:
     verdict = "SURVIVOR" if net_exp > 0 else "DEAD"
 
     return {
-        "is_trade_count": len(is_trades),
+        "is_trade_count": is_log.height,
         "gross_expectancy_per_trade": float(np.mean(gross)),
         "cost_per_trade": float(np.mean(comm)),
         "net_expectancy_per_trade": net_exp,
@@ -136,3 +88,12 @@ def gate1_is_screen(is_trades: list[P2Trade]) -> dict[str, Any]:
         "verdict": verdict,
         "verdict_reason": "net expectancy > 0" if verdict == "SURVIVOR" else "net expectancy <= 0",
     }
+
+
+def trades_per_yr(total_trades: int, protocol_start: str, protocol_end: str) -> float:
+    yfrac = protocol_year_fraction(protocol_start, protocol_end)
+    return total_trades / yfrac if yfrac > 0 else 0.0
+
+
+def validation_thresholds() -> ValidationThresholds:
+    return ValidationThresholds(implausible_net_ticks_per_trade=P2_W2_V4_TICK_THRESHOLD)

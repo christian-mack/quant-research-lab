@@ -21,6 +21,16 @@ class StopLimitIntrabarPolicy(StrEnum):
     FIRST_TOUCH_OHLC_ORDER = "first_touch_ohlc_order"
     PESSIMISTIC = "pessimistic"
     OPTIMISTIC = "optimistic"
+    #: Whole-bar OHLC touch; when stop and target both touched, stop fills first
+    #: (matches legacy OTE / Track 1 bar walkers; uncalibrated — see P2 deferral).
+    STOP_BEFORE_TARGET = "stop_before_target"
+
+
+class LimitFillMode(StrEnum):
+    """How resting limit orders are evaluated against a bar."""
+
+    CROSS = "cross"
+    TOUCH = "touch"
 
 
 class GapPolicy(StrEnum):
@@ -117,11 +127,22 @@ class CommissionSpec:
 
 
 @dataclass(frozen=True, slots=True)
+class TagSlippageOverride:
+    """Per-order-tag slippage override (matched on ``OrderRequest.tag`` prefix)."""
+
+    tag_prefix: str
+    mode: SlippageMode
+    ticks: float = 0.0
+    points: float = 0.0
+
+
+@dataclass(frozen=True, slots=True)
 class SlippageSpec:
     mode: SlippageMode = SlippageMode.NONE
     ticks: float = 0.0
     points: float = 0.0
     side: SlippageSide = SlippageSide.ADVERSE_ONLY
+    tag_overrides: tuple[TagSlippageOverride, ...] = ()
 
 
 @dataclass(frozen=True, slots=True)
@@ -132,6 +153,10 @@ class FillModelSpec:
     )
     gap_policy: GapPolicy = GapPolicy.FILL_AT_OPEN
     intrabar_path: IntrabarPricePath = IntrabarPricePath.OPEN_HIGH_LOW_CLOSE
+    limit_fill_mode: LimitFillMode = LimitFillMode.CROSS
+    #: After a limit entry fill opens a position, evaluate bracket exits on the
+    #: same bar (OTE / limit-entry strategies).
+    same_bar_exit_after_entry: bool = False
 
 
 @dataclass(frozen=True, slots=True)
@@ -164,3 +189,4 @@ class BacktestConfig:
     partial_fills: PartialFillSpec = field(default_factory=PartialFillSpec)
     time_in_force: TimeInForceSpec = field(default_factory=TimeInForceSpec)
     orchestration: OrchestrationSpec = field(default_factory=OrchestrationSpec)
+    enforce_trade_geometry: bool = True

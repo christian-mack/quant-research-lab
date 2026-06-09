@@ -9,7 +9,8 @@ from dataclasses import dataclass
 import polars as pl
 
 from quant_research.ict import pd_arrays as pd_mod
-from quant_research.research_p2w2.costs import P2Trade, simulate_p2_trade
+from quant_research.research_p2w2.p2_execution import P2ExecutionBatch, execute_setups, session_frames
+from quant_research.research_p2w2.p2_setup import P2Setup
 
 _EASTERN = "America/New_York"
 
@@ -133,6 +134,25 @@ def count_h3_h7_reclaim_triggers(mnq_et: pl.DataFrame) -> int:
     return sum(1 for _ in iter_h3_h7_reclaim_signals(mnq_et))
 
 
+def _bar_index_at_ts(sdf: pl.DataFrame, ts: object) -> int:
+    for i in range(sdf.height):
+        if sdf["timestamp"][i] == ts:
+            return i
+    for i in range(sdf.height):
+        if sdf["timestamp"][i] >= ts:
+            return i
+    return max(0, sdf.height - 1)
+
+
+def _reclaim_entry_index(sig: H3H7ReclaimSignal) -> int:
+    """Last minute of reclaim 5m bucket (entry decision bar)."""
+    sdf = sig.session_bars.sort("timestamp")
+    bucket = sdf.filter(pl.col("timestamp") >= sig.anchor_ts).head(5)
+    if bucket.is_empty():
+        return _bar_index_at_ts(sdf, sig.anchor_ts)
+    return _bar_index_at_ts(sdf, bucket["timestamp"][-1])
+
+
 def prepare_et_frame(mnq_rth: pl.DataFrame) -> pl.DataFrame:
     """Sort RTH bars and attach America/New_York timestamps."""
     return (
@@ -167,9 +187,9 @@ def _morning_vwap_atr(pre: pl.DataFrame) -> tuple[float, float, float] | None:
     return pv / vv, atr, vv / float(pre.height)
 
 
-def simulate_h1(mnq_et: pl.DataFrame) -> list[P2Trade]:
+def scan_h1(mnq_et: pl.DataFrame) -> list[P2Setup]:
     """H-1: trend micro-pullback continuation (stop cap 9pt, 1 trade/session)."""
-    trades: list[P2Trade] = []
+    setups: list[P2Setup] = []
     for sdate in sorted(mnq_et["cme_session_date"].unique().drop_nulls().to_list()):
         sdf = mnq_et.filter(pl.col("cme_session_date") == sdate).sort("timestamp")
         if sdf.height < 40:
@@ -225,20 +245,19 @@ def simulate_h1(mnq_et: pl.DataFrame) -> list[P2Trade]:
                 entry_px = clo
                 stop_px = entry_px - H1_STOP_CAP
                 target_px = entry_px + 1.5 * H1_STOP_CAP
-                rest = sdf.filter(pl.col("ts_et") >= scan["ts_et"][j])
-                tr = simulate_p2_trade(
-                    rest,
-                    entry_idx=0,
-                    direction=1,
-                    entry_price=entry_px,
-                    stop_px=stop_px,
-                    target_px=target_px,
-                    cme_session_date=sdate,
-                    max_et_time_exit=T_ET_1200,
-                    hypothesis_id="H-1",
+                entry_idx = _bar_index_at_ts(sdf, scan["timestamp"][j])
+                setups.append(
+                    P2Setup(
+                        hypothesis_id="H-1",
+                        cme_session_date=sdate,
+                        entry_fill_index=entry_idx,
+                        entry_price=entry_px,
+                        stop_price=stop_px,
+                        target_price=target_px,
+                        direction="long",
+                        time_stop_et=T_ET_1200,
+                    )
                 )
-                if tr is not None:
-                    trades.append(tr)
                 fired = True
             else:
                 trough = min(trough, lw)
@@ -252,27 +271,26 @@ def simulate_h1(mnq_et: pl.DataFrame) -> list[P2Trade]:
                 entry_px = clo
                 stop_px = entry_px + H1_STOP_CAP
                 target_px = entry_px - 1.5 * H1_STOP_CAP
-                rest = sdf.filter(pl.col("ts_et") >= scan["ts_et"][j])
-                tr = simulate_p2_trade(
-                    rest,
-                    entry_idx=0,
-                    direction=-1,
-                    entry_price=entry_px,
-                    stop_px=stop_px,
-                    target_px=target_px,
-                    cme_session_date=sdate,
-                    max_et_time_exit=T_ET_1200,
-                    hypothesis_id="H-1",
+                entry_idx = _bar_index_at_ts(sdf, scan["timestamp"][j])
+                setups.append(
+                    P2Setup(
+                        hypothesis_id="H-1",
+                        cme_session_date=sdate,
+                        entry_fill_index=entry_idx,
+                        entry_price=entry_px,
+                        stop_price=stop_px,
+                        target_price=target_px,
+                        direction="short",
+                        time_stop_et=T_ET_1200,
+                    )
                 )
-                if tr is not None:
-                    trades.append(tr)
                 fired = True
-    return trades
+    return setups
 
 
-def simulate_h2(mnq_et: pl.DataFrame) -> list[P2Trade]:
+def scan_h2(mnq_et: pl.DataFrame) -> list[P2Setup]:
     """H-2: liquidity-vacuum lunch reversion (stop cap 8pt, ≤2 trades/window)."""
-    trades: list[P2Trade] = []
+    setups: list[P2Setup] = []
     for sdate in sorted(mnq_et["cme_session_date"].unique().drop_nulls().to_list()):
         sdf = mnq_et.filter(pl.col("cme_session_date") == sdate).sort("timestamp")
         if sdf.height < 40:
@@ -310,95 +328,91 @@ def simulate_h2(mnq_et: pl.DataFrame) -> list[P2Trade]:
             if direction == 0:
                 continue
             entry_px = clo
+            dir_str = "long" if direction == 1 else "short"
             if direction == 1:
                 stop_px = entry_px - H2_STOP_CAP
                 target_px = vwap_m
             else:
                 stop_px = entry_px + H2_STOP_CAP
                 target_px = vwap_m
-            rest = sdf.filter(pl.col("ts_et") >= tsb)
-            tr = simulate_p2_trade(
-                rest,
-                entry_idx=0,
-                direction=direction,
-                entry_price=entry_px,
-                stop_px=stop_px,
-                target_px=target_px,
-                cme_session_date=sdate,
-                max_et_time_exit=T_ET_LUNCH_END,
-                hypothesis_id="H-2",
+            entry_idx = _bar_index_at_ts(sdf, row["timestamp"])
+            setups.append(
+                P2Setup(
+                    hypothesis_id="H-2",
+                    cme_session_date=sdate,
+                    entry_fill_index=entry_idx,
+                    entry_price=entry_px,
+                    stop_price=stop_px,
+                    target_price=target_px,
+                    direction=dir_str,
+                    time_stop_et=T_ET_LUNCH_END,
+                )
             )
-            if tr is not None:
-                trades.append(tr)
-                window_trades += 1
-    return trades
+            window_trades += 1
+    return setups
 
 
-def simulate_h3(mnq_et: pl.DataFrame) -> list[P2Trade]:
+def scan_h3(mnq_et: pl.DataFrame) -> list[P2Setup]:
     """H-3: failed-breakout fast reclaim (stop cap 10pt, 1 trade/session)."""
-    trades: list[P2Trade] = []
+    setups: list[P2Setup] = []
     for sig in iter_h3_h7_reclaim_signals(mnq_et):
         entry_px = sig.entry_px
         if sig.false_dir == 1:
             stop_px = entry_px + min(
                 H3_STOP_CAP, max(2.0, sig.false_extreme + 2.0 - entry_px)
             )
-            direction = -1
+            direction = "short"
         else:
             stop_px = entry_px - min(
                 H3_STOP_CAP, max(2.0, entry_px - (sig.false_extreme - 2.0))
             )
-            direction = 1
-        rest = sig.session_bars.filter(pl.col("timestamp") >= sig.anchor_ts)
-        tr = simulate_p2_trade(
-            rest,
-            entry_idx=0,
-            direction=direction,
-            entry_price=entry_px,
-            stop_px=stop_px,
-            target_px=sig.or_mid,
-            cme_session_date=sig.cme_session_date,
-            max_et_time_exit=T_ET_1200,
-            hypothesis_id="H-3",
+            direction = "long"
+        setups.append(
+            P2Setup(
+                hypothesis_id="H-3",
+                cme_session_date=sig.cme_session_date,
+                entry_fill_index=_reclaim_entry_index(sig),
+                entry_price=entry_px,
+                stop_price=stop_px,
+                target_price=sig.or_mid,
+                direction=direction,
+                time_stop_et=T_ET_1200,
+            )
         )
-        if tr is not None:
-            trades.append(tr)
-    return trades
+    return setups
 
 
-def simulate_h7(mnq_et: pl.DataFrame) -> list[P2Trade]:
+def scan_h7(mnq_et: pl.DataFrame) -> list[P2Setup]:
     """H-7: OR-extreme reclaim continuation — H-3 trigger, inverted direction, fixed 10/20."""
-    trades: list[P2Trade] = []
+    setups: list[P2Setup] = []
     for sig in iter_h3_h7_reclaim_signals(mnq_et):
         entry_px = sig.entry_px
         if sig.false_dir == 1:
-            direction = 1
+            direction = "long"
             stop_px = entry_px - H7_STOP_PTS
             target_px = entry_px + H7_TARGET_PTS
         else:
-            direction = -1
+            direction = "short"
             stop_px = entry_px + H7_STOP_PTS
             target_px = entry_px - H7_TARGET_PTS
-        rest = sig.session_bars.filter(pl.col("timestamp") >= sig.anchor_ts)
-        tr = simulate_p2_trade(
-            rest,
-            entry_idx=0,
-            direction=direction,
-            entry_price=entry_px,
-            stop_px=stop_px,
-            target_px=target_px,
-            cme_session_date=sig.cme_session_date,
-            max_et_time_exit=T_ET_1200,
-            hypothesis_id="H-7",
+        setups.append(
+            P2Setup(
+                hypothesis_id="H-7",
+                cme_session_date=sig.cme_session_date,
+                entry_fill_index=_reclaim_entry_index(sig),
+                entry_price=entry_px,
+                stop_price=stop_px,
+                target_price=target_px,
+                direction=direction,
+                time_stop_et=T_ET_1200,
+            )
         )
-        if tr is not None:
-            trades.append(tr)
-    return trades
+    return setups
 
 
-def simulate_h4(mnq_et: pl.DataFrame) -> list[P2Trade]:
+def scan_h4(mnq_et: pl.DataFrame) -> list[P2Setup]:
     """H-4: opening-auction imbalance fade (stop cap 10pt, 1 trade/session)."""
-    trades: list[P2Trade] = []
+    setups: list[P2Setup] = []
     for sdate in sorted(mnq_et["cme_session_date"].unique().drop_nulls().to_list()):
         sdf = mnq_et.filter(pl.col("cme_session_date") == sdate).sort("timestamp")
         if sdf.height < 30:
@@ -421,34 +435,33 @@ def simulate_h4(mnq_et: pl.DataFrame) -> list[P2Trade]:
             continue
         if move < 0 and win_close > win_lo + 2.0:
             continue
-        direction = -1 if move > 0 else 1
+        dir_str = "short" if move > 0 else "long"
         entry_px = float(after["close"][0])
-        if direction == 1:
+        if dir_str == "long":
             stop_px = entry_px - H4_STOP_CAP
             target_px = rth_open + 0.5 * move
         else:
             stop_px = entry_px + H4_STOP_CAP
             target_px = rth_open + 0.5 * move
-        rest = sdf.filter(pl.col("ts_et") >= after["ts_et"][0])
-        tr = simulate_p2_trade(
-            rest,
-            entry_idx=0,
-            direction=direction,
-            entry_price=entry_px,
-            stop_px=stop_px,
-            target_px=target_px,
-            cme_session_date=sdate,
-            max_et_time_exit=T_ET_1200,
-            hypothesis_id="H-4",
+        entry_idx = _bar_index_at_ts(sdf, after["timestamp"][0])
+        setups.append(
+            P2Setup(
+                hypothesis_id="H-4",
+                cme_session_date=sdate,
+                entry_fill_index=entry_idx,
+                entry_price=entry_px,
+                stop_price=stop_px,
+                target_price=target_px,
+                direction=dir_str,
+                time_stop_et=T_ET_1200,
+            )
         )
-        if tr is not None:
-            trades.append(tr)
-    return trades
+    return setups
 
 
-def simulate_h6(mnq_pd: pl.DataFrame) -> list[P2Trade]:
+def scan_h6(mnq_pd: pl.DataFrame) -> list[P2Setup]:
     """H-6: PDH/PDL first-test rejection (stop cap 8pt, ≤2 trades/session)."""
-    trades: list[P2Trade] = []
+    setups: list[P2Setup] = []
     for sdate in sorted(mnq_pd["cme_session_date"].unique().drop_nulls().to_list()):
         sdf = mnq_pd.filter(pl.col("cme_session_date") == sdate).sort("timestamp")
         if sdf.height < 20:
@@ -476,21 +489,20 @@ def simulate_h6(mnq_pd: pl.DataFrame) -> list[P2Trade]:
                 if clo < pdh_f - 0.5:
                     entry_px = clo
                     stop_px = entry_px + H6_STOP_CAP
-                    rest = sdf.filter(pl.col("ts_et") >= tsb)
-                    tr = simulate_p2_trade(
-                        rest,
-                        entry_idx=0,
-                        direction=-1,
-                        entry_price=entry_px,
-                        stop_px=stop_px,
-                        target_px=peq_f,
-                        cme_session_date=sdate,
-                        max_et_time_exit=T_ET_SESSION_END,
-                        hypothesis_id="H-6",
+                    entry_idx = _bar_index_at_ts(sdf, sdf["timestamp"][j])
+                    setups.append(
+                        P2Setup(
+                            hypothesis_id="H-6",
+                            cme_session_date=sdate,
+                            entry_fill_index=entry_idx,
+                            entry_price=entry_px,
+                            stop_price=stop_px,
+                            target_price=peq_f,
+                            direction="short",
+                            time_stop_et=T_ET_SESSION_END,
+                        )
                     )
-                    if tr is not None:
-                        trades.append(tr)
-                        session_trades += 1
+                    session_trades += 1
             if session_trades >= 2:
                 break
             if not pdl_tested and lw <= pdl_f + 0.5:
@@ -498,51 +510,58 @@ def simulate_h6(mnq_pd: pl.DataFrame) -> list[P2Trade]:
                 if clo > pdl_f + 0.5:
                     entry_px = clo
                     stop_px = entry_px - H6_STOP_CAP
-                    rest = sdf.filter(pl.col("ts_et") >= tsb)
-                    tr = simulate_p2_trade(
-                        rest,
-                        entry_idx=0,
-                        direction=1,
-                        entry_price=entry_px,
-                        stop_px=stop_px,
-                        target_px=peq_f,
-                        cme_session_date=sdate,
-                        max_et_time_exit=T_ET_SESSION_END,
-                        hypothesis_id="H-6",
+                    entry_idx = _bar_index_at_ts(sdf, sdf["timestamp"][j])
+                    setups.append(
+                        P2Setup(
+                            hypothesis_id="H-6",
+                            cme_session_date=sdate,
+                            entry_fill_index=entry_idx,
+                            entry_price=entry_px,
+                            stop_price=stop_px,
+                            target_price=peq_f,
+                            direction="long",
+                            time_stop_et=T_ET_SESSION_END,
+                        )
                     )
-                    if tr is not None:
-                        trades.append(tr)
-                        session_trades += 1
-    return trades
+                    session_trades += 1
+    return setups
 
 
-def run_hypothesis(
+_SCANNERS: dict[str, object] = {
+    "H-1": scan_h1,
+    "H-2": scan_h2,
+    "H-3": scan_h3,
+    "H-4": scan_h4,
+    "H-6": scan_h6,
+    "H-7": scan_h7,
+}
+
+
+def scan_setups(hypothesis_id: str, mnq_et: pl.DataFrame) -> list[P2Setup]:
+    """Scan one hypothesis on a prepared ET frame."""
+    if hypothesis_id == "H-6":
+        mnq_pd = pd_mod.add_pd_arrays(mnq_et)
+        return scan_h6(mnq_pd)
+    scanner = _SCANNERS.get(hypothesis_id)
+    if scanner is None:
+        msg = f"unknown hypothesis: {hypothesis_id}"
+        raise ValueError(msg)
+    return scanner(mnq_et)  # type: ignore[operator]
+
+
+def run_hypothesis_m4(
     hypothesis_id: str,
     segments: list[pl.DataFrame],
-) -> list[P2Trade]:
-    """Run one hypothesis across gap-split segments."""
-    all_trades: list[P2Trade] = []
+) -> P2ExecutionBatch:
+    """Scan + execute one hypothesis across gap-split segments via M4 engine."""
+    all_setups: list[P2Setup] = []
+    session_map: dict[dt.date, pl.DataFrame] = {}
     for seg in segments:
         if seg.is_empty():
             continue
         mnq_et = prepare_et_frame(seg)
         if mnq_et.is_empty():
             continue
-        if hypothesis_id == "H-1":
-            part = simulate_h1(mnq_et)
-        elif hypothesis_id == "H-2":
-            part = simulate_h2(mnq_et)
-        elif hypothesis_id == "H-3":
-            part = simulate_h3(mnq_et)
-        elif hypothesis_id == "H-7":
-            part = simulate_h7(mnq_et)
-        elif hypothesis_id == "H-4":
-            part = simulate_h4(mnq_et)
-        elif hypothesis_id == "H-6":
-            mnq_pd = pd_mod.add_pd_arrays(mnq_et)
-            part = simulate_h6(mnq_pd)
-        else:
-            msg = hypothesis_id
-            raise ValueError(msg)
-        all_trades.extend(part)
-    return sorted(all_trades, key=lambda t: t.exit_time)
+        all_setups.extend(scan_setups(hypothesis_id, mnq_et))
+        session_map.update(session_frames(mnq_et))
+    return execute_setups(all_setups, session_map, hypothesis_id=hypothesis_id)

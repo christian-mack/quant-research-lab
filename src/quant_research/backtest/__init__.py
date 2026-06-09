@@ -2,6 +2,7 @@
 
 from quant_research.backtest.account import Account
 from quant_research.backtest.engine import BacktestEngine, BacktestResult, as_module
+from quant_research.backtest.validation import ValidationReport, validate_backtest_result
 from quant_research.backtest.omat import StrategyModule, collect_orders_for_bar
 from quant_research.backtest.schema import empty_trade_log, trade_log_schema
 from quant_research.backtest.specs import (
@@ -28,6 +29,8 @@ __all__ = [
     "Strategy",
     "StrategyModule",
     "TradeLedger",
+    "ValidationReport",
+    "validate_backtest_result",
     "as_module",
     "collect_orders_for_bar",
     "empty_trade_log",
