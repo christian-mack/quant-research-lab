@@ -1,0 +1,318 @@
+{
+  "wave": "P2-W3",
+  "hypothesis": "H-7",
+  "screen": "exit_integrity_forensic_is_only",
+  "date": "2026-06-08",
+  "git": {
+    "git_sha": "0383f84adac8908a92a187de043711703a517443",
+    "git_dirty": true
+  },
+  "gate1_anchor": {
+    "is_trades": 751,
+    "net_per_trade": 20.84689747003995,
+    "win_rate": 0.748335552596538
+  },
+  "partition": {
+    "total_trades": 1253,
+    "is_trade_count": 751,
+    "oos_trade_count": 502,
+    "is_fraction": 0.6,
+    "is_oos_boundary_last_is_exit": "2023-08-28T11:00:00-05:00",
+    "is_oos_boundary_first_oos_entry": "2023-08-30T09:15:00-05:00"
+  },
+  "contexts_matched": 751,
+  "check1": {
+    "fill_path": "research_p2w2/costs.py::simulate_p2_trade (inline bar walker)",
+    "m4_engine_used": false,
+    "dual_touch_rule": "stop-before-target on same minute bar (lines 144-146 long, 156-158 short)",
+    "m4_equivalent_policy_in_config": "StopLimitIntrabarPolicy.STOP_BEFORE_TARGET (not invoked by walker)",
+    "is_target_trades": 497,
+    "dual_touch_on_exit_bar_among_targets": 0,
+    "dual_touch_pct_of_is": 0.0,
+    "dual_touch_any_bar_among_targets": 0,
+    "hand_verify_samples": [
+      {
+        "session": "2020-01-03",
+        "exit_time": "2020-01-03T12:35:00-06:00",
+        "booked_exit": "target",
+        "bar_dual_touch": false,
+        "pessimistic_first": "target",
+        "optimistic_first": null,
+        "chrono_1min_first": "target",
+        "note": "single-touch exit bar (included for path audit)"
+      },
+      {
+        "session": "2020-02-03",
+        "exit_time": "2020-02-03T10:09:00-06:00",
+        "booked_exit": "target",
+        "bar_dual_touch": false,
+        "pessimistic_first": "target",
+        "optimistic_first": "target",
+        "chrono_1min_first": "target",
+        "note": "single-touch exit bar (included for path audit)"
+      },
+      {
+        "session": "2020-02-05",
+        "exit_time": "2020-02-05T09:27:00-06:00",
+        "booked_exit": "target",
+        "bar_dual_touch": false,
+        "pessimistic_first": "target",
+        "optimistic_first": "target",
+        "chrono_1min_first": "target",
+        "note": "single-touch exit bar (included for path audit)"
+      },
+      {
+        "session": "2020-02-07",
+        "exit_time": "2020-02-07T10:21:00-06:00",
+        "booked_exit": "target",
+        "bar_dual_touch": false,
+        "pessimistic_first": "target",
+        "optimistic_first": "target",
+        "chrono_1min_first": "target",
+        "note": "single-touch exit bar (included for path audit)"
+      },
+      {
+        "session": "2020-02-11",
+        "exit_time": "2020-02-11T09:32:00-06:00",
+        "booked_exit": "target",
+        "bar_dual_touch": false,
+        "pessimistic_first": "target",
+        "optimistic_first": "target",
+        "chrono_1min_first": "target",
+        "note": "single-touch exit bar (included for path audit)"
+      },
+      {
+        "session": "2020-02-19",
+        "exit_time": "2020-02-19T10:24:00-06:00",
+        "booked_exit": "target",
+        "bar_dual_touch": false,
+        "pessimistic_first": "target",
+        "optimistic_first": "target",
+        "chrono_1min_first": "target",
+        "note": "single-touch exit bar (included for path audit)"
+      },
+      {
+        "session": "2020-02-24",
+        "exit_time": "2020-02-24T09:15:00-06:00",
+        "booked_exit": "target",
+        "bar_dual_touch": false,
+        "pessimistic_first": "target",
+        "optimistic_first": "target",
+        "chrono_1min_first": "target",
+        "note": "single-touch exit bar (included for path audit)"
+      },
+      {
+        "session": "2020-02-27",
+        "exit_time": "2020-02-27T09:45:00-06:00",
+        "booked_exit": "target",
+        "bar_dual_touch": false,
+        "pessimistic_first": null,
+        "optimistic_first": null,
+        "chrono_1min_first": null,
+        "note": "single-touch exit bar (included for path audit)"
+      },
+      {
+        "session": "2020-02-28",
+        "exit_time": "2020-02-28T11:00:00-06:00",
+        "booked_exit": "target",
+        "bar_dual_touch": false,
+        "pessimistic_first": "target",
+        "optimistic_first": "target",
+        "chrono_1min_first": "target",
+        "note": "single-touch exit bar (included for path audit)"
+      },
+      {
+        "session": "2020-03-02",
+        "exit_time": "2020-03-02T09:10:00-06:00",
+        "booked_exit": "target",
+        "bar_dual_touch": false,
+        "pessimistic_first": "target",
+        "optimistic_first": "target",
+        "chrono_1min_first": "target",
+        "note": "single-touch exit bar (included for path audit)"
+      }
+    ],
+    "worst_case_stop_first": {
+      "net_expectancy": 20.84689747004022,
+      "delta_vs_gate1": 2.7000623958883807e-13,
+      "win_rate": 0.748335552596538,
+      "delta_wr_vs_gate1": 0.0,
+      "flipped_trades": 0
+    }
+  },
+  "check2": {
+    "entry_fill_mechanism": "Entry at reclaim 5m bar CLOSE price; walker starts at entry_idx=0 (first minute of 5m bucket = anchor_ts). Bracket is LIVE on entry bar.",
+    "bracket_arms_next_bar": false,
+    "same_bar_stop_or_target_exit_count": 429,
+    "same_bar_exit_pct_of_is": 57.123834886817576,
+    "same_bar_exit_samples": [
+      {
+        "session": "2020-01-03",
+        "entry_time": "2020-01-03T12:35:00-06:00",
+        "exit_time": "2020-01-03T12:35:00-06:00",
+        "exit_reason": "target",
+        "bars_held": 0,
+        "entry_px_booked": 8821.75,
+        "raw_reclaim_close": 8821.75
+      },
+      {
+        "session": "2020-02-24",
+        "entry_time": "2020-02-24T09:15:00-06:00",
+        "exit_time": "2020-02-24T09:15:00-06:00",
+        "exit_reason": "target",
+        "bars_held": 0,
+        "entry_px_booked": 9178.25,
+        "raw_reclaim_close": 9178.25
+      },
+      {
+        "session": "2020-02-27",
+        "entry_time": "2020-02-27T09:45:00-06:00",
+        "exit_time": "2020-02-27T09:45:00-06:00",
+        "exit_reason": "target",
+        "bars_held": 0,
+        "entry_px_booked": 8618.25,
+        "raw_reclaim_close": 8618.25
+      },
+      {
+        "session": "2020-02-28",
+        "entry_time": "2020-02-28T11:00:00-06:00",
+        "exit_time": "2020-02-28T11:00:00-06:00",
+        "exit_reason": "target",
+        "bars_held": 0,
+        "entry_px_booked": 8315.25,
+        "raw_reclaim_close": 8315.25
+      },
+      {
+        "session": "2020-03-02",
+        "entry_time": "2020-03-02T09:10:00-06:00",
+        "exit_time": "2020-03-02T09:10:00-06:00",
+        "exit_reason": "target",
+        "bars_held": 0,
+        "entry_px_booked": 8495.0,
+        "raw_reclaim_close": 8495.0
+      },
+      {
+        "session": "2020-03-03",
+        "entry_time": "2020-03-03T09:10:00-06:00",
+        "exit_time": "2020-03-03T09:10:00-06:00",
+        "exit_reason": "target",
+        "bars_held": 0,
+        "entry_px_booked": 8881.25,
+        "raw_reclaim_close": 8881.25
+      },
+      {
+        "session": "2020-03-04",
+        "entry_time": "2020-03-04T09:30:00-06:00",
+        "exit_time": "2020-03-04T09:30:00-06:00",
+        "exit_reason": "target",
+        "bars_held": 0,
+        "entry_px_booked": 8760.5,
+        "raw_reclaim_close": 8760.5
+      },
+      {
+        "session": "2020-03-05",
+        "entry_time": "2020-03-05T09:35:00-06:00",
+        "exit_time": "2020-03-05T09:35:00-06:00",
+        "exit_reason": "target",
+        "bars_held": 0,
+        "entry_px_booked": 8778.5,
+        "raw_reclaim_close": 8778.5
+      },
+      {
+        "session": "2020-03-06",
+        "entry_time": "2020-03-06T09:20:00-06:00",
+        "exit_time": "2020-03-06T09:20:00-06:00",
+        "exit_reason": "stop",
+        "bars_held": 0,
+        "entry_px_booked": 8457.75,
+        "raw_reclaim_close": 8457.75
+      },
+      {
+        "session": "2020-03-09",
+        "entry_time": "2020-03-09T09:25:00-05:00",
+        "exit_time": "2020-03-09T09:25:00-05:00",
+        "exit_reason": "stop",
+        "bars_held": 0,
+        "entry_px_booked": 8090.25,
+        "raw_reclaim_close": 8090.25
+      }
+    ],
+    "entry_bar_spans_full_bracket_count": 3,
+    "entry_bar_bracket_samples": [
+      {
+        "session": "2022-02-04",
+        "entry_time": "2022-02-04T09:30:00-06:00",
+        "exit_reason": "stop",
+        "entry_bar_spans_bracket": true
+      },
+      {
+        "session": "2022-03-08",
+        "entry_time": "2022-03-08T09:20:00-06:00",
+        "exit_reason": "stop",
+        "entry_bar_spans_bracket": true
+      },
+      {
+        "session": "2022-08-26",
+        "entry_time": "2022-08-26T09:10:00-05:00",
+        "exit_reason": "stop",
+        "entry_bar_spans_bracket": true
+      }
+    ],
+    "next_bar_bracket_recompute": {
+      "count": 749,
+      "net_per_trade": -2.41124165554072,
+      "win_rate": 0.34979973297730305,
+      "delta_net_vs_gate1": -23.25813912558067,
+      "delta_wr_vs_gate1": -0.3985358196192349,
+      "same_bar_exits_after_fix": 152,
+      "note": "Entry on last minute of reclaim 5m bucket; if walker still exits same bar, force bracket walk from entry_idx+1."
+    }
+  },
+  "check3": {
+    "trigger_uses_completed_5m_close": true,
+    "signal_anchor_ts": "first minute timestamp of reclaim 5m bucket (bar open)",
+    "entry_price": "5m bucket last close (reclaim close) \u2014 known only after bucket completes",
+    "lookahead_within_5m_bucket": "YES \u2014 bracket walk begins at anchor_ts (minute 1 of bucket) while entry_px is the bucket close (minute 5). Minutes 1\u20134 of reclaim bar are evaluated against a bracket priced at the not-yet-realized close.",
+    "acted_after_bar_complete": "Partially \u2014 signal requires completed 5m close, but simulate_p2_trade fills at close price on the first minute bar of that bucket (entry_idx=0).",
+    "h3_shared_trigger_negative": "H-3 IS net \u2212$19.61 on same trigger \u2014 look-ahead that inflates WR would tend to help both directions; H-3 failure is partial evidence trigger is not grossly lookahead-biased, but H-7/H-3 entry timing issue is shared.",
+    "is_signals_in_dataset": 1253
+  },
+  "check4": {
+    "disposition": {
+      "target": {
+        "count": 497,
+        "pct": 66.17842876165113,
+        "net_pnl_total": 18771.440000000002,
+        "net_pnl_per_trade": 37.76949698189135
+      },
+      "stop": {
+        "count": 169,
+        "pct": 22.503328894806923,
+        "net_pnl_total": -3799.12,
+        "net_pnl_per_trade": -22.48
+      },
+      "time": {
+        "count": 85,
+        "pct": 11.318242343541945,
+        "net_pnl_total": 683.6999999999999,
+        "net_pnl_per_trade": 8.043529411764705
+      }
+    },
+    "other_exit_reasons": {},
+    "time_stop_mark_verification": {
+      "time_wins_booked": 65,
+      "time_wins_verified_at_noon_close": 65,
+      "time_wins_booked_at_target_bug": 0,
+      "bug_samples": []
+    },
+    "wr_decomposition": {
+      "total_wins": 562,
+      "target_capture_wins": 497,
+      "time_stop_wins": 65,
+      "target_fraction_of_wins": 0.8843416370106761,
+      "time_fraction_of_wins": 0.11565836298932385,
+      "genuine_target_capture_pct_of_is": 66.17842876165113
+    }
+  },
+  "verdict": "H-7 result CONTAMINATED \u2014 next-bar bracket recompute net $-2.41/tr (WR 35.0% vs gate 74.8%); H-7 does not route through backtest/engine.py M4 ledger \u2014 uses bespoke simulate_p2_trade walker (stop-first on minute bar, not pivot path); 429 same-bar bracket exits (57.1% of IS; bracket live on entry bar); entry_px is 5m close but bracket walks from first minute of bucket"
+}
