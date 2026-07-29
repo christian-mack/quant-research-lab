@@ -1,0 +1,46 @@
+---
+description: Program Context System (PCS) — how to use the pinned index and PCS retrieval tools
+alwaysApply: true
+---
+
+# Program Context System (PCS)
+
+This repo has a Program Context System: a retrieval layer over the program's
+authoritative context, exposed as the `pcs` MCP server (read-only tools). Use it
+instead of guessing about program state, past findings, or why a decision was made.
+
+## The pinned index is a table of contents, not a substitute
+
+At session start you may see an injected **PCS pinned index** — Tier-1 doc titles,
+a one-line purpose each, and a git SHA. That index only tells you *which* documents
+define current program state and *what* each covers. It is NOT the content.
+
+**For any decision, claim, or answer that touches program state, direction, or
+constraints, load the full document via the `get_pinned_context` tool** (it returns
+the Tier-1 docs whole, with git SHA). Do not answer from the one-line summaries in
+the index — that is summary-leakage and it launders stale or incomplete context.
+
+## Cloud fallback — if you see no pinned index, fetch it yourself
+
+The session-start injection runs only in the local IDE; it does **not** fire in
+cloud agents. If you do not already see a PCS pinned index in this session, call
+`get_pinned_context` yourself before reasoning about program state, rather than
+running blind.
+
+## On-demand retrieval
+
+- `search(query, top_k, include_superseded)` — hybrid search over the Tier-2 corpus
+  (lessons log, research log, method docs). Prefer this over grepping docs when you
+  need a prior finding or rationale.
+- `status()` — check the index is fresh (git SHA + timestamp) and whether any source
+  file drifted; if results look stale, say so rather than trusting them.
+
+## Reading results: `[SUPERSEDED by …]` labels
+
+By default `search` returns only **current** content. If you pass
+`include_superseded=true`, some results arrive prefixed `[SUPERSEDED by <pointer>]`.
+Treat those as the **stale/corrected-away** version — never present a
+`[SUPERSEDED …]` figure or claim as current fact; follow the pointer to the current
+one. The corpus actively contradicts itself (it contains confident, well-written,
+*wrong* earlier numbers), which is exactly why this labeling exists.
+```

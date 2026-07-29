@@ -1,0 +1,38 @@
+# Program Context System (PCS) — Postgres 17 + pgvector.
+#
+# D-01/D-02: run from the official pgvector image with a named volume so the
+# index survives container restarts. Bound to localhost only (Q-05); this is a
+# single-user research tool and must not be reachable off this machine.
+#
+# Usage:
+#   docker compose -f docker/pcs-compose.yml up -d
+#   docker compose -f docker/pcs-compose.yml down     # data persists in volume
+#   docker compose -f docker/pcs-compose.yml down -v  # DESTROYS the index volume
+#
+# Credentials default to pcs/pcs/pcs (localhost-only, no secrets here). Override
+# with PCS_DB_USER / PCS_DB_PASSWORD / PCS_DB_NAME in the environment if desired;
+# keep them in sync with src/quant_research/context/config.py defaults.
+
+services:
+  pcs-postgres:
+    image: pgvector/pgvector:pg17
+    container_name: pcs-postgres
+    environment:
+      POSTGRES_USER: ${PCS_DB_USER:-pcs}
+      POSTGRES_PASSWORD: ${PCS_DB_PASSWORD:-pcs}
+      POSTGRES_DB: ${PCS_DB_NAME:-pcs}
+    ports:
+      # host-side bind to 127.0.0.1 only — not exposed beyond localhost.
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - pcs_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${PCS_DB_USER:-pcs} -d ${PCS_DB_NAME:-pcs}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+volumes:
+  pcs_pgdata:
+    name: pcs_pgdata

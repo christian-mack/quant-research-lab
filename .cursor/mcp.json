@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "pcs": {
+      "type": "stdio",
+      "command": "uv",
+      "args": [
+        "run",
+        "--project",
+        "${workspaceFolder}",
+        "python",
+        "-m",
+        "quant_research.context.mcp_server"
+      ]
+    }
+  }
+}

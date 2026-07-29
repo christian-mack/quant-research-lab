@@ -1,0 +1,533 @@
+# docs/context-manifest.yml — PCS status map (operator-owned; spec §4.4)
+#
+# Fully-classified manifest. Every item carries a 'justification' citing the rule applied.
+# Valid statuses: current | superseded | deprecated | historical.
+#
+# split_required: true marks a dual-purpose entry where a still-current finding shares
+# one chunk with a stale number. The entry stays classified for its current finding; D3's
+# chunker MUST split it so the stale number becomes its own superseded chunk (see split_note).
+# D3 is not done until every split_required entry is split; golden query #1 is the acceptance test.
+#
+# latent_split_note records the SAME dual-purpose defect on an entry that is NOT on the default
+# surface (historical). No status change and no D3 obligation today — it is off-surface, so the
+# stale number is not served unless deliberately recalled. The note makes the debt machine-visible
+# so that if the entry is ever promoted to current or pulled by explicit recall, the split is
+# performed rather than shipping the misread-as-fact. See 'pcs manifest-check'.
+
+# --- Tier-1 pinned documents (loaded whole, never chunked/embedded; spec §4.1) ---
+# These are the program's current-state operating docs. Always 'current'. They live
+# in a separate section so they can never be swept into the Tier-2 chunk/embed path;
+# validation enforces that a pinned doc is never also a Tier-2 target.
+pinned:
+  "docs/program-charter.md":
+    tier: 1
+    status: current
+    justification: "Tier-1: live program charter (mission, constraints, income anchors); the current-state authority."
+  "docs/phase-2-kickoff.md":
+    tier: 1
+    status: current
+    justification: "Tier-1: live Phase-2 framing; supersedes the deprecated v2 module-search starter."
+  "docs/current-working-plan.md":
+    tier: 1
+    status: current
+    justification: "Tier-1: active working plan / current scope; loaded every session."
+  "docs/ai-project-instructions.md":
+    tier: 1
+    status: current
+    justification: "Tier-1: standing agent operating conventions for this repo."
+  "docs/flux-response-style.md":
+    tier: 1
+    status: current
+    justification: "Tier-1: agent response-style operating instruction; pinned-only, must never surface as a Tier-2 research fragment."
+
+documents:
+  "docs/m6-nt8-reproduction.md":
+    # M6 — Python ORB+Opt3 vs NT8 reference (smoke + forensic escalation)
+    status: current
+    justification: "Rule 6: authoritative M6 reproduction record; uses the corrected $1,088.50/contract basis (not the misread) and supports golden queries #1 and #9."
+  "docs/nt8-backtest-methodology.md":
+    # NT8 Backtest Methodology (Flux V1 research baseline)
+    status: current
+    justification: "Rule 6: live NT8 backtest-methodology reference (no stale Apex params); M4/M6 mirror it."
+  "docs/phase-1-detailed-plan.md":
+    # Phase 1 Detailed Plan: Python Research Infrastructure
+    status: historical
+    justification: "Rule 5: completed-phase (Phase 1) plan; exit text already self-corrected to m6/nt8 docs; informs no active Phase-2 decision."
+  "flux-v2-module-search-starter.md":
+    # **DEPRECATED FRAMING (2026-05).** This document predates Phase 2 production simplification. **Current framing:** `docs/phase-2-kickoff.md` and `docs/…
+    status: deprecated
+    justification: "Rule 2: self-announced DEPRECATED FRAMING (2026-05) header; current framing is the kickoff + charter."
+    superseded_by: "docs/phase-2-kickoff.md; docs/program-charter.md"
+
+entries:
+  "docs/lessons-log.md":
+    - heading: "2026-06-08 — P2 quant strategies consolidated onto M4 engine; V7 holds; full W2/W3 wave is a clean negative — two apparent \"survivors\" are frequency artifacts, not edge"
+      # **Phase:** 2 (Flux V2)
+      date: 2026-06-08
+      status: current
+      justification: "Rule 6: current infra state + exhausted-ground conclusion driving the next wave."
+    - heading: "2026-06-08 — P2 quant waves ran on bespoke walker outside M4; entry-bar look-ahead inflated H-7; consolidate fills + add provenance guard"
+      # **Phase:** 2 (Flux V2)
+      date: 2026-06-08
+      status: current
+      justification: "Rule 1+6: completed (not falsified) by the consolidation entry; states the live engine-bypass lesson and V7 rationale."
+    - heading: "2026-06-07 — Strategy execution must live in tested modules; geometry guard engine-wide"
+      # **Phase:** Wave 1 (cross-track infrastructure)
+      date: 2026-06-07
+      status: current
+      justification: "Rule 6: standing engineering invariant (fills route through the M4 engine)."
+    - heading: "2026-06-07 — Mandatory validation harness on every backtest (V1–V6)"
+      # **Phase:** Wave 1 (cross-track infrastructure)
+      date: 2026-06-07
+      status: current
+      justification: "Rule 1+6: live harness convention; V7 later adds scope, does not falsify it."
+    - heading: "2026-06-01 — nbconvert silently used the anaconda base kernel, faking \"no transcript\""
+      # **Phase:** Parallel track (ICT ingestion)
+      date: 2026-06-01
+      status: current
+      justification: "Rule 6: ongoing notebook-execution guard (pin the .venv kernel)."
+    - heading: "2026-05-17 — Wave 0h: ORB+Opt3 Phase 2 repair closed; unit tail moderate vs $50K TDD; Phase 2 = new-strategy search"
+      # **Phase:** 2
+      date: 2026-05-17
+      status: current
+      justification: "Rule 6: defines the current Phase-2 framing (new-strategy search); golden query #10."
+    - heading: "2026-05-17 — Wave 0g: 2020 log OK; breach days early Jan (not COVID window); excluding 2020 still zero funded survival"
+      # **Phase:** 2
+      date: 2026-05-17
+      status: historical
+      justification: "Rule 5: completed 2020-exclusion diagnostic; conclusion carried by Wave 0h/working plan."
+    - heading: "2026-05-17 — Wave 0f: pre-lock tail breaches in 2020 at high qty; low qty funds but bootstrap blocks"
+      # **Phase:** 2
+      date: 2026-05-17
+      status: historical
+      justification: "Rule 5: completed failure-profile diagnostic; off the default surface."
+    - heading: "2026-05-17 — Wave 0e: Apex PA tiers are max contracts + tiered DLL; lock at start + TDD"
+      # **Phase:** 2
+      date: 2026-05-17
+      status: current
+      justification: "Rule 6: states the current Apex PA tier rules (ai-project-instructions §7 authoritative)."
+    - heading: "2026-05-13 — Wave 0d: Apex EOD DLL is session pause, not account death"
+      # **Phase:** 2
+      date: 2026-05-13
+      status: current
+      justification: "Rule 6: DLL-as-session-pause finding is live methodology (implemented; §7 authoritative). Only its survey numbers were later obsoleted by Wave 0e."
+    - heading: "2026-05-16 — Wave 0c correction: Apex $50K EOD was mis-parameterized in Wave 0 / 0b"
+      # **Phase:** 2
+      date: 2026-05-16
+      status: current
+      justification: "Rule 6: states the current $50K two-gate params ($2K trail / $52K lock); §7 authoritative."
+    - heading: "2026-05-14 — Phase 1 M8/M9 scope-down: infrastructure when requirements are concrete"
+      # **Phase:** 1 → 2 transition
+      date: 2026-05-14
+      status: current
+      justification: "Rule 6: live scoping principle (no speculative infra until a concrete use exists)."
+    - heading: "2026-05-14 — M7 statistics: AFML methodology scope (implemented vs deferred)"
+      # **Phase:** 1 (M7)
+      date: 2026-05-14
+      status: current
+      justification: "Rule 6: documents the live statistics package scope (implemented vs deferred)."
+    - heading: "2026-05-13 — Correction: ~$10,885/yr was qty=10 total, not per contract; M6 closes"
+      # **Phase:** 1 (M6 closure / reference hygiene)
+      date: 2026-05-13
+      status: current
+      justification: "Rule 6: authoritative corrected per-contract figure (~$1,088.50/yr); golden query #1 target."
+    - heading: "2026-05-04 — PT3 missed NT8 break-at-end-of-session; M6 divergence (maintenance hold)"
+      # **Phase:** 1 (M6 / methodology)
+      date: 2026-05-04
+      status: current
+      justification: "Rule 6: session-hygiene fix is load-bearing engine behaviour (ETH/full-session parity)."
+    - heading: "2026-04-28 — M6 second escalation: defensive bracket re-arm, dollar gap widened (honest)"
+      # **Phase:** 1 (M6)
+      date: 2026-04-28
+      status: current
+      justification: "Rule 6: bracket-re-arm narrative is a true, still-current finding; golden query #8 target. The shared stale per-contract number is a chunk-boundary defect, not a status judgment (see split_required)."
+      split_required: true
+      split_note: "The 'NT8 ≈$10,885' figure treated here as $/yr/contract is the misread; it must become its own chunk classified superseded (pointer: docs/lessons-log.md :: 2026-05-13 — Correction: ~$10,885/yr was qty=10 total, not per contract; M6 closes). The bracket-re-arm narrative AND the honest widened-gap numbers (~$2,175 → ~$1,014 per contract, which are Python figures, not the misread) stay current. Golden query #1 must not surface the ≈$10,885 per-contract misread as current; #8 must still retrieve the bracket-re-arm narrative."
+      # split_anchor: exact verbatim span(s) D3's chunker carves into the superseded chunk.
+      # Here the whole **Context:** sentence carries the misread; Finding/Implication (the
+      # bracket-re-arm narrative incl. ~$2,175 → ~$1,014) stay in the current chunk.
+      split_anchor:
+        - "**Context:** After the cross-session fix the **headline $/yr/contract** moved <2% (≈$2,175 vs NT8 ≈$10,885). User pushed: investigate **broker-bracket persistence** before closing M6, on the principle that a Phase 2 module with tighter stops would silently mis-report."
+      split_superseded_by: "docs/lessons-log.md :: 2026-05-13 — Correction: ~$10,885/yr was qty=10 total, not per contract; M6 closes"
+    - heading: "2026-04-28 — M5 ORB port: session FSM reset orphaned live position management; M6 forensics"
+      # **Phase:** 1 (M5/M6)
+      date: 2026-04-28
+      status: current
+      justification: "Rule 6: cross-session FSM bug-fix is live, regression-tested engine behaviour; not falsified by the figure correction."
+    - heading: "2026-04-28 — Docs referenced artifact paths that were never committed (looked fine locally)"
+      # **Phase:** 1 (process / repo hygiene)
+      date: 2026-04-28
+      status: historical
+      justification: "Rule 5: settled repo-hygiene observation; informs no active methodology decision."
+    - heading: "2026-04-28 — M4 = correct engine; M6 = NT8 smoke test (not parity)"
+      # **Phase:** 1 (M4/M6 scope)
+      date: 2026-04-28
+      status: current
+      justification: "Rule 6: defines the live M4-engine / M6-smoke-test scope; golden query #9 relevant."
+    - heading: "2026-04-30 — Phase 1b after Phase 1; Python-first port spec to Sierra"
+      # **Phase:** 1 / program infrastructure
+      date: 2026-04-30
+      status: current
+      justification: "Rule 6: golden query #5 target (Phase 1b sequencing after Phase 1, not parallel)."
+    - heading: "2026-04-28 — Income target is the constraint; architecture is empirical"
+      # **Phase:** Program-wide (charter / roadmap framing)
+      date: 2026-04-28
+      status: current
+      justification: "Rule 6: live program-framing principle (income is the constraint, architecture empirical)."
+    - heading: "2026-04-28 — Backtest-to-live alignment is first-class validation"
+      # **Phase:** Program-wide (research and gates)
+      date: 2026-04-28
+      status: current
+      justification: "Rule 6: live first-class validation principle."
+    - heading: "2026-04-28 — Production cut to ORB+Opt3; tri-module economics invalidated on 6-year data"
+      # **Phase:** Live operations / research framing
+      date: 2026-04-28
+      status: current
+      justification: "Rule 6: tri-module displacement narrative is a true, still-current finding; golden query #2 target. The shared stale per-contract number is a chunk-boundary defect, not a status judgment (see split_required)."
+      split_required: true
+      split_note: "The ~$10,885/yr-per-contract misread ('ORB+Opt3 alone: $10,885/yr per contract' bullet) and the derived ~$8K/yr projection FIGURE ONLY must become their own superseded chunk (pointer: docs/lessons-log.md :: 2026-05-13 — Correction: ~$10,885/yr was qty=10 total, not per contract; M6 closes). The number is stale but the claim built around it is CURRENT: 'per-account income significantly trails the $65K-$100K target — this gap is now an explicit research priority' stays current (it is the origin of the phase-2-kickoff / charter income-gap framing). Displacement / tri-module-net-negative narrative also stays current. Golden query #1 must not surface the misread as current; #2 (displacement) and the income-gap-priority claim must still retrieve as current."
+      # split_anchor: two verbatim spans — (1) the $10,885/contract bullet, and (2) the
+      # ~$8K/yr projection FIGURE ONLY (the parenthetical, carved sub-sentence so the
+      # income-gap claim's surrounding clause survives on the current chunk). Everything
+      # else (config change, Momentum displacement, net-negative tri-module, Apex pass-rate,
+      # income-gap priority) stays current.
+      split_anchor:
+        - "- ORB+Opt3 alone: $10,885/yr per contract, 63.8% WR, 7/7 positive years, MaxDD -$17,880"
+        - " (~$8K/yr at qty=3 funded sizing)"
+      split_superseded_by: "docs/lessons-log.md :: 2026-05-13 — Correction: ~$10,885/yr was qty=10 total, not per contract; M6 closes"
+    - heading: "2026-04-27 — Source NT8 export timestamps are UTC, not CME local time"
+      # **Phase:** 1
+      date: 2026-04-27
+      status: current
+      justification: "Rule 6: live loader behaviour; golden query #4 target (source is UTC)."
+    - heading: "2026-04-27 — Correction to the 2026-04-26 DST entry: rationale was wrong"
+      # **Phase:** 1
+      date: 2026-04-27
+      status: current
+      justification: "Rule 6: the correction itself; supersedes the DST-rationale entry and states current state."
+    - heading: "2026-04-27 — Amendment to the 2026-04-26 process-lesson: data-shape inspection includes timezone"
+      # **Phase:** 1 (process)
+      date: 2026-04-27
+      status: current
+      justification: "Rule 4: amendment adds scope (timezone checks) to a live process lesson; not a supersession."
+    - heading: "2026-04-26 — NT8 export shape forced data-boundary fallback for continuous contract"
+      # **Phase:** 1
+      date: 2026-04-26
+      status: current
+      justification: "Rule 4: golden query #12 target (volume-crossover abandonment); the 2026-04-27 amendment adds scope, does not falsify the finding."
+    - heading: "2026-04-26 — NT8 export contains DST-gap timestamps; loader must handle gracefully"
+      # **Phase:** 1
+      date: 2026-04-26
+      status: superseded
+      justification: "Rule 3 (split-entry): rationale corrected 2026-04-27; the kept phantom-bar action survives because 2026-04-27 restates it. Satisfies golden query #4."
+      superseded_by: "docs/lessons-log.md :: 2026-04-27 — Source NT8 export timestamps are UTC, not CME local time"
+    - heading: "2026-04-26 — Renamed Python package: flux_research → quant_research"
+      # **Phase:** 1
+      date: 2026-04-26
+      status: historical
+      justification: "Rule 5: settled M1-era setup note."
+    - heading: "2026-04-26 — Deferred WSL2 in favor of Windows-native Python for Phase 1"
+      # **Phase:** 1
+      date: 2026-04-26
+      status: historical
+      justification: "Rule 5: settled M1-era runtime decision; live convention lives in ai-project-instructions §3."
+    - heading: "2026-04-26 — Switched IDE from VS Code to Cursor"
+      # **Phase:** 1
+      date: 2026-04-26
+      status: historical
+      justification: "Rule 5: settled M1-era setup note; live convention lives in ai-project-instructions §3."
+
+  "docs/research-log.md":
+    - heading: "2026-05-14 — Wave 0 ORB+Opt3 graded baseline — PRE-REGISTERED"
+      # **Wave:** Wave 0
+      date: 2026-05-14
+      status: historical
+      justification: "Rule 5: pre-registration process record; result logged separately."
+    - heading: "2026-05-14 — Wave 0 ORB+Opt3 graded baseline — RESULT-LOGGED"
+      # **Wave:** Wave 0 (implements pre-registration block above)
+      date: 2026-05-14
+      status: superseded
+      justification: "Rule 2/§7: used pre-correction $3,000-trail params ('superseded mistake'); re-baselined by Wave 0c."
+      superseded_by: "docs/research-log.md :: 2026-05-16 — Wave 0c ORB+Opt3 two-gate re-baseline — RESULT-LOGGED"
+    - heading: "2026-05-16 — Wave 0b R(q) methodology investigation — PRE-REGISTERED"
+      # **Wave:** Wave 0b (methodology — not a strategy hypothesis)
+      date: 2026-05-16
+      status: historical
+      justification: "Rule 5: pre-registration process record; result logged separately."
+    - heading: "2026-05-16 — Wave 0b R(q) methodology investigation — RESULT-LOGGED"
+      # **Wave:** Wave 0b (implements pre-registration block above)
+      date: 2026-05-16
+      status: superseded
+      justification: "Rule 2/§7: R(q) numbers used pre-correction params (R(q) method itself lives in kickoff); re-baselined by Wave 0c."
+      superseded_by: "docs/research-log.md :: 2026-05-16 — Wave 0c ORB+Opt3 two-gate re-baseline — RESULT-LOGGED"
+    - heading: "2026-05-16 — Wave 0c ORB+Opt3 two-gate re-baseline — PRE-REGISTERED"
+      # **Wave:** Wave 0c
+      date: 2026-05-16
+      status: historical
+      justification: "Rule 5: pre-registration process record; result logged separately."
+    - heading: "2026-05-16 — Wave 0c ORB+Opt3 two-gate re-baseline — RESULT-LOGGED"
+      # **Wave:** Wave 0c (implements pre-registration above)
+      date: 2026-05-16
+      status: superseded
+      justification: "Rule 2: two-gate DLL conclusions used terminal-DLL semantics; corrected to session-pause by Wave 0d."
+      superseded_by: "docs/research-log.md :: 2026-05-13 — Wave 0d DLL fix + Apex EOD account-class survey — RESULT-LOGGED"
+    - heading: "2026-05-13 — Wave 0d DLL fix + Apex EOD account-class survey — PRE-REGISTERED"
+      # **Wave:** Wave 0d
+      date: 2026-05-13
+      status: historical
+      justification: "Rule 5: pre-registration process record; result logged separately."
+    - heading: "2026-05-13 — Wave 0d DLL fix + Apex EOD account-class survey — RESULT-LOGGED"
+      # **Status:** Numeric results **obsolete** for PA contract limits, TDD rows, and **tier-DLL** modeling — see **`docs/research-log.md` Wave 0e** (2026-0…
+      date: 2026-05-13
+      status: superseded
+      justification: "Rule 2/§7: survey numbers obsolete for PA caps / tier DLL; superseded by Wave 0e."
+      superseded_by: "docs/research-log.md :: 2026-05-17 — Wave 0e — Tiered PA rules + bootstrap diagnosis + survey — RESULT-LOGGED"
+    - heading: "2026-05-17 — Wave 0e — Tiered PA rules + bootstrap diagnosis + survey — PRE-REGISTERED"
+      # **Wave:** Wave 0e
+      date: 2026-05-17
+      status: historical
+      justification: "Rule 5: pre-registration process record; result logged separately."
+    - heading: "2026-05-17 — Wave 0e — Tiered PA rules + bootstrap diagnosis + survey — RESULT-LOGGED"
+      # **Wave:** Wave 0e (implements pre-registration above)
+      date: 2026-05-17
+      status: current
+      justification: "Rule 6: authoritative Apex PA tier tables (ai-project-instructions §7 cites this)."
+    - heading: "2026-05-17 — Wave 0f — ORB+Opt3 failure profile + low-qty sweep — PRE-REGISTERED"
+      # **Wave:** Wave 0f
+      date: 2026-05-17
+      status: historical
+      justification: "Rule 5: pre-registration process record; result logged separately."
+    - heading: "2026-05-17 — Wave 0f — ORB+Opt3 failure profile + low-qty sweep — RESULT-LOGGED"
+      # **Wave:** Wave 0f (implements pre-registration above)
+      date: 2026-05-17
+      status: historical
+      justification: "Rule 5: completed research result; conclusion (if live) carried by pinned docs; off the default surface."
+    - heading: "2026-05-17 — Wave 0g — 2020 data sanity + breach-session characterization + 2020-excluded survival re-grade — PRE-REGISTERED"
+      # **Wave:** Wave 0g
+      date: 2026-05-17
+      status: historical
+      justification: "Rule 5: pre-registration process record; result logged separately."
+    - heading: "2026-05-17 — Wave 0g — 2020 data sanity + breach-session characterization + 2020-excluded survival re-grade — RESULT-LOGGED"
+      # **Wave:** Wave 0g (implements pre-registration above)
+      date: 2026-05-17
+      status: historical
+      justification: "Rule 5: completed research result; conclusion (if live) carried by pinned docs; off the default surface."
+    - heading: "2026-05-17 — Wave 0h — ORB+Opt3 chapter close-out + Phase 2 reframe (new-strategy search) — PRE-REGISTERED"
+      # **Wave:** Wave 0h
+      date: 2026-05-17
+      status: historical
+      justification: "Rule 5: pre-registration process record; result logged separately."
+    - heading: "2026-05-17 — Wave 0h — ORB+Opt3 chapter close-out + Phase 2 reframe — RESULT-LOGGED"
+      # **Wave:** Wave 0h (implements pre-registration above)
+      date: 2026-05-17
+      status: current
+      justification: "Rule 6: Wave 0 close-out + Phase-2 reframe; live framing (golden query #10)."
+    - heading: "2026-05-26 — Wave 1 Stage 1 Track 1 — quant hypotheses (N=7) — PRE-REGISTERED"
+      # **Wave:** Wave 1
+      date: 2026-05-26
+      status: historical
+      justification: "Rule 5: pre-registration process record; result logged separately."
+    - heading: "2026-05-26 — Wave 1 Stage 1 Track 1 — RESULT-LOGGED"
+      # **Wave:** Wave 1 (implements PRE-REGISTERED block above)
+      date: 2026-05-26
+      status: historical
+      justification: "Rule 5: completed research result; conclusion (if live) carried by pinned docs; off the default surface."
+    - heading: "2026-05-29 — Wave 1 Stage 1 Track 1b — H8b MES–MNQ divergence — PRE-REGISTERED"
+      # **Wave:** Wave 1 (Track **1b** extension — cross-instrument batch)
+      date: 2026-05-29
+      status: historical
+      justification: "Rule 5: pre-registration process record; result logged separately."
+    - heading: "2026-05-29 — Wave 1 Stage 1 Track 1b — H8b — RESULT-LOGGED"
+      # **Wave:** Wave 1 Track **1b** (implements PRE-REGISTERED block above)
+      date: 2026-05-29
+      status: historical
+      justification: "Rule 5: completed research result; conclusion (if live) carried by pinned docs; off the default surface."
+    - heading: "2026-06-01 — ICT daily-bias corpus ingested (JadeCap primary, TTrades supplement) — PROVENANCE / RESULT-LOGGED"
+      # **Wave:** Parallel track — ICT source-material ingestion (NOT a Phase 2 quant hypothesis; no edge claim, no backtest).
+      date: 2026-06-01
+      status: historical
+      justification: "Rule 5: completed research result; conclusion (if live) carried by pinned docs; off the default surface."
+    - heading: "2026-06-02 — Bias corpus re-scanned with TTrades mechanical lexicon; TTrades set as mechanical spec primary — PROVENANCE / DECISION"
+      # **Wave:** Parallel track — ICT source-material ingestion (NOT a Phase 2 quant hypothesis; no edge claim, no backtest).
+      date: 2026-06-02
+      status: current
+      justification: "Rule 6: standing decision fixing the current ICT mechanical spec."
+    - heading: "2026-06-02 — TTrades CISD + SMT confirmation primitives ingested (distinct `cisd_smt` mini-corpus) — PROVENANCE / RESULT-LOGGED"
+      # **Wave:** Parallel track — ICT source-material ingestion (NOT a Phase 2 quant hypothesis; no edge claim, no backtest).
+      date: 2026-06-02
+      status: historical
+      justification: "Rule 5: completed research result; conclusion (if live) carried by pinned docs; off the default surface."
+    - heading: "2026-06-04 — Wave 1 Track 2 — Phase 1 ICT primitives + MYM data prep — PRE-REGISTERED"
+      # **Wave:** Wave 1, Track 2 (ICT-derived hypotheses)
+      date: 2026-06-04
+      status: historical
+      justification: "Rule 5: pre-registration process record; result logged separately."
+    - heading: "2026-06-04 — Wave 1 Track 2 — Phase 1 ICT primitives + MYM data prep — RESULT-LOGGED"
+      # **Wave:** Wave 1, Track 2 (implements PRE-REGISTERED block above)
+      date: 2026-06-04
+      status: historical
+      justification: "Rule 5: completed research result; conclusion (if live) carried by pinned docs; off the default surface."
+    - heading: "2026-06-05 — Wave 1 Track 2 — Phase 2 daily bias module (assembly) — PRE-REGISTERED"
+      # **Wave:** Wave 1, Track 2 (ICT-derived hypotheses) — Phase 2 (bias module assembly).
+      date: 2026-06-05
+      status: historical
+      justification: "Rule 5: pre-registration process record; result logged separately."
+    - heading: "2026-06-05 — Wave 1 Track 2 — Phase 2 daily bias module (assembly) — RESULT-LOGGED"
+      # **Wave:** Wave 1, Track 2 (implements the PRE-REGISTERED block above).
+      date: 2026-06-05
+      status: historical
+      justification: "Rule 5: completed research result; conclusion (if live) carried by pinned docs; off the default surface."
+    - heading: "2026-06-06 — Wave 1 Track 2 — Phase 3a bias/entry architecture diagnostic — RESULT-LOGGED"
+      # **Wave:** Wave 1, Track 2 — Phase 3a (source-material diagnostic only; **no strategy code**).
+      date: 2026-06-06
+      status: historical
+      justification: "Rule 5: completed research result; conclusion (if live) carried by pinned docs; off the default surface."
+    - heading: "2026-06-06 — Wave 1 Track 2 — Phase 3 steps 0–1 (definitions + MSS) — PRE-REGISTERED"
+      # **Wave:** Wave 1, Track 2 — Phase 3 steps 0–1
+      date: 2026-06-06
+      status: historical
+      justification: "Rule 5: pre-registration process record; result logged separately."
+    - heading: "2026-06-06 — Wave 1 Track 2 — Phase 3 steps 0–1 (definitions + MSS) — RESULT-LOGGED"
+      # **Wave:** Wave 1, Track 2 — Phase 3 steps 0–1 (implements pre-registration above)
+      date: 2026-06-06
+      status: historical
+      justification: "Rule 5: completed research result; conclusion (if live) carried by pinned docs; off the default surface."
+    - heading: "2026-06-06 — Wave 1 Track 2 — Phase 3 step 2 (standalone OTE assembly) — PRE-REGISTERED"
+      # **Wave:** Wave 1, Track 2 — Phase 3 step 2
+      date: 2026-06-06
+      status: historical
+      justification: "Rule 5: pre-registration process record; result logged separately."
+    - heading: "2026-06-06 — Wave 1 Track 2 — Phase 3 step 2 (standalone OTE assembly) — RESULT-LOGGED"
+      # **Wave:** Wave 1, Track 2 — Phase 3 step 2 (implements pre-registration above)
+      date: 2026-06-06
+      status: historical
+      justification: "Rule 5: completed research result; conclusion (if live) carried by pinned docs; off the default surface."
+    - heading: "2026-06-06 — Wave 1 Track 2 — Phase 3 step 3 (standalone OTE backtest) — PRE-REGISTERED"
+      # **Wave:** Wave 1, Track 2 — Phase 3 step 3
+      date: 2026-06-06
+      status: historical
+      justification: "Rule 5: pre-registration process record; result logged separately."
+    - heading: "2026-06-06 — Wave 1 Track 2 — Phase 3 step 3 (standalone OTE backtest) — RESULT-LOGGED"
+      # **Wave:** Wave 1, Track 2 — Phase 3 step 3 (implements pre-registration above)
+      date: 2026-06-06
+      status: superseded
+      justification: "Rule 2: +$2,093/MNQ headline was a wrong-side-geometry artifact on the bespoke walker; superseded by the harness-clean OTE rerun."
+      superseded_by: "docs/research-log.md :: 2026-06-07 — Wave 1 guard fix + parity + harness-clean OTE — RESULT-LOGGED"
+    - heading: "2026-06-06 — Wave 1 Track 2 — Phase 3 step 3b (entry-coherence diagnostic) — PRE-REGISTERED"
+      # **Wave:** Wave 1, Track 2 — Phase 3 step 3b
+      date: 2026-06-06
+      status: historical
+      justification: "Rule 5: pre-registration process record; result logged separately."
+    - heading: "2026-06-06 — Wave 1 Track 2 — Phase 3 step 3b (entry-coherence diagnostic) — RESULT-LOGGED"
+      # **Wave:** Wave 1, Track 2 — Phase 3 step 3b (implements pre-registration above)
+      date: 2026-06-06
+      status: historical
+      justification: "Rule 5: completed research result; conclusion (if live) carried by pinned docs; off the default surface."
+      latent_split_note: "LATENT (stays historical): OTE cost-inclusive economics (−$1,186/yr OTE-only, +$5,673 entry_ote_62, +$28,549 FVG-only) ran on the pre-remediation bespoke walker (wrong-side-stop geometry bug) and are stale-as-fact; superseded by 2026-06-07 harness-clean OTE rerun (OTE 70.5% +$1,122, 62% +$975, FVG +$2,750). The $220k counterfactual is already labeled 'Artifact/Discard' (protected). The definitional finding (OTE vs FVG are opposite-PD-side entry styles; entry incoherence is not a code bug) stays valid. If promoted to current or pulled by explicit recall, split the contaminated dollar economics into a superseded chunk."
+    - heading: "2026-06-06 — Wave 1 Track 2 — Phase 3 step 3c (coherent entry rebuilds) — PRE-REGISTERED"
+      # **Wave:** Wave 1, Track 2 — Phase 3 step 3c
+      date: 2026-06-06
+      status: historical
+      justification: "Rule 5: pre-registration process record; result logged separately."
+    - heading: "2026-06-06 — Wave 1 Track 2 — Phase 3 step 3c (coherent entry rebuilds) — RESULT-LOGGED"
+      # **Wave:** Wave 1, Track 2 — Phase 3 step 3c (implements pre-registration above)
+      date: 2026-06-06
+      status: historical
+      justification: "Rule 5: completed research result; conclusion (if live) carried by pinned docs; off the default surface."
+      latent_split_note: "LATENT (stays historical): the cost-inclusive headline table (−$2,410/+$5,099 OTE bands, +$26,185 FVG-only) ran on the pre-remediation engine and is stale-as-fact; superseded by 2026-06-07 harness-clean rerun (OTE 62% $975; FVG-only $2,750 — the +$26k was a wrong-side-stop artifact). The qualitative verdict (no coherent cost-surviving OTE edge; FVG magnitude implausible/'not authorized') stays valid. If promoted to current or pulled by explicit recall, split the contaminated dollar table into a superseded chunk."
+    - heading: "2026-06-07 — Wave 1 engine topology + integrity audit — RESULT-LOGGED"
+      # **Wave:** Wave 1 (cross-track infrastructure)
+      date: 2026-06-07
+      status: historical
+      justification: "Rule 5: completed research result; conclusion (if live) carried by pinned docs; off the default surface."
+    - heading: "2026-06-07 — Wave 1 engine remediation (P0 geometry + P1 OTE→M4) — PRE-REGISTERED"
+      # **Wave:** Wave 1 (cross-track infrastructure)
+      date: 2026-06-07
+      status: historical
+      justification: "Rule 5: pre-registration process record; result logged separately."
+    - heading: "2026-06-07 — Wave 1 engine remediation (P0 geometry + P1 OTE→M4) — RESULT-LOGGED"
+      # **Wave:** Wave 1 (cross-track infrastructure)
+      date: 2026-06-07
+      status: superseded
+      justification: "Rule 2: the 'Clean M4' comparison numbers (OTE 62% $4,629/yr, OTE 70.5% $11,155/yr, FVG-only $2,798/yr) were nameably superseded — the 2026-06-07 harness-clean OTE rerun EXPLICITLY names them artifacts (OTE 70.5% +$1,122, 62% +$975, FVG +$2,750; the $11,155 was a harness-join/wrong-side artifact). Nameable one-to-one overturn, so this is a clean supersession, not a latent note."
+      superseded_by: "docs/research-log.md :: 2026-06-07 — Wave 1 guard fix + parity + harness-clean OTE — RESULT-LOGGED"
+    - heading: "2026-06-07 — Wave 1 geometry-guard causality + validation harness — PRE-REGISTERED"
+      # **Wave:** Wave 1 (cross-track infrastructure)
+      date: 2026-06-07
+      status: historical
+      justification: "Rule 5: pre-registration process record; result logged separately."
+    - heading: "2026-06-07 — Wave 1 geometry-guard causality + validation harness — RESULT-LOGGED"
+      # **Wave:** Wave 1 (cross-track infrastructure)
+      date: 2026-06-07
+      status: historical
+      justification: "Rule 5: completed research result; conclusion (if live) carried by pinned docs; off the default surface."
+    - heading: "2026-06-07 — Wave 1 guard fix + parity + harness-clean OTE — PRE-REGISTERED"
+      # **Wave:** Wave 1 (cross-track infrastructure)
+      date: 2026-06-07
+      status: historical
+      justification: "Rule 5: pre-registration process record; result logged separately."
+    - heading: "2026-06-07 — Wave 1 guard fix + parity + harness-clean OTE — RESULT-LOGGED"
+      # **Wave:** Wave 1 (cross-track infrastructure)
+      date: 2026-06-07
+      status: current
+      justification: "Rule 6: trustworthy harness-clean OTE rerun on the remediated M4 engine."
+    - heading: "2026-06-07 — Wave 1 Track 2 — Phase 3 step 3d (realistic exit-structure test) — PRE-REGISTERED"
+      # **Wave:** Wave 1, Track 2 — Phase 3 step 3d
+      date: 2026-06-07
+      status: historical
+      justification: "Rule 5: pre-registration process record; result logged separately."
+    - heading: "2026-06-07 — Wave 1 Track 2 — Phase 3 step 3d (realistic exit-structure test) — RESULT-LOGGED"
+      # **Wave:** Wave 1, Track 2 — Phase 3 step 3d (implements pre-registration above)
+      date: 2026-06-07
+      status: historical
+      justification: "Rule 5: completed research result; conclusion (if live) carried by pinned docs; off the default surface."
+      latent_split_note: "LATENT (stays historical): the exit-structure economics table (C-base +$1,122 … C-3 −$4,033/yr) ran on the pre-remediation sha 0db224fc and is stale-as-fact; the exit-combo axis was never re-run on the fixed M4 engine, and is subsumed by the 2026-06-07 harness-clean OTE rerun. The verdict (OTE has no account-viable edge independent of exit structure; OTE closes) stays valid. If promoted to current or pulled by explicit recall, split the contaminated dollar table into a superseded chunk."
+    - heading: "2026-06-08 — ORB+Opt3 account-class survey ($50K / $100K / $150K floor-income) — PRE-REGISTERED"
+      # **Wave:** Account-class survey (post–Wave 0h; not a new edge hypothesis)
+      date: 2026-06-08
+      status: historical
+      justification: "Rule 5: pre-registration process record; result logged separately."
+    - heading: "2026-06-08 — ORB+Opt3 account-class survey ($50K / $100K / $150K floor-income) — RESULT-LOGGED"
+      # **Wave:** Account-class survey (implements pre-registration above)
+      date: 2026-06-08
+      status: historical
+      justification: "Rule 5: completed research result; conclusion (if live) carried by pinned docs; off the default surface."
+    - heading: "2026-06-08 — P2-W2 — tight-loss-tail / arbitrage-resistant hypotheses (N=6) — RESULT-LOGGED"
+      # **Wave:** P2-W2
+      date: 2026-06-08
+      status: superseded
+      justification: "Rule 2: produced on the bespoke walker (engine bypass); re-run on M4 (verdicts unchanged-negative, numbers superseded)."
+      superseded_by: "docs/research-log.md :: 2026-06-08 — P2-W2/W3 M4 engine migration + Gate #1 re-run (IS) — RESULT-LOGGED"
+    - heading: "2026-06-08 — P2-W2 Gate #1 mortality screen (IS partition) — RESULT-LOGGED"
+      # **Wave:** P2-W2 (implements pre-registration block above)
+      date: 2026-06-08
+      status: superseded
+      justification: "Rule 2: bespoke-walker screen; superseded by the M4 Gate #1 re-run."
+      superseded_by: "docs/research-log.md :: 2026-06-08 — P2-W2/W3 M4 engine migration + Gate #1 re-run (IS) — RESULT-LOGGED"
+    - heading: "2026-06-08 — P2-W3 — OR-extreme reclaim continuation (N=1) — RESULT-LOGGED"
+      # **Wave:** P2-W3
+      date: 2026-06-08
+      status: superseded
+      justification: "Rule 2: H-7 result carried entry-bar look-ahead on the bespoke walker; superseded by the M4 re-run."
+      superseded_by: "docs/research-log.md :: 2026-06-08 — P2-W2/W3 M4 engine migration + Gate #1 re-run (IS) — RESULT-LOGGED"
+    - heading: "2026-06-08 — M4 validation harness V7 engine provenance guard — RESULT-LOGGED"
+      # **Wave:** Cross-track infrastructure (Wave 1 harness extension; closes P2-W2/W3 bypass class)
+      date: 2026-06-08
+      status: current
+      justification: "Rule 6: live validation harness (V7); golden query #9 (trusted engine)."
+    - heading: "2026-06-08 — P2-W3 / H-7 Gate #1 mortality screen (IS partition) — RESULT-LOGGED"
+      # **Wave:** P2-W3 (implements pre-registration block above)
+      date: 2026-06-08
+      status: superseded
+      justification: "Rule 2: bespoke-walker screen; superseded by the M4 Gate #1 re-run."
+      superseded_by: "docs/research-log.md :: 2026-06-08 — P2-W2/W3 M4 engine migration + Gate #1 re-run (IS) — RESULT-LOGGED"
+    - heading: "2026-06-08 — P2-W2/W3 M4 engine migration + Gate #1 re-run (IS) — RESULT-LOGGED"
+      # **Wave:** P2-W2 (H-1..H-6) + P2-W3 (H-7)
+      date: 2026-06-08
+      status: current
+      justification: "Rule 6: authoritative current infra state + exhausted-ground conclusion on the vetted engine."
+    - heading: "2026-06-08 — MNQ + MES dual-instrument search — methodology convention"
+      # **Wave:** Cross-wave methodology (not a hypothesis wave)
+      date: 2026-06-08
+      status: current
+      justification: "Rule 6: live MNQ+MES methodology convention."
