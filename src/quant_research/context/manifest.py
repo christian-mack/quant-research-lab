@@ -64,7 +64,6 @@ TIER2_WHOLE_FILE_DOCS: tuple[str, ...] = (
     "docs/m6-nt8-reproduction.md",
     "docs/nt8-backtest-methodology.md",
     "docs/phase-1-detailed-plan.md",
-    "flux-v2-module-search-starter.md",
 )
 
 # Tier-2 documents chunked one-status-per-dated-entry (spec section 4.2). The
@@ -520,14 +519,7 @@ _ENTRY_SUGGESTIONS: tuple[_Suggestion, ...] = (
     ),
 )
 
-_DOC_SUGGESTIONS: dict[str, tuple[str, str, str]] = {
-    # file_path: (status, superseded_by, note)
-    "flux-v2-module-search-starter.md": (
-        "deprecated",
-        "docs/phase-2-kickoff.md; docs/program-charter.md",
-        "file carries its own DEPRECATED FRAMING (2026-05) header",
-    ),
-}
+_DOC_SUGGESTIONS: dict[str, tuple[str, str, str]] = {}
 
 
 def _dq(value: str) -> str:

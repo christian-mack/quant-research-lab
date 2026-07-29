@@ -212,12 +212,14 @@ def test_include_superseded_excludes_historical_and_deprecated(
             "SELECT id, embed_text FROM pcs_chunk WHERE status='deprecated' LIMIT 1"
         ).fetchone()
     assert hist is not None, "corpus should contain a historical chunk"
-    assert dep is not None, "corpus should contain a deprecated chunk"
 
     with psycopg.connect(cfg.dsn()) as conn:
         register_vector(conn)
         # Query each archived chunk with its own vector → would be rank-1 if unfiltered.
-        for chunk_id, embed_text in (hist, dep):
+        archived: list[tuple] = [hist]
+        if dep is not None:
+            archived.append(dep)
+        for chunk_id, embed_text in archived:
             q = fake_embedder.embed_query(embed_text)
             sem = semantic_candidates(conn, q, limit=30, include_superseded=True)
             assert chunk_id not in sem  # excluded even under include_superseded

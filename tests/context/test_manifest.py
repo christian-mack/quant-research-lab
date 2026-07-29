@@ -343,9 +343,7 @@ def test_scaffold_round_trips_and_only_unclassified_blocks() -> None:
     assert errors, "a fresh scaffold must not validate clean"
     assert all("still UNCLASSIFIED" in e for e in errors)
 
-    # The three suggested supersessions + one deprecated doc validate cleanly.
-    starter = data["documents"]["flux-v2-module-search-starter.md"]
-    assert starter["status"] == "deprecated" and starter["superseded_by"]
+    # The three suggested supersessions validate cleanly.
     lessons = {i["heading"]: i for i in data["entries"]["docs/lessons-log.md"]}
     suggested = [h for h, i in lessons.items() if i["status"] == "superseded"]
     assert len(suggested) == 3

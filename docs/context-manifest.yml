@@ -53,11 +53,6 @@ documents:
     # Phase 1 Detailed Plan: Python Research Infrastructure
     status: historical
     justification: "Rule 5: completed-phase (Phase 1) plan; exit text already self-corrected to m6/nt8 docs; informs no active Phase-2 decision."
-  "flux-v2-module-search-starter.md":
-    # **DEPRECATED FRAMING (2026-05).** This document predates Phase 2 production simplification. **Current framing:** `docs/phase-2-kickoff.md` and `docs/…
-    status: deprecated
-    justification: "Rule 2: self-announced DEPRECATED FRAMING (2026-05) header; current framing is the kickoff + charter."
-    superseded_by: "docs/phase-2-kickoff.md; docs/program-charter.md"
 
 entries:
   "docs/lessons-log.md":
