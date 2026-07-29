@@ -70,6 +70,26 @@ def _status_clause(include_superseded: bool) -> str:
     return " AND status = 'current'"
 
 
+def _normalize_lexical_query(query: str) -> str:
+    """Prepare a query for ``websearch_to_tsquery`` (D-05 identifier hygiene).
+
+    Compound program identifiers use punctuation that tsquery treats as operators
+    (``ORB+Opt3``, ``R(q)``). Hyphenated terms (``per-contract``) and low-signal
+    question words can over-constrain ``websearch_to_tsquery`` to zero hits.
+    """
+    q = query.replace("+", " ")
+    q = q.replace("(", " ").replace(")", " ")
+    q = q.replace("-", " ")
+    stop = {
+        "what", "is", "the", "a", "an", "are", "was", "were", "when", "why", "how",
+        "does", "do", "did", "which", "who", "where", "has", "have", "had", "and", "or",
+        # query scaffolding absent from the corpus — keeps tsquery from zeroing out
+        "graded", "figure", "figures", "current", "happened", "trusted", "abandoned",
+    }
+    tokens = [t for t in q.split() if t.lower().strip("?.,'\"") not in stop]
+    return " ".join(tokens) if tokens else query
+
+
 def semantic_candidates(
     conn: psycopg.Connection,
     query_embedding: list[float],
@@ -163,7 +183,9 @@ def search(
         semantic = semantic_candidates(
             conn, query_embedding, include_superseded=include_superseded
         )
-        lexical = lexical_candidates(conn, query, include_superseded=include_superseded)
+        lexical = lexical_candidates(
+            conn, _normalize_lexical_query(query), include_superseded=include_superseded
+        )
         fused = rrf_fuse(semantic, lexical)
         if not fused:
             return []

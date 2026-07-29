@@ -69,6 +69,13 @@ def test_rrf_fuse_empty_is_empty() -> None:
     assert rrf_fuse([], []) == {}
 
 
+def test_normalize_lexical_query_unwraps_compound_identifiers() -> None:
+    from quant_research.context.retriever import _normalize_lexical_query
+
+    assert "ORB Opt3" in _normalize_lexical_query("ORB+Opt3 per-contract")
+    assert "R q" in _normalize_lexical_query("max sustainable qty R(q)")
+
+
 # --------------------------------------------------------------------------- #
 # Filter-before-fusion (locked constraint 1)
 # --------------------------------------------------------------------------- #
