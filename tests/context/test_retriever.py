@@ -74,6 +74,53 @@ def test_normalize_lexical_query_unwraps_compound_identifiers() -> None:
 
     assert "ORB Opt3" in _normalize_lexical_query("ORB+Opt3 per-contract")
     assert "R q" in _normalize_lexical_query("max sustainable qty R(q)")
+    assert "MES" in _normalize_lexical_query("MES+MNQ cross-instrument")
+
+
+# --------------------------------------------------------------------------- #
+# Identifier-heavy lexical regression (D7 / D8 — not golden-query paraphrases)
+# --------------------------------------------------------------------------- #
+def test_search_orb_plus_opt3_non_golden_wording(indexed_config, fake_embedder) -> None:
+    """Full search path: ORB+Opt3 compound identifier, non-golden phrasing."""
+    results = search(
+        "ORB+Opt3 per-contract figure",
+        top_k=3,
+        config=indexed_config,
+        embedder=fake_embedder,
+    )
+    assert results
+    assert any("2026-05-13" in r.breadcrumb for r in results)
+
+
+def test_search_dll_and_sizing_identifiers(indexed_config, fake_embedder) -> None:
+    """DLL and sizing vocabulary retrieve distinct current hits."""
+    dll = search(
+        "Apex EOD DLL session pause",
+        top_k=3,
+        config=indexed_config,
+        embedder=fake_embedder,
+    )
+    sizing = search(
+        "max sustainable qty ORB+Opt3",
+        top_k=3,
+        config=indexed_config,
+        embedder=fake_embedder,
+    )
+    assert dll and sizing
+    assert {r.chunk_id for r in dll} != {r.chunk_id for r in sizing}
+
+
+def test_search_git_sha_artifact_lookup(indexed_config, fake_embedder) -> None:
+    """Short git SHAs cited in artifacts must be retrievable."""
+    results = search(
+        "git 1fe521b M4 migration",
+        top_k=5,
+        config=indexed_config,
+        embedder=fake_embedder,
+    )
+    assert results
+    blob = " ".join(r.chunk_text for r in results)
+    assert "1fe521b" in blob
 
 
 # --------------------------------------------------------------------------- #

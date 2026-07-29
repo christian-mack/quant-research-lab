@@ -535,3 +535,42 @@ entries:
       date: 2026-06-08
       status: current
       justification: "Rule 6: live MNQ+MES methodology convention."
+
+  "docs/chat-extracts/2026-07-29_pcs-d6-d7/extract.md":
+    - heading: "2026-07-29 — q02-decision-records-not-facts"
+      date: 2026-07-29
+      status: current
+      justification: "Rule 6: D8 extraction schema — decision records, not fact summaries."
+    - heading: "2026-07-18 — pcs-d6-hook-primary-load-bearing"
+      date: 2026-07-18
+      status: superseded
+      justification: "Rule 2: original D6 hook-primary framing; reversed 2026-07-29."
+      superseded_by: "docs/chat-extracts/2026-07-29_pcs-d6-d7/extract.md :: 2026-07-29 — pcs-d6-rule-primary-not-hook"
+    - heading: "2026-07-29 — pcs-d6-rule-primary-not-hook"
+      date: 2026-07-29
+      status: current
+      justification: "Rule 6: D6 closeout — rule+tool is primary PCS load path; hook best-effort."
+    - heading: "2026-07-29 — pcs-hook-venv-direct-windows"
+      date: 2026-07-29
+      status: current
+      justification: "Rule 6: Windows hook stdout capture fix — direct venv python path."
+    - heading: "2026-07-29 — pcs-hook-test-not-capture-acceptance"
+      date: 2026-07-29
+      status: current
+      justification: "Rule 6: hook-test is not sessionStart delivery acceptance."
+    - heading: "2026-07-29 — pcs-d7-lexical-normalize-identifiers"
+      date: 2026-07-29
+      status: current
+      justification: "Rule 6: D7 retriever fix — uniform lexical normalization for compound identifiers."
+    - heading: "2026-07-29 — pcs-tier1-via-pinned-not-search"
+      date: 2026-07-29
+      status: current
+      justification: "Rule 6: golden Tier-1 queries use get_pinned_context(), not search()."
+    - heading: "2026-07-18 — pcs-d1-d7-single-commit-batch"
+      date: 2026-07-18
+      status: historical
+      justification: "Rule 5: process deviation record — D1–D7 batched into one commit; not current guidance."
+    - heading: "2026-07-29 — pcs-workspaceopen-considered-not-adopted"
+      date: 2026-07-29
+      status: historical
+      justification: "Rule 5: diagnosis fact — workspaceOpen considered, not adopted; not a committed decision."

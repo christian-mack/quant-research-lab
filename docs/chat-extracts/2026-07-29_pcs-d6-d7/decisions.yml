@@ -1,0 +1,105 @@
+# PCS build sessions — decision records (D8 / Q-02)
+# Extraction date: 2026-07-29
+# Indexed extract: docs/chat-extracts/2026-07-29_pcs-d6-d7/extract.md
+# Raw archival: data/context/chats/archival-index.md (historical — not indexed as current)
+
+decisions:
+  - id: q02-decision-records-not-facts
+    date: 2026-07-29
+    decision: "D8 chat extraction target is structured decision records, not important-fact prose summaries."
+    alternatives: "Hand-curated markdown summaries; raw transcript indexing as current; Anthropic bulk export to data/context/chats/"
+    rationale: "Facts get overturned; a misread can live in chat for weeks. Decision records with rationale stay accurate when reversed and match manifest discipline."
+    type: committed
+    status: current
+    superseded_by: null
+    source_chat: "cursor:2026-07-29-d8-stage2-instructions"
+    low_confidence: false
+
+  - id: pcs-d6-hook-primary-load-bearing
+    date: 2026-07-18
+    decision: "PCS sessionStart hook deterministically injects the compact pinned index; alwaysApply rule is supplement and cloud fallback."
+    alternatives: "Rule-only bootstrap; MCP-only with no session injection; pre_chat.py (invalid Cursor mechanism)"
+    rationale: "Original D6 integration design (context-system-implementation-spec §6.1, verified 2026-07-18): hook for deterministic IDE injection, rule for on-demand retrieval and cloud."
+    type: committed
+    status: superseded
+    superseded_by: "docs/chat-extracts/2026-07-29_pcs-d6-d7/extract.md :: 2026-07-29 — pcs-d6-rule-primary-not-hook"
+    source_chat: "context-system-implementation-spec.md §6.1 (2026-07-18 verification)"
+    low_confidence: false
+
+  - id: pcs-d6-rule-primary-not-hook
+    date: 2026-07-29
+    decision: "PCS primary pinned-load path is alwaysApply rule + get_pinned_context(); sessionStart hook is best-effort only."
+    alternatives: "sessionStart hook as deterministic primary; MCP-only with no rule; pre_chat.py (invalid Cursor mechanism)"
+    rationale: "Hook stdout not captured on Windows (Cursor 3.13.25, bare python + re-exec); rule+tool works in every fresh session tested and ports to Claude Code/app."
+    type: committed
+    status: current
+    supersedes: "pcs-d6-hook-primary-load-bearing"
+    superseded_by: null
+    source_chat: "cursor:2026-07-29-d6-hook-diagnosis"
+    low_confidence: false
+
+  - id: pcs-hook-venv-direct-windows
+    date: 2026-07-29
+    decision: "hooks.json invokes .\\.venv\\Scripts\\python.exe directly (repo-root-relative); not bare python or uv run."
+    alternatives: "uv run python (worked 2026-07-19 but uv absent from hook PATH); bare python with in-script re-exec (stdout lost); absolute machine path"
+    rationale: "Cursor hook subprocess captures empty stdout when script re-execs; uv unreliable in hook PATH; direct venv avoids re-exec."
+    type: committed
+    status: current
+    superseded_by: null
+    source_chat: "cursor:2026-07-29-d6-hook-diagnosis"
+    low_confidence: false
+
+  - id: pcs-hook-test-not-capture-acceptance
+    date: 2026-07-29
+    decision: "pcs hook-test is not acceptance for sessionStart delivery; operator verifies Hooks Execution Log merge line."
+    alternatives: "Treat hook-test PASS as D6 exit; automated CI hook capture test"
+    rationale: "hook-test runs in a normal shell and is blind to Cursor stdout capture failures (Case D)."
+    type: committed
+    status: current
+    superseded_by: null
+    source_chat: "cursor:2026-07-29-d6-hook-diagnosis"
+    low_confidence: false
+
+  - id: pcs-d7-lexical-normalize-identifiers
+    date: 2026-07-29
+    decision: "Retriever applies uniform _normalize_lexical_query() for compound identifiers before tsquery — not a Q1 special case."
+    alternatives: "Golden-query-only boosts; increase top_k; re-embed corpus"
+    rationale: "websearch_to_tsquery treats + and hyphens as operators; corpus-absent question words zero out lexical arm."
+    type: committed
+    status: current
+    superseded_by: null
+    source_chat: "cursor:2026-07-29-d7-golden-scoring"
+    low_confidence: false
+
+  - id: pcs-tier1-via-pinned-not-search
+    date: 2026-07-29
+    decision: "Golden queries for Tier-1 docs use get_pinned_context(), not search()."
+    alternatives: "Duplicate Tier-1 into Tier-2 index; search-only acceptance"
+    rationale: "Spec §4.1 / D-06: Tier-1 pinned docs are never chunk-retrieved."
+    type: committed
+    status: current
+    superseded_by: null
+    source_chat: "cursor:2026-07-29-d7-golden-scoring"
+    low_confidence: false
+
+  - id: pcs-d1-d7-single-commit-batch
+    date: 2026-07-18
+    decision: "D1–D7 landed as a single commit (d23ead6); milestone-split was intended per ai-project-instructions §1 but not executed."
+    alternatives: "Split into D1…D7 commits before push; interactive rebase"
+    rationale: "Process deviation — commits batched during the build, then pushed for durability; not a deliberate architectural choice."
+    type: committed
+    status: historical
+    superseded_by: null
+    source_chat: "cursor:2026-07-29-stage1-commit-instructions"
+    low_confidence: false
+
+  - id: pcs-workspaceopen-considered-not-adopted
+    date: 2026-07-29
+    decision: "workspaceOpen hook considered for pinned index injection; not adopted."
+    alternatives: "sessionStart (current best-effort); rule-only bootstrap"
+    rationale: "workspaceOpen surfaced during diagnosis as a separate Cursor lifecycle event — a fact about the event model, not a path we chose."
+    type: tentative
+    status: historical
+    superseded_by: null
+    source_chat: "cursor:2026-07-29-d6-hook-diagnosis"
+    low_confidence: false

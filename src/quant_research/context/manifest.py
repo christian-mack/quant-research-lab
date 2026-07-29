@@ -72,6 +72,7 @@ TIER2_WHOLE_FILE_DOCS: tuple[str, ...] = (
 TIER2_ENTRY_LOGS: tuple[str, ...] = (
     "docs/lessons-log.md",
     "docs/research-log.md",
+    "docs/chat-extracts/2026-07-29_pcs-d6-d7/extract.md",
 )
 
 # A dated entry heading: "## 2026-05-13 — Correction: ...". Sub-headings ("### ")
