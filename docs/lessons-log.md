@@ -24,6 +24,14 @@
 
 ## Entries
 
+## 2026-07-29 — Cursor sessionStart hook stdout not captured on Windows; rule+tool is primary PCS load path
+
+**Phase:** PCS (D6)
+**Context:** D6 Cursor integration — `sessionStart` hook configured to inject compact pinned index via `additional_context`. Operator reported Hooks Execution Log empty after full restart; `pcs hook-test` passed throughout.
+**Finding:** On Cursor **3.13.25** / Windows, config loads and the hook **fires** (exit 0, ~1–3s runtime) but Cursor captures **empty stdout** when `hooks.json` uses bare `python` and the script **re-execs** to venv python (`os.execve`). Cursor logs: `Hook 1 produced no output` / `none returned a valid response`. **`uv run python .cursor/hooks/session_start.py` worked** on **2026-07-19** (Cursor 3.12.17, log: `Merged 1 valid response(s)`); **`python .cursor/hooks/session_start.py` regressed** on **2026-07-29**. `pcs hook-test` passes regardless — it runs in a normal shell and cannot see the capture-layer failure. Fix: invoke `.venv/Scripts/python.exe` directly (repo-root-relative; Windows venv layout assumption).
+**Implication:** **`alwaysApply` rule + `get_pinned_context()` is the primary, portable pinned-load mechanism**; the hook is best-effort belt-and-suspenders. **Generalizing lesson:** a Cursor-specific injection hook does not port to Claude Code or the Claude app; being forced off the hook landed on the more portable rule+tool pattern. Spec §6.1 and D6 row updated accordingly.
+**Artifact:** Cursor hook logs `%APPDATA%\\Cursor\\logs\\20260729T122338\\...\\cursor.hooks.workspaceId-638ed46042d6a57db11a7ae76a50d92c.log` (2026-07-29 empty-output session); prior success log `20260719T124619\\...` (`uv run python`); hook fix commit on `main`.
+
 ## 2026-06-08 — P2 quant strategies consolidated onto M4 engine; V7 holds; full W2/W3 wave is a clean negative — two apparent "survivors" are frequency artifacts, not edge
 
 **Phase:** 2 (Flux V2)

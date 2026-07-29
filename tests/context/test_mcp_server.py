@@ -104,6 +104,7 @@ def test_hooks_json_wires_session_start_to_the_hook_script() -> None:
     session_start = hooks["hooks"]["sessionStart"]
     command = session_start[0]["command"]
     assert "session_start.py" in command
+    assert ".venv" in command.replace("\\", "/") and "python.exe" in command.lower()
     assert "uv run" not in command  # hook subprocess PATH often lacks uv
     assert (repo_root() / ".cursor/hooks/session_start.py").is_file()
 

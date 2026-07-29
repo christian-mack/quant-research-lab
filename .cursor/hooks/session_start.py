@@ -6,6 +6,12 @@ passing an event JSON on stdin. We ignore the input and emit
 purpose, and git SHA per Tier-1 doc (NOT the full text; the agent pulls whole
 docs on demand via the PCS ``get_pinned_context`` tool).
 
+``hooks.json`` invokes ``.venv/Scripts/python.exe`` directly (repo-root-relative,
+Windows venv layout). Do not use bare ``python`` (stdout lost on Windows when
+this script re-execs) or ``uv run`` (``uv`` is often absent from Cursor's hook
+subprocess PATH). Revisit this command if the venv layout changes (fresh clone
+on Linux, server deployment).
+
 sessionStart is fire-and-forget and does not run in cloud agents, so this hook
 **fails open** on stdout: on any error it emits no context rather than blocking
 startup. Failures are still logged to stderr for the Hooks output channel.

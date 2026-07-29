@@ -61,6 +61,10 @@ documents:
 
 entries:
   "docs/lessons-log.md":
+    - heading: "2026-07-29 — Cursor sessionStart hook stdout not captured on Windows; rule+tool is primary PCS load path"
+      date: 2026-07-29
+      status: current
+      justification: "Rule 6: external-platform constraint (Cursor hook capture on Windows); D6 closeout — rule+tool is primary PCS load path."
     - heading: "2026-06-08 — P2 quant strategies consolidated onto M4 engine; V7 holds; full W2/W3 wave is a clean negative — two apparent \"survivors\" are frequency artifacts, not edge"
       # **Phase:** 2 (Flux V2)
       date: 2026-06-08
