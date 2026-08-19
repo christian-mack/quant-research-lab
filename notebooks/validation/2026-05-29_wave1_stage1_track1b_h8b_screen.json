@@ -1,0 +1,361 @@
+{
+  "wave": "Wave1_Stage1_Track1b_H8b_MES_MNQ_divergence",
+  "date": "2026-05-29",
+  "git_sha": "75c84e5ae8ce1edc1d19e4c0788144dc5f6dff7d",
+  "protocol_calendar": {
+    "start": "2021-01-01",
+    "end_inclusive": "2025-12-31",
+    "year_filters_gates": [
+      2021,
+      2022,
+      2023,
+      2024,
+      2025
+    ],
+    "instrument_execution": "MNQ",
+    "cross_feature_instrument": "MES",
+    "h8b_spec": "trade WITH divergence leader (supersedes Track 1 H8 fade spec)",
+    "macro_calendar_filter": "not applied (no calendar data \u2014 same as Track 1)",
+    "commission_slippage": "none coarse screen ($0); exit modeling minute-bar pessimistic dual touch."
+  },
+  "data_coverage": {
+    "mes_raw_probe": {
+      "pattern": "mes/MES *.Last.txt",
+      "contract_file_count": 26,
+      "contract_symbols": [
+        "MES 03-20",
+        "MES 06-20",
+        "MES 09-20",
+        "MES 12-20",
+        "MES 03-21",
+        "MES 06-21",
+        "MES 09-21",
+        "MES 12-21",
+        "MES 03-22",
+        "MES 06-22",
+        "MES 09-22",
+        "MES 12-22",
+        "MES 03-23",
+        "MES 06-23",
+        "MES 09-23",
+        "MES 12-23",
+        "MES 03-24",
+        "MES 06-24",
+        "MES 09-24",
+        "MES 12-24",
+        "MES 03-25",
+        "MES 06-25",
+        "MES 09-25",
+        "MES 12-25",
+        "MES 03-26",
+        "MES 06-26"
+      ],
+      "ct_first_bar": "2020-01-01T17:01:00-06:00",
+      "ct_last_bar": "2026-05-26T22:55:00-05:00"
+    },
+    "mnq_raw_probe": {
+      "pattern": "mnq/MNQ *.Last.txt",
+      "contract_file_count": 26,
+      "contract_symbols": [
+        "MNQ 03-20",
+        "MNQ 06-20",
+        "MNQ 09-20",
+        "MNQ 12-20",
+        "MNQ 03-21",
+        "MNQ 06-21",
+        "MNQ 09-21",
+        "MNQ 12-21",
+        "MNQ 03-22",
+        "MNQ 06-22",
+        "MNQ 09-22",
+        "MNQ 12-22",
+        "MNQ 03-23",
+        "MNQ 06-23",
+        "MNQ 09-23",
+        "MNQ 12-23",
+        "MNQ 03-24",
+        "MNQ 06-24",
+        "MNQ 09-24",
+        "MNQ 12-24",
+        "MNQ 03-25",
+        "MNQ 06-25",
+        "MNQ 09-25",
+        "MNQ 12-25",
+        "MNQ 03-26",
+        "MNQ 06-26"
+      ],
+      "ct_first_bar": "2019-12-28T13:46:00-06:00",
+      "ct_last_bar": "2026-04-17T16:00:00-05:00"
+    },
+    "rth_coverage_report": {
+      "mes_rth_bar_count": 629048,
+      "mnq_rth_bar_count": 599533,
+      "mes_ct_first_bar": "2020-01-02T08:30:00-06:00",
+      "mes_ct_last_bar": "2026-05-26T14:59:00-05:00",
+      "mnq_ct_first_bar": "2020-01-02T08:30:00-06:00",
+      "mnq_ct_last_bar": "2026-04-17T14:59:00-05:00",
+      "overlapping_cme_session_dates": 1551,
+      "mes_unexpected_missing_all_range": [
+        "2020-10-23",
+        "2021-04-02",
+        "2023-04-06",
+        "2023-04-07",
+        "2023-04-10",
+        "2023-04-11",
+        "2023-04-12",
+        "2023-04-13",
+        "2023-04-14",
+        "2023-11-13",
+        "2025-02-10",
+        "2025-07-14",
+        "2025-08-18",
+        "2026-04-03"
+      ],
+      "mnq_unexpected_missing_all_range": [
+        "2020-10-23",
+        "2021-04-02",
+        "2023-04-07",
+        "2024-06-17",
+        "2026-02-02",
+        "2026-04-03"
+      ],
+      "mes_only_unexpected_missing_all_range": [
+        "2023-04-06",
+        "2023-04-10",
+        "2023-04-11",
+        "2023-04-12",
+        "2023-04-13",
+        "2023-04-14",
+        "2023-11-13",
+        "2025-02-10",
+        "2025-07-14",
+        "2025-08-18"
+      ],
+      "mnq_only_unexpected_missing_all_range": [
+        "2024-06-17",
+        "2026-02-02"
+      ],
+      "mes_only_unexpected_missing_eval_2021_2025": [
+        "2023-04-06",
+        "2023-04-10",
+        "2023-04-11",
+        "2023-04-12",
+        "2023-04-13",
+        "2023-04-14",
+        "2023-11-13",
+        "2025-02-10",
+        "2025-07-14",
+        "2025-08-18"
+      ],
+      "known_export_gap_comparison": [
+        {
+          "gap": "2024-03-29..2024-03-29",
+          "description": "Good Friday 2024. PMC marks as a trading day (early close 08:15 CT, ~8h of bars expected on the calendar date). NT8 export contains no bars here; root cause not investigated.",
+          "mes_missing_days_in_gap": 1,
+          "mnq_missing_days_in_gap": 1
+        },
+        {
+          "gap": "2024-06-18..2024-07-31",
+          "description": "Jun-Jul 2024 export gap. 32 contiguous trading days with no bars in the NT8 export. Operator-acknowledged in the phase-1 plan; root cause not yet investigated.",
+          "mes_missing_days_in_gap": 0,
+          "mnq_missing_days_in_gap": 32
+        },
+        {
+          "gap": "2025-04-18..2025-04-18",
+          "description": "Good Friday 2025. Same shape as Good Friday 2024 \u2014 PMC marks as an 08:15 CT early-close trading day; NT8 export has no bars.",
+          "mes_missing_days_in_gap": 1,
+          "mnq_missing_days_in_gap": 1
+        },
+        {
+          "gap": "2026-02-03..2026-03-11",
+          "description": "Feb-Mar 2026 export gap. 27 contiguous trading days with no bars in the NT8 export. Operator-acknowledged in the phase-1 plan; root cause not yet investigated.",
+          "mes_missing_days_in_gap": 0,
+          "mnq_missing_days_in_gap": 27
+        }
+      ],
+      "stop_surface_mes_extra_gaps": true,
+      "note": "H8b sim uses inner join on timestamp within MNQ gap-split segments; sessions without aligned MES bars are excluded automatically."
+    },
+    "mnq_gap_split_segments": 4,
+    "deferred_hypotheses": [
+      "H9 (RTY pending)",
+      "H10 (RTY pending for full cross set)"
+    ]
+  },
+  "H8b": {
+    "selected_variant": "stop10",
+    "sweep_eval_summary": {
+      "stop8": {
+        "trades": 1511,
+        "pnl_gate_years_qty1_sum": -8972.5,
+        "gates_pass_score": 1
+      },
+      "stop10": {
+        "trades": 1501,
+        "pnl_gate_years_qty1_sum": -8718.5,
+        "gates_pass_score": 1
+      }
+    },
+    "trades_gate_years_qty1": 1501,
+    "gates_full": {
+      "gate1": {
+        "pass": false,
+        "detail": {
+          "avg_annual_pnl_usd_qty1": -1743.7,
+          "target_annual_design_usd": 30000.0,
+          "qty_design": null,
+          "worst_session_loss_usd_at_qty_design": null,
+          "note": "non-positive average annual P&L at qty=1 -> fail Gate 1 by spec"
+        }
+      },
+      "gate2": {
+        "pass": true,
+        "detail": {
+          "avg_trades_per_week": 5.795366795366795,
+          "years_filter": [
+            2021,
+            2022,
+            2023,
+            2024,
+            2025
+          ]
+        }
+      },
+      "gate3": {
+        "pass": false,
+        "detail": {
+          "win_rate": 0.09060626249167222,
+          "closed_trade_count": 1501.0
+        }
+      },
+      "gate4": {
+        "pass": false,
+        "detail": {
+          "avg_win_usd": 136.62867647058823,
+          "avg_loss_mag_usd": 20.0,
+          "rr": 6.831433823529411
+        }
+      },
+      "gate5": {
+        "pass": false,
+        "detail": {
+          "annual_pnls_qty1_et_exit_year": {
+            "2021": -1630.5,
+            "2022": -2996.0,
+            "2023": 295.5,
+            "2024": -1670.5,
+            "2025": -2717.0
+          },
+          "profitable_year_count_strict_gt_0": 1
+        }
+      },
+      "overall_survives_track1b": false,
+      "conditional_stage2_candidate": false,
+      "failed_gate_numerical_gaps": {
+        "G1": "avg annual qty=1 -1743.7 <= 0",
+        "G3": "win rate 0.091 < 0.60",
+        "G4": "R:R 6.831433823529411 outside [0.8, 1.5]",
+        "G5": "profitable years 1 < 4 (need >=4 of [2021, 2022, 2023, 2024, 2025])"
+      }
+    },
+    "sharpe": {
+      "aggregation": "Daily realized USD P&L at qty=1 MNQ; calendar NY exit-date; sqrt(252) scale.",
+      "daily_sharpe_annualized_point": -2.3818598401264732,
+      "daily_moment_summary_qty1": {
+        "n": 801.0,
+        "mean": -10.884519350811486,
+        "std_ddof1": 72.5426346023491,
+        "skew_fisher": 3.3835260177537165,
+        "kurtosis_excess": 15.190315744771471
+      }
+    },
+    "bootstrap_mean_annual_pnl_qty1_sessions": {
+      "ci95_low": -2530.2774999999997,
+      "ci95_high": -843.4975000000011,
+      "point_mean_annual_usd": -1743.7,
+      "block_len_sessions": 20,
+      "n_iterations": 1000,
+      "years_span": 5.0,
+      "includes_zero": false
+    }
+  },
+  "deflated_sharpe_joint_n5_run_hypotheses": {
+    "n_trials_registered": 5,
+    "variance_across_trial_sharpes_substituted_zeros": 13.94902909508231,
+    "adjusted_sharpes_track_vector": [
+      -2.5437950009926165,
+      -1.7654920679819721,
+      -2.3818598401264732,
+      4.507399293567078,
+      4.627377417417
+    ],
+    "hypothesis_ids_ordered": [
+      "H1",
+      "H2",
+      "H8b",
+      "H11",
+      "H12"
+    ],
+    "note": "NaN Sharpes become 0 in the track vector for Var(SRhat) only; PSR rows stay NaN for blocked/insufficient trials.",
+    "per_hypothesis_deflated_block": [
+      {
+        "hypothesis_id": "H1",
+        "observed_daily_sharpe_annualized": -2.5437950009926165,
+        "expected_max_sr_under_null_trials": 4.454147662117097,
+        "probabilistic_sharpe_vs_track_null": 4.462277100876418e-139,
+        "n_observations_daily": 330,
+        "skewness_daily_fisher": 2.5742931847595143,
+        "kurtosis_pearson_daily": 12.1715353552351
+      },
+      {
+        "hypothesis_id": "H2",
+        "observed_daily_sharpe_annualized": -1.7654920679819721,
+        "expected_max_sr_under_null_trials": 4.454147662117097,
+        "probabilistic_sharpe_vs_track_null": 0.0,
+        "n_observations_daily": 1256,
+        "skewness_daily_fisher": 2.636258577398891,
+        "kurtosis_pearson_daily": 11.463066969560236
+      },
+      {
+        "hypothesis_id": "H8b",
+        "observed_daily_sharpe_annualized": -2.3818598401264732,
+        "expected_max_sr_under_null_trials": 4.454147662117097,
+        "probabilistic_sharpe_vs_track_null": 2.0678881958936437e-245,
+        "n_observations_daily": 801,
+        "skewness_daily_fisher": 3.3835260177537165,
+        "kurtosis_pearson_daily": 18.19031574477147
+      },
+      {
+        "hypothesis_id": "H11",
+        "observed_daily_sharpe_annualized": 4.507399293567078,
+        "expected_max_sr_under_null_trials": 4.454147662117097,
+        "probabilistic_sharpe_vs_track_null": 0.6849069333938113,
+        "n_observations_daily": 1145,
+        "skewness_daily_fisher": 0.00481333933044354,
+        "kurtosis_pearson_daily": 3.562699189663778
+      },
+      {
+        "hypothesis_id": "H12",
+        "observed_daily_sharpe_annualized": 4.627377417417,
+        "expected_max_sr_under_null_trials": 4.454147662117097,
+        "probabilistic_sharpe_vs_track_null": 0.7735780535440513,
+        "n_observations_daily": 449,
+        "skewness_daily_fisher": 1.3173463599193067,
+        "kurtosis_pearson_daily": 6.408506424024298
+      }
+    ]
+  },
+  "deflated_sharpe_track1_n7_reference": {
+    "source_artifact": "C:\\Users\\chris\\Documents\\Trading\\quant-research-lab\\notebooks\\validation\\2026-05-26_wave1_stage1_track1_quant_screen.json",
+    "H11_psr_vs_track_null": 0.9999999397399743,
+    "note": "N=7 includes three zero-SR blocked slots (H8/H9/H10 never run)."
+  },
+  "deflated_sharpe_H11_psr_comparison": {
+    "H11_psr_n7_from_track1": 0.9999999397399743,
+    "H11_psr_n5_joint_rerun": 0.6849069333938113,
+    "demotion_note": "Recompute at N=5 (actually-run hypotheses) vs N=7 (registered batch)."
+  },
+  "stop_surfaces_triggers": [
+    "MES_HAS_UNEXPECTED_GAPS_NOT_IN_MNQ_EVAL_WINDOW: ['2023-04-06', '2023-04-10', '2023-04-11', '2023-04-12', '2023-04-13', '2023-04-14', '2023-11-13', '2025-02-10', '2025-07-14', '2025-08-18'] \u2014 surfaced; H8b runs on inner-joined overlap only."
+  ]
+}
