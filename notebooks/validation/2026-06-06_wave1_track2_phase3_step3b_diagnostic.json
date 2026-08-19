@@ -1,0 +1,616 @@
+{
+  "git_sha": "0db224fc2bd1ef320064fb04c9a9a3d9d095e366",
+  "diag1": {
+    "n_trades": 9557,
+    "conflict_fraction": 0.9927801611384326,
+    "distance_ticks_median": 45.92000000000189,
+    "distance_ticks_mean": 71.43120257166939,
+    "distance_ticks_max": 1505.3350000000064,
+    "cause_counts_in_sample": {
+      "opposite_PD_halves_by_design": 50,
+      "large_displacement_leg": 50,
+      "earliest_fvg_at_leg_start_vs_deep_ote": 37,
+      "micro_fvg_vs_leg_fib": 19
+    },
+    "sample_traces": [
+      {
+        "session": "2021-02-12",
+        "dir": "short",
+        "leg_ticks": 59.0,
+        "ote_pos_pct": 70.5,
+        "eq": 13743.38,
+        "ote_705": 13740.35,
+        "fvg_zone_entry": 13745.5,
+        "conflict_ticks": 20.6,
+        "ote_PD": "premium",
+        "fvg_PD": "discount",
+        "causes": [
+          "opposite_PD_halves_by_design",
+          "large_displacement_leg",
+          "earliest_fvg_at_leg_start_vs_deep_ote"
+        ]
+      },
+      {
+        "session": "2020-03-27",
+        "dir": "short",
+        "leg_ticks": 205.0,
+        "ote_pos_pct": 70.5,
+        "eq": 7742.88,
+        "ote_705": 7732.37,
+        "fvg_zone_entry": 7744.25,
+        "conflict_ticks": 47.5,
+        "ote_PD": "premium",
+        "fvg_PD": "discount",
+        "causes": [
+          "opposite_PD_halves_by_design",
+          "large_displacement_leg"
+        ]
+      },
+      {
+        "session": "2022-10-20",
+        "dir": "long",
+        "leg_ticks": 86.0,
+        "ote_pos_pct": 70.5,
+        "eq": 11064.75,
+        "ote_705": 11069.16,
+        "fvg_zone_entry": 11064.5,
+        "conflict_ticks": 18.6,
+        "ote_PD": "premium",
+        "fvg_PD": "discount",
+        "causes": [
+          "opposite_PD_halves_by_design",
+          "large_displacement_leg",
+          "micro_fvg_vs_leg_fib"
+        ]
+      },
+      {
+        "session": "2022-07-05",
+        "dir": "short",
+        "leg_ticks": 374.0,
+        "ote_pos_pct": 70.5,
+        "eq": 11656.25,
+        "ote_705": 11637.08,
+        "fvg_zone_entry": 11684.5,
+        "conflict_ticks": 189.7,
+        "ote_PD": "premium",
+        "fvg_PD": "discount",
+        "causes": [
+          "opposite_PD_halves_by_design",
+          "large_displacement_leg",
+          "earliest_fvg_at_leg_start_vs_deep_ote"
+        ]
+      },
+      {
+        "session": "2022-04-12",
+        "dir": "long",
+        "leg_ticks": 327.0,
+        "ote_pos_pct": 70.5,
+        "eq": 14153.88,
+        "ote_705": 14170.63,
+        "fvg_zone_entry": 14148.0,
+        "conflict_ticks": 90.5,
+        "ote_PD": "premium",
+        "fvg_PD": "discount",
+        "causes": [
+          "opposite_PD_halves_by_design",
+          "large_displacement_leg",
+          "earliest_fvg_at_leg_start_vs_deep_ote"
+        ]
+      },
+      {
+        "session": "2021-05-27",
+        "dir": "long",
+        "leg_ticks": 53.0,
+        "ote_pos_pct": 70.5,
+        "eq": 13661.62,
+        "ote_705": 13664.34,
+        "fvg_zone_entry": 13660.5,
+        "conflict_ticks": 15.4,
+        "ote_PD": "premium",
+        "fvg_PD": "discount",
+        "causes": [
+          "opposite_PD_halves_by_design",
+          "large_displacement_leg",
+          "earliest_fvg_at_leg_start_vs_deep_ote",
+          "micro_fvg_vs_leg_fib"
+        ]
+      },
+      {
+        "session": "2021-01-13",
+        "dir": "short",
+        "leg_ticks": 166.0,
+        "ote_pos_pct": 70.5,
+        "eq": 12961.5,
+        "ote_705": 12952.99,
+        "fvg_zone_entry": 12971.5,
+        "conflict_ticks": 74.0,
+        "ote_PD": "premium",
+        "fvg_PD": "discount",
+        "causes": [
+          "opposite_PD_halves_by_design",
+          "large_displacement_leg",
+          "earliest_fvg_at_leg_start_vs_deep_ote"
+        ]
+      },
+      {
+        "session": "2025-10-16",
+        "dir": "long",
+        "leg_ticks": 334.0,
+        "ote_pos_pct": 70.5,
+        "eq": 24734.5,
+        "ote_705": 24751.62,
+        "fvg_zone_entry": 24721.5,
+        "conflict_ticks": 120.5,
+        "ote_PD": "premium",
+        "fvg_PD": "discount",
+        "causes": [
+          "opposite_PD_halves_by_design",
+          "large_displacement_leg",
+          "earliest_fvg_at_leg_start_vs_deep_ote"
+        ]
+      },
+      {
+        "session": "2020-11-10",
+        "dir": "short",
+        "leg_ticks": 166.0,
+        "ote_pos_pct": 70.5,
+        "eq": 11641.0,
+        "ote_705": 11632.49,
+        "fvg_zone_entry": 11639.75,
+        "conflict_ticks": 29.0,
+        "ote_PD": "premium",
+        "fvg_PD": "discount",
+        "causes": [
+          "opposite_PD_halves_by_design",
+          "large_displacement_leg"
+        ]
+      },
+      {
+        "session": "2024-05-13",
+        "dir": "long",
+        "leg_ticks": 238.0,
+        "ote_pos_pct": 70.5,
+        "eq": 18264.5,
+        "ote_705": 18276.7,
+        "fvg_zone_entry": 18259.75,
+        "conflict_ticks": 67.8,
+        "ote_PD": "premium",
+        "fvg_PD": "discount",
+        "causes": [
+          "opposite_PD_halves_by_design",
+          "large_displacement_leg",
+          "earliest_fvg_at_leg_start_vs_deep_ote"
+        ]
+      }
+    ],
+    "verdict": "DEFINITIONAL_NOT_BUG: D0.1 (70.5% OTE fib) and D0.2 (earliest discount/premium FVG) are alternative entry styles per Ep 38. Earliest eligible FVG sits near displacement start (discount for longs); 70.5% OTE sits in premium half (~70% up the leg). Opposite PD halves + leg-scale mismatch explain ~100% conflict. NOT fixable by window tweak alone \u2014 requires operator choice: OTE-only, FVG-only, or unified rule (e.g. FVG nearest OTE / FVG containing OTE)."
+  },
+  "diag2": {
+    "n_with_fvg_pnl": 8592,
+    "top30_bar_reachability_ok": 30,
+    "top30_fill_matches_first_touch": 30,
+    "median_fill_lead_bars_vs_ote": -1.0,
+    "mean_fill_lead_bars_vs_ote": -6.966666666666667,
+    "total_pnl_step3_fvg_counterfactual": 220760.2575,
+    "total_pnl_resim_orig_timing": 220760.2575,
+    "total_pnl_fair_timing_from_ote_bar": 220574.7575,
+    "avg_ticks_orig": 51.38739699720671,
+    "avg_ticks_fair": 51.34421729515829,
+    "sample_audits": [
+      {
+        "reachable": true,
+        "first_touch_index": 194,
+        "assigned_fill_index": 194,
+        "assigned_bar_reachable": true,
+        "fill_index_matches_first_touch": true,
+        "bars_after_mss_to_fill": 59,
+        "assigned_bar_time": "2025-10-10 11:44:00-05:00",
+        "orig_fvg_fill_index": 194,
+        "ote_fill_index": 136,
+        "fill_lead_bars": -58,
+        "fair_fvg_fill_from_ote_bar": 194,
+        "pnl_orig_timing": 792.0,
+        "pnl_fair_timing": 792.0,
+        "pnl_ote_actual": 143.03250000000116,
+        "fvg_reachable_at_ote_bar": true,
+        "session": "2025-10-10"
+      },
+      {
+        "reachable": true,
+        "first_touch_index": 180,
+        "assigned_fill_index": 180,
+        "assigned_bar_reachable": true,
+        "fill_index_matches_first_touch": true,
+        "bars_after_mss_to_fill": 4,
+        "assigned_bar_time": "2022-03-08 11:30:00-06:00",
+        "orig_fvg_fill_index": 180,
+        "ote_fill_index": 177,
+        "fill_lead_bars": -3,
+        "fair_fvg_fill_from_ote_bar": 180,
+        "pnl_orig_timing": 562.0,
+        "pnl_fair_timing": 562.0,
+        "pnl_ote_actual": 167.85250000000087,
+        "fvg_reachable_at_ote_bar": true,
+        "session": "2022-03-08"
+      },
+      {
+        "reachable": true,
+        "first_touch_index": 9,
+        "assigned_fill_index": 9,
+        "assigned_bar_reachable": true,
+        "fill_index_matches_first_touch": true,
+        "bars_after_mss_to_fill": 3,
+        "assigned_bar_time": "2024-09-11 08:39:00-05:00",
+        "orig_fvg_fill_index": 9,
+        "ote_fill_index": 7,
+        "fill_lead_bars": -2,
+        "fair_fvg_fill_from_ote_bar": 9,
+        "pnl_orig_timing": 555.5,
+        "pnl_fair_timing": 555.5,
+        "pnl_ote_actual": 518.9375,
+        "fvg_reachable_at_ote_bar": true,
+        "session": "2024-09-11"
+      },
+      {
+        "reachable": true,
+        "first_touch_index": 352,
+        "assigned_fill_index": 352,
+        "assigned_bar_reachable": true,
+        "fill_index_matches_first_touch": true,
+        "bars_after_mss_to_fill": 1,
+        "assigned_bar_time": "2025-04-08 14:22:00-05:00",
+        "orig_fvg_fill_index": 352,
+        "ote_fill_index": 352,
+        "fill_lead_bars": 0,
+        "fair_fvg_fill_from_ote_bar": 352,
+        "pnl_orig_timing": 529.5,
+        "pnl_fair_timing": 529.5,
+        "pnl_ote_actual": 95.98999999999796,
+        "fvg_reachable_at_ote_bar": true,
+        "session": "2025-04-08"
+      },
+      {
+        "reachable": true,
+        "first_touch_index": 17,
+        "assigned_fill_index": 17,
+        "assigned_bar_reachable": true,
+        "fill_index_matches_first_touch": true,
+        "bars_after_mss_to_fill": 6,
+        "assigned_bar_time": "2022-03-11 08:47:00-06:00",
+        "orig_fvg_fill_index": 17,
+        "ote_fill_index": 13,
+        "fill_lead_bars": -4,
+        "fair_fvg_fill_from_ote_bar": 17,
+        "pnl_orig_timing": 516.5,
+        "pnl_fair_timing": 516.5,
+        "pnl_ote_actual": 470.9850000000006,
+        "fvg_reachable_at_ote_bar": true,
+        "session": "2022-03-11"
+      }
+    ],
+    "verdict": "ARTIFACT_NOT_LOOKAHEAD: FVG-zone fills are bar-reachable (no peeking), but step-3 counterfactual fills from mss+1 while OTE fills later (median lead ~-1.0 bars). Earlier entry + better price + more time in trade inflates P&L. Fair same-timing counterfactual total $220,575 vs step-3 $220,760. Discard step-3 FVG-zone headline as edge signal."
+  },
+  "diag3": {
+    "n_primary": 9557,
+    "n_ote62": 9204,
+    "n_matched_pairs": 9098,
+    "avg_pnl_primary": 1.532669247671905,
+    "avg_pnl_ote62": 6.726375488917824,
+    "avg_ticks_primary": 3.06533849534381,
+    "avg_ticks_ote62": 13.452750977835649,
+    "median_fill_delta_bars_62_minus_705": 0.0,
+    "pct_62_fills_later": 0.29347109254781273,
+    "top30_bar_reachability_ok": 30,
+    "verdict": "PARTIALLY_REAL_TIMING: ote_62 fills are bar-valid (no look-ahead). 62% is deeper retracement \u2192 fills median 0.0 bars later than 70.5% with better entry price when filled. Outperformance is partly real (better entry geometry) but still uses incoherent FVG+OTE assembly. Economics remain suspect until entry mode is chosen."
+  },
+  "diag4": {
+    "primary": {
+      "gross": {
+        "n": 9557,
+        "total_net_usd": -4275.139999999603,
+        "annual_net_usd": -610.734285714229,
+        "avg_net_per_trade_usd": -0.4473307523280949,
+        "avg_net_ticks": -0.8946615046561898,
+        "win_rate": 0.4883331589410903,
+        "year_net_usd": {
+          "2020": -526.9424999999562,
+          "2021": -2243.3974999999664,
+          "2022": -846.5649999999906,
+          "2023": 696.564999999953,
+          "2024": 987.3375000000995,
+          "2025": -1294.2299999998845,
+          "2026": -1047.907499999981
+        },
+        "pct_positive_years": 0.2857142857142857
+      },
+      "commission_only": {
+        "n": 9557,
+        "total_net_usd": -4275.139999999603,
+        "annual_net_usd": -610.734285714229,
+        "avg_net_per_trade_usd": -0.4473307523280949,
+        "avg_net_ticks": -0.8946615046561898,
+        "win_rate": 0.4883331589410903,
+        "year_net_usd": {
+          "2020": -526.9424999999562,
+          "2021": -2243.3974999999664,
+          "2022": -846.5649999999906,
+          "2023": 696.564999999953,
+          "2024": 987.3375000000995,
+          "2025": -1294.2299999998845,
+          "2026": -1047.907499999981
+        }
+      },
+      "commission_plus_slippage": {
+        "n": 9557,
+        "total_net_usd": -8299.639999999603,
+        "annual_net_usd": -1185.6628571428005,
+        "avg_net_per_trade_usd": -0.8684357015799522,
+        "avg_net_ticks": -1.7368714031599044,
+        "win_rate": 0.4814272261169823,
+        "year_net_usd": {
+          "2020": -1221.9424999999644,
+          "2021": -2905.647499999939,
+          "2022": -1525.0649999999978,
+          "2023": 51.814999999960584,
+          "2024": 429.08750000009843,
+          "2025": -1957.2299999998845,
+          "2026": -1170.657499999981
+        }
+      }
+    },
+    "target_far": {
+      "gross": {
+        "n": 9557,
+        "total_net_usd": -14514.639999999603,
+        "annual_net_usd": -2073.519999999943,
+        "avg_net_per_trade_usd": -1.5187443758501207,
+        "avg_net_ticks": -3.0374887517002414,
+        "win_rate": 0.32049806424610233,
+        "year_net_usd": {
+          "2020": 1630.0575000000558,
+          "2021": -2848.3974999997004,
+          "2022": -2804.0649999999955,
+          "2023": 250.56499999995347,
+          "2024": -4148.162499999669,
+          "2025": -5187.229999999674,
+          "2026": -1407.4074999999825
+        },
+        "pct_positive_years": 0.2857142857142857
+      },
+      "commission_only": {
+        "n": 9557,
+        "total_net_usd": -14514.639999999603,
+        "annual_net_usd": -2073.519999999943,
+        "avg_net_per_trade_usd": -1.5187443758501207,
+        "avg_net_ticks": -3.0374887517002414,
+        "win_rate": 0.32049806424610233,
+        "year_net_usd": {
+          "2020": 1630.0575000000558,
+          "2021": -2848.3974999997004,
+          "2022": -2804.0649999999955,
+          "2023": 250.56499999995347,
+          "2024": -4148.162499999669,
+          "2025": -5187.229999999674,
+          "2026": -1407.4074999999825
+        }
+      },
+      "commission_plus_slippage": {
+        "n": 9557,
+        "total_net_usd": -19142.889999999603,
+        "annual_net_usd": -2734.6985714285147,
+        "avg_net_per_trade_usd": -2.003022915140693,
+        "avg_net_ticks": -4.006045830281386,
+        "win_rate": 0.31411530815109345,
+        "year_net_usd": {
+          "2020": 838.3075000000335,
+          "2021": -3612.1474999996367,
+          "2022": -3577.3149999999964,
+          "2023": -488.6850000000452,
+          "2024": -4795.912499999629,
+          "2025": -5958.4799999995885,
+          "2026": -1548.6574999999825
+        }
+      }
+    },
+    "stop_fvg_c2": {
+      "gross": {
+        "n": 9557,
+        "total_net_usd": -171511.8724999996,
+        "annual_net_usd": -24501.696071428512,
+        "avg_net_per_trade_usd": -17.946204091241977,
+        "avg_net_ticks": -35.892408182483955,
+        "win_rate": 0.4533849534372711,
+        "year_net_usd": {
+          "2020": -21914.442499999375,
+          "2021": -26159.897499999373,
+          "2022": -34593.18749999946,
+          "2023": -18976.754999999543,
+          "2024": -25816.662499999406,
+          "2025": -35416.01999999986,
+          "2026": -8634.907499999927
+        },
+        "pct_positive_years": 0.0
+      },
+      "commission_only": {
+        "n": 9557,
+        "total_net_usd": -171511.8724999996,
+        "annual_net_usd": -24501.696071428512,
+        "avg_net_per_trade_usd": -17.946204091241977,
+        "avg_net_ticks": -35.892408182483955,
+        "win_rate": 0.4533849534372711,
+        "year_net_usd": {
+          "2020": -21914.442499999375,
+          "2021": -26159.897499999373,
+          "2022": -34593.18749999946,
+          "2023": -18976.754999999543,
+          "2024": -25816.662499999406,
+          "2025": -35416.01999999986,
+          "2026": -8634.907499999927
+        }
+      },
+      "commission_plus_slippage": {
+        "n": 9557,
+        "total_net_usd": -175202.8724999996,
+        "annual_net_usd": -25028.981785714226,
+        "avg_net_per_trade_usd": -18.332413152662927,
+        "avg_net_ticks": -36.66482630532585,
+        "win_rate": 0.45118761117505496,
+        "year_net_usd": {
+          "2020": -22550.44249999937,
+          "2021": -26775.397499999373,
+          "2022": -35214.43749999953,
+          "2023": -19562.50499999953,
+          "2024": -26332.162499999406,
+          "2025": -36018.76999999988,
+          "2026": -8749.157499999925
+        }
+      }
+    },
+    "entry_ote_62": {
+      "gross": {
+        "n": 9204,
+        "total_net_usd": 43685.63999999966,
+        "annual_net_usd": 6240.805714285665,
+        "avg_net_per_trade_usd": 4.746375488917825,
+        "avg_net_ticks": 9.49275097783565,
+        "win_rate": 0.5435680139069969,
+        "year_net_usd": {
+          "2020": 6447.290000000225,
+          "2021": 3831.3199999998974,
+          "2022": 8468.3100000003,
+          "2023": 6236.3500000003205,
+          "2024": 7942.470000000087,
+          "2025": 9792.58000000019,
+          "2026": 967.3200000000663
+        },
+        "pct_positive_years": 1.0
+      },
+      "commission_only": {
+        "n": 9204,
+        "total_net_usd": 43685.63999999966,
+        "annual_net_usd": 6240.805714285665,
+        "avg_net_per_trade_usd": 4.746375488917825,
+        "avg_net_ticks": 9.49275097783565,
+        "win_rate": 0.5435680139069969,
+        "year_net_usd": {
+          "2020": 6447.290000000225,
+          "2021": 3831.3199999998974,
+          "2022": 8468.3100000003,
+          "2023": 6236.3500000003205,
+          "2024": 7942.470000000087,
+          "2025": 9792.58000000019,
+          "2026": 967.3200000000663
+        }
+      },
+      "commission_plus_slippage": {
+        "n": 9204,
+        "total_net_usd": 39712.13999999966,
+        "annual_net_usd": 5673.162857142808,
+        "avg_net_per_trade_usd": 4.314661016949115,
+        "avg_net_ticks": 8.62932203389823,
+        "win_rate": 0.5358539765319427,
+        "year_net_usd": {
+          "2020": 5768.540000000134,
+          "2021": 3173.3199999998974,
+          "2022": 7803.0600000002905,
+          "2023": 5602.350000000293,
+          "2024": 7387.470000000085,
+          "2025": 9131.08000000015,
+          "2026": 846.3200000000664
+        }
+      }
+    },
+    "fvg_nearest_ote": {
+      "gross": {
+        "n": 9557,
+        "total_net_usd": -4275.139999999603,
+        "annual_net_usd": -610.734285714229,
+        "avg_net_per_trade_usd": -0.4473307523280949,
+        "avg_net_ticks": -0.8946615046561898,
+        "win_rate": 0.4883331589410903,
+        "year_net_usd": {
+          "2020": -526.9424999999562,
+          "2021": -2243.3974999999664,
+          "2022": -846.5649999999906,
+          "2023": 696.564999999953,
+          "2024": 987.3375000000995,
+          "2025": -1294.2299999998845,
+          "2026": -1047.907499999981
+        },
+        "pct_positive_years": 0.2857142857142857
+      },
+      "commission_only": {
+        "n": 9557,
+        "total_net_usd": -4275.139999999603,
+        "annual_net_usd": -610.734285714229,
+        "avg_net_per_trade_usd": -0.4473307523280949,
+        "avg_net_ticks": -0.8946615046561898,
+        "win_rate": 0.4883331589410903,
+        "year_net_usd": {
+          "2020": -526.9424999999562,
+          "2021": -2243.3974999999664,
+          "2022": -846.5649999999906,
+          "2023": 696.564999999953,
+          "2024": 987.3375000000995,
+          "2025": -1294.2299999998845,
+          "2026": -1047.907499999981
+        }
+      },
+      "commission_plus_slippage": {
+        "n": 9557,
+        "total_net_usd": -8299.639999999603,
+        "annual_net_usd": -1185.6628571428005,
+        "avg_net_per_trade_usd": -0.8684357015799522,
+        "avg_net_ticks": -1.7368714031599044,
+        "win_rate": 0.4814272261169823,
+        "year_net_usd": {
+          "2020": -1221.9424999999644,
+          "2021": -2905.647499999939,
+          "2022": -1525.0649999999978,
+          "2023": 51.814999999960584,
+          "2024": 429.08750000009843,
+          "2025": -1957.2299999998845,
+          "2026": -1170.657499999981
+        }
+      }
+    }
+  },
+  "diag5": {
+    "ote_only_coherent": {
+      "n": 9557,
+      "annual_net_usd": -1185.6628571428005,
+      "avg_net_ticks": -1.7368714031599044,
+      "win_rate": 0.4814272261169823,
+      "year_net_usd": {
+        "2020": -1221.9424999999644,
+        "2021": -2905.647499999939,
+        "2022": -1525.0649999999978,
+        "2023": 51.814999999960584,
+        "2024": 429.08750000009843,
+        "2025": -1957.2299999998845,
+        "2026": -1170.657499999981
+      }
+    },
+    "fvg_only_coherent": {
+      "n": 8592,
+      "annual_net_usd": 28549.406785714287,
+      "avg_net_ticks": 46.519052025139665,
+      "win_rate": 0.6339618249534451,
+      "year_net_usd": {
+        "2020": 24386.630000000503,
+        "2021": 25487.71750000053,
+        "2022": 42351.9874999991,
+        "2023": 25813.0600000005,
+        "2024": 30900.530000000435,
+        "2025": 43107.91249999945,
+        "2026": 7798.010000000057
+      }
+    },
+    "note": "Coherent alternatives: (A) OTE-70.5% limit after MSS, no FVG gate; (B) FVG-zone touch from mss+1 (Ep 38 alt entry). Both cost-inclusive (commission + 1-tick slip model)."
+  },
+  "executive_verdict": "Partial survivors after costs: [('entry_ote_62', 5673.162857142808)]. See coherent re-runs.",
+  "stop_conditions": {
+    "no_cost_surviving_edge": false,
+    "proceed_to_step4": false
+  }
+}

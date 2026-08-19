@@ -20,6 +20,10 @@ Primitives
   detection at swing points.
 - :mod:`quant_research.ict.liquidity_sweep` — Primitive 5: liquidity-sweep
   detection (trade through a level then close back inside within N bars).
+- :mod:`quant_research.ict.mss` — Primitive 6: market structure shift (MSS)
+  detection per 2022 mentorship (swing-break after sweep; distinct from CISD).
+- :mod:`quant_research.ict.ote_strategy` — Phase 3 standalone OTE strategy
+  assembly (sweep → MSS → FVG → OTE; self-contained, no bias gate).
 
 Source specifications: Spec A (liquidity-sweep reversal) and the Bias Module
 Spec (TTrades mechanical daily bias). Worked examples for the load-bearing

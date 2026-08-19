@@ -1,0 +1,698 @@
+{
+  "git_sha": "0db224fc2bd1ef320064fb04c9a9a3d9d095e366",
+  "deflation_n": 20,
+  "entry_config": "OTE 70.5% ote_only full RTH",
+  "scan_setups_passed": 12978,
+  "scan_detected": 51100,
+  "combinations": {
+    "C-base": {
+      "label": "Current baseline: swept-extreme stop + nearest opposing pool target.",
+      "stop_rule": "swept_extreme",
+      "target_rule": "nearest_pool",
+      "exit_rejects": {},
+      "scan_geometry_rejects": {
+        "stop_wrong_side": 18667
+      },
+      "ledger_geometry_rejects": {
+        "stop_wrong_side": 2327,
+        "target_unreachable": 10
+      },
+      "booked": 10680,
+      "frame_b": {
+        "n_trades": 10680,
+        "trades_per_year": 2136.0,
+        "total_net_usd": 931.1000000000028,
+        "annual_net_usd": 1121.9800000000637,
+        "avg_net_per_trade_usd": 0.08718164794007516,
+        "avg_net_ticks": 0.17436329588015032,
+        "win_rate": 0.4610486891385768,
+        "avg_win_usd": 37.75872867587328,
+        "avg_loss_usd": -32.1391382904795,
+        "reward_risk_ratio": 1.1748519308328331,
+        "year_net_usd": {
+          "2021": -1913.6200000000276,
+          "2022": 5812.460000000399,
+          "2023": -1693.5400000000277,
+          "2024": 141.57999999997745,
+          "2025": 3263.0199999999963
+        }
+      },
+      "full_protocol": {
+        "n_trades": 10680,
+        "trades_per_year": 1525.7142857142858,
+        "total_net_usd": 931.1000000000028,
+        "annual_net_usd": 133.0142857143267,
+        "avg_net_per_trade_usd": 0.08718164794007516,
+        "avg_net_ticks": 0.17436329588015032,
+        "win_rate": 0.4610486891385768,
+        "avg_win_usd": 37.75872867587328,
+        "avg_loss_usd": -32.1391382904795,
+        "reward_risk_ratio": 1.1748519308328331,
+        "year_net_usd": {
+          "2020": -3510.640000000029,
+          "2021": -1913.6200000000276,
+          "2022": 5812.460000000399,
+          "2023": -1693.5400000000277,
+          "2024": 141.57999999997745,
+          "2025": 3263.0199999999963,
+          "2026": -1168.160000000002
+        }
+      },
+      "exit_rates": {
+        "stop_rate": 0.5229400749063671,
+        "target_rate": 0.44307116104868915,
+        "time_rate": 0.03398876404494382,
+        "other_rate": 0.0,
+        "stop_count": 5585,
+        "target_count": 4732,
+        "time_count": 363,
+        "other_count": 0
+      },
+      "year_concentration": {
+        "dominant_year": "2022",
+        "dominant_share": 1.0361075955008234,
+        "positive_years": 3
+      },
+      "dll_check": {
+        "sizing_qty_for_30k_yr": 26.74,
+        "max_session_net_loss_usd_at_qty": -14432.88,
+        "fits_apex_tier1_dll": false,
+        "worst_session_date": "2022-02-24"
+      },
+      "validation_report": {
+        "passed": true,
+        "checks": [
+          {
+            "check_id": "V1",
+            "name": "Geometry coherence",
+            "passed": true,
+            "message": "0/10680 filled trades fail entry-time geometry; upstream reject rate 63.7% > 20% surface (booked population clean)",
+            "details": {
+              "incoherent_filled": 0,
+              "n_trades": 10680,
+              "geometry_reject_rate": 0.636925071652791,
+              "has_bracket_columns": true,
+              "samples": []
+            }
+          },
+          {
+            "check_id": "V2",
+            "name": "Causal sequencing",
+            "passed": true,
+            "message": "All trades exit at/after entry",
+            "details": {
+              "violations": [],
+              "n_trades": 10680
+            }
+          },
+          {
+            "check_id": "V3",
+            "name": "Cost application",
+            "passed": true,
+            "message": "0/10680 zero-commission; 0 net/gross mismatches",
+            "details": {
+              "zero_commission_trades": 0,
+              "net_gross_mismatches": 0
+            }
+          },
+          {
+            "check_id": "V4",
+            "name": "Magnitude sanity",
+            "passed": true,
+            "message": "Avg net 0.17 ticks/trade (surface > 15.0)",
+            "details": {
+              "avg_net_ticks": 0.17436329588015032,
+              "n_trades": 10680,
+              "total_net_usd": 931.1000000000028
+            }
+          },
+          {
+            "check_id": "V5",
+            "name": "Hand-computation spot check",
+            "passed": true,
+            "message": "T1=ok T2=ok T5_reject=ok",
+            "details": {}
+          },
+          {
+            "check_id": "V6",
+            "name": "Dual-touch exposure",
+            "passed": true,
+            "message": "Skipped (need bars + entry_bar for dual-touch analysis)",
+            "details": {}
+          }
+        ]
+      }
+    },
+    "C-1": {
+      "label": "Keep structural stop; force 2R target \u2014 tests entry quality for 2R.",
+      "stop_rule": "swept_extreme",
+      "target_rule": "fixed_2r",
+      "exit_rejects": {
+        "target_unreachable": 18
+      },
+      "scan_geometry_rejects": {
+        "stop_wrong_side": 18667
+      },
+      "ledger_geometry_rejects": {
+        "stop_wrong_side": 2413,
+        "target_unreachable": 31
+      },
+      "booked": 10680,
+      "frame_b": {
+        "n_trades": 10680,
+        "trades_per_year": 2136.0,
+        "total_net_usd": -7886.899999999995,
+        "annual_net_usd": -519.0199999999959,
+        "avg_net_per_trade_usd": -0.7384737827715351,
+        "avg_net_ticks": -1.4769475655430702,
+        "win_rate": 0.34700374531835204,
+        "avg_win_usd": 62.92501888828926,
+        "avg_loss_usd": -34.56940349870949,
+        "reward_risk_ratio": 1.8202517984042828,
+        "year_net_usd": {
+          "2021": -2689.120000000027,
+          "2022": 4564.460000000122,
+          "2023": -937.0400000000268,
+          "2024": -496.4200000000212,
+          "2025": -3036.9800000000264
+        }
+      },
+      "full_protocol": {
+        "n_trades": 10680,
+        "trades_per_year": 1525.7142857142858,
+        "total_net_usd": -7886.899999999995,
+        "annual_net_usd": -1126.7000000000016,
+        "avg_net_per_trade_usd": -0.7384737827715351,
+        "avg_net_ticks": -1.4769475655430702,
+        "win_rate": 0.34700374531835204,
+        "avg_win_usd": 62.92501888828926,
+        "avg_loss_usd": -34.56940349870949,
+        "reward_risk_ratio": 1.8202517984042828,
+        "year_net_usd": {
+          "2020": -3161.1400000000285,
+          "2021": -2689.120000000027,
+          "2022": 4564.460000000122,
+          "2023": -937.0400000000268,
+          "2024": -496.4200000000212,
+          "2025": -3036.9800000000264,
+          "2026": -2130.6600000000035
+        }
+      },
+      "exit_rates": {
+        "stop_rate": 0.6298689138576778,
+        "target_rate": 0.30926966292134833,
+        "time_rate": 0.060861423220973786,
+        "other_rate": 0.0,
+        "stop_count": 6727,
+        "target_count": 3303,
+        "time_count": 650,
+        "other_count": 0
+      },
+      "year_concentration": {
+        "dominant_year": null,
+        "dominant_share": 0.0,
+        "positive_years": 1
+      },
+      "dll_check": {
+        "fits_apex_tier1_dll": false,
+        "note": "Non-positive annual net"
+      },
+      "validation_report": {
+        "passed": true,
+        "checks": [
+          {
+            "check_id": "V1",
+            "name": "Geometry coherence",
+            "passed": true,
+            "message": "0/10680 filled trades fail entry-time geometry; upstream reject rate 64.0% > 20% surface (booked population clean)",
+            "details": {
+              "incoherent_filled": 0,
+              "n_trades": 10680,
+              "geometry_reject_rate": 0.6398753467347008,
+              "has_bracket_columns": true,
+              "samples": []
+            }
+          },
+          {
+            "check_id": "V2",
+            "name": "Causal sequencing",
+            "passed": true,
+            "message": "All trades exit at/after entry",
+            "details": {
+              "violations": [],
+              "n_trades": 10680
+            }
+          },
+          {
+            "check_id": "V3",
+            "name": "Cost application",
+            "passed": true,
+            "message": "0/10680 zero-commission; 0 net/gross mismatches",
+            "details": {
+              "zero_commission_trades": 0,
+              "net_gross_mismatches": 0
+            }
+          },
+          {
+            "check_id": "V4",
+            "name": "Magnitude sanity",
+            "passed": true,
+            "message": "Avg net -1.48 ticks/trade (surface > 15.0)",
+            "details": {
+              "avg_net_ticks": -1.4769475655430702,
+              "n_trades": 10680,
+              "total_net_usd": -7886.899999999995
+            }
+          },
+          {
+            "check_id": "V5",
+            "name": "Hand-computation spot check",
+            "passed": true,
+            "message": "T1=ok T2=ok T5_reject=ok",
+            "details": {}
+          },
+          {
+            "check_id": "V6",
+            "name": "Dual-touch exposure",
+            "passed": true,
+            "message": "Skipped (need bars + entry_bar for dual-touch analysis)",
+            "details": {}
+          }
+        ]
+      }
+    },
+    "C-2": {
+      "label": "Fixed 10pt stop + 15pt target (1.5R tradeable structure).",
+      "stop_rule": "fixed_10pt",
+      "target_rule": "fixed_15pt",
+      "exit_rejects": {},
+      "scan_geometry_rejects": {
+        "stop_wrong_side": 18667
+      },
+      "ledger_geometry_rejects": {
+        "stop_wrong_side": 1851,
+        "target_unreachable": 42
+      },
+      "booked": 11270,
+      "frame_b": {
+        "n_trades": 11270,
+        "trades_per_year": 2254.0,
+        "total_net_usd": 10241.399999999998,
+        "annual_net_usd": 1946.1680000001338,
+        "avg_net_per_trade_usd": 0.9087311446317655,
+        "avg_net_ticks": 1.817462289263531,
+        "win_rate": 0.4165039929015084,
+        "avg_win_usd": 29.802168726033234,
+        "avg_loss_usd": -19.715629562043794,
+        "reward_risk_ratio": 1.5116011706472654,
+        "year_net_usd": {
+          "2021": -1268.140000000014,
+          "2022": 4680.880000000182,
+          "2023": -2614.3200000000293,
+          "2024": 1960.339999999987,
+          "2025": 6972.080000000545
+        }
+      },
+      "full_protocol": {
+        "n_trades": 11270,
+        "trades_per_year": 1610.0,
+        "total_net_usd": 10241.399999999998,
+        "annual_net_usd": 1463.057142857234,
+        "avg_net_per_trade_usd": 0.9087311446317655,
+        "avg_net_ticks": 1.817462289263531,
+        "win_rate": 0.4165039929015084,
+        "avg_win_usd": 29.802168726033234,
+        "avg_loss_usd": -19.715629562043794,
+        "reward_risk_ratio": 1.5116011706472654,
+        "year_net_usd": {
+          "2020": -1466.220000000027,
+          "2021": -1268.140000000014,
+          "2022": 4680.880000000182,
+          "2023": -2614.3200000000293,
+          "2024": 1960.339999999987,
+          "2025": 6972.080000000545,
+          "2026": 1976.7799999999957
+        }
+      },
+      "exit_rates": {
+        "stop_rate": 0.5726708074534161,
+        "target_rate": 0.40150842945874,
+        "time_rate": 0.025820763087843833,
+        "other_rate": 0.0,
+        "stop_count": 6454,
+        "target_count": 4525,
+        "time_count": 291,
+        "other_count": 0
+      },
+      "year_concentration": {
+        "dominant_year": "2025",
+        "dominant_share": 0.7164931290618348,
+        "positive_years": 3
+      },
+      "dll_check": {
+        "sizing_qty_for_30k_yr": 15.41,
+        "max_session_net_loss_usd_at_qty": -3348.73,
+        "fits_apex_tier1_dll": false,
+        "worst_session_date": "2021-10-01"
+      },
+      "validation_report": {
+        "passed": true,
+        "checks": [
+          {
+            "check_id": "V1",
+            "name": "Geometry coherence",
+            "passed": true,
+            "message": "0/11270 filled trades fail entry-time geometry; upstream reject rate 62.7% > 20% surface (booked population clean)",
+            "details": {
+              "incoherent_filled": 0,
+              "n_trades": 11270,
+              "geometry_reject_rate": 0.6274200053777897,
+              "has_bracket_columns": true,
+              "samples": []
+            }
+          },
+          {
+            "check_id": "V2",
+            "name": "Causal sequencing",
+            "passed": true,
+            "message": "All trades exit at/after entry",
+            "details": {
+              "violations": [],
+              "n_trades": 11270
+            }
+          },
+          {
+            "check_id": "V3",
+            "name": "Cost application",
+            "passed": true,
+            "message": "0/11270 zero-commission; 0 net/gross mismatches",
+            "details": {
+              "zero_commission_trades": 0,
+              "net_gross_mismatches": 0
+            }
+          },
+          {
+            "check_id": "V4",
+            "name": "Magnitude sanity",
+            "passed": true,
+            "message": "Avg net 1.82 ticks/trade (surface > 15.0)",
+            "details": {
+              "avg_net_ticks": 1.817462289263531,
+              "n_trades": 11270,
+              "total_net_usd": 10241.399999999998
+            }
+          },
+          {
+            "check_id": "V5",
+            "name": "Hand-computation spot check",
+            "passed": true,
+            "message": "T1=ok T2=ok T5_reject=ok",
+            "details": {}
+          },
+          {
+            "check_id": "V6",
+            "name": "Dual-touch exposure",
+            "passed": true,
+            "message": "Skipped (need bars + entry_bar for dual-touch analysis)",
+            "details": {}
+          }
+        ]
+      }
+    },
+    "C-3": {
+      "label": "1.0\u00d7 ATR(14) stop + 2.0\u00d7 ATR(14) target \u2014 regime-adaptive 2:1.",
+      "stop_rule": "atr_1x",
+      "target_rule": "atr_2x",
+      "exit_rejects": {},
+      "scan_geometry_rejects": {
+        "stop_wrong_side": 18667
+      },
+      "ledger_geometry_rejects": {
+        "stop_wrong_side": 1704,
+        "target_unreachable": 5
+      },
+      "booked": 11277,
+      "frame_b": {
+        "n_trades": 11277,
+        "trades_per_year": 2255.4,
+        "total_net_usd": -27637.459999999995,
+        "annual_net_usd": -4033.355999999921,
+        "avg_net_per_trade_usd": -2.450781236144364,
+        "avg_net_ticks": -4.901562472288728,
+        "win_rate": 0.3073512458987319,
+        "avg_win_usd": 45.86708597807271,
+        "avg_loss_usd": -23.891022916399947,
+        "reward_risk_ratio": 1.9198460500654133,
+        "year_net_usd": {
+          "2021": -4479.019999999948,
+          "2022": -5187.559999999704,
+          "2023": -4600.319999999906,
+          "2024": -3191.4600000000196,
+          "2025": -2708.4200000000287
+        }
+      },
+      "full_protocol": {
+        "n_trades": 11277,
+        "trades_per_year": 1611.0,
+        "total_net_usd": -27637.459999999995,
+        "annual_net_usd": -3948.2085714284876,
+        "avg_net_per_trade_usd": -2.450781236144364,
+        "avg_net_ticks": -4.901562472288728,
+        "win_rate": 0.3073512458987319,
+        "avg_win_usd": 45.86708597807271,
+        "avg_loss_usd": -23.891022916399947,
+        "reward_risk_ratio": 1.9198460500654133,
+        "year_net_usd": {
+          "2020": -5700.439999999806,
+          "2021": -4479.019999999948,
+          "2022": -5187.559999999704,
+          "2023": -4600.319999999906,
+          "2024": -3191.4600000000196,
+          "2025": -2708.4200000000287,
+          "2026": -1770.2400000000023
+        }
+      },
+      "exit_rates": {
+        "stop_rate": 0.6850226123969141,
+        "target_rate": 0.2935177795512991,
+        "time_rate": 0.021459608051786823,
+        "other_rate": 0.0,
+        "stop_count": 7725,
+        "target_count": 3310,
+        "time_count": 242,
+        "other_count": 0
+      },
+      "year_concentration": {
+        "dominant_year": null,
+        "dominant_share": 0.0,
+        "positive_years": 0
+      },
+      "dll_check": {
+        "fits_apex_tier1_dll": false,
+        "note": "Non-positive annual net"
+      },
+      "validation_report": {
+        "passed": true,
+        "checks": [
+          {
+            "check_id": "V1",
+            "name": "Geometry coherence",
+            "passed": true,
+            "message": "0/11277 filled trades fail entry-time geometry; upstream reject rate 62.4% > 20% surface (booked population clean)",
+            "details": {
+              "incoherent_filled": 0,
+              "n_trades": 11277,
+              "geometry_reject_rate": 0.6235636023516836,
+              "has_bracket_columns": true,
+              "samples": []
+            }
+          },
+          {
+            "check_id": "V2",
+            "name": "Causal sequencing",
+            "passed": true,
+            "message": "All trades exit at/after entry",
+            "details": {
+              "violations": [],
+              "n_trades": 11277
+            }
+          },
+          {
+            "check_id": "V3",
+            "name": "Cost application",
+            "passed": true,
+            "message": "0/11277 zero-commission; 0 net/gross mismatches",
+            "details": {
+              "zero_commission_trades": 0,
+              "net_gross_mismatches": 0
+            }
+          },
+          {
+            "check_id": "V4",
+            "name": "Magnitude sanity",
+            "passed": true,
+            "message": "Avg net -4.90 ticks/trade (surface > 15.0)",
+            "details": {
+              "avg_net_ticks": -4.901562472288728,
+              "n_trades": 11277,
+              "total_net_usd": -27637.459999999995
+            }
+          },
+          {
+            "check_id": "V5",
+            "name": "Hand-computation spot check",
+            "passed": true,
+            "message": "T1=ok T2=ok T5_reject=ok",
+            "details": {}
+          },
+          {
+            "check_id": "V6",
+            "name": "Dual-touch exposure",
+            "passed": true,
+            "message": "Skipped (need bars + entry_bar for dual-touch analysis)",
+            "details": {}
+          }
+        ]
+      }
+    },
+    "C-4": {
+      "label": "Fixed 10pt stop + 2R target (= 20pt target).",
+      "stop_rule": "fixed_10pt",
+      "target_rule": "fixed_2r",
+      "exit_rejects": {},
+      "scan_geometry_rejects": {
+        "stop_wrong_side": 18667
+      },
+      "ledger_geometry_rejects": {
+        "stop_wrong_side": 1793,
+        "target_unreachable": 23
+      },
+      "booked": 11270,
+      "frame_b": {
+        "n_trades": 11270,
+        "trades_per_year": 2254.0,
+        "total_net_usd": -5729.599999999992,
+        "annual_net_usd": -731.9320000000297,
+        "avg_net_per_trade_usd": -0.5083939662821644,
+        "avg_net_ticks": -1.0167879325643288,
+        "win_rate": 0.33460514640638866,
+        "avg_win_usd": 38.17393794749404,
+        "avg_loss_usd": -19.960464061874916,
+        "reward_risk_ratio": 1.9124774769343866,
+        "year_net_usd": {
+          "2021": -3089.140000000035,
+          "2022": 1234.3799999999696,
+          "2023": -2748.8200000000297,
+          "2024": -1161.1600000000249,
+          "2025": 2105.0799999999713
+        }
+      },
+      "full_protocol": {
+        "n_trades": 11270,
+        "trades_per_year": 1610.0,
+        "total_net_usd": -5729.599999999992,
+        "annual_net_usd": -818.5142857143117,
+        "avg_net_per_trade_usd": -0.5083939662821644,
+        "avg_net_ticks": -1.0167879325643288,
+        "win_rate": 0.33460514640638866,
+        "avg_win_usd": 38.17393794749404,
+        "avg_loss_usd": -19.960464061874916,
+        "reward_risk_ratio": 1.9124774769343866,
+        "year_net_usd": {
+          "2020": -3111.720000000029,
+          "2021": -3089.140000000035,
+          "2022": 1234.3799999999696,
+          "2023": -2748.8200000000297,
+          "2024": -1161.1600000000249,
+          "2025": 2105.0799999999713,
+          "2026": 1041.7799999999963
+        }
+      },
+      "exit_rates": {
+        "stop_rate": 0.6527950310559006,
+        "target_rate": 0.3118899733806566,
+        "time_rate": 0.035314995563442766,
+        "other_rate": 0.0,
+        "stop_count": 7357,
+        "target_count": 3515,
+        "time_count": 398,
+        "other_count": 0
+      },
+      "year_concentration": {
+        "dominant_year": null,
+        "dominant_share": 0.0,
+        "positive_years": 2
+      },
+      "dll_check": {
+        "fits_apex_tier1_dll": false,
+        "note": "Non-positive annual net"
+      },
+      "validation_report": {
+        "passed": true,
+        "checks": [
+          {
+            "check_id": "V1",
+            "name": "Geometry coherence",
+            "passed": true,
+            "message": "0/11270 filled trades fail entry-time geometry; upstream reject rate 62.6% > 20% surface (booked population clean)",
+            "details": {
+              "incoherent_filled": 0,
+              "n_trades": 11270,
+              "geometry_reject_rate": 0.625800395588186,
+              "has_bracket_columns": true,
+              "samples": []
+            }
+          },
+          {
+            "check_id": "V2",
+            "name": "Causal sequencing",
+            "passed": true,
+            "message": "All trades exit at/after entry",
+            "details": {
+              "violations": [],
+              "n_trades": 11270
+            }
+          },
+          {
+            "check_id": "V3",
+            "name": "Cost application",
+            "passed": true,
+            "message": "0/11270 zero-commission; 0 net/gross mismatches",
+            "details": {
+              "zero_commission_trades": 0,
+              "net_gross_mismatches": 0
+            }
+          },
+          {
+            "check_id": "V4",
+            "name": "Magnitude sanity",
+            "passed": true,
+            "message": "Avg net -1.02 ticks/trade (surface > 15.0)",
+            "details": {
+              "avg_net_ticks": -1.0167879325643288,
+              "n_trades": 11270,
+              "total_net_usd": -5729.599999999992
+            }
+          },
+          {
+            "check_id": "V5",
+            "name": "Hand-computation spot check",
+            "passed": true,
+            "message": "T1=ok T2=ok T5_reject=ok",
+            "details": {}
+          },
+          {
+            "check_id": "V6",
+            "name": "Dual-touch exposure",
+            "passed": true,
+            "message": "Skipped (need bars + entry_bar for dual-touch analysis)",
+            "details": {}
+          }
+        ]
+      }
+    }
+  },
+  "diagnostic_verdict": "Exit redesign improves target-hit rates but does not produce account-viable edge.",
+  "verdict": "**Marginal economics, no DLL fit.** Some combos show modest positive Frame B net but fail Apex tier-1 DLL at $30K/yr sizing. Not a survey candidate.",
+  "operator_summary": "| Combo | Harness | Annual/MNQ | Ticks/tr | Target% | DLL |\n|-------|---------|------------|----------|---------|-----|\n| C-base | PASS | $1,122 | 0.17 | 44% | NO |\n| C-1 | PASS | $-519 | -1.48 | 31% | NO |\n| C-2 | PASS | $1,946 | 1.82 | 40% | NO |\n| C-3 | PASS | $-4,033 | -4.90 | 29% | NO |\n| C-4 | PASS | $-732 | -1.02 | 31% | NO |\n\n**Does realistic exit recover OTE entry edge?** No."
+}

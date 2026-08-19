@@ -1,0 +1,271 @@
+{
+  "wave": "Wave 1 Track 2 Phase 2 \u2014 daily bias module assembly",
+  "git_sha": "0db224fc2bd1ef320064fb04c9a9a3d9d095e366",
+  "protocol_window": [
+    "2020-01-01",
+    "2026-06-30"
+  ],
+  "primary_config": "C1",
+  "configs": {
+    "C1": {
+      "pairing_timeframe": "5m",
+      "smt_required": false
+    },
+    "C2": {
+      "pairing_timeframe": "5m",
+      "smt_required": true
+    },
+    "C3": {
+      "pairing_timeframe": "15m",
+      "smt_required": false
+    },
+    "C4": {
+      "pairing_timeframe": "15m",
+      "smt_required": true
+    }
+  },
+  "structural_constants": {
+    "opening_range_minutes": 30,
+    "penetration_ticks": 1,
+    "close_back_within_bars": 3,
+    "tick_size": 0.25,
+    "smt_instruments": [
+      "MNQ",
+      "MES",
+      "MYM"
+    ]
+  },
+  "bar_counts": {
+    "MNQ": 599533,
+    "MES": 629048,
+    "MYM": 632947
+  },
+  "a_bias_distribution": {
+    "C1": {
+      "pairing_timeframe": "5m",
+      "smt_required": false,
+      "n_sessions": 1561,
+      "counts": {
+        "long": 218,
+        "short": 165,
+        "no-clear-bias": 1178
+      },
+      "fractions": {
+        "long": 0.13965406790518897,
+        "short": 0.1057014734144779,
+        "no-clear-bias": 0.7546444586803331
+      }
+    },
+    "C2": {
+      "pairing_timeframe": "5m",
+      "smt_required": true,
+      "n_sessions": 1561,
+      "counts": {
+        "long": 96,
+        "short": 73,
+        "no-clear-bias": 1392
+      },
+      "fractions": {
+        "long": 0.06149903907751442,
+        "short": 0.04676489429852659,
+        "no-clear-bias": 0.891736066623959
+      }
+    },
+    "C3": {
+      "pairing_timeframe": "15m",
+      "smt_required": false,
+      "n_sessions": 1561,
+      "counts": {
+        "long": 240,
+        "short": 159,
+        "no-clear-bias": 1162
+      },
+      "fractions": {
+        "long": 0.15374759769378604,
+        "short": 0.10185778347213324,
+        "no-clear-bias": 0.7443946188340808
+      }
+    },
+    "C4": {
+      "pairing_timeframe": "15m",
+      "smt_required": true,
+      "n_sessions": 1561,
+      "counts": {
+        "long": 89,
+        "short": 57,
+        "no-clear-bias": 1415
+      },
+      "fractions": {
+        "long": 0.057014734144778985,
+        "short": 0.03651505445227418,
+        "no-clear-bias": 0.9064702114029468
+      }
+    }
+  },
+  "b_bias_distribution_by_year_primary": {
+    "2020": {
+      "n_sessions": 258,
+      "counts": {
+        "long": 36,
+        "short": 26,
+        "no-clear-bias": 196
+      },
+      "fractions": {
+        "long": 0.13953488372093023,
+        "short": 0.10077519379844961,
+        "no-clear-bias": 0.7596899224806202
+      }
+    },
+    "2021": {
+      "n_sessions": 258,
+      "counts": {
+        "long": 30,
+        "short": 25,
+        "no-clear-bias": 203
+      },
+      "fractions": {
+        "long": 0.11627906976744186,
+        "short": 0.09689922480620156,
+        "no-clear-bias": 0.7868217054263565
+      }
+    },
+    "2022": {
+      "n_sessions": 258,
+      "counts": {
+        "long": 30,
+        "short": 36,
+        "no-clear-bias": 192
+      },
+      "fractions": {
+        "long": 0.11627906976744186,
+        "short": 0.13953488372093023,
+        "no-clear-bias": 0.7441860465116279
+      }
+    },
+    "2023": {
+      "n_sessions": 257,
+      "counts": {
+        "long": 38,
+        "short": 29,
+        "no-clear-bias": 190
+      },
+      "fractions": {
+        "long": 0.14785992217898833,
+        "short": 0.11284046692607004,
+        "no-clear-bias": 0.7392996108949417
+      }
+    },
+    "2024": {
+      "n_sessions": 226,
+      "counts": {
+        "long": 35,
+        "short": 23,
+        "no-clear-bias": 168
+      },
+      "fractions": {
+        "long": 0.15486725663716813,
+        "short": 0.10176991150442478,
+        "no-clear-bias": 0.7433628318584071
+      }
+    },
+    "2025": {
+      "n_sessions": 257,
+      "counts": {
+        "long": 39,
+        "short": 22,
+        "no-clear-bias": 196
+      },
+      "fractions": {
+        "long": 0.1517509727626459,
+        "short": 0.08560311284046693,
+        "no-clear-bias": 0.7626459143968871
+      }
+    },
+    "2026": {
+      "n_sessions": 47,
+      "counts": {
+        "long": 10,
+        "short": 4,
+        "no-clear-bias": 33
+      },
+      "fractions": {
+        "long": 0.2127659574468085,
+        "short": 0.0851063829787234,
+        "no-clear-bias": 0.7021276595744681
+      }
+    }
+  },
+  "c_confirmation_chain_attrition_primary": {
+    "smt_required": false,
+    "n_sessions": 1561,
+    "combined_funnel": {
+      "started_path_sweep": 1333,
+      "reached_cisd": 817,
+      "reached_eq_respect": 383,
+      "reached_smt": 169
+    },
+    "attrition_at_stage": {
+      "sweep->cisd": 516,
+      "cisd->eq": 434,
+      "eq->smt": 214
+    },
+    "per_direction": {
+      "bullish": {
+        "sweep": 892,
+        "cisd": 516,
+        "eq": 218,
+        "smt": 96
+      },
+      "bearish": {
+        "sweep": 945,
+        "cisd": 511,
+        "eq": 165,
+        "smt": 73
+      }
+    }
+  },
+  "d_smt_impact_primary_tf": {
+    "clear_bias_sessions_smt_optional": 383,
+    "winning_path_smt_evaluable": 374,
+    "winning_path_smt_present": 169,
+    "flip_to_no_clear_if_smt_required": 214,
+    "flip_fraction": 0.5587467362924282
+  },
+  "e_worked_examples": {
+    "continuation_bullish": {
+      "expected": "long",
+      "got": "long",
+      "correct": true,
+      "reason": "bullish chain complete"
+    },
+    "reversal_bearish": {
+      "expected": "short",
+      "got": "short",
+      "correct": true,
+      "reason": "bearish chain complete"
+    },
+    "consolidation_range": {
+      "expected": "no-clear-bias",
+      "got": "no-clear-bias",
+      "correct": true,
+      "reason": "no chain completed"
+    },
+    "all_correct": true
+  },
+  "stop_conditions": {
+    "worked_example_misclassified_STOP": false,
+    "no_clear_bias_dominates_surface": true,
+    "no_clear_bias_fraction_primary": 0.7546444586803331,
+    "insufficient_clear_sessions_surface": false,
+    "n_clear_sessions_primary": 383,
+    "year_long_share_primary": {
+      "2020": 0.5806451612903226,
+      "2021": 0.5454545454545454,
+      "2022": 0.45454545454545453,
+      "2023": 0.5671641791044776,
+      "2024": 0.603448275862069,
+      "2025": 0.639344262295082,
+      "2026": 0.7142857142857143
+    }
+  }
+}
