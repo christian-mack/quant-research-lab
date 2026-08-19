@@ -24,6 +24,12 @@ dist/
 /data/
 /results/
 
+# Bulk per-trade JSON logs from the closed OTE chapter (Wave 1 Track 2 Phase 3
+# step 3). ~88 MB across five files; regenerate with
+# scripts/run_wave1_track2_phase3_step3_ote_backtest.py. The summary .md/.json
+# reports for that step ARE tracked; see docs/research-log.md 2026-06-06 step 3.
+/notebooks/validation/2026-06-06_wave1_track2_phase3_step3_ote_trades/
+
 # Defensive: raw market-data files anywhere in the tree. Catches accidents
 # where vendor exports get dropped inside src/, notebooks/, or scratch dirs.
 **/MNQ*.txt
