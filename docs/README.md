@@ -10,7 +10,7 @@
 A multi-year program to build a portfolio of systematic trading strategies, progressing from retail-level systematic trading to quant-level edge sources. The program spans multiple strategy generations:
 
 - **Flux V1** (deployed) — NT8 intraday NQ/MNQ; **live: ORB+Opt3** (see `lessons-log.md`; historical quad-module stack for repro only)
-- **Flux V2** (planned) — Python research: **configuration investigations** vs ORB+Opt3 baseline (modules optional; see `flux-v2-module-search-starter.md`)
+- **Flux V2** (in progress) — Python research: **new-strategy search** vs the frozen ORB+Opt3 reference (modules optional; see `phase-2-kickoff.md` and `orb_opt3_phase2_closeout.md`)
 - **Flux V3** (leading candidate) — Regime-overlay / meta-gating **if** Phase 2 warrants
 - **Onyx-class V1** (leading candidate) — Multi-instrument systematic **if** economics justify after Flux phases; not “next” by default
 - **Future generations** (placeholder) — Leading candidates only after major-phase evidence
@@ -72,7 +72,6 @@ If you're an AI agent, new collaborator, or future-self returning to this projec
 ```
 repo_root/
 ├── README.md                  # Repo entry; links to docs/
-├── flux-v2-module-search-starter.md  # Phase 2 scope primer (TODO: consider moving under docs/)
 ├── docs/
 │   ├── README.md              # Program overview (this file)
 │   └── …

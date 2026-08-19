@@ -3,9 +3,9 @@
 **Plan type:** Batch-oriented research units (not week-by-week Phase 1 milestones)
 **Phase:** **2 — Flux V2** — configuration and pattern discovery vs frozen **ORB+Opt3** baseline
 **Status:** **H-W4-7** Session 3 complete (2026-08-18): clean-SHA repro + cells A–C; pulse not met. No kill/promote this session.
-**Last updated:** August 18, 2026 — H-W4-7 Session 3 (N=15 ledger; family dead at fixed-bracket pulse; no verdict)
+**Last updated:** August 18, 2026 — H-W4-7 Session 3 (N=15 ledger; family dead at fixed-bracket pulse; no verdict). Wave 0 / Wave 1 sections reconciled against `docs/research-log.md` during repo cleanup.
 **Next review:** After each hypothesis batch / validation cycle (or at least weekly for parallel tracks)
-**Related documents:** `docs/phase-2-kickoff.md`, `docs/research-log.md`, `docs/program-charter.md`, `flux-v2-module-search-starter.md`, `docs/phase-1-detailed-plan.md`, `docs/ai-project-instructions.md`, `docs/lessons-log.md`
+**Related documents:** `docs/phase-2-kickoff.md`, `docs/orb_opt3_phase2_closeout.md`, `docs/research-log.md`, `docs/program-charter.md`, `docs/phase-1-detailed-plan.md`, `docs/ai-project-instructions.md`, `docs/lessons-log.md`
 
 ---
 
@@ -19,7 +19,11 @@ Update when a batch completes, when hypotheses are pre-registered, or when paral
 
 ## Phase 2 success criteria (reminder)
 
-Charter-level Phase 2 exit is **≥ X% improvement vs ORB+Opt3 baseline** on agreed KPIs over the **6-year** protocol, plus statistical and (where applicable) **minimum viable edge** gates for new modules — see `docs/program-charter.md`. **Program north star** remains **per-account income** toward **$65K–$100K/yr**; see `docs/phase-2-kickoff.md` for gap framing and trade-frequency constraints.
+**Operational (post–Wave 0h):** At least **one** strategy configuration passes **joint gates** (**funded survival** + **block bootstrap ≥ 80%** + **eval ≥ 50%** on the pre-registered rolling-window spec) **and** **average funded P&L ≥ $36K/yr** (floor tier) at the sized quantity on the six-year MNQ protocol, under the relevant Apex PA class rules — see `docs/phase-2-kickoff.md`. **Target / stretch** tiers ($60K / $100K) and charter **$65K–$100K** net per account remain north-star goals.
+
+**Reference floor:** **Wave 0** graded **ORB+Opt3** (**Waves 0c–0h**) clears **none** of the joint gates at meaningful economics, and the 2026-06-08 account-class survey found **no** class ($50K / $100K / $150K) clearing **$36K/yr net + eval ≥ 50%**. Replacement strategies should beat that implicit "do nothing new" outcome.
+
+**Open doc conflict (operator):** `docs/program-charter.md` still frames Phase 2 exit as **≥ X% improvement vs ORB+Opt3**. That predates the Wave 0h reframe and should be aligned with the joint-gate definition above on the next charter edit (flagged in lessons log **2026-05-17**, Wave 0h). Not edited here — charter changes require operator sign-off.
 
 ---
 
@@ -37,33 +41,42 @@ Research proceeds in **batches**, not calendar weeks. A typical batch includes:
 
 ---
 
-## Wave 0 (current): Graded ORB+Opt3 baseline — **before any hypothesis wave**
+## Wave 0 (complete): Graded ORB+Opt3 baseline + chapter close-out
 
-**Goal:** Establish the **graded** ORB+Opt3 anchor (max sustainable qty, **R(q)**, economics, simulated eval pass rate).
+**Goal:** Establish the **graded** ORB+Opt3 anchor under **tiered PA** rules and document **joint-gate** failure modes; **close** the Phase 2 repair thread.
 
 **Tasks:**
 
-- [x] Re-run **ORB+Opt3** at **computed max sustainable qty** using **R(q)** and default **linear DD(q) ≈ q × DD(1)** (path-dependent DD only if justified and logged).
-- [x] Document **graded P&L** (and year-by-year profile), **max DD / DD(q)** curve, and **simulated eval pass rate** per `docs/phase-2-kickoff.md` (rolling 30-day windows; **$3K** profit target + **$3K** EOD trailing + **$1K** DLL per `docs/ai-project-instructions.md`).
-- [x] Append **Wave 0** summary + artifact pointers to **`docs/research-log.md`**. *(Lessons log: no charter-level surprise warranting an entry per AI Section 6.)*
+- [x] Re-run **ORB+Opt3** at **computed max sustainable qty** using **R(q)** and default **linear DD(q) ≈ q × DD(1)**. Result: **q_max = 0** under the original R(q) ceiling (research-log 2026-05-14).
+- [x] Re-baseline under **corrected** Apex $50K EOD rules — **$2,000** pre-lock trail, **$52K** lock, **$50K** post-lock floor, **$3K** target, **$1K** DLL (**Waves 0c–0d**; the earlier **$3K** trail figure is superseded per lessons log 2026-05-16).
+- [x] **Waves 0e–0g:** tiered PA / DLL simulator, bootstrap diagnosis, failure profile, and 2020-exclusion re-grade — **no** funded survival at surveyed sizes; excluding 2020 does not restore it.
+- [x] **Wave 0h (2026-05-17):** per-session loss tail vs TDD; **`docs/orb_opt3_phase2_closeout.md`**; kickoff + working-plan reframe to **new-strategy search**.
 
-**Wave 0 exit:** Operator + implementation agent agree the baseline numbers are **repeatable**; subsequent waves compare **only** against this **Wave 0** anchor — not against qty = 3 snapshots alone.
+**Wave 0 exit:** **Complete.** ORB+Opt3 is a **frozen research reference** and the **live production** placeholder until a replacement clears gates — not the object of Phase 2 repair.
 
 ---
 
-## Wave 1: Phase 2 kickoff and initial hypothesis selection
+## Wave 1 (complete): First non-ORB hypothesis batch — Track 1 quant + Track 2 ICT
 
-**Goal:** Establish operating rhythm and a **first pre-registered set** of investigations **after** Wave 0.
+**Goal:** Establish operating rhythm and run a **first pre-registered set** of **non-ORB** investigations.
 
-**Tasks:**
+**Track 1 / 1b (quant) — RESULT-LOGGED:**
 
-- [ ] Read **`docs/phase-2-kickoff.md`** end-to-end; align operator + strategy partner on gap, methodology, and roles.
-- [ ] Read **`flux-v2-module-search-starter.md`** (deprecation header) and charter Phase 2; treat starter as supplemental detail only.
-- [ ] Use **`docs/research-log.md`** for all pre-registrations (**Wave 1** onward); confirm deflated Sharpe uses **N = wave size**.
-- [ ] Produce **5–10** first hypotheses; **pre-register all** before running backtests that inform go/no-go.
-- [ ] Define how **results** are summarized and signed off (pass/pause/kill, links to trade logs / reports).
+- [x] **Track 1** (N=7: H1, H2, H8–H12) pre-registered 2026-05-26 and screened — **0 survivors** of the five Stage-1 gates. **H11** is the best near-miss (passes G2–G5, dies on G1 session tail).
+- [x] **Track 1b:** **H8b** MES–MNQ divergence screened 2026-05-29 — **KILLED** (strongly negative; fails G1, G3, G4, G5).
+- [ ] **H9 / H10 — BLOCKED:** no `RTY *.Last.txt` or `ES *.Last.txt` under `data/raw/`. Unblocked only by an operator export.
 
-**Wave 1 exit:** First hypothesis wave documented and pre-registered; at least one analysis **ready to execute** with frozen protocol references (`docs/m6-nt8-reproduction.md`, `docs/nt8-backtest-methodology.md`) and **Wave 0** baseline cited in the log.
+**Track 2 (ICT) — RESULT-LOGGED:**
+
+- [x] **Phase 1 (2026-06-04):** five unit-tested ICT primitives + MYM data prep; three-instrument SMT (MNQ/MES/MYM) confirmed viable.
+- [x] **Phase 2 (2026-06-05):** daily **bias module** — **no-clear-bias 75.5%** of 1,561 sessions (stand-down on ~3/4 of days). Binding filters are CISD + EQ-respect; SMT requirement halves frequency.
+- [x] **Phase 3a → step 3d (2026-06-06 → 06-07):** MSS primitive, standalone OTE assembly, entry-coherence forensic, coherent rebuilds, exit-structure test. **OTE closed definitively** — no persistent account-viable edge independent of exit structure; best combo still fails Apex tier-1 DLL.
+
+**Cross-track infrastructure — RESULT-LOGGED:**
+
+- [x] Geometry guard engine-wide; **V1–V6** harness mandatory (lessons log 2026-06-07), then **V7** engine-provenance guard (2026-06-08) closing the script-local fill bypass class.
+
+**Wave 1 exit:** **Complete, no survivors.** Every Track 1/1b hypothesis and the entire OTE chain are closed negative on the trusted M4 path. Remaining live threads are the **RTY/ES data block** (H9/H10) and the **MES parallel discovery surface** (running MNQ N tracked in `docs/research-log.md`; MES N started at 0).
 
 ---
 

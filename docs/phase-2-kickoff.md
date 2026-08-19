@@ -3,7 +3,7 @@
 **Status:** Entry artifact for Phase 2 (fresh-chat startup)
 **Date:** May 2026
 **Owner:** Christian
-**Related:** `docs/program-charter.md`, `docs/lessons-log.md`, `docs/current-working-plan.md`, `docs/research-log.md`, `flux-v2-module-search-starter.md` (repo root), `docs/ai-project-instructions.md`
+**Related:** `docs/program-charter.md`, `docs/lessons-log.md`, `docs/current-working-plan.md`, `docs/research-log.md`, `docs/orb_opt3_phase2_closeout.md`, `docs/ai-project-instructions.md`
 
 ---
 
@@ -118,7 +118,7 @@ The **V2 starter packet** mental model remains useful:
 
 **Updated mantra:** discover **any configurations** that **pass joint Apex EOD research gates** and **meet floor economics**, closing income gap toward charter targets — with **sizing** set by **funded survival (Gate A)** and **eval / bootstrap** (as pre-registered), not by fixing qty a priori.
 
-Canonical supplemental research-process detail: **`flux-v2-module-search-starter.md`** (repo root; see deprecation header — **`docs/phase-2-kickoff.md`** is authoritative on framing).
+The self-deprecated `flux-v2-module-search-starter.md` primer that previously held supplemental research-process detail was **removed from the repo** in `ae2fa83` (2026-07-29). **This document is authoritative** on Phase 2 framing; `docs/orb_opt3_phase2_closeout.md` is authoritative on the ORB chapter boundary.
 
 ---
 
@@ -197,7 +197,7 @@ Read these **in order** when opening a new Phase 2 session:
 2. `docs/lessons-log.md` — decisions, failures, baseline corrections, multi-module findings.
 3. **`docs/phase-2-kickoff.md`** (this document) — intent, **two-gate** grading, methodology, roles, **Wave 0 / 0c** baseline.
 4. **`docs/research-log.md`** — append-only pre-registration and results (**wave** = deflated Sharpe **N**).
-5. **`flux-v2-module-search-starter.md`** — legacy process detail; see **deprecation header** — authoritative framing is this kickoff + charter.
+5. **`docs/orb_opt3_phase2_closeout.md`** — ORB+Opt3 chapter boundary: what was ruled out, what was never explored, production status.
 6. `docs/ai-project-instructions.md` — agent and documentation conventions (incl. Apex **$50K EOD**: **$2K** trailing pre-lock, **$52K** lock, **$50K** static floor, **$3K** profit target, **$1K** DLL).
 
 Supporting: `docs/phase-1-detailed-plan.md` (what was built), `docs/m6-nt8-reproduction.md` (parity anchor), `docs/nt8-backtest-methodology.md` (NT8 reference protocol).
@@ -207,7 +207,7 @@ Supporting: `docs/phase-1-detailed-plan.md` (what was built), `docs/m6-nt8-repro
 ## First-session priorities (Phase 2)
 
 1. Read **`docs/orb_opt3_phase2_closeout.md`** and **`docs/research-log.md`** (Waves **0e–0h**) for the **ORB+Opt3** boundary conditions and **session-loss tail** vs **TDD**.
-2. Re-read **`flux-v2-module-search-starter.md`** and charter Phase **2** for any remaining stale “must improve ORB” language; **`docs/phase-2-kickoff.md`** + **close-out** supersede for **success** definition.
+2. Re-read charter Phase **2** for any remaining stale “must improve ORB” language; **`docs/phase-2-kickoff.md`** + **close-out** supersede for the **success** definition. (Charter still carries the **≥ X% vs ORB** framing — realignment is an open operator edit per lessons log **2026-05-17**.)
 3. **Pre-register** the **first new-strategy hypothesis wave** (**5–10** ideas) in **`docs/research-log.md`** before runs; include **per-session tail** screens where relevant (**Wave 0h** JSON agenda).
 4. Agree how **findings** are **documented and surfaced** (summary format, pass/fail, links to trade logs / reports).
 
