@@ -2,8 +2,8 @@
 
 **Plan type:** Batch-oriented research units (not week-by-week Phase 1 milestones)
 **Phase:** **2 — Flux V2** — configuration and pattern discovery vs frozen **ORB+Opt3** baseline
-**Status:** Phase 1 milestone gate cleared; Phase 2 execution begins after **`docs/phase-2-kickoff.md`** commit
-**Last updated:** May 14, 2026 — Wave 0 baseline + `docs/research-log.md`
+**Status:** **H-W4-7** Session 3 complete (2026-08-18): clean-SHA repro + cells A–C; pulse not met. No kill/promote this session.
+**Last updated:** August 18, 2026 — H-W4-7 Session 3 (N=15 ledger; family dead at fixed-bracket pulse; no verdict)
 **Next review:** After each hypothesis batch / validation cycle (or at least weekly for parallel tracks)
 **Related documents:** `docs/phase-2-kickoff.md`, `docs/research-log.md`, `docs/program-charter.md`, `flux-v2-module-search-starter.md`, `docs/phase-1-detailed-plan.md`, `docs/ai-project-instructions.md`, `docs/lessons-log.md`
 
@@ -83,11 +83,14 @@ These run **alongside** Phase 2 research unless charter stop-conditions trigger:
 
 ## Near-future waves (placeholders)
 
-Placeholders only — scope TBD by operator after Wave 1:
+Executed naming in `docs/research-log.md` supersedes these labels where they conflict:
 
-- **Wave 2:** Execute first pre-registered hypothesis set; record deflated Sharpe / CI outputs; kill or promote.
-- **Wave 3:** Second discovery round or deep-dive on surviving families (e.g. frequency vs magnitude tradeoffs).
-- **Wave 4:** Walk-forward and integration tests on top candidate(s).
+- **P2-W2 / P2-W3:** RESULT-LOGGED 2026-06-08 on `main` (closed negative on M4).
+- **Wave 4 (H-W4-7):** Session 3 (2026-08-18) — clean-clone primary **reproduced** Session 1 (6410 / 50.5% / $1,358.70 / DD $6,769.84). DSR at committed **N=15**. Cells A–C **fail** pre-specified pulse (PF ≥ 1.10 AND 4/7 years+). No R:R / ATR / block-subset follow-up this session. Kill/promote **not issued**.
+
+Placeholders only for anything still TBD:
+
+- Walk-forward / integration on a survivor — gated on an operator promote, none this session.
 
 Rename or split as needed; document changes in **`docs/research-log.md`** and **`docs/lessons-log.md`**.
 

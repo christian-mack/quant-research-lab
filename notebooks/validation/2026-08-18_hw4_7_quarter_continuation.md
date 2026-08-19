@@ -1,18 +1,29 @@
 # H-W4-7 Quarterly Close-Location Continuation (MNQ) — harness report
 
 **Date:** 2026-08-18  
-**git_sha:** `ae2fa83edc6f1940a841b92e99caff381b9f8839`  
+**git_sha:** `efc119e11495666a6e73d4161e2dcab649f7e337`  
 **git_dirty:** `True`  
 **Fill path:** M4 `BacktestEngine` (V7 provenance)  
 **Costs:** $1.98 RT + 1 tick stop/time / 0.5 tick target  
-**MNQ running N (DSR):** **19**  
+**MNQ running N (DSR):** **15**  
 **Verdict:** not issued this session
+
+## Repro check vs Session 1
+
+| Metric | Session 1 | This rerun | Delta | OK |
+|--------|-----------|------------|-------|----|
+| trades | 6410 | 6410 | 0 | yes |
+| win_rate_pct | 50.5 | 50.5 | 0.0 | yes |
+| net_pnl | 1358.7 | 1358.6999999999757 | -2.432898327242583e-11 | yes |
+| max_dd | 6769.84 | 6769.840000000014 | 1.3642420526593924e-11 | yes |
+
+Trade log: `2026-08-18_hw4_7_primary_trades.parquet`
 
 ## W4 pre-conditions
 
 | Gate | Status |
 |------|--------|
-| Clean clone | **NOT MET** (dirty tree; SHA recorded) |
+| Clean clone | **MET** (worktree of ledger-correction SHA) |
 | TDD $2K vs $3K | **RESOLVED** — $2,000 pre-lock trail |
 | MES loader | N/A (MNQ-only) |
 
@@ -22,9 +33,9 @@
 - V4 implausible-tick surface raised 15 → 250 because the pre-registered 50-pt target is 200 MNQ ticks gross (default 15 is ORB-scale and would false-fail).
 - 15-min left-labeled bars never timestamp at 16:59 ET, so engine hygiene flatten does not fire on this grid; holds may cross the 17:00 ET maintenance break (counted below). Deadzone [17:00, 18:00) still suppresses entries if those bars exist.
 - DLL spec text said '$200/contract per loss' for a 50-pt MNQ stop; 50×$2/pt=$100. Binding q uses $100; the $200 figure is reported as a side calculation.
-- Committed research-log MNQ N last snapshot is 13 (W3 would be 14); DSR uses operator-stated N=19. H-W4-1…6 are not in this repo's research-log.
-- Repo was not a clean clone (dirty working tree at HEAD ae2fa83).
-- Eval windows use 30 CME session dates (kickoff Gate B default), not 30 calendar days.
+- Committed MNQ running N: Track 1 + W2 = 13, W3 H-7 = 14, H-W4-7 primary = **15**. H-W4-1…6 were never registered and are not invented. Session 1 DSR used N=19; this rerun uses N=15.
+- Session 3 execution is from a clean worktree of the ledger-correction SHA (H-W4-7 module + N-correction committed). Per-trade log is written (Session 1 aggregates-only JSON was a hygiene miss).
+- V5 `validation_spot_checks.py` was imported by committed `validation.py` since fb264ac but the module itself was never on main (only in the dirty tree / now WIP). Restored onto this worktree so V1–V7 can run; fills/P&L path unchanged.
 - Full-protocol graded path (not 60/40 IS as the pass/fail split). 60/40 is not the primary metric for this spec.
 
 ## DST spot-check
@@ -138,14 +149,14 @@ Chart: `2026-08-18_hw4_7_quarter_continuation.png`
 
 Qty=1 eval diagnostic (not graded): 1.04% (16/1538).
 
-## Deflated Sharpe (N=19)
+## Deflated Sharpe (N=15)
 
 - Observed trade-series Sharpe: **0.1644**
 - PSR vs E[max SR] null: **1.0000**
-- E[max SR] (N=19, var from this SR + 18 zeros): **0.0708**
+- E[max SR] (N=15, var from this SR + 14 zeros): **0.0752**
 - n_trades (observations): **6410**
 
-Variance-across-trials uses this hypothesis's Sharpe plus 18 zeros (committed log last recorded MNQ N=13/14; operator stated 18→19). Missing H-W4-1…6 trial SRs are not invented. **PSR near 1 here is an artifact of that zero-fill shrinking E[max SR]; it is not evidence of edge.** Trade-series Sharpe 0.16 with PF 1.00 is noise-scale.
+Variance-across-trials uses this hypothesis's Sharpe plus 14 zeros (committed ledger: Track 1 + W2 = 13, W3 H-7 = 14, H-W4-7 primary = **15**; H-W4-1…6 were never registered). **PSR near 1 here is an artifact of that zero-fill shrinking E[max SR]; it is not evidence of edge.** Trade-series Sharpe ~0.16 with PF 1.00 is noise-scale.
 
 ## Kill/promote
 

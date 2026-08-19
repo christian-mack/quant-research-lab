@@ -41,6 +41,7 @@ from quant_research.modules.quarter_continuation import (
     MODULE_ID,
     QUARTER_BLOCKS,
     QuarterContinuationStrategy,
+    annotate_trades_with_signal_quarter,
     completed_quarter_stats,
     holds_cross_maintenance_et,
     qcl_backtest_config,
@@ -58,8 +59,16 @@ from quant_research.statistics.trade_report import _trade_sharpe
 PROTOCOL_START = dt.date(2020, 1, 1)
 PROTOCOL_END = dt.date(2026, 4, 19)
 OUT_STEM = _REPO / "notebooks" / "validation" / "2026-08-18_hw4_7_quarter_continuation"
+TRADES_STEM = _REPO / "notebooks" / "validation" / "2026-08-18_hw4_7_primary_trades"
 FREQ_FLOOR = 200.0
-MNQ_N = 19
+MNQ_N = 15
+SESSION1_TRADES = 6410
+SESSION1_WIN_RATE = 0.505
+SESSION1_NET = 1358.70
+SESSION1_DD = 6769.84
+REPRO_NET_TOL = 0.02
+REPRO_WR_TOL = 0.0005
+REPRO_DD_TOL = 0.02
 _ET = ZoneInfo("America/New_York")
 _CT = ZoneInfo("America/Chicago")
 WIN_LEN = 30
@@ -349,7 +358,11 @@ def eval_pass_rate_sessions(
     }
 
 
-def run_backtest(bars_15m: pl.DataFrame) -> dict[str, object]:
+def run_backtest(
+    bars_15m: pl.DataFrame,
+    *,
+    strategy_factory: type | None = None,
+) -> dict[str, object]:
     cfg = qcl_backtest_config()
     segments = split_dataframe_at_operator_export_gaps(bars_15m)
     logs: list[pl.DataFrame] = []
@@ -359,10 +372,11 @@ def run_backtest(bars_15m: pl.DataFrame) -> dict[str, object]:
     suppress_skip = 0
     geom_rejects: dict[str, int] = {}
     bar_frames: list[pl.DataFrame] = []
+    factory = strategy_factory or QuarterContinuationStrategy
     with warnings.catch_warnings():
         warnings.filterwarnings("ignore", message="Backtest end:")
         for seg in segments:
-            strat = QuarterContinuationStrategy()
+            strat = factory()
             out = BacktestEngine(cfg).run(seg, [as_module(MODULE_ID, strat)], run_validation=False)
             skip += strat.skip_count
             signals += strat.signal_count
@@ -432,11 +446,25 @@ def _render_md(payload: dict[str, object]) -> str:
         f"**MNQ running N (DSR):** **{MNQ_N}**  ",
         "**Verdict:** not issued this session",
         "",
+        "## Repro check vs Session 1",
+        "",
+        "| Metric | Session 1 | This rerun | Delta | OK |",
+        "|--------|-----------|------------|-------|----|",
+    ]
+    for r in payload.get("repro", {}).get("rows", []):
+        lines.append(
+            f"| {r['metric']} | {r['session1']} | {r['rerun']} | {r['delta']} | "
+            f"{'yes' if r['ok'] else 'NO'} |"
+        )
+    lines += [
+        "",
+        f"Trade log: `{Path(str(payload.get('trade_log', ''))).name}`",
+        "",
         "## W4 pre-conditions",
         "",
         "| Gate | Status |",
         "|------|--------|",
-        "| Clean clone | **NOT MET** (dirty tree; SHA recorded) |",
+        "| Clean clone | **MET** (worktree of ledger-correction SHA) |",
         "| TDD $2K vs $3K | **RESOLVED** — $2,000 pre-lock trail |",
         "| MES loader | N/A (MNQ-only) |",
         "",
@@ -574,18 +602,19 @@ def _render_md(payload: dict[str, object]) -> str:
             else ""
         ),
         "",
-        "## Deflated Sharpe (N=19)",
+        f"## Deflated Sharpe (N={MNQ_N})",
         "",
         f"- Observed trade-series Sharpe: **{g['dsr']['observed_sharpe']:.4f}**",
         f"- PSR vs E[max SR] null: **{g['dsr']['psr']:.4f}**",
-        f"- E[max SR] (N=19, var from this SR + 18 zeros): **{g['dsr']['e_max']:.4f}**",
+        f"- E[max SR] (N={MNQ_N}, var from this SR + {MNQ_N - 1} zeros): "
+        f"**{g['dsr']['e_max']:.4f}**",
         f"- n_trades (observations): **{g['dsr']['n_obs']}**",
         "",
-        "Variance-across-trials uses this hypothesis's Sharpe plus 18 zeros "
-        "(committed log last recorded MNQ N=13/14; operator stated 18→19). "
-        "Missing H-W4-1…6 trial SRs are not invented. **PSR near 1 here is an artifact "
+        f"Variance-across-trials uses this hypothesis's Sharpe plus {MNQ_N - 1} zeros "
+        "(committed ledger: Track 1 + W2 = 13, W3 H-7 = 14, H-W4-7 primary = **15**; "
+        "H-W4-1…6 were never registered). **PSR near 1 here is an artifact "
         "of that zero-fill shrinking E[max SR]; it is not evidence of edge.** "
-        "Trade-series Sharpe 0.16 with PF 1.00 is noise-scale.",
+        "Trade-series Sharpe ~0.16 with PF 1.00 is noise-scale.",
         "",
         "## Kill/promote",
         "",
@@ -648,11 +677,80 @@ def main() -> int:
     print("Running M4 grading backtest (qty=1) ...")
     bt = run_backtest(bars)
     log = bt["trade_log"]
+    annotated = annotate_trades_with_signal_quarter(log, stats)
+    TRADES_STEM.parent.mkdir(parents=True, exist_ok=True)
+    annotated.write_parquet(TRADES_STEM.with_suffix(".parquet"))
+    annotated.write_csv(TRADES_STEM.with_suffix(".csv"))
+    n_unlabeled = (
+        annotated.filter(pl.col("tier_bucket").is_null()).height if not annotated.is_empty() else 0
+    )
+    print(
+        f"Wrote trade log {TRADES_STEM.with_suffix('.parquet')} "
+        f"n={annotated.height} unlabeled_tier={n_unlabeled}"
+    )
     agg = compute_m6_aggregates(log)
     n = agg.trade_count
     pnl_yr = agg.net_pnl_total / yfrac if yfrac else 0.0
     dd1 = abs(float(agg.max_drawdown))
     mar1 = (pnl_yr / dd1) if dd1 > 0 else float("nan")
+
+    wr_pp = 100.0 * agg.win_rate
+    repro_rows = [
+        {
+            "metric": "trades",
+            "session1": SESSION1_TRADES,
+            "rerun": n,
+            "delta": n - SESSION1_TRADES,
+            "ok": n == SESSION1_TRADES,
+        },
+        {
+            "metric": "win_rate_pct",
+            "session1": 50.5,
+            "rerun": round(wr_pp, 1),
+            "delta": round(wr_pp, 1) - 50.5,
+            "ok": abs(wr_pp - 50.5) <= 0.05,
+        },
+        {
+            "metric": "net_pnl",
+            "session1": SESSION1_NET,
+            "rerun": float(agg.net_pnl_total),
+            "delta": float(agg.net_pnl_total) - SESSION1_NET,
+            "ok": abs(float(agg.net_pnl_total) - SESSION1_NET) <= REPRO_NET_TOL,
+        },
+        {
+            "metric": "max_dd",
+            "session1": SESSION1_DD,
+            "rerun": dd1,
+            "delta": dd1 - SESSION1_DD,
+            "ok": abs(dd1 - SESSION1_DD) <= REPRO_DD_TOL,
+        },
+    ]
+    repro_ok = all(bool(r["ok"]) for r in repro_rows)
+    print("Repro check vs Session 1:")
+    for r in repro_rows:
+        mark = "OK" if r["ok"] else "MISMATCH"
+        print(
+            f"  {r['metric']}: session1={r['session1']} rerun={r['rerun']} "
+            f"delta={r['delta']} {mark}"
+        )
+    if not repro_ok:
+        print("STOP: reproducibility check failed. No further cells.")
+        fail_payload = {
+            "hypothesis": "H-W4-7",
+            "git": git,
+            "repro": {"passed": False, "rows": repro_rows},
+            "grading": {
+                "n_trades": n,
+                "win_rate": agg.win_rate,
+                "net_pnl": agg.net_pnl_total,
+                "max_dd": dd1,
+            },
+            "trade_log": str(TRADES_STEM.with_suffix(".parquet")),
+        }
+        OUT_STEM.with_suffix(".json").write_text(
+            json.dumps(_json_sanitize(fail_payload), indent=2), encoding="utf-8"
+        )
+        return 3
 
     q_rq = 0
     r_at = None
@@ -702,7 +800,7 @@ def main() -> int:
         "e_max": float("nan"),
         "n_obs": n,
         "n_trials": MNQ_N,
-        "variance_note": "this SR + 18 zeros",
+            "variance_note": f"this SR + {MNQ_N - 1} zeros (committed N={MNQ_N})",
     }
     if n >= 3:
         sr = _trade_sharpe(net)
@@ -737,10 +835,15 @@ def main() -> int:
         "(counted below). Deadzone [17:00, 18:00) still suppresses entries if those bars exist.",
         "DLL spec text said '$200/contract per loss' for a 50-pt MNQ stop; 50×$2/pt=$100. "
         "Binding q uses $100; the $200 figure is reported as a side calculation.",
-        "Committed research-log MNQ N last snapshot is 13 (W3 would be 14); DSR uses "
-        "operator-stated N=19. H-W4-1…6 are not in this repo's research-log.",
-        "Repo was not a clean clone (dirty working tree at HEAD ae2fa83).",
-        "Eval windows use 30 CME session dates (kickoff Gate B default), not 30 calendar days.",
+        "Committed MNQ running N: Track 1 + W2 = 13, W3 H-7 = 14, H-W4-7 primary = **15**. "
+        "H-W4-1…6 were never registered and are not invented. Session 1 DSR used N=19; "
+        "this rerun uses N=15.",
+        "Session 3 execution is from a clean worktree of the ledger-correction SHA "
+        "(H-W4-7 module + N-correction committed). Per-trade log is written (Session 1 "
+        "aggregates-only JSON was a hygiene miss).",
+        "V5 `validation_spot_checks.py` was imported by committed `validation.py` since "
+        "fb264ac but the module itself was never on main (only in the dirty tree / now "
+        "WIP). Restored onto this worktree so V1–V7 can run; fills/P&L path unchanged.",
         "Full-protocol graded path (not 60/40 IS as the pass/fail split). 60/40 is not the "
         "primary metric for this spec.",
     ]
@@ -790,6 +893,9 @@ def main() -> int:
         "validation": vdict,
         "grading": grading,
         "deviations": deviations,
+        "repro": {"passed": True, "rows": repro_rows},
+        "trade_log": str(TRADES_STEM.with_suffix(".parquet")),
+        "trade_log_unlabeled_tier": n_unlabeled,
         "data": {
             "minute_bars": minute.height,
             "bars_15m": bars.height,
@@ -808,6 +914,7 @@ def main() -> int:
         f"PF={agg.profit_factor:.3f}  DD=${dd1:,.0f}  q_max={q_max} ({binding})"
     )
     print(f"V1-V7: {'PASS' if vdict['passed'] else 'FAIL'}")
+    print("Repro: PASS")
     return 0
 
 

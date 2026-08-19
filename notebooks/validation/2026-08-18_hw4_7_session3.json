@@ -1,0 +1,613 @@
+{
+  "hypothesis": "H-W4-7",
+  "session": 3,
+  "git": {
+    "git_sha": "efc119e11495666a6e73d4161e2dcab649f7e337",
+    "git_dirty": true
+  },
+  "clone_base_sha": "efc119e11495666a6e73d4161e2dcab649f7e337",
+  "hw47_sha": "1ae71e8ca46fb307e64c160e9f44ae6d22ca4329",
+  "wip_branch": "wip/wave0e-ict-backlog",
+  "worktree": "C:\\Users\\chris\\Documents\\Trading\\quant-research-lab-hw47-clean",
+  "repro": {
+    "passed": true,
+    "rows": [
+      {
+        "metric": "trades",
+        "session1": 6410,
+        "rerun": 6410,
+        "delta": 0,
+        "ok": true
+      },
+      {
+        "metric": "win_rate_pct",
+        "session1": 50.5,
+        "rerun": 50.5,
+        "delta": 0.0,
+        "ok": true
+      },
+      {
+        "metric": "net_pnl",
+        "session1": 1358.7,
+        "rerun": 1358.6999999999757,
+        "delta": -2.432898327242583e-11,
+        "ok": true
+      },
+      {
+        "metric": "max_dd",
+        "session1": 6769.84,
+        "rerun": 6769.840000000014,
+        "delta": 1.3642420526593924e-11,
+        "ok": true
+      }
+    ]
+  },
+  "primary_v17": true,
+  "diagnostic": {
+    "by_tier": {
+      "ge_0.75": {
+        "n": 2205,
+        "win_rate": 0.5229024943310657,
+        "profit_factor": 1.0742302616876431,
+        "net_pnl": 8031.599999999991
+      },
+      "0.50_to_0.75": {
+        "n": 1346,
+        "win_rate": 0.5208023774145617,
+        "profit_factor": 1.0672199798336426,
+        "net_pnl": 4439.919999999995
+      },
+      "0.25_to_0.50": {
+        "n": 1380,
+        "win_rate": 0.47101449275362317,
+        "profit_factor": 0.8850470297819818,
+        "net_pnl": -8642.900000000005
+      },
+      "le_0.25": {
+        "n": 1479,
+        "win_rate": 0.4942528735632184,
+        "profit_factor": 0.9678081627588593,
+        "net_pnl": -2469.9200000000055
+      }
+    },
+    "by_block": {
+      "18:00-22:00": {
+        "n": 741,
+        "win_rate": 0.5114709851551957,
+        "profit_factor": 1.0104000888463347,
+        "net_pnl": 385.8199999999971
+      },
+      "22:00-02:00": {
+        "n": 610,
+        "win_rate": 0.4540983606557377,
+        "profit_factor": 0.8038788202722628,
+        "net_pnl": -6692.800000000002
+      },
+      "02:00-06:00": {
+        "n": 1023,
+        "win_rate": 0.49560117302052786,
+        "profit_factor": 0.9527504705020907,
+        "net_pnl": -2498.540000000004
+      },
+      "06:00-10:00": {
+        "n": 1430,
+        "win_rate": 0.4951048951048951,
+        "profit_factor": 1.0173901732337638,
+        "net_pnl": 1286.0999999999951
+      },
+      "10:00-14:00": {
+        "n": 1429,
+        "win_rate": 0.5262421273617914,
+        "profit_factor": 1.0948326604260548,
+        "net_pnl": 6641.0799999999945
+      },
+      "14:00-17:00": {
+        "n": 1177,
+        "win_rate": 0.5199660152931181,
+        "profit_factor": 1.0385217022947295,
+        "net_pnl": 2237.0399999999954
+      }
+    },
+    "cross": {
+      "ge_0.75": {
+        "18:00-22:00": {
+          "n": 271,
+          "win_rate": 0.5092250922509225,
+          "profit_factor": 0.9942713927676333,
+          "net_pnl": -78.08000000000106
+        },
+        "22:00-02:00": {
+          "n": 210,
+          "win_rate": 0.42857142857142855,
+          "profit_factor": 0.7238648191517043,
+          "net_pnl": -3395.8000000000006
+        },
+        "02:00-06:00": {
+          "n": 326,
+          "win_rate": 0.4815950920245399,
+          "profit_factor": 0.8955789901565437,
+          "net_pnl": -1808.4800000000014
+        },
+        "06:00-10:00": {
+          "n": 466,
+          "win_rate": 0.5300429184549357,
+          "profit_factor": 1.1532906298233043,
+          "net_pnl": 3440.3199999999983
+        },
+        "10:00-14:00": {
+          "n": 514,
+          "win_rate": 0.5642023346303502,
+          "profit_factor": 1.2700990160533216,
+          "net_pnl": 6259.279999999998
+        },
+        "14:00-17:00": {
+          "n": 418,
+          "win_rate": 0.5526315789473685,
+          "profit_factor": 1.1869358605951146,
+          "net_pnl": 3614.3599999999983
+        }
+      },
+      "0.50_to_0.75": {
+        "18:00-22:00": {
+          "n": 148,
+          "win_rate": 0.5608108108108109,
+          "profit_factor": 1.2412418182909986,
+          "net_pnl": 1606.9599999999994
+        },
+        "22:00-02:00": {
+          "n": 133,
+          "win_rate": 0.49624060150375937,
+          "profit_factor": 0.9398004124576183,
+          "net_pnl": -413.34000000000054
+        },
+        "02:00-06:00": {
+          "n": 233,
+          "win_rate": 0.5450643776824035,
+          "profit_factor": 1.1506193569292855,
+          "net_pnl": 1636.1599999999992
+        },
+        "06:00-10:00": {
+          "n": 288,
+          "win_rate": 0.4965277777777778,
+          "profit_factor": 1.0005577086681159,
+          "net_pnl": 8.259999999998975
+        },
+        "10:00-14:00": {
+          "n": 297,
+          "win_rate": 0.5387205387205387,
+          "profit_factor": 1.1766013094240928,
+          "net_pnl": 2479.4399999999987
+        },
+        "14:00-17:00": {
+          "n": 247,
+          "win_rate": 0.4939271255060729,
+          "profit_factor": 0.9314941451990632,
+          "net_pnl": -877.560000000001
+        }
+      },
+      "0.25_to_0.50": {
+        "18:00-22:00": {
+          "n": 148,
+          "win_rate": 0.4594594594594595,
+          "profit_factor": 0.831669594067135,
+          "net_pnl": -1380.0400000000006
+        },
+        "22:00-02:00": {
+          "n": 128,
+          "win_rate": 0.4453125,
+          "profit_factor": 0.7810716759573836,
+          "net_pnl": -1592.9400000000005
+        },
+        "02:00-06:00": {
+          "n": 230,
+          "win_rate": 0.5347826086956522,
+          "profit_factor": 1.1412721515755067,
+          "net_pnl": 1549.099999999999
+        },
+        "06:00-10:00": {
+          "n": 332,
+          "win_rate": 0.4457831325301205,
+          "profit_factor": 0.84664488996477,
+          "net_pnl": -2893.860000000001
+        },
+        "10:00-14:00": {
+          "n": 309,
+          "win_rate": 0.459546925566343,
+          "profit_factor": 0.8340413454671964,
+          "net_pnl": -2900.320000000001
+        },
+        "14:00-17:00": {
+          "n": 233,
+          "win_rate": 0.48068669527896996,
+          "profit_factor": 0.8850942897142599,
+          "net_pnl": -1424.8400000000008
+        }
+      },
+      "le_0.25": {
+        "18:00-22:00": {
+          "n": 174,
+          "win_rate": 0.5172413793103449,
+          "profit_factor": 1.0275291810713356,
+          "net_pnl": 236.97999999999934
+        },
+        "22:00-02:00": {
+          "n": 139,
+          "win_rate": 0.460431654676259,
+          "profit_factor": 0.8320686963309913,
+          "net_pnl": -1290.7200000000005
+        },
+        "02:00-06:00": {
+          "n": 234,
+          "win_rate": 0.42735042735042733,
+          "profit_factor": 0.7177956820114882,
+          "net_pnl": -3875.320000000001
+        },
+        "06:00-10:00": {
+          "n": 344,
+          "win_rate": 0.4941860465116279,
+          "profit_factor": 1.0410161332292478,
+          "net_pnl": 731.3799999999989
+        },
+        "10:00-14:00": {
+          "n": 309,
+          "win_rate": 0.517799352750809,
+          "profit_factor": 1.0523275826101468,
+          "net_pnl": 802.6799999999989
+        },
+        "14:00-17:00": {
+          "n": 279,
+          "win_rate": 0.5268817204301075,
+          "profit_factor": 1.0683858491235538,
+          "net_pnl": 925.0799999999989
+        }
+      }
+    }
+  },
+  "cells": {
+    "A": {
+      "cell": "A",
+      "n_trades": 3941,
+      "trades_per_year": 625.5759452411994,
+      "win_rate": 0.5130677493022076,
+      "profit_factor": 1.0574174828522722,
+      "net_pnl": 11292.819999999985,
+      "pnl_per_year": 1792.5695371577551,
+      "max_dd": 2836.120000000003,
+      "years": {
+        "2023": 815.6799999999906,
+        "2024": 3254.999999999992,
+        "2022": 1117.3199999999888,
+        "2025": 5229.0999999999985,
+        "2020": 2078.319999999991,
+        "2026": -410.8000000000022,
+        "2021": -791.800000000007
+      },
+      "years_positive": 5,
+      "skip_count": 974,
+      "signal_count_engine": 4957,
+      "holds_crossing_maintenance": 224,
+      "maintenance_flatten_exits": 0,
+      "dual_touch_rate": 0.004314720812182741,
+      "validation_passed": true,
+      "validation": {
+        "passed": true,
+        "checks": [
+          {
+            "check_id": "V1",
+            "name": "Geometry coherence",
+            "passed": true,
+            "message": "0/3941 filled trades fail entry-time geometry",
+            "details": {
+              "incoherent_filled": 0,
+              "n_trades": 3941,
+              "geometry_reject_rate": null,
+              "has_bracket_columns": true,
+              "samples": []
+            }
+          },
+          {
+            "check_id": "V2",
+            "name": "Causal sequencing",
+            "passed": true,
+            "message": "All trades exit at/after entry",
+            "details": {
+              "violations": [],
+              "n_trades": 3941
+            }
+          },
+          {
+            "check_id": "V3",
+            "name": "Cost application",
+            "passed": true,
+            "message": "0/3941 zero-commission; 0 net/gross mismatches",
+            "details": {
+              "zero_commission_trades": 0,
+              "net_gross_mismatches": 0
+            }
+          },
+          {
+            "check_id": "V4",
+            "name": "Magnitude sanity",
+            "passed": true,
+            "message": "Avg net 5.73 ticks/trade (surface > 250.0)",
+            "details": {
+              "avg_net_ticks": 5.730941385435162,
+              "n_trades": 3941,
+              "total_net_usd": 11292.819999999985
+            }
+          },
+          {
+            "check_id": "V5",
+            "name": "Hand-computation spot check",
+            "passed": true,
+            "message": "T1=ok T2=ok T5_reject=ok",
+            "details": {}
+          },
+          {
+            "check_id": "V6",
+            "name": "Dual-touch exposure",
+            "passed": true,
+            "message": "0.4% dual-touch on 3940 bracket exits",
+            "details": {
+              "dual_touch_count": 17,
+              "resolved_exits": 3940,
+              "dual_touch_rate": 0.004314720812182741
+            }
+          },
+          {
+            "check_id": "V7",
+            "name": "Engine provenance",
+            "passed": true,
+            "message": "All 3941 trades carry M4 engine provenance",
+            "details": {
+              "n_trades": 3941,
+              "offending_trade_ids": [],
+              "expected_marker": "m4_backtest_engine@v1",
+              "foreign_samples": []
+            }
+          }
+        ]
+      },
+      "pulse_pass": false,
+      "trade_log": "C:\\Users\\chris\\Documents\\Trading\\quant-research-lab-hw47-clean\\notebooks\\validation\\2026-08-18_hw4_7_cell_a_trades.parquet"
+    },
+    "B": {
+      "cell": "B",
+      "n_trades": 4018,
+      "trades_per_year": 637.7985658409386,
+      "win_rate": 0.5092085614733698,
+      "profit_factor": 1.0183305796107884,
+      "net_pnl": 3712.8599999999847,
+      "pnl_per_year": 589.3620664928268,
+      "max_dd": 5163.759999999889,
+      "years": {
+        "2026": 393.39999999999856,
+        "2023": 788.2999999999917,
+        "2024": 3655.1599999999917,
+        "2020": -1513.1600000000085,
+        "2022": 741.6999999999881,
+        "2021": 2138.3799999999896,
+        "2025": -2490.920000000011
+      },
+      "years_positive": 5,
+      "skip_count": 966,
+      "signal_count_engine": 4984,
+      "holds_crossing_maintenance": 266,
+      "maintenance_flatten_exits": 0,
+      "dual_touch_rate": 0.0032370517928286854,
+      "validation_passed": true,
+      "validation": {
+        "passed": true,
+        "checks": [
+          {
+            "check_id": "V1",
+            "name": "Geometry coherence",
+            "passed": true,
+            "message": "0/4018 filled trades fail entry-time geometry",
+            "details": {
+              "incoherent_filled": 0,
+              "n_trades": 4018,
+              "geometry_reject_rate": null,
+              "has_bracket_columns": true,
+              "samples": []
+            }
+          },
+          {
+            "check_id": "V2",
+            "name": "Causal sequencing",
+            "passed": true,
+            "message": "All trades exit at/after entry",
+            "details": {
+              "violations": [],
+              "n_trades": 4018
+            }
+          },
+          {
+            "check_id": "V3",
+            "name": "Cost application",
+            "passed": true,
+            "message": "0/4018 zero-commission; 0 net/gross mismatches",
+            "details": {
+              "zero_commission_trades": 0,
+              "net_gross_mismatches": 0
+            }
+          },
+          {
+            "check_id": "V4",
+            "name": "Magnitude sanity",
+            "passed": true,
+            "message": "Avg net 1.85 ticks/trade (surface > 250.0)",
+            "details": {
+              "avg_net_ticks": 1.8481134892981506,
+              "n_trades": 4018,
+              "total_net_usd": 3712.8599999999847
+            }
+          },
+          {
+            "check_id": "V5",
+            "name": "Hand-computation spot check",
+            "passed": true,
+            "message": "T1=ok T2=ok T5_reject=ok",
+            "details": {}
+          },
+          {
+            "check_id": "V6",
+            "name": "Dual-touch exposure",
+            "passed": true,
+            "message": "0.3% dual-touch on 4016 bracket exits",
+            "details": {
+              "dual_touch_count": 13,
+              "resolved_exits": 4016,
+              "dual_touch_rate": 0.0032370517928286854
+            }
+          },
+          {
+            "check_id": "V7",
+            "name": "Engine provenance",
+            "passed": true,
+            "message": "All 4018 trades carry M4 engine provenance",
+            "details": {
+              "n_trades": 4018,
+              "offending_trade_ids": [],
+              "expected_marker": "m4_backtest_engine@v1",
+              "foreign_samples": []
+            }
+          }
+        ]
+      },
+      "pulse_pass": false,
+      "trade_log": "C:\\Users\\chris\\Documents\\Trading\\quant-research-lab-hw47-clean\\notebooks\\validation\\2026-08-18_hw4_7_cell_b_trades.parquet"
+    },
+    "C": {
+      "cell": "C",
+      "n_trades": 6350,
+      "trades_per_year": 1007.9693611473272,
+      "win_rate": 0.5133858267716536,
+      "profit_factor": 1.056026607037891,
+      "net_pnl": 17756.999999999975,
+      "pnl_per_year": 2818.6632985658366,
+      "max_dd": 3964.7800000000157,
+      "years": {
+        "2020": 1860.9999999999827,
+        "2023": 2334.7399999999843,
+        "2026": -1004.140000000004,
+        "2021": 3240.8799999999846,
+        "2022": -902.8800000000182,
+        "2024": 5085.540000000034,
+        "2025": 7141.860000000368
+      },
+      "years_positive": 5,
+      "skip_count": 2836,
+      "signal_count_engine": 9253,
+      "holds_crossing_maintenance": 354,
+      "maintenance_flatten_exits": 0,
+      "dual_touch_rate": 0.004725897920604915,
+      "validation_passed": true,
+      "validation": {
+        "passed": true,
+        "checks": [
+          {
+            "check_id": "V1",
+            "name": "Geometry coherence",
+            "passed": true,
+            "message": "0/6350 filled trades fail entry-time geometry",
+            "details": {
+              "incoherent_filled": 0,
+              "n_trades": 6350,
+              "geometry_reject_rate": null,
+              "has_bracket_columns": true,
+              "samples": []
+            }
+          },
+          {
+            "check_id": "V2",
+            "name": "Causal sequencing",
+            "passed": true,
+            "message": "All trades exit at/after entry",
+            "details": {
+              "violations": [],
+              "n_trades": 6350
+            }
+          },
+          {
+            "check_id": "V3",
+            "name": "Cost application",
+            "passed": true,
+            "message": "0/6350 zero-commission; 0 net/gross mismatches",
+            "details": {
+              "zero_commission_trades": 0,
+              "net_gross_mismatches": 0
+            }
+          },
+          {
+            "check_id": "V4",
+            "name": "Magnitude sanity",
+            "passed": true,
+            "message": "Avg net 5.59 ticks/trade (surface > 250.0)",
+            "details": {
+              "avg_net_ticks": 5.592755905511803,
+              "n_trades": 6350,
+              "total_net_usd": 17756.999999999975
+            }
+          },
+          {
+            "check_id": "V5",
+            "name": "Hand-computation spot check",
+            "passed": true,
+            "message": "T1=ok T2=ok T5_reject=ok",
+            "details": {}
+          },
+          {
+            "check_id": "V6",
+            "name": "Dual-touch exposure",
+            "passed": true,
+            "message": "0.5% dual-touch on 6348 bracket exits",
+            "details": {
+              "dual_touch_count": 30,
+              "resolved_exits": 6348,
+              "dual_touch_rate": 0.004725897920604915
+            }
+          },
+          {
+            "check_id": "V7",
+            "name": "Engine provenance",
+            "passed": true,
+            "message": "All 6350 trades carry M4 engine provenance",
+            "details": {
+              "n_trades": 6350,
+              "offending_trade_ids": [],
+              "expected_marker": "m4_backtest_engine@v1",
+              "foreign_samples": []
+            }
+          }
+        ]
+      },
+      "pulse_pass": false,
+      "trade_log": "C:\\Users\\chris\\Documents\\Trading\\quant-research-lab-hw47-clean\\notebooks\\validation\\2026-08-18_hw4_7_cell_c_trades.parquet"
+    }
+  },
+  "pulse_any": false,
+  "dst": {
+    "checks": {
+      "spring_reopen_2020_03_08_1800": "18:00-22:00",
+      "fall_reopen_2020_11_01_1800": "18:00-22:00",
+      "jan_2200": "22:00-02:00",
+      "jan_0200": "02:00-06:00",
+      "jun_2200": "22:00-02:00",
+      "jun_0200": "02:00-06:00"
+    },
+    "spring_ok": true,
+    "fall_ok": true,
+    "overnight_ok": true,
+    "passed": true,
+    "note": "US DST is Sunday 02:00 ET during the CME weekend close; no 15-min bars exist at the transition instant."
+  },
+  "deviations": [
+    "M4 OPEN_OF_NEXT_BAR only; Cell A/C submit on last bar of completing quarter (16:45 ET last of 14:00-17:00 fills at next in-session bar, typically 18:00 ET because 17:00-18:00 is BREAK).",
+    "V4 surface 250 ticks (50-pt / 200-tick target).",
+    "V5 module `validation_spot_checks.py` restored from WIP \u2014 committed validation.py imported it since fb264ac but the file was never on main.",
+    "DSR uses committed N=15. Cells A-C do not increment N.",
+    "15-min grid: 16:59 flatten never fires; 17:00-cross holds counted.",
+    "Annotation of tier_bucket / quarter_block is post-hoc asof join; does not change fills."
+  ]
+}

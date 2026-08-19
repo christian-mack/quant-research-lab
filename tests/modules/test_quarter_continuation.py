@@ -16,9 +16,11 @@ from quant_research.modules.quarter_continuation import (
     BLOCK_1800_2200,
     MODULE_ID,
     QuarterContinuationStrategy,
+    annotate_trades_with_signal_quarter,
     close_location,
     completed_quarter_stats,
     holds_cross_maintenance_et,
+    is_quarter_last_bar_et,
     qcl_backtest_config,
     qcl_validation_thresholds,
     quarter_block_id_et,
@@ -40,6 +42,11 @@ def test_close_location_and_signal() -> None:
     assert signal_from_close_location(0.5) is None
     assert signal_from_close_location(0.51) == "long"
     assert signal_from_close_location(0.49) == "short"
+    assert signal_from_close_location(0.60, extreme_only=True) is None
+    assert signal_from_close_location(0.75, extreme_only=True) == "long"
+    assert signal_from_close_location(0.25, extreme_only=True) == "short"
+    assert is_quarter_last_bar_et(_et(2020, 1, 6, 21, 45)) is True
+    assert is_quarter_last_bar_et(_et(2020, 1, 6, 22, 0)) is False
     assert close_location(100.0, 100.0, 100.0) is None
     assert signal_from_close_location(None) is None
     assert tier_bucket(0.75) == "ge_0.75"
@@ -131,6 +138,42 @@ def _bars_for_long_round_trip() -> pl.DataFrame:
     )
 
 
+def test_last_bar_submit_fills_open_of_first_bar_of_new_quarter() -> None:
+    """Cell A/C timing: submit on 13:45 close → fill at 14:00 open."""
+    cfg = qcl_backtest_config()
+    strat = QuarterContinuationStrategy(submit_on_completing_quarter_last_bar=True)
+    result = BacktestEngine(cfg).run(
+        _bars_for_long_round_trip(),
+        [as_module(MODULE_ID, strat)],
+        run_validation=False,
+    )
+    assert result.trade_log.height == 1
+    row = result.trade_log.row(0, named=True)
+    assert row["direction"] == "long"
+    assert float(row["entry_price"]) == pytest.approx(10080.0)
+
+
+def test_extreme_filter_skips_mid_tier() -> None:
+    sess = dt.date(2020, 1, 7)
+    rows = [
+        (_et(2020, 1, 7, 13, 30), 10000.0, 10100.0, 10000.0, 10050.0, 1.0, sess),
+        (_et(2020, 1, 7, 13, 45), 10050.0, 10100.0, 10000.0, 10060.0, 1.0, sess),
+        (_et(2020, 1, 7, 14, 0), 10060.0, 10070.0, 10050.0, 10062.0, 1.0, sess),
+        (_et(2020, 1, 7, 14, 15), 10062.0, 10070.0, 10050.0, 10065.0, 1.0, sess),
+    ]
+    df = pl.DataFrame(
+        rows,
+        schema=["timestamp", "open", "high", "low", "close", "volume", "cme_session_date"],
+        orient="row",
+    )
+    strat = QuarterContinuationStrategy(extreme_tiers_only=True)
+    result = BacktestEngine(qcl_backtest_config()).run(
+        df, [as_module(MODULE_ID, strat)], run_validation=False
+    )
+    assert result.trade_log.height == 0
+    assert strat.signal_count == 0
+
+
 def test_m4_engine_long_hits_target() -> None:
     cfg = qcl_backtest_config()
     strat = QuarterContinuationStrategy()
@@ -180,6 +223,30 @@ def test_skip_when_position_still_open() -> None:
     )
     assert strat.signal_count >= 1
     assert strat.skip_count >= 1
+
+
+def test_annotate_trades_with_signal_quarter_asof() -> None:
+    last = _et(2020, 1, 6, 21, 45)
+    stats = pl.DataFrame(
+        {
+            "last_bar_time": [last],
+            "quarter_block": [BLOCK_1800_2200],
+            "tier": ["ge_0.75"],
+            "close_loc": [0.80],
+        }
+    )
+    entry = last.astimezone(dt.UTC) + dt.timedelta(minutes=30)
+    log = pl.DataFrame(
+        {
+            "trade_id": [1],
+            "entry_time": [entry],
+            "net_pnl": [1.0],
+        }
+    ).with_columns(pl.col("entry_time").dt.convert_time_zone("UTC"))
+    out = annotate_trades_with_signal_quarter(log, stats)
+    assert out["quarter_block"][0] == BLOCK_1800_2200
+    assert out["tier_bucket"][0] == "ge_0.75"
+    assert out["close_loc"][0] == pytest.approx(0.80)
 
 
 def test_maintenance_cross_helper() -> None:

@@ -2174,6 +2174,32 @@ Reversion/fade family dead on MNQ intraday at realistic cost. Note: original wal
 
 ---
 
+## 2026-08-18 — H-W4-7 Session 3: clean-SHA repro + trade log + cells A–C — RESULT-LOGGED
+
+**Wave:** Wave 4 (H-W4-7)
+**Status:** RESULT-LOGGED (Session 3). Does **not** rewrite Session 1 PRE/RESULT. Kill/promote **not issued**.
+**Execution:** worktree of `efc119e` (H-W4-7 provenance `1ae71e8` + N-ledger correction). Wave 0e–1 / ICT parked on `wip/wave0e-ict-backlog`.
+
+**Repro check (primary spec unchanged):** PASS — trades **6410**, WR **50.5%**, net **$1,358.70**, DD **$6,769.84** (float-tolerance equality vs Session 1). V1–V7 **PASS**. Per-trade log written (`2026-08-18_hw4_7_primary_trades.parquet`).
+
+**DSR at committed N=15:** trade SR **0.164**; PSR vs E[max SR] still an artifact of 14-zero fill (E[max SR] **0.075**). Immaterial to PF **1.004**.
+
+**Diagnostic (descriptive; no new cells):** net edge concentrated in `ge_0.75` (+$8,032) and `0.50_to_0.75` (+$4,440); short-side / lower-half buckets negative. Overnight `22:00-02:00` is the weak block (−$6,693).
+
+**Sensitivity cells A–C (qty=1, standard costs, M4):**
+
+| Cell | n | /yr | WR | PF | $/yr | DD | Years+ | Pulse |
+|------|---|-----|----|----|------|----|--------|-------|
+| A ≥0.75/≤0.25, first-bar open | 3941 | 626 | 51.3% | 1.057 | $1,793 | $2,836 | 5/7 | no |
+| B ≥0.75/≤0.25, second-bar open | 4018 | 638 | 50.9% | 1.018 | $589 | $5,164 | 5/7 | no |
+| C all-tier, first-bar open | 6350 | 1008 | 51.3% | 1.056 | $2,819 | $3,965 | 5/7 | no |
+
+**Pulse criterion (pre-specified):** qty=1 net PF ≥ 1.10 AND +PnL in ≥ 4 of 7 years. **No cell passed.** Family dead at fixed-bracket level this session — no R:R sweep, ATR variant, or block subset. Cells do not increment N.
+
+**Artifact:** `notebooks/validation/2026-08-18_hw4_7_session3.{md,json}`; primary + cell trade logs under `notebooks/validation/2026-08-18_hw4_7_*_trades.{parquet,csv}`
+
+---
+
 ## Entry template
 
 Copy from `## YYYY-MM-DD` through **`Artifact:`** for each new hypothesis or baseline record.

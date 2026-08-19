@@ -1,7 +1,7 @@
 {
   "hypothesis": "H-W4-7",
   "git": {
-    "git_sha": "ae2fa83edc6f1940a841b92e99caff381b9f8839",
+    "git_sha": "efc119e11495666a6e73d4161e2dcab649f7e337",
     "git_dirty": true
   },
   "dst": {
@@ -98,7 +98,7 @@
       "frac_50_vs_median": 0.32679738562091504
     }
   ],
-  "range_chart": "C:\\Users\\chris\\Documents\\Trading\\quant-research-lab\\notebooks\\validation\\2026-08-18_hw4_7_quarter_continuation.png",
+  "range_chart": "C:\\Users\\chris\\Documents\\Trading\\quant-research-lab-hw47-clean\\notebooks\\validation\\2026-08-18_hw4_7_quarter_continuation.png",
   "frequency": {
     "n_signals": 9309,
     "n_quarters": 9330,
@@ -266,13 +266,13 @@
     "max_dd": 6769.840000000014,
     "mar_q1": 0.031858019719672975,
     "years": {
-      "2025": -289.360000000019,
+      "2025": -289.36000000001786,
       "2026": 417.1599999999959,
-      "2024": 4574.459999999997,
-      "2020": -2660.5400000000154,
-      "2021": 2757.3999999999855,
-      "2022": -314.1000000000202,
-      "2023": -3126.320000000015
+      "2024": 4574.459999999986,
+      "2022": -314.100000000018,
+      "2023": -3126.3200000000134,
+      "2021": 2757.3999999999887,
+      "2020": -2660.5400000000154
     },
     "years_positive": 3,
     "q_max_rq": 0,
@@ -302,11 +302,11 @@
     },
     "dsr": {
       "observed_sharpe": 0.16441404911282761,
-      "psr": 0.999999999999972,
-      "e_max": 0.07083720081433866,
+      "psr": 0.9999999999996225,
+      "e_max": 0.07516821830941299,
       "n_obs": 6410,
-      "n_trials": 19,
-      "variance_across_trials": 0.0014227357655618575,
+      "n_trials": 15,
+      "variance_across_trials": 0.0018021319697116862,
       "skew": 0.05950806424777674,
       "kurtosis_pearson": 1.441437319093328
     },
@@ -317,11 +317,46 @@
     "V4 implausible-tick surface raised 15 \u2192 250 because the pre-registered 50-pt target is 200 MNQ ticks gross (default 15 is ORB-scale and would false-fail).",
     "15-min left-labeled bars never timestamp at 16:59 ET, so engine hygiene flatten does not fire on this grid; holds may cross the 17:00 ET maintenance break (counted below). Deadzone [17:00, 18:00) still suppresses entries if those bars exist.",
     "DLL spec text said '$200/contract per loss' for a 50-pt MNQ stop; 50\u00d7$2/pt=$100. Binding q uses $100; the $200 figure is reported as a side calculation.",
-    "Committed research-log MNQ N last snapshot is 13 (W3 would be 14); DSR uses operator-stated N=19. H-W4-1\u20266 are not in this repo's research-log.",
-    "Repo was not a clean clone (dirty working tree at HEAD ae2fa83).",
-    "Eval windows use 30 CME session dates (kickoff Gate B default), not 30 calendar days.",
+    "Committed MNQ running N: Track 1 + W2 = 13, W3 H-7 = 14, H-W4-7 primary = **15**. H-W4-1\u20266 were never registered and are not invented. Session 1 DSR used N=19; this rerun uses N=15.",
+    "Session 3 execution is from a clean worktree of the ledger-correction SHA (H-W4-7 module + N-correction committed). Per-trade log is written (Session 1 aggregates-only JSON was a hygiene miss).",
+    "V5 `validation_spot_checks.py` was imported by committed `validation.py` since fb264ac but the module itself was never on main (only in the dirty tree / now WIP). Restored onto this worktree so V1\u2013V7 can run; fills/P&L path unchanged.",
     "Full-protocol graded path (not 60/40 IS as the pass/fail split). 60/40 is not the primary metric for this spec."
   ],
+  "repro": {
+    "passed": true,
+    "rows": [
+      {
+        "metric": "trades",
+        "session1": 6410,
+        "rerun": 6410,
+        "delta": 0,
+        "ok": true
+      },
+      {
+        "metric": "win_rate_pct",
+        "session1": 50.5,
+        "rerun": 50.5,
+        "delta": 0.0,
+        "ok": true
+      },
+      {
+        "metric": "net_pnl",
+        "session1": 1358.7,
+        "rerun": 1358.6999999999757,
+        "delta": -2.432898327242583e-11,
+        "ok": true
+      },
+      {
+        "metric": "max_dd",
+        "session1": 6769.84,
+        "rerun": 6769.840000000014,
+        "delta": 1.3642420526593924e-11,
+        "ok": true
+      }
+    ]
+  },
+  "trade_log": "C:\\Users\\chris\\Documents\\Trading\\quant-research-lab-hw47-clean\\notebooks\\validation\\2026-08-18_hw4_7_primary_trades.parquet",
+  "trade_log_unlabeled_tier": 0,
   "data": {
     "minute_bars": 2133530,
     "bars_15m": 142881,

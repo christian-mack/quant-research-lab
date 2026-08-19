@@ -97,15 +97,38 @@ def close_location(close: float, high: float, low: float) -> float | None:
     return (close - low) / rng
 
 
-def signal_from_close_location(loc: float | None) -> str | None:
-    """``long`` if loc > 0.50, ``short`` if loc < 0.50, else no trade."""
+def signal_from_close_location(loc: float | None, *, extreme_only: bool = False) -> str | None:
+    """``long`` if loc > 0.50, ``short`` if loc < 0.50, else no trade.
+
+    ``extreme_only=True`` restricts to ≥0.75 / ≤0.25 (sensitivity cells A/B).
+    """
     if loc is None:
+        return None
+    if extreme_only:
+        if loc >= 0.75:
+            return "long"
+        if loc <= 0.25:
+            return "short"
         return None
     if loc > 0.50:
         return "long"
     if loc < 0.50:
         return "short"
     return None
+
+
+LAST_BAR_HM: frozenset[tuple[int, int]] = frozenset(
+    {(21, 45), (1, 45), (5, 45), (9, 45), (13, 45), (16, 45)}
+)
+
+
+def is_quarter_last_bar_et(ts: Any) -> bool:
+    """True if this 15-min left-edge is the last bar of a clock-anchored quarter."""
+    if not hasattr(ts, "astimezone"):
+        msg = "timestamp must be timezone-aware"
+        raise TypeError(msg)
+    t = ts.astimezone(EASTERN)
+    return (t.hour, t.minute) in LAST_BAR_HM
 
 
 def tier_bucket(loc: float | None) -> str | None:
@@ -256,6 +279,8 @@ class QuarterContinuationStrategy:
     quantity: int = 1
     stop_points: float = STOP_POINTS
     target_points: float = TARGET_POINTS
+    extreme_tiers_only: bool = False
+    submit_on_completing_quarter_last_bar: bool = False
     skip_count: int = 0
     signal_count: int = 0
     suppress_skip_count: int = 0
@@ -272,23 +297,32 @@ class QuarterContinuationStrategy:
             if ctx.position_qty != 0:
                 return self._manage_open(ctx)
             return []
+        if self.submit_on_completing_quarter_last_bar:
+            return self._on_bar_last_of_quarter(ctx, block)
+        return self._on_bar_first_of_next(ctx, block)
 
+    def _maybe_entry(self, ctx: BarContext, loc: float | None) -> list[OrderRequest]:
+        sig = signal_from_close_location(loc, extreme_only=self.extreme_tiers_only)
+        if sig is None:
+            return []
+        self.signal_count += 1
+        if ctx.position_qty != 0:
+            self.skip_count += 1
+            return []
+        if ctx.suppress_entry:
+            self.suppress_skip_count += 1
+            self.skip_count += 1
+            return []
+        return self._entry_orders(ctx, sig)
+
+    def _on_bar_first_of_next(self, ctx: BarContext, block: str) -> list[OrderRequest]:
         key = (ctx.session_date, block)
         changed = self._q_key is not None and key != self._q_key
         orders: list[OrderRequest] = []
 
         if changed and self._q_close is not None:
             loc = close_location(self._q_close, self._q_high, self._q_low)
-            sig = signal_from_close_location(loc)
-            if sig is not None:
-                self.signal_count += 1
-                if ctx.position_qty != 0:
-                    self.skip_count += 1
-                elif ctx.suppress_entry:
-                    self.suppress_skip_count += 1
-                    self.skip_count += 1
-                else:
-                    orders = self._entry_orders(ctx, sig)
+            orders = self._maybe_entry(ctx, loc)
 
         if changed or self._q_key is None:
             self._q_high = ctx.high
@@ -299,6 +333,27 @@ class QuarterContinuationStrategy:
             self._q_high = max(self._q_high, ctx.high)
             self._q_low = min(self._q_low, ctx.low)
             self._q_close = ctx.close
+
+        if ctx.position_qty != 0:
+            return self._manage_open(ctx)
+        return orders
+
+    def _on_bar_last_of_quarter(self, ctx: BarContext, block: str) -> list[OrderRequest]:
+        key = (ctx.session_date, block)
+        if self._q_key is None or key != self._q_key:
+            self._q_high = ctx.high
+            self._q_low = ctx.low
+            self._q_close = ctx.close
+            self._q_key = key
+        else:
+            self._q_high = max(self._q_high, ctx.high)
+            self._q_low = min(self._q_low, ctx.low)
+            self._q_close = ctx.close
+
+        orders: list[OrderRequest] = []
+        if is_quarter_last_bar_et(ctx.timestamp) and self._q_close is not None:
+            loc = close_location(self._q_close, self._q_high, self._q_low)
+            orders = self._maybe_entry(ctx, loc)
 
         if ctx.position_qty != 0:
             return self._manage_open(ctx)
@@ -369,6 +424,45 @@ class QuarterContinuationStrategy:
                 **common,
             ),
         ]
+
+
+def annotate_trades_with_signal_quarter(
+    trade_log: pl.DataFrame,
+    quarter_stats: pl.DataFrame,
+) -> pl.DataFrame:
+    """Attach the completed-quarter ``tier_bucket`` and ``quarter_block`` to each fill.
+
+    Uses an as-of join: the signal quarter is the latest completed quarter whose
+    ``last_bar_time`` is strictly before the trade's ``entry_time``. Extra columns
+    sit beside the canonical engine schema; they do not change fills.
+    """
+    extras = [
+        pl.lit(None).cast(pl.Utf8).alias("tier_bucket"),
+        pl.lit(None).cast(pl.Utf8).alias("quarter_block"),
+        pl.lit(None).cast(pl.Float64).alias("close_loc"),
+    ]
+    if trade_log.is_empty() or quarter_stats.is_empty():
+        return trade_log.with_columns(extras)
+    stats = (
+        quarter_stats.select(
+            pl.col("last_bar_time").dt.convert_time_zone("UTC").alias("_signal_last_utc"),
+            pl.col("quarter_block"),
+            pl.col("tier").alias("tier_bucket"),
+            pl.col("close_loc"),
+        )
+        .drop_nulls("_signal_last_utc")
+        .sort("_signal_last_utc")
+    )
+    entries = trade_log.with_columns(
+        pl.col("entry_time").dt.convert_time_zone("UTC").alias("_entry_utc")
+    ).sort("_entry_utc")
+    joined = entries.join_asof(
+        stats,
+        left_on="_entry_utc",
+        right_on="_signal_last_utc",
+        strategy="backward",
+    )
+    return joined.drop(["_entry_utc", "_signal_last_utc"])
 
 
 def holds_cross_maintenance_et(entry_time: Any, exit_time: Any) -> bool:
