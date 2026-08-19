@@ -194,11 +194,7 @@ def simulate_apex_eod_two_phase(
         if lock_equity_threshold is not None
         else float(starting_balance) + float(trailing_dd)
     )
-    floor_after = (
-        float(post_lock_floor)
-        if post_lock_floor is not None
-        else float(starting_balance)
-    )
+    floor_after = float(post_lock_floor) if post_lock_floor is not None else float(starting_balance)
     trail = float(trailing_dd)
 
     equity = float(starting_balance)
@@ -285,12 +281,7 @@ def simulate_apex_eod_two_phase(
             max_pt_dd = pt_dd
             max_pt_dd_i = i
 
-    if (
-        current_day is not None
-        and dll_terminates_run
-        and enforce_dll
-        and day_accum < -dll_limit
-    ):
+    if current_day is not None and dll_terminates_run and enforce_dll and day_accum < -dll_limit:
         dll_fail = True
         dll_day_hits += 1
 
@@ -354,11 +345,7 @@ def _simulate_apex_eod_two_phase_tiered(
         if lock_equity_threshold is not None
         else float(starting_balance) + float(trailing_dd)
     )
-    floor_after = (
-        float(post_lock_floor)
-        if post_lock_floor is not None
-        else float(starting_balance)
-    )
+    floor_after = float(post_lock_floor) if post_lock_floor is not None else float(starting_balance)
     trail = float(trailing_dd)
 
     equity = float(starting_balance)
@@ -659,11 +646,7 @@ def simulate_eval_window_eod(
         if lock_equity_threshold is not None
         else float(starting_balance) + float(trailing_dd)
     )
-    floor_after = (
-        float(post_lock_floor)
-        if post_lock_floor is not None
-        else float(starting_balance)
-    )
+    floor_after = float(post_lock_floor) if post_lock_floor is not None else float(starting_balance)
     pt_equity = float(starting_balance) + float(profit_target)
     trail = float(trailing_dd)
 
@@ -1079,9 +1062,7 @@ def trades_to_daily_pnls_with_ny(
         raise ValueError(msg)
     day_to_sum: dict[object, float] = {}
     day_to_ny: dict[object, dt.date] = {}
-    for d_sess, d_ny, p in zip(
-        exit_session_dates, exit_ny_dates, net_pnls, strict=True
-    ):
+    for d_sess, d_ny, p in zip(exit_session_dates, exit_ny_dates, net_pnls, strict=True):
         day_to_sum[d_sess] = day_to_sum.get(d_sess, 0.0) + float(p)
         day_to_ny[d_sess] = d_ny
     uniq = sorted(day_to_sum.keys(), key=lambda x: x)  # type: ignore[arg-type, return-value]

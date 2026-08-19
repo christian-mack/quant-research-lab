@@ -5,10 +5,9 @@ from __future__ import annotations
 import datetime as dt
 from pathlib import Path
 from typing import Any
+from zoneinfo import ZoneInfo
 
 import polars as pl
-
-from zoneinfo import ZoneInfo
 
 from quant_research.data import continuous_contract, data_loader, session
 from quant_research.data.session import SESSION_RTH
@@ -37,9 +36,7 @@ def instrument_raw_coverage(
             "ct_last_bar": None,
             "note": "no matching files under data_root",
         }
-    dfs = [
-        data_loader.load_contract_file(p, timezone=timezone)[["timestamp"]] for p in paths
-    ]
+    dfs = [data_loader.load_contract_file(p, timezone=timezone)[["timestamp"]] for p in paths]
 
     concat = (
         pl.concat(dfs, how="vertical").sort("timestamp")
@@ -116,6 +113,6 @@ def load_continuous_rth_mnq_style(
         dt.time.min,
     ).replace(tzinfo=ZoneInfo(timezone))
 
-    return rth.filter(
-        (pl.col("timestamp") >= ts0) & (pl.col("timestamp") < ts_end_excl)
-    ).sort("timestamp")
+    return rth.filter((pl.col("timestamp") >= ts0) & (pl.col("timestamp") < ts_end_excl)).sort(
+        "timestamp"
+    )

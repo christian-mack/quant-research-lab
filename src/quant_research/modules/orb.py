@@ -207,10 +207,7 @@ class OrbStrategy:
                 return []
 
             self._state = _OrbState.WATCHING
-            if (
-                self.params.earliest_entry_hour_et > 0
-                and h_et < self.params.earliest_entry_hour_et
-            ):
+            if self.params.earliest_entry_hour_et > 0 and h_et < self.params.earliest_entry_hour_et:
                 return []
             return self._evaluate_breakout(ctx, mid, t_et, h_et)
 
@@ -218,16 +215,10 @@ class OrbStrategy:
             if t_et > _ORB_SESSION_END_ET:
                 self._state = _OrbState.NO_TRIGGER
                 return []
-            if (
-                self.params.latest_entry_hour_et > 0
-                and h_et >= self.params.latest_entry_hour_et
-            ):
+            if self.params.latest_entry_hour_et > 0 and h_et >= self.params.latest_entry_hour_et:
                 self._state = _OrbState.NO_TRIGGER
                 return []
-            if (
-                self.params.earliest_entry_hour_et > 0
-                and h_et < self.params.earliest_entry_hour_et
-            ):
+            if self.params.earliest_entry_hour_et > 0 and h_et < self.params.earliest_entry_hour_et:
                 return []
             if (
                 self.params.max_atr15m > 0
@@ -305,10 +296,7 @@ class OrbStrategy:
         t_et: time,
         h_et: int,
     ) -> list[OrderRequest]:
-        if (
-            self.params.latest_entry_hour_et > 0
-            and h_et >= self.params.latest_entry_hour_et
-        ):
+        if self.params.latest_entry_hour_et > 0 and h_et >= self.params.latest_entry_hour_et:
             self._state = _OrbState.NO_TRIGGER
             return []
         if (
@@ -326,12 +314,8 @@ class OrbStrategy:
         short_break = close < rl - buf
 
         vwap_val = self._session_vwap() if self.params.enable_vwap_filter else 0.0
-        vwap_long_ok = (not self.params.enable_vwap_filter) or (
-            vwap_val > 0 and close > vwap_val
-        )
-        vwap_short_ok = (not self.params.enable_vwap_filter) or (
-            vwap_val > 0 and close < vwap_val
-        )
+        vwap_long_ok = (not self.params.enable_vwap_filter) or (vwap_val > 0 and close > vwap_val)
+        vwap_short_ok = (not self.params.enable_vwap_filter) or (vwap_val > 0 and close < vwap_val)
 
         long_sig = long_break and vwap_long_ok
         short_sig = short_break and vwap_short_ok
@@ -402,11 +386,7 @@ class OrbStrategy:
         if self._pending_market_side is not None:
             self._pending_market_side = None
 
-        if (
-            self.params.enable_break_even
-            and not self._break_even_done
-            and self._stop_distance > 0
-        ):
+        if self.params.enable_break_even and not self._break_even_done and self._stop_distance > 0:
             init_risk = abs(entry - self._initial_stop_price)
             if init_risk > 0:
                 trigger = init_risk * self.params.be_trigger_r

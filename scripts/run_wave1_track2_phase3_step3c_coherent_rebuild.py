@@ -15,7 +15,6 @@ from collections import defaultdict
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
-from zoneinfo import ZoneInfo
 
 import polars as pl
 
@@ -28,7 +27,6 @@ from quant_research.ict import pd_arrays as pd_mod
 from quant_research.research_wave1.instrument_pipeline import load_continuous_rth_mnq_style
 from quant_research.ict.ote_strategy import (
     DIRECTION_LONG,
-    DIRECTION_SHORT,
     ENTRY_FVG_ONLY,
     ENTRY_OTE_ONLY,
     ENTRY_OTE_62,
@@ -42,7 +40,9 @@ from quant_research.ict.ote_strategy import (
 DATA_ROOT = _REPO / "data" / "raw"
 PROTOCOL_START = dt.date(2020, 1, 1)
 PROTOCOL_END = dt.date(2026, 4, 19)
-OUT_STEM = _REPO / "notebooks" / "validation" / "2026-06-06_wave1_track2_phase3_step3c_coherent_rebuild"
+OUT_STEM = (
+    _REPO / "notebooks" / "validation" / "2026-06-06_wave1_track2_phase3_step3c_coherent_rebuild"
+)
 
 MNQ_POINT_VALUE = 2.0
 TICK_SIZE = 0.25
@@ -68,8 +68,12 @@ SESSION_WINDOWS: dict[str, tuple[dt.time, dt.time]] = {
 def _git_sha() -> str:
     try:
         cp = subprocess.run(
-            ["git", "rev-parse", "HEAD"], cwd=_REPO,
-            capture_output=True, text=True, check=False, timeout=30,
+            ["git", "rev-parse", "HEAD"],
+            cwd=_REPO,
+            capture_output=True,
+            text=True,
+            check=False,
+            timeout=30,
         )
         return (cp.stdout or "").strip() or "unknown"
     except OSError:
@@ -271,8 +275,10 @@ def _audit_fvg_trades(
         setup = setups_by_key.get((t.session_date, 0))  # fallback
         # match by session+entry price
         key_candidates = [
-            s for s in setups_by_key.values()
-            if s.session_date and s.session_date.isoformat() == t.session_date
+            s
+            for s in setups_by_key.values()
+            if s.session_date
+            and s.session_date.isoformat() == t.session_date
             and abs(s.entry_price - t.entry_price) < 0.01
         ]
         setup = key_candidates[0] if key_candidates else None
@@ -286,18 +292,18 @@ def _audit_fvg_trades(
             continue
         lo = float(sess["low"][fi])
         hi = float(sess["high"][fi])
-        reachable = (
-            lo <= t.entry_price if t.direction == DIRECTION_LONG else hi >= t.entry_price
-        )
+        reachable = lo <= t.entry_price if t.direction == DIRECTION_LONG else hi >= t.entry_price
         if reachable:
             ok += 1
-        samples.append({
-            "session": t.session_date,
-            "entry": t.entry_price,
-            "fill_index": fi,
-            "reachable": reachable,
-            "net_usd": _net_usd(t, slippage=True),
-        })
+        samples.append(
+            {
+                "session": t.session_date,
+                "entry": t.entry_price,
+                "fill_index": fi,
+                "reachable": reachable,
+                "net_usd": _net_usd(t, slippage=True),
+            }
+        )
     return {
         "audited": len(samples),
         "reachable_ok": ok,
@@ -335,7 +341,9 @@ def _run_config(
         "commission_plus_slippage": slip,
         "hour_breakdown_net": _hour_breakdown(trades, slippage=True),
         "dll_check": _dll_check(
-            trades, slippage=True, annual_net=slip.get("annual_net_usd", 0),
+            trades,
+            slippage=True,
+            annual_net=slip.get("annual_net_usd", 0),
         ),
         "_trades": trades,
     }
@@ -345,7 +353,7 @@ def _render_md(report: dict[str, Any]) -> str:
     lines = [
         "# Wave 1 Track 2 — Phase 3 step 3c: Coherent entry rebuilds",
         "",
-        f"**Date:** 2026-06-06  ",
+        "**Date:** 2026-06-06  ",
         f"**git_sha:** `{report['git_sha']}`  ",
         f"**Protocol:** {report['protocol_window'][0]} → {report['protocol_window'][1]}  ",
         "",
@@ -368,17 +376,19 @@ def _render_md(report: dict[str, Any]) -> str:
     for section in report["configs"]:
         slip = section["commission_plus_slippage"]
         comm = section["commission_only"]
-        lines.extend([
-            f"### {section['label']}",
-            "",
-            f"- Trades: **{section['n_trades']:,}** ({slip.get('trades_per_year', 0):.0f}/yr)",
-            f"- Net annual (comm only): **${comm.get('annual_net_usd', 0):,.0f}/MNQ**",
-            f"- Net annual (comm+slip): **${slip.get('annual_net_usd', 0):,.0f}/MNQ**",
-            f"- Net ticks/trade: **{slip.get('avg_net_ticks', 0):.2f}**",
-            f"- WR: **{100 * slip.get('win_rate', 0):.1f}%** | R:R **{slip.get('reward_risk_ratio', 0):.2f}**",
-            "",
-            "**Year-by-year net (comm+slip):**",
-        ])
+        lines.extend(
+            [
+                f"### {section['label']}",
+                "",
+                f"- Trades: **{section['n_trades']:,}** ({slip.get('trades_per_year', 0):.0f}/yr)",
+                f"- Net annual (comm only): **${comm.get('annual_net_usd', 0):,.0f}/MNQ**",
+                f"- Net annual (comm+slip): **${slip.get('annual_net_usd', 0):,.0f}/MNQ**",
+                f"- Net ticks/trade: **{slip.get('avg_net_ticks', 0):.2f}**",
+                f"- WR: **{100 * slip.get('win_rate', 0):.1f}%** | R:R **{slip.get('reward_risk_ratio', 0):.2f}**",
+                "",
+                "**Year-by-year net (comm+slip):**",
+            ]
+        )
         for y, p in slip.get("year_net_usd", {}).items():
             flag = " *(partial)*" if y in ("2020", "2026") else ""
             lines.append(f"- {y}: ${p:,.0f}{flag}")
@@ -391,13 +401,15 @@ def _render_md(report: dict[str, Any]) -> str:
         lines.append("")
     if report.get("fvg_audit"):
         fa = report["fvg_audit"]
-        lines.extend([
-            "## Config 3 FVG audit (>10 ticks/trade trigger)",
-            "",
-            f"- Audited: {fa['audited']}, reachable: {fa['reachable_ok']}/{fa['audited']}",
-            f"- Verdict: {fa['verdict']}",
-            "",
-        ])
+        lines.extend(
+            [
+                "## Config 3 FVG audit (>10 ticks/trade trigger)",
+                "",
+                f"- Audited: {fa['audited']}, reachable: {fa['reachable_ok']}/{fa['audited']}",
+                f"- Verdict: {fa['verdict']}",
+                "",
+            ]
+        )
     lines.extend(["## Stop conditions", ""])
     for k, v in report["stop_conditions"].items():
         lines.append(f"- **{k}:** {v}")
@@ -463,9 +475,7 @@ def main() -> None:
     fvg_audit: dict[str, Any] | None = None
     if fvg_slip.get("avg_net_ticks", 0) > FVG_AUDIT_THRESHOLD_TICKS:
         setups_map = {
-            (s.session_date.isoformat(), i): s
-            for i, s in enumerate(setups_fvg)
-            if s.session_date
+            (s.session_date.isoformat(), i): s for i, s in enumerate(setups_fvg) if s.session_date
         }
         fvg_audit = _audit_fvg_trades(c3["_trades"], sessions, setups_map)
         fvg_audit["verdict"] = (
@@ -539,11 +549,15 @@ def main() -> None:
 
     OUT_STEM.parent.mkdir(parents=True, exist_ok=True)
     OUT_STEM.with_suffix(".json").write_text(
-        json.dumps(report, indent=2, default=str), encoding="utf-8",
+        json.dumps(report, indent=2, default=str),
+        encoding="utf-8",
     )
     OUT_STEM.with_suffix(".md").write_text(_render_md(report), encoding="utf-8")
     print(f"Wrote {OUT_STEM.with_suffix('.md')}", flush=True)
-    print(f"C1 OTE705 anchor reproduces 3b: {anchor_ok} (${c1_705_slip.get('annual_net_usd', 0):,.0f}/yr)", flush=True)
+    print(
+        f"C1 OTE705 anchor reproduces 3b: {anchor_ok} (${c1_705_slip.get('annual_net_usd', 0):,.0f}/yr)",
+        flush=True,
+    )
     print(exec_verdict, flush=True)
 
 

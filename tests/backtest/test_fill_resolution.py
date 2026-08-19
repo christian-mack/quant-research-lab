@@ -123,9 +123,7 @@ def test_market_fill_at_open() -> None:
 
 
 def test_gap_would_trigger_sell_stop() -> None:
-    req = OrderRequest(
-        OrderSide.SELL, 1, OrderType.STOP, stop_price=100.0, module_id="m1"
-    )
+    req = OrderRequest(OrderSide.SELL, 1, OrderType.STOP, stop_price=100.0, module_id="m1")
     assert gap_would_trigger(req, prior_close=100.5, open_px=99.5) is True
 
 
@@ -133,15 +131,11 @@ def test_order_priority_by_order_id() -> None:
     w = [
         QueuedOrder(
             2,
-            OrderRequest(
-                OrderSide.BUY, 1, OrderType.STOP, stop_price=100.0, module_id="m1"
-            ),
+            OrderRequest(OrderSide.BUY, 1, OrderType.STOP, stop_price=100.0, module_id="m1"),
         ),
         QueuedOrder(
             1,
-            OrderRequest(
-                OrderSide.BUY, 1, OrderType.STOP, stop_price=100.0, module_id="m1"
-            ),
+            OrderRequest(OrderSide.BUY, 1, OrderType.STOP, stop_price=100.0, module_id="m1"),
         ),
     ]
     fills, _ = resolve_stop_limit_for_bar(

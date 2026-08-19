@@ -148,9 +148,7 @@ class SlippageSpec:
 @dataclass(frozen=True, slots=True)
 class FillModelSpec:
     market_fill_timing: MarketFillTiming = MarketFillTiming.OPEN_OF_NEXT_BAR
-    stop_limit_intrabar: StopLimitIntrabarPolicy = (
-        StopLimitIntrabarPolicy.FIRST_TOUCH_OHLC_ORDER
-    )
+    stop_limit_intrabar: StopLimitIntrabarPolicy = StopLimitIntrabarPolicy.FIRST_TOUCH_OHLC_ORDER
     gap_policy: GapPolicy = GapPolicy.FILL_AT_OPEN
     intrabar_path: IntrabarPricePath = IntrabarPricePath.OPEN_HIGH_LOW_CLOSE
     limit_fill_mode: LimitFillMode = LimitFillMode.CROSS

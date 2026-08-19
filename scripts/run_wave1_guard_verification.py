@@ -13,6 +13,8 @@ import sys
 from collections import Counter
 from pathlib import Path
 
+import polars as pl
+
 _REPO = Path(__file__).resolve().parents[1]
 if str(_REPO / "src") not in sys.path:
     sys.path.insert(0, str(_REPO / "src"))
@@ -59,8 +61,6 @@ def _git_sha() -> str:
 
 
 def _session_frames(mnq: pl.DataFrame) -> dict[dt.date, pl.DataFrame]:
-    import polars as pl
-
     out: dict[dt.date, pl.DataFrame] = {}
     for sd in mnq["cme_session_date"].unique().sort().to_list():
         if sd is None:
@@ -73,7 +73,7 @@ def _render(report: dict[str, object]) -> str:
     lines = [
         "# Wave 1 — Geometry guard verification + validation harness",
         "",
-        f"**Date:** 2026-06-07  ",
+        "**Date:** 2026-06-07  ",
         f"**git_sha:** `{report['git_sha']}`  ",
         "",
         "## A1 — Causality proof",
@@ -94,14 +94,16 @@ def _render(report: dict[str, object]) -> str:
             lines.append(f"- Total net: **${e.get('total_net_usd', 0):,.0f}**")
         lines.append("")
     struct = pop["structural"]
-    lines.extend([
-        "**Structural distinction (entry-time):**",
-        f"- Kept avg entry-vs-stop: **{struct.get('kept_avg_entry_vs_stop_ticks', 0):.1f}** ticks",
-        f"- Rejected avg entry-vs-stop: **{struct.get('rejected_avg_entry_vs_stop_ticks', 0):.1f}** ticks",
-        "",
-        "## A3 — Wrong-side mechanism (20 traces)",
-        "",
-    ])
+    lines.extend(
+        [
+            "**Structural distinction (entry-time):**",
+            f"- Kept avg entry-vs-stop: **{struct.get('kept_avg_entry_vs_stop_ticks', 0):.1f}** ticks",
+            f"- Rejected avg entry-vs-stop: **{struct.get('rejected_avg_entry_vs_stop_ticks', 0):.1f}** ticks",
+            "",
+            "## A3 — Wrong-side mechanism (20 traces)",
+            "",
+        ]
+    )
     mech_counts = Counter(t["mechanism"] for t in report["a3_traces"])
     for m, c in mech_counts.most_common():
         lines.append(f"- {m}: **{c}**")
@@ -112,25 +114,27 @@ def _render(report: dict[str, object]) -> str:
             f"evs_ticks={t['entry_vs_stop_ticks']:.1f} mech={t['mechanism']} "
             f"hyp_gross=${t.get('hypothetical_wrong_side_gross')}"
         )
-    lines.extend([
-        "",
-        "## M4 vs bespoke parity (kept sample)",
-        "",
-        f"- Sampled: **{report['parity']['sampled']}**",
-        f"- Exact matches: **{report['parity']['exact_gross_and_net_matches']}**",
-        f"- Avg net diff (M4 − bespoke): **${report['parity'].get('avg_net_diff_m4_minus_bespoke', 0):.4f}**",
-        "",
-        "## A4 — Verdict",
-        "",
-        report["a4_verdict"],
-        "",
-        "## Harness on clean OTE 70.5% log",
-        "",
-        report["harness_summary"],
-        "",
-        "## Stop conditions",
-        "",
-    ])
+    lines.extend(
+        [
+            "",
+            "## M4 vs bespoke parity (kept sample)",
+            "",
+            f"- Sampled: **{report['parity']['sampled']}**",
+            f"- Exact matches: **{report['parity']['exact_gross_and_net_matches']}**",
+            f"- Avg net diff (M4 − bespoke): **${report['parity'].get('avg_net_diff_m4_minus_bespoke', 0):.4f}**",
+            "",
+            "## A4 — Verdict",
+            "",
+            report["a4_verdict"],
+            "",
+            "## Harness on clean OTE 70.5% log",
+            "",
+            report["harness_summary"],
+            "",
+            "## Stop conditions",
+            "",
+        ]
+    )
     for k, v in report["stop_conditions"].items():
         lines.append(f"- **{k}:** {v}")
     return "\n".join(lines)
@@ -175,7 +179,6 @@ def main() -> None:
     econ = economics_summary(batch.trades, eval_years=EVAL_YEARS)
 
     from quant_research.backtest.schema import trade_log_schema
-    import polars as pl
 
     rows = []
     for t in batch.trades:
@@ -189,8 +192,8 @@ def main() -> None:
         row: dict[str, object] = {
             "trade_id": len(rows) + 1,
             "module_id": "ote",
-            "entry_time": dt.datetime(2024, 1, 1, tzinfo=dt.timezone.utc),
-            "exit_time": dt.datetime(2024, 1, 1, 1, tzinfo=dt.timezone.utc),
+            "entry_time": dt.datetime(2024, 1, 1, tzinfo=dt.UTC),
+            "exit_time": dt.datetime(2024, 1, 1, 1, tzinfo=dt.UTC),
             "direction": t.direction,
             "quantity": t.quantity,
             "entry_price": t.entry_price,
@@ -230,7 +233,9 @@ def main() -> None:
             f"NOT triggered — rejected net-negative/mixed "
             f"(WR {100 * rej_wr:.1f}%, avg net ${rej_avg_net:.2f})"
         )
-    if mech_counts.get("stop_placement_bug", 0) > mech_counts.get("shallow_retracement_vs_swept_stop", 0):
+    if mech_counts.get("stop_placement_bug", 0) > mech_counts.get(
+        "shallow_retracement_vs_swept_stop", 0
+    ):
         stop["stop_logic_bug"] = "TRIGGERED — majority classified as stop-placement bug"
     else:
         stop["stop_logic_bug"] = (
@@ -285,7 +290,9 @@ def main() -> None:
     }
 
     OUT_STEM.parent.mkdir(parents=True, exist_ok=True)
-    OUT_STEM.with_suffix(".json").write_text(json.dumps(report, indent=2, default=str), encoding="utf-8")
+    OUT_STEM.with_suffix(".json").write_text(
+        json.dumps(report, indent=2, default=str), encoding="utf-8"
+    )
     OUT_STEM.with_suffix(".md").write_text(_render(report), encoding="utf-8")
     print(f"\nWrote {OUT_STEM.with_suffix('.md')}", flush=True)
     print(verdict, flush=True)

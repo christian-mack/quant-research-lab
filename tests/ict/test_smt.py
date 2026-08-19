@@ -171,8 +171,12 @@ def test_detect_smt_from_frames_uses_window_extremes() -> None:
     )
 
     def frame(lows_prior, lows_cur):
-        ts = [dt.datetime(2024, 6, 10, 8, 0, tzinfo=CT), dt.datetime(2024, 6, 10, 8, 30, tzinfo=CT),
-              dt.datetime(2024, 6, 10, 9, 0, tzinfo=CT), dt.datetime(2024, 6, 10, 9, 30, tzinfo=CT)]
+        ts = [
+            dt.datetime(2024, 6, 10, 8, 0, tzinfo=CT),
+            dt.datetime(2024, 6, 10, 8, 30, tzinfo=CT),
+            dt.datetime(2024, 6, 10, 9, 0, tzinfo=CT),
+            dt.datetime(2024, 6, 10, 9, 30, tzinfo=CT),
+        ]
         lows = lows_prior + lows_cur
         return pl.DataFrame({"timestamp": ts, "high": [x + 5 for x in lows], "low": lows})
 

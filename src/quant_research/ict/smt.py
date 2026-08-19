@@ -189,9 +189,7 @@ def detect_smt_from_frames(
     extreme_col = low if direction == DIRECTION_BULLISH else high
 
     def window_extreme(df: pl.DataFrame, window: TimeWindow, label: str, inst: str) -> float:
-        sub = df.filter(
-            (pl.col(timestamp) >= window[0]) & (pl.col(timestamp) < window[1])
-        )
+        sub = df.filter((pl.col(timestamp) >= window[0]) & (pl.col(timestamp) < window[1]))
         if sub.height == 0:
             raise ValueError(f"instrument {inst!r} has no bars in the {label} window {window}")
         if direction == DIRECTION_BULLISH:

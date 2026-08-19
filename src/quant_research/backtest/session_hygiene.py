@@ -7,7 +7,6 @@ session**: flat before the Globex maintenance gap; no new entries during the gap
 from __future__ import annotations
 
 from typing import Any
-
 from zoneinfo import ZoneInfo
 
 from quant_research.backtest.specs import IntradaySessionHygieneSpec
@@ -37,7 +36,7 @@ def in_entry_deadzone_et(ts: Any, hygiene: IntradaySessionHygieneSpec) -> bool:
     if not hygiene.enabled:
         return False
     t = time_et(ts)
-    tup = (t[0] * 60 + t[1])
+    tup = t[0] * 60 + t[1]
     lo = hygiene.entry_deadzone_start_et.hour * 60 + hygiene.entry_deadzone_start_et.minute
     hi = hygiene.entry_deadzone_end_et.hour * 60 + hygiene.entry_deadzone_end_et.minute
     return lo <= tup < hi

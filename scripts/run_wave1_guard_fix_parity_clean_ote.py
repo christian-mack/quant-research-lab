@@ -11,7 +11,6 @@ import json
 import random
 import subprocess
 import sys
-from collections import Counter
 from pathlib import Path
 
 _REPO = Path(__file__).resolve().parents[1]
@@ -20,11 +19,15 @@ if str(_REPO / "src") not in sys.path:
 
 import polars as pl
 
-from quant_research.backtest.parity import compare_m4_bespoke_hand, hand_trace_setup
+from quant_research.backtest.parity import compare_m4_bespoke_hand
 from quant_research.data import data_loader
 from quant_research.ict import pd_arrays as pd_mod
 from quant_research.ict.guard_analysis import net_with_costs, simulate_bespoke_exit
-from quant_research.ict.ote_execution import economics_summary, ote_research_backtest_config, run_config_backtest
+from quant_research.ict.ote_execution import (
+    economics_summary,
+    ote_research_backtest_config,
+    run_config_backtest,
+)
 from quant_research.ict.ote_strategy import (
     ENTRY_FVG_ONLY,
     ENTRY_OTE_62,
@@ -53,8 +56,12 @@ CONFIGS = {
 def _git_sha() -> str:
     try:
         cp = subprocess.run(
-            ["git", "rev-parse", "HEAD"], cwd=_REPO,
-            capture_output=True, text=True, check=False, timeout=30,
+            ["git", "rev-parse", "HEAD"],
+            cwd=_REPO,
+            capture_output=True,
+            text=True,
+            check=False,
+            timeout=30,
         )
         return (cp.stdout or "").strip() or "unknown"
     except OSError:
@@ -118,7 +125,12 @@ def _parity_sample(mnq: pl.DataFrame, *, n: int = 30) -> dict[str, object]:
         )
         besp_net = net_with_costs(gross, reason)
         cmp = compare_m4_bespoke_hand(
-            setup, sess, m4_net=m4.net_pnl, m4_gross=m4.gross_pnl, bespoke_net=besp_net, config=bt_cfg
+            setup,
+            sess,
+            m4_net=m4.net_pnl,
+            m4_gross=m4.gross_pnl,
+            bespoke_net=besp_net,
+            config=bt_cfg,
         )
         if cmp.get("m4_match"):
             m4_wins += 1
@@ -173,7 +185,7 @@ def _operator_summary(
             f"   - {key}: {cfg.get('setups_filled', 0):,} booked | "
             f"${econ.get('annual_net_usd', 0):,.0f}/yr | "
             f"{econ.get('avg_net_ticks', 0):.2f} ticks/tr | "
-            f"{100*econ.get('win_rate',0):.1f}% WR"
+            f"{100 * econ.get('win_rate', 0):.1f}% WR"
         )
     edge_answer = "No" if not any_edge or not all_pass else "Marginal only — fails DLL"
     lines.append("")
@@ -202,8 +214,8 @@ def _render(report: dict[str, object]) -> str:
         "",
         report["parity"]["verdict"],
         "",
-        f"| Metric | Value |",
-        f"|--------|-------|",
+        "| Metric | Value |",
+        "|--------|-------|",
         f"| Sample disagreements (|M4−hand| > $0.05) | {report['parity']['sampled_disagreements']} |",
         f"| M4 exact match to hand (full sample) | {report['parity']['m4_matches_hand']} |",
         f"| Bespoke exact match to hand | {report['parity']['bespoke_matches_hand']} |",
@@ -221,8 +233,8 @@ def _render(report: dict[str, object]) -> str:
     ]
     for s in report["parity"].get("samples", []):
         lines.append(
-            f"| {s.get('session','')} | ${s.get('hand_net',0):.2f} | "
-            f"${s.get('m4_net',0):.2f} | ${s.get('bespoke_net',0):.2f} | {s.get('winner','')} |"
+            f"| {s.get('session', '')} | ${s.get('hand_net', 0):.2f} | "
+            f"${s.get('m4_net', 0):.2f} | ${s.get('bespoke_net', 0):.2f} | {s.get('winner', '')} |"
         )
     lines.extend(["", "## Part 3 — Harness-clean OTE results (Frame B 2021–2025)", ""])
     for key, cfg in report["configs"].items():
@@ -238,13 +250,17 @@ def _render(report: dict[str, object]) -> str:
         lines.append(f"### {key} — harness **{'PASS' if passed else 'FAIL'}**")
         lines.append("")
         lines.append(f"- Setups detected (scan): **{detected:,}**")
-        lines.append(f"- Scan geometry rejects: **{gr_total:,}** ({100*gr_total/max(detected,1):.1f}%)")
+        lines.append(
+            f"- Scan geometry rejects: **{gr_total:,}** ({100 * gr_total / max(detected, 1):.1f}%)"
+        )
         lines.append(f"- Passed scan (attempted): **{scan_pass:,}**")
         lines.append(f"- Ledger geometry rejects: **{lr_total:,}**")
         lines.append(f"- **Booked:** **{booked:,}**")
         econ = cfg.get("frame_b", {})
-        lines.append(f"- Frame B net (2021–2025): **${econ.get('total_net_usd', 0):,.0f}** total, "
-                     f"**${econ.get('annual_net_usd', 0):,.0f}/yr per MNQ**")
+        lines.append(
+            f"- Frame B net (2021–2025): **${econ.get('total_net_usd', 0):,.0f}** total, "
+            f"**${econ.get('annual_net_usd', 0):,.0f}/yr per MNQ**"
+        )
         lines.append(f"- Net ticks/trade: **{econ.get('avg_net_ticks', 0):.2f}**")
         lines.append(f"- Win rate: **{100 * econ.get('win_rate', 0):.1f}%**")
         rr = econ.get("reward_risk_ratio")
@@ -256,16 +272,28 @@ def _render(report: dict[str, object]) -> str:
             for y, n in yr.items():
                 lines.append(f"  - {y}: ${n:,.0f}")
         dll = cfg.get("dll_check", {})
-        lines.append(f"- Apex tier-1 DLL ($50K, $30K/yr sizing): "
-                     f"**{'FITS' if dll.get('fits_apex_tier1_dll') else 'NO FIT'}** "
-                     f"(worst session ${dll.get('max_session_net_loss_usd_at_qty', 0):,.0f} "
-                     f"at qty {dll.get('sizing_qty_for_30k_yr', 0)})")
+        lines.append(
+            f"- Apex tier-1 DLL ($50K, $30K/yr sizing): "
+            f"**{'FITS' if dll.get('fits_apex_tier1_dll') else 'NO FIT'}** "
+            f"(worst session ${dll.get('max_session_net_loss_usd_at_qty', 0):,.0f} "
+            f"at qty {dll.get('sizing_qty_for_30k_yr', 0)})"
+        )
         lines.append("- Harness:")
         for c in v.get("checks", []):
             mark = "PASS" if c["passed"] else "**FAIL**"
             lines.append(f"  - {c['check_id']}: {mark} — {c['message']}")
         lines.append("")
-    lines.extend(["## Verdict", "", report["verdict"], "", "## Operator summary", "", report.get("operator_summary", "")])
+    lines.extend(
+        [
+            "## Verdict",
+            "",
+            report["verdict"],
+            "",
+            "## Operator summary",
+            "",
+            report.get("operator_summary", ""),
+        ]
+    )
     return "\n".join(lines)
 
 
@@ -289,7 +317,9 @@ def main() -> None:
     any_edge = False
     for key, ote_cfg in CONFIGS.items():
         print(f"Part 3 — {key} ...", flush=True)
-        batch = run_config_backtest(mnq, config=ote_cfg, backtest_config=ote_research_backtest_config())
+        batch = run_config_backtest(
+            mnq, config=ote_cfg, backtest_config=ote_research_backtest_config()
+        )
         frame_b = economics_summary(batch.trades, eval_years=EVAL_YEARS)
         full = economics_summary(batch.trades)
         vrep = batch.validation_report.to_dict() if batch.validation_report else {"passed": False}
@@ -309,7 +339,10 @@ def main() -> None:
             "validation_report": vrep,
         }
         v1 = next((c for c in vrep.get("checks", []) if c["check_id"] == "V1"), None)
-        print(f"  booked={batch.setups_filled:,} V1={'PASS' if v1 and v1['passed'] else 'FAIL'}", flush=True)
+        print(
+            f"  booked={batch.setups_filled:,} V1={'PASS' if v1 and v1['passed'] else 'FAIL'}",
+            flush=True,
+        )
 
     if not all_pass:
         verdict = (
@@ -349,7 +382,9 @@ def main() -> None:
     }
 
     OUT_STEM.parent.mkdir(parents=True, exist_ok=True)
-    OUT_STEM.with_suffix(".json").write_text(json.dumps(report, indent=2, default=str), encoding="utf-8")
+    OUT_STEM.with_suffix(".json").write_text(
+        json.dumps(report, indent=2, default=str), encoding="utf-8"
+    )
     OUT_STEM.with_suffix(".md").write_text(_render(report), encoding="utf-8")
     print(f"\nWrote {OUT_STEM.with_suffix('.md')}", flush=True)
     print(verdict, flush=True)

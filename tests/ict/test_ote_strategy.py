@@ -9,18 +9,17 @@ import polars as pl
 import pytest
 
 from quant_research.ict.liquidity_sweep import SIDE_HIGH, SIDE_LOW, detect_sweep
-from quant_research.ict.mss import DIRECTION_BULLISH, DIRECTION_BEARISH
+from quant_research.ict.mss import DIRECTION_BULLISH
 from quant_research.ict.ote_strategy import (
     DIRECTION_LONG,
     DIRECTION_SHORT,
     ENTRY_OTE_62,
     ENTRY_OTE_705,
-    FVG_NEAREST_OTE,
-    OteStrategyConfig,
     STOP_FVG_C2,
     STOP_SWEPT_EXTREME,
     TARGET_FAR,
     TARGET_NEAREST,
+    OteStrategyConfig,
     build_setup_from_sweep,
     mss_direction_to_trade,
     ote_fib_price,
@@ -140,9 +139,7 @@ def test_end_to_end_long_setup_primary_variants() -> None:
     sweep = _sweep_long(df)
     assert sweep.swept is True
 
-    setup = build_setup_from_sweep(
-        df, sweep, config=_cfg(), session_date=SESSION, pdh=PDH, pdl=PDL
-    )
+    setup = build_setup_from_sweep(df, sweep, config=_cfg(), session_date=SESSION, pdh=PDH, pdl=PDL)
     assert setup is not None
     assert setup.direction == DIRECTION_LONG
     assert setup.mss_index == 7
@@ -174,9 +171,7 @@ def test_end_to_end_short_setup_symmetric() -> None:
     sweep = _sweep_short(df)
     assert sweep.swept is True
 
-    setup = build_setup_from_sweep(
-        df, sweep, config=_cfg(), session_date=SESSION, pdh=PDH, pdl=PDL
-    )
+    setup = build_setup_from_sweep(df, sweep, config=_cfg(), session_date=SESSION, pdh=PDH, pdl=PDL)
     assert setup is not None
     assert setup.direction == DIRECTION_SHORT
     assert setup.mss_index == 7
@@ -192,9 +187,7 @@ def test_target_variants_differ_on_same_setup() -> None:
     near = build_setup_from_sweep(
         df, sweep, config=_cfg(target_mode=TARGET_NEAREST), pdh=PDH, pdl=PDL
     )
-    far = build_setup_from_sweep(
-        df, sweep, config=_cfg(target_mode=TARGET_FAR), pdh=PDH, pdl=PDL
-    )
+    far = build_setup_from_sweep(df, sweep, config=_cfg(target_mode=TARGET_FAR), pdh=PDH, pdl=PDL)
     assert near is not None and far is not None
     assert near.target_price == pytest.approx(near.target_nearest)
     assert far.target_price == pytest.approx(far.target_far)

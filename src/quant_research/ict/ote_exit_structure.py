@@ -13,7 +13,7 @@ from typing import Final, Literal
 import polars as pl
 
 from quant_research.backtest.geometry import check_trade_geometry
-from quant_research.ict.ote_strategy import DIRECTION_LONG, DIRECTION_SHORT, OteSetup
+from quant_research.ict.ote_strategy import DIRECTION_LONG, OteSetup
 
 StopRule = Literal["swept_extreme", "fixed_10pt", "atr_1x"]
 TargetRule = Literal["nearest_pool", "fixed_15pt", "atr_2x", "fixed_2r"]

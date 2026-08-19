@@ -24,7 +24,6 @@ from quant_research.backtest.session_hygiene import (
 )
 from quant_research.backtest.specs import BacktestConfig, MarketFillTiming
 from quant_research.backtest.trade_ledger import TradeLedger
-from quant_research.backtest.validation import ValidationReport, validate_backtest_result
 from quant_research.backtest.types import (
     BarContext,
     OrderRequest,
@@ -34,6 +33,7 @@ from quant_research.backtest.types import (
     SimulatedFill,
     Strategy,
 )
+from quant_research.backtest.validation import ValidationReport, validate_backtest_result
 
 _REQUIRED_BAR_COLUMNS = frozenset({"timestamp", "open", "high", "low", "close", "volume"})
 
@@ -218,9 +218,7 @@ class BacktestEngine:
                     working.clear()
 
             hygiene = self.config.session.intraday_hygiene
-            suppress_entry = (
-                hygiene.enabled and in_entry_deadzone_et(ts, hygiene)
-            )
+            suppress_entry = hygiene.enabled and in_entry_deadzone_et(ts, hygiene)
             ctx = BarContext(
                 i,
                 ts,
@@ -426,9 +424,7 @@ class BacktestEngine:
                 self._route_orders(extra, [], working)
         if not working:
             return position_owner
-        sf2, _ = resolve_stop_limit_for_bar(
-            working, o, h, low_px, c, prev_close, ts, self.config
-        )
+        sf2, _ = resolve_stop_limit_for_bar(working, o, h, low_px, c, prev_close, ts, self.config)
         working.clear()
         return _apply_fills(
             sf2,
@@ -454,9 +450,7 @@ class BacktestEngine:
                 working[:] = [
                     w
                     for w in working
-                    if not (
-                        w.request.module_id == mid and w.request.dedupe_tag == dt
-                    )
+                    if not (w.request.module_id == mid and w.request.dedupe_tag == dt)
                 ]
             oid = self._next_order_id
             self._next_order_id += 1

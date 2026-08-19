@@ -70,9 +70,7 @@ def doctor(config: PCSConfig | None = None) -> int:
                     "to_regclass('public.pcs_chunk')"
                 )
                 tables = cur.fetchone()
-            checks.append(
-                _check("core tables present", all(t is not None for t in tables))
-            )
+            checks.append(_check("core tables present", all(t is not None for t in tables)))
 
             with conn.cursor() as cur:
                 cur.execute("SELECT COUNT(*) FROM pcs_chunk")
@@ -197,8 +195,7 @@ def search_cmd(query: str, top_k: int, include_superseded: bool) -> int:
         entry = r.entry_date.isoformat() if r.entry_date else "-"
         sha = r.git_sha[:12]
         print(
-            f"[{i}] score={r.score:.4f}  status={r.status}  {r.file_path}  "
-            f"date={entry}  sha={sha}"
+            f"[{i}] score={r.score:.4f}  status={r.status}  {r.file_path}  date={entry}  sha={sha}"
         )
         first_line = r.text.splitlines()[0] if r.text else r.breadcrumb
         print(f"    {first_line}")
@@ -348,9 +345,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_scaffold = sub.add_parser(
         "manifest-scaffold", help="write a draft context-manifest.yml worklist"
     )
-    p_scaffold.add_argument(
-        "--force", action="store_true", help="overwrite an existing manifest"
-    )
+    p_scaffold.add_argument("--force", action="store_true", help="overwrite an existing manifest")
 
     p_reindex = sub.add_parser("reindex", help="(D4) walk, chunk, embed, upsert the corpus")
     p_reindex.add_argument("--all", action="store_true", help="full rebuild from repo")

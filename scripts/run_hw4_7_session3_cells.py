@@ -322,8 +322,7 @@ def _render(payload: dict[str, object]) -> str:
         "",
         "## 3c. Sensitivity cells A–C",
         "",
-        "Pulse: qty=1 net PF ≥ 1.10 AND +PnL in ≥ 4 of 7 years. "
-        "Cells do not increment N.",
+        "Pulse: qty=1 net PF ≥ 1.10 AND +PnL in ≥ 4 of 7 years. Cells do not increment N.",
         "",
         "| Cell | n | /yr | WR | PF | $/yr | Max DD | Y+ | Skips | Dual | 17:00 | Pulse |",
         "|------|---|-----|----|----|------|--------|----|-------|------|-------|-------|",
@@ -376,8 +375,7 @@ def _render(payload: dict[str, object]) -> str:
                 f"- q_max: **{h['q_max']}** ({h['binding']}); R(q) q={h['q_max_rq']}; "
                 f"DLL q={h['q_max_dll']}",
                 f"- Eval: {100 * h['eval']['pass_rate']:.2f}%",
-                f"- DSR N={MNQ_N}: SR={h['dsr'].get('observed_sharpe')}, "
-                f"PSR={h['dsr'].get('psr')}",
+                f"- DSR N={MNQ_N}: SR={h['dsr'].get('observed_sharpe')}, PSR={h['dsr'].get('psr')}",
                 "",
             ]
     lines += [

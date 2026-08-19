@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import datetime as dt
 import statistics
-from collections import Counter
 from dataclasses import dataclass
 from typing import Any, Literal
 
@@ -12,24 +11,24 @@ import polars as pl
 
 from quant_research.backtest.geometry import (
     REJECT_STOP_WRONG_SIDE,
-    GeometryReject,
     check_trade_geometry,
 )
-from quant_research.ict.ote_execution import OteExecutedTrade, execute_setup, ote_research_backtest_config
+from quant_research.ict import fvg as fvg_mod
+from quant_research.ict import pd_arrays as pd_mod
+from quant_research.ict.ote_execution import (
+    OteExecutedTrade,
+    execute_setup,
+    ote_research_backtest_config,
+)
 from quant_research.ict.ote_strategy import (
     DIRECTION_LONG,
     DIRECTION_SHORT,
-    ENTRY_OTE_ONLY,
-    ENTRY_OTE_705,
     OteSetup,
     OteStrategyConfig,
     _build_setup_partial,
     _reference_levels,
-    _scan_session_with_stats,
     detect_sweep,
 )
-from quant_research.ict import fvg as fvg_mod
-from quant_research.ict import pd_arrays as pd_mod
 
 MNQ_POINT_VALUE = 2.0
 TICK_SIZE = 0.25

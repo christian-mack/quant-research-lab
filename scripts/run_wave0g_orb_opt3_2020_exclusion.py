@@ -62,7 +62,9 @@ _GATE_EVAL = 0.50
 _MNQ_PER_MINI = 10.0
 _DOLLARS_PER_POINT = 2.0  # 1 MNQ
 _WAVE0E_JSON = _REPO / "notebooks" / "validation" / "2026-05-17_wave0e_orb_opt3_survey.json"
-_WAVE0F_JSON = _REPO / "notebooks" / "validation" / "2026-05-17_wave0f_orb_opt3_failure_profile.json"
+_WAVE0F_JSON = (
+    _REPO / "notebooks" / "validation" / "2026-05-17_wave0f_orb_opt3_failure_profile.json"
+)
 
 
 def pa_25k_tiers() -> tuple[ApexBalanceTier, ...]:
@@ -170,7 +172,10 @@ def _append_exit_session_columns(trade_log: pl.DataFrame) -> pl.DataFrame:
     stamp = trade_log.select(pl.col("exit_time").alias("timestamp"))
     stamped = session.assign_cme_session_date(stamp)
     ny_date = trade_log.select(
-        pl.col("exit_time").dt.convert_time_zone("America/New_York").dt.date().alias("exit_ny_date"),
+        pl.col("exit_time")
+        .dt.convert_time_zone("America/New_York")
+        .dt.date()
+        .alias("exit_ny_date"),
     )["exit_ny_date"]
     return trade_log.with_columns(
         stamped["cme_session_date"].alias("exit_cme_session_date"),
@@ -339,7 +344,9 @@ def main() -> None:
     n_full = int(wave0e["protocol"]["trade_count_qty1"])
 
     rth_full = _build_rth_window()
-    cont_raw = continuous_contract.build_continuous_contract(data_loader.load_all_contracts(root_raw))
+    cont_raw = continuous_contract.build_continuous_contract(
+        data_loader.load_all_contracts(root_raw)
+    )
     rth_unexp = find_unexpected_missing_days(session.classify_sessions(cont_raw))
     missing_2020 = [d.isoformat() for d in rth_unexp if d.year == 2020]
     gaps_touching_2020 = [
@@ -348,9 +355,7 @@ def main() -> None:
         if g.start_date <= dt.date(2020, 12, 31) and g.end_date >= dt.date(2020, 1, 1)
     ]
 
-    uniq_sessions = (
-        rth_full["cme_session_date"].unique().drop_nulls().sort().to_list()
-    )
+    uniq_sessions = rth_full["cme_session_date"].unique().drop_nulls().sort().to_list()
     sess_by_cal_year: dict[int, int] = defaultdict(int)
     for sd in uniq_sessions:
         sess_by_cal_year[int(sd.year)] += 1  # type: ignore[arg-type]
@@ -369,9 +374,7 @@ def main() -> None:
     enriched = _append_exit_session_columns(combined.sort("exit_time"))
 
     t_per_year = (
-        enriched.group_by(pl.col("exit_cme_session_date").dt.year().alias("y"))
-        .len()
-        .sort("y")
+        enriched.group_by(pl.col("exit_cme_session_date").dt.year().alias("y")).len().sort("y")
     )
     trades_by_year = {int(r["y"]): int(r["len"]) for r in t_per_year.iter_rows(named=True)}
 
@@ -391,13 +394,20 @@ def main() -> None:
         and (r2020 < 0.5 * med_other or r2020 > 1.5 * med_other)
     )
 
-    m2020 = enriched.filter(pl.col("exit_ny_date").dt.year() == 2020).group_by(
-        pl.col("exit_ny_date").dt.month().alias("m"),
-    ).len()
+    m2020 = (
+        enriched.filter(pl.col("exit_ny_date").dt.year() == 2020)
+        .group_by(
+            pl.col("exit_ny_date").dt.month().alias("m"),
+        )
+        .len()
+    )
     monthly_2020 = {int(r["m"]): int(r["len"]) for r in m2020.iter_rows(named=True)}
 
-    d1_stop = bool(missing_2020) or (trades_by_year.get(2020, 0) == 0) or ratio_anomaly or (
-        sess_by_cal_year.get(2020, 0) == 0
+    d1_stop = (
+        bool(missing_2020)
+        or (trades_by_year.get(2020, 0) == 0)
+        or ratio_anomaly
+        or (sess_by_cal_year.get(2020, 0) == 0)
     )
     d1 = {
         "trades_by_calendar_year_exit_cme": trades_by_year,
@@ -468,7 +478,11 @@ def main() -> None:
                 if prev_c is not None and math.isfinite(day_open)
                 else float("nan")
             )
-            r_atr = id_range / float(atrp) if atrp and float(atrp) > 0 and math.isfinite(id_range) else None
+            r_atr = (
+                id_range / float(atrp)
+                if atrp and float(atrp) > 0 and math.isfinite(id_range)
+                else None
+            )
 
             dow = bd.weekday()
             et_exits = day_trades.select(
@@ -532,7 +546,10 @@ def main() -> None:
         _, daily_ex, ny_ex = trades_to_daily_pnls_with_ny(exit_sess, exit_ny, pnls1)
 
         wave0e_pairs: list[tuple[str, float]] = sorted(
-            {(str(r["account_class"]), float(r["target_qty_mnq"])) for r in wave0e["deliverable_3_survey"]},
+            {
+                (str(r["account_class"]), float(r["target_qty_mnq"]))
+                for r in wave0e["deliverable_3_survey"]
+            },
         )
         results_excl: list[dict[str, object]] = []
         for key, tq in wave0e_pairs:
@@ -554,7 +571,9 @@ def main() -> None:
             r["comparison_6y_wave0e"] = {
                 "funded_survived_6y": ref.get("funded_survived"),
                 "bootstrap_6y": ref.get("bootstrap_funded_survival_block20"),
-                "eval_rate_6y": ref.get("eval", {}).get("pass_rate") if isinstance(ref.get("eval"), dict) else None,
+                "eval_rate_6y": ref.get("eval", {}).get("pass_rate")
+                if isinstance(ref.get("eval"), dict)
+                else None,
                 "joint_6y": (
                     ref.get("gates", {}).get("funded")
                     and ref.get("gates", {}).get("bootstrap_ge_80")
@@ -632,7 +651,10 @@ def main() -> None:
             "unique_breach_ny_dates": [b["breach_exit_ny_date"] for b in breach_profiles],
             "n_unique": len(breach_profiles),
             "month_distribution_within_2020": dict(breach_months),
-            "covid_window_feb_apr": all(2 <= dt.date.fromisoformat(b["breach_exit_ny_date"]).month <= 4 for b in breach_profiles),
+            "covid_window_feb_apr": all(
+                2 <= dt.date.fromisoformat(b["breach_exit_ny_date"]).month <= 4
+                for b in breach_profiles
+            ),
             "coarse_signature": (
                 "Early-Jan-2020 (two NY dates); not Feb–Apr COVID window. "
                 "Sampled days: intraday range / prior ATR ≈ 0.6–0.9 (not extreme range>>ATR); "
@@ -656,7 +678,9 @@ def main() -> None:
                 and (len(gaps_touching_2020) == 0)
             ),
             "breach_regime_signature": (
-                d2_agg.get("coarse_signature") if not isinstance(d2_agg.get("skipped"), bool) else "n/a"
+                d2_agg.get("coarse_signature")
+                if not isinstance(d2_agg.get("skipped"), bool)
+                else "n/a"
             ),
             "joint_pass_meaningful_pnl": (
                 best is not None and float(best["avg_annual_pnl_est"]) >= 20_000.0
@@ -687,7 +711,9 @@ def main() -> None:
     out_dir.mkdir(parents=True, exist_ok=True)
     json_path = out_dir / "2026-05-17_wave0g_orb_opt3_2020_exclusion.json"
     md_path = out_dir / "2026-05-17_wave0g_orb_opt3_2020_exclusion.md"
-    json_path.write_text(json.dumps(_json_safe(payload), indent=2, allow_nan=False), encoding="utf-8")
+    json_path.write_text(
+        json.dumps(_json_safe(payload), indent=2, allow_nan=False), encoding="utf-8"
+    )
 
     n_joint = 0
     if isinstance(d3, dict) and isinstance(d3.get("joint_gate_passing_configs"), list):
@@ -716,7 +742,11 @@ def main() -> None:
         "",
     ]
     md_path.write_text("\n".join(md_lines), encoding="utf-8")
-    print(json.dumps({"wrote_json": str(json_path), "wrote_md": str(md_path), "d1_stop": d1_stop}, indent=2))
+    print(
+        json.dumps(
+            {"wrote_json": str(json_path), "wrote_md": str(md_path), "d1_stop": d1_stop}, indent=2
+        )
+    )
 
 
 if __name__ == "__main__":

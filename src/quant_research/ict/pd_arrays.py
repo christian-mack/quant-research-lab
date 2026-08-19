@@ -98,9 +98,7 @@ def daily_pd_arrays(
     out = df
     if session_date_col not in out.columns:
         if timestamp not in out.columns:
-            raise ValueError(
-                f"need either `{session_date_col}` or a tz-aware `{timestamp}` column"
-            )
+            raise ValueError(f"need either `{session_date_col}` or a tz-aware `{timestamp}` column")
         out = session_mod.assign_cme_session_date(
             out, calendar_name=calendar_name, output=session_date_col
         )
@@ -165,9 +163,7 @@ def add_pd_arrays(
     out = df
     if session_date_col not in out.columns:
         if timestamp not in out.columns:
-            raise ValueError(
-                f"need either `{session_date_col}` or a tz-aware `{timestamp}` column"
-            )
+            raise ValueError(f"need either `{session_date_col}` or a tz-aware `{timestamp}` column")
         out = session_mod.assign_cme_session_date(
             out, calendar_name=calendar_name, output=session_date_col
         )

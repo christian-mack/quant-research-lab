@@ -202,7 +202,10 @@ def _append_exit_session_columns(trade_log: pl.DataFrame) -> pl.DataFrame:
     stamp = trade_log.select(pl.col("exit_time").alias("timestamp"))
     stamped = session.assign_cme_session_date(stamp)
     ny_date = trade_log.select(
-        pl.col("exit_time").dt.convert_time_zone("America/New_York").dt.date().alias("exit_ny_date"),
+        pl.col("exit_time")
+        .dt.convert_time_zone("America/New_York")
+        .dt.date()
+        .alias("exit_ny_date"),
     )["exit_ny_date"]
     return trade_log.with_columns(
         stamped["cme_session_date"].alias("exit_cme_session_date"),
@@ -324,7 +327,9 @@ def main() -> None:
             "combine with year-count analysis."
         )
     elif bias_flag:
-        diag_class = "Likely overweight of high-impact calendar year in tails (see conditional survival)."
+        diag_class = (
+            "Likely overweight of high-impact calendar year in tails (see conditional survival)."
+        )
     else:
         diag_class = "Low unconditional survival may reflect path fragility; year-bias not dominant by coarse flags."
 

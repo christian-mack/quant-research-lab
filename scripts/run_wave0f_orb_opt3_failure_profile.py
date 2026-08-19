@@ -162,7 +162,10 @@ def _append_exit_session_columns(trade_log: pl.DataFrame) -> pl.DataFrame:
     stamp = trade_log.select(pl.col("exit_time").alias("timestamp"))
     stamped = session.assign_cme_session_date(stamp)
     ny_date = trade_log.select(
-        pl.col("exit_time").dt.convert_time_zone("America/New_York").dt.date().alias("exit_ny_date"),
+        pl.col("exit_time")
+        .dt.convert_time_zone("America/New_York")
+        .dt.date()
+        .alias("exit_ny_date"),
     )["exit_ny_date"]
     return trade_log.with_columns(
         stamped["cme_session_date"].alias("exit_cme_session_date"),
@@ -199,15 +202,15 @@ def _failure_enumeration(
             "primary_failure_mode": None,
             "catastrophic_vs_cumulative_hint": None,
             "dll_pauses_before_primary_breach": None,
-            "note": "no_trailing_breach_sessions_recorded" if survived else "unexpected_empty_breaches",
+            "note": "no_trailing_breach_sessions_recorded"
+            if survived
+            else "unexpected_empty_breaches",
         }
     primary = breaches[0]
     fb = float(primary["session_pnl"])
     idx0 = int(primary["session_index"])
     dll_before = sum(
-        1
-        for r in trace
-        if int(r["session_index"]) < idx0 and r.get("dll_new_pause_this_session")
+        1 for r in trace if int(r["session_index"]) < idx0 and r.get("dll_new_pause_this_session")
     )
     locked_at_breach = bool(primary["locked_close"])
     primary_failure_mode = (
@@ -279,9 +282,7 @@ def _yearly_attribution(trace: list[dict[str, object]], acct: Acct) -> dict[str,
         if prev_t is not None and tix < prev_t:
             demotion_y[y] += 1
         prev_t = tix
-    breach_years = [
-        _row_date(r["ny_date"]).year for r in trace if r["trail_breach_after_session"]
-    ]
+    breach_years = [_row_date(r["ny_date"]).year for r in trace if r["trail_breach_after_session"]]
     failure_year = breach_years[0] if breach_years else None
     return {
         "pnl_by_year": {str(k): round(v, 2) for k, v in sorted(pnl_y.items())},
@@ -292,7 +293,9 @@ def _yearly_attribution(trace: list[dict[str, object]], acct: Acct) -> dict[str,
         "concentration_note": (
             "single_year_failure"
             if failure_year is not None and len(set(breach_years)) == 1
-            else "multi_year_breach_days" if breach_years else "no_breach"
+            else "multi_year_breach_days"
+            if breach_years
+            else "no_breach"
         ),
     }
 
@@ -540,7 +543,9 @@ def main() -> None:
         "50k_qty1_funded_survival": fifty_k_q1_survived,
         "50k_incompatible_sizing_only": fifty_k_q1_survived is False,
         "any_joint_triple_pass": len(joint_all) > 0,
-        "low_qty_any_funded_survival": any(lowest_funded_pass[k] is not None for k in lowest_funded_pass),
+        "low_qty_any_funded_survival": any(
+            lowest_funded_pass[k] is not None for k in lowest_funded_pass
+        ),
     }
 
     binding_mode = modes_counter.most_common(1)[0][0] if modes_counter else "n/a"

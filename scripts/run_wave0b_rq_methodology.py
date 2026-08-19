@@ -98,7 +98,10 @@ def _append_exit_session_columns(trade_log: pl.DataFrame) -> pl.DataFrame:
     stamp = trade_log.select(pl.col("exit_time").alias("timestamp"))
     stamped = session.assign_cme_session_date(stamp)
     ny_date = trade_log.select(
-        pl.col("exit_time").dt.convert_time_zone("America/New_York").dt.date().alias("exit_ny_date"),
+        pl.col("exit_time")
+        .dt.convert_time_zone("America/New_York")
+        .dt.date()
+        .alias("exit_ny_date"),
     )["exit_ny_date"]
     return trade_log.with_columns(
         stamped["cme_session_date"].alias("exit_cme_session_date"),
@@ -223,9 +226,7 @@ def main() -> None:
 
     d1_pure: dict[str, dict[str, dict[str, object]]] = {
         str(q): {
-            "pure_trailing": _run_d1_daily_payload(
-                session_dates, daily_qty1, q, "pure_trailing"
-            ),
+            "pure_trailing": _run_d1_daily_payload(session_dates, daily_qty1, q, "pure_trailing"),
             "funded_lock": _run_d1_daily_payload(session_dates, daily_qty1, q, "funded_lock"),
         }
         for q in (1, 2, 3)

@@ -8,14 +8,13 @@ from typing import Any
 
 import polars as pl
 
-from quant_research.backtest.schema import empty_trade_log
-from quant_research.backtest.validation import ValidationReport, validate_backtest_result
 from quant_research.backtest.engine import BacktestEngine, BacktestResult, as_module
 from quant_research.backtest.fill_resolution import (
     validate_bracket_geometry_in_orders,
     validate_order_request,
 )
-from quant_research.backtest.geometry import GeometryError, GeometryReject, check_trade_geometry
+from quant_research.backtest.geometry import GeometryReject, check_trade_geometry
+from quant_research.backtest.schema import empty_trade_log
 from quant_research.backtest.specs import (
     BacktestConfig,
     CommissionSpec,
@@ -28,10 +27,17 @@ from quant_research.backtest.specs import (
     StopLimitIntrabarPolicy,
     TagSlippageOverride,
 )
-from quant_research.backtest.types import BarContext, OrderRequest, OrderSide, OrderType, QueuedOrder, SimulatedFill
+from quant_research.backtest.types import (
+    BarContext,
+    OrderRequest,
+    OrderSide,
+    OrderType,
+    QueuedOrder,
+    SimulatedFill,
+)
+from quant_research.backtest.validation import ValidationReport, validate_backtest_result
 from quant_research.ict.ote_strategy import (
     DIRECTION_LONG,
-    DIRECTION_SHORT,
     OteSetup,
     OteStrategyConfig,
     scan_setups_with_stats,
@@ -57,7 +63,9 @@ def ote_research_backtest_config() -> BacktestConfig:
             ticks=SLIP_STOP_TICKS,
             tag_overrides=(
                 TagSlippageOverride(OTE_ENTRY_TAG, SlippageMode.NONE, ticks=0.0),
-                TagSlippageOverride(OTE_TARGET_TAG, SlippageMode.FIXED_TICKS, ticks=SLIP_TARGET_TICKS),
+                TagSlippageOverride(
+                    OTE_TARGET_TAG, SlippageMode.FIXED_TICKS, ticks=SLIP_TARGET_TICKS
+                ),
             ),
         ),
         fill_model=FillModelSpec(
@@ -350,7 +358,9 @@ def _trade_from_result(result: BacktestResult, setup: OteSetup) -> OteExecutedTr
     )
 
 
-def economics_summary(trades: list[OteExecutedTrade], *, eval_years: tuple[int, ...] | None = None) -> dict[str, Any]:
+def economics_summary(
+    trades: list[OteExecutedTrade], *, eval_years: tuple[int, ...] | None = None
+) -> dict[str, Any]:
     """Net economics from executed trades (already includes comm+slip from engine)."""
     if not trades:
         return {"n_trades": 0}
@@ -377,6 +387,8 @@ def economics_summary(trades: list[OteExecutedTrade], *, eval_years: tuple[int, 
         "win_rate": len(wins) / len(trades),
         "avg_win_usd": sum(wins) / len(wins) if wins else 0.0,
         "avg_loss_usd": sum(losses) / len(losses) if losses else 0.0,
-        "reward_risk_ratio": abs(sum(wins) / len(wins) / (sum(losses) / len(losses))) if wins and losses else None,
+        "reward_risk_ratio": abs(sum(wins) / len(wins) / (sum(losses) / len(losses)))
+        if wins and losses
+        else None,
         "year_net_usd": dict(sorted(by_year.items())),
     }

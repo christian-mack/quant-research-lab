@@ -47,14 +47,17 @@ def run_spot_check_suite() -> CheckResult:
         target=105.0,
     ) == ("stop", 99.0)
 
-    ok_t5 = _run_spot(
-        _bars([(100.0, 101.0, 99.5, 100.5), (100.5, 102.0, 100.0, 101.5)]),
-        direction="long",
-        entry=100.0,
-        stop=100.5,
-        target=103.0,
-        expect_reject=True,
-    ) is None
+    ok_t5 = (
+        _run_spot(
+            _bars([(100.0, 101.0, 99.5, 100.5), (100.5, 102.0, 100.0, 101.5)]),
+            direction="long",
+            entry=100.0,
+            stop=100.5,
+            target=103.0,
+            expect_reject=True,
+        )
+        is None
+    )
 
     passed = ok_t1 and ok_t2 and ok_t5
     return CheckResult(

@@ -72,12 +72,7 @@ def test_breadcrumb_is_prepended_to_embed_text_only() -> None:
 
 def test_oversized_entry_splits_on_headings_then_paragraphs() -> None:
     cfg = ChunkConfig(max_tokens=40, min_tokens=1)
-    body = (
-        "### Section A\n\n"
-        + "alpha " * 40
-        + "\n\n### Section B\n\n"
-        + "beta " * 40
-    )
+    body = "### Section A\n\n" + "alpha " * 40 + "\n\n### Section B\n\n" + "beta " * 40
     chunks = chunk_entry("docs/research-log.md", "2026-01-01 — Big", body, "current", config=cfg)
     assert len(chunks) >= 2
     # sequential, no gaps (rule 6: no overlap; indices contiguous)

@@ -130,21 +130,15 @@ def detect_fvgs(
         bear_gap.alias("_bear_gap"),
     )
 
-    bull = (
-        annotated.filter(pl.col("_bull_gap") > min_gap_size)
-        .with_columns(
-            pl.lit(DIRECTION_BULLISH).alias("direction"),
-            pl.col("_c1_high").alias("bottom"),
-            pl.col("_c3_low").alias("top"),
-        )
+    bull = annotated.filter(pl.col("_bull_gap") > min_gap_size).with_columns(
+        pl.lit(DIRECTION_BULLISH).alias("direction"),
+        pl.col("_c1_high").alias("bottom"),
+        pl.col("_c3_low").alias("top"),
     )
-    bear = (
-        annotated.filter(pl.col("_bear_gap") > min_gap_size)
-        .with_columns(
-            pl.lit(DIRECTION_BEARISH).alias("direction"),
-            pl.col("_c3_high").alias("bottom"),
-            pl.col("_c1_low").alias("top"),
-        )
+    bear = annotated.filter(pl.col("_bear_gap") > min_gap_size).with_columns(
+        pl.lit(DIRECTION_BEARISH).alias("direction"),
+        pl.col("_c3_high").alias("bottom"),
+        pl.col("_c1_low").alias("top"),
     )
 
     combined = pl.concat([bull, bear], how="vertical")
@@ -218,12 +212,7 @@ def resample_ohlc(
     ]
     if volume is not None and volume in df.columns:
         aggs.append(pl.col(volume).sum().alias(volume))
-    return (
-        df.sort(timestamp)
-        .group_by_dynamic(timestamp, every=every)
-        .agg(aggs)
-        .sort(timestamp)
-    )
+    return df.sort(timestamp).group_by_dynamic(timestamp, every=every).agg(aggs).sort(timestamp)
 
 
 def _empty_fvg_frame(ts_dtype: pl.DataType) -> pl.DataFrame:

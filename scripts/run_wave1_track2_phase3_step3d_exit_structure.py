@@ -44,7 +44,9 @@ from quant_research.research_wave1.instrument_pipeline import load_continuous_rt
 DATA_ROOT = _REPO / "data" / "raw"
 PROTOCOL_START = dt.date(2020, 1, 1)
 PROTOCOL_END = dt.date(2026, 4, 19)
-OUT_STEM = _REPO / "notebooks" / "validation" / "2026-06-07_wave1_track2_phase3_step3d_exit_structure"
+OUT_STEM = (
+    _REPO / "notebooks" / "validation" / "2026-06-07_wave1_track2_phase3_step3d_exit_structure"
+)
 EVAL_YEARS = (2021, 2022, 2023, 2024, 2025)
 APEX_TIER1_DLL = 1000.0
 TARGET_ANNUAL_USD = 30_000.0
@@ -159,32 +161,50 @@ def _render(report: dict[str, Any]) -> str:
         econ = cfg.get("frame_b", {})
         ex = cfg.get("exit_rates", {})
         yr = econ.get("year_net_usd", {})
-        lines.append(f"### {cid} — {cfg.get('label', '')} — harness **{'PASS' if passed else 'FAIL'}**")
+        lines.append(
+            f"### {cid} — {cfg.get('label', '')} — harness **{'PASS' if passed else 'FAIL'}**"
+        )
         lines.append("")
         lines.append(f"- Stop / Target: **{cfg.get('stop_rule')}** + **{cfg.get('target_rule')}**")
         lines.append(f"- Exit remap rejects: **{sum(cfg.get('exit_rejects', {}).values()):,}**")
         lines.append(f"- Booked: **{cfg.get('booked', 0):,}**")
-        lines.append(f"- WR: **{100 * econ.get('win_rate', 0):.1f}%** | "
-                     f"Avg win: **${econ.get('avg_win_usd', 0):.2f}** | "
-                     f"Avg loss: **${econ.get('avg_loss_usd', 0):.2f}** | "
-                     f"R:R: **{econ.get('reward_risk_ratio') or 0:.2f}**")
+        lines.append(
+            f"- WR: **{100 * econ.get('win_rate', 0):.1f}%** | "
+            f"Avg win: **${econ.get('avg_win_usd', 0):.2f}** | "
+            f"Avg loss: **${econ.get('avg_loss_usd', 0):.2f}** | "
+            f"R:R: **{econ.get('reward_risk_ratio') or 0:.2f}**"
+        )
         lines.append(f"- Net ticks/trade: **{econ.get('avg_net_ticks', 0):.2f}**")
         lines.append(f"- Frame B annual net: **${econ.get('annual_net_usd', 0):,.0f}/MNQ**")
         if yr:
             lines.append("- Year-by-year ($/MNQ):")
             for y, n in yr.items():
                 lines.append(f"  - {y}: ${n:,.0f}")
-        lines.append(f"- Exit rates: stop **{100*ex.get('stop_rate',0):.1f}%** | "
-                     f"target **{100*ex.get('target_rate',0):.1f}%** | "
-                     f"time **{100*ex.get('time_rate',0):.1f}%**")
+        lines.append(
+            f"- Exit rates: stop **{100 * ex.get('stop_rate', 0):.1f}%** | "
+            f"target **{100 * ex.get('target_rate', 0):.1f}%** | "
+            f"time **{100 * ex.get('time_rate', 0):.1f}%**"
+        )
         dll = cfg.get("dll_check", {})
-        lines.append(f"- Apex DLL fit ($30K/yr): **{'YES' if dll.get('fits_apex_tier1_dll') else 'NO'}**")
+        lines.append(
+            f"- Apex DLL fit ($30K/yr): **{'YES' if dll.get('fits_apex_tier1_dll') else 'NO'}**"
+        )
         lines.append("- Harness:")
         for c in v.get("checks", []):
             mark = "PASS" if c["passed"] else "**FAIL**"
             lines.append(f"  - {c['check_id']}: {mark} — {c['message']}")
         lines.append("")
-    lines.extend(["## Verdict", "", report["verdict"], "", "## Operator summary", "", report["operator_summary"]])
+    lines.extend(
+        [
+            "## Verdict",
+            "",
+            report["verdict"],
+            "",
+            "## Operator summary",
+            "",
+            report["operator_summary"],
+        ]
+    )
     return "\n".join(lines)
 
 
@@ -205,11 +225,7 @@ def _build_verdict(combos: dict[str, Any]) -> tuple[str, str, str]:
             all_near_zero = False
         if conc.get("dominant_year") != "2022" or conc.get("dominant_share", 1) < 0.7:
             all_2022_driven = False
-        if (
-            dll.get("fits_apex_tier1_dll")
-            and annual > 0
-            and conc.get("positive_years", 0) >= 3
-        ):
+        if dll.get("fits_apex_tier1_dll") and annual > 0 and conc.get("positive_years", 0) >= 3:
             candidates.append(cid)
 
     if candidates:
@@ -217,9 +233,7 @@ def _build_verdict(combos: dict[str, Any]) -> tuple[str, str, str]:
             f"**Genuine candidate(s):** {', '.join(candidates)} — harness-clean, multi-year "
             "positive, fits Apex tier-1 DLL. Proceed to account-class survey on winning structure."
         )
-        diagnostic = (
-            "At least one realistic exit structure recovers tradeable edge from the OTE 70.5% entry."
-        )
+        diagnostic = "At least one realistic exit structure recovers tradeable edge from the OTE 70.5% entry."
     elif all_near_zero:
         verdict = (
             "**OTE entry has no persistent edge independent of exit.** All combinations are "
@@ -245,7 +259,10 @@ def _build_verdict(combos: dict[str, Any]) -> tuple[str, str, str]:
             "Exit redesign improves target-hit rates but does not produce account-viable edge."
         )
 
-    op_lines = ["| Combo | Harness | Annual/MNQ | Ticks/tr | Target% | DLL |", "|-------|---------|------------|----------|---------|-----|"]
+    op_lines = [
+        "| Combo | Harness | Annual/MNQ | Ticks/tr | Target% | DLL |",
+        "|-------|---------|------------|----------|---------|-----|",
+    ]
     for cid, cfg in combos.items():
         vpass = cfg.get("validation_report", {}).get("passed", False)
         econ = cfg.get("frame_b", {})
@@ -254,10 +271,12 @@ def _build_verdict(combos: dict[str, Any]) -> tuple[str, str, str]:
         op_lines.append(
             f"| {cid} | {'PASS' if vpass else 'FAIL'} | "
             f"${econ.get('annual_net_usd', 0):,.0f} | {econ.get('avg_net_ticks', 0):.2f} | "
-            f"{100*ex.get('target_rate', 0):.0f}% | {'YES' if dll.get('fits_apex_tier1_dll') else 'NO'} |"
+            f"{100 * ex.get('target_rate', 0):.0f}% | {'YES' if dll.get('fits_apex_tier1_dll') else 'NO'} |"
         )
     op_lines.append("")
-    op_lines.append(f"**Does realistic exit recover OTE entry edge?** {'Yes' if candidates else 'No'}.")
+    op_lines.append(
+        f"**Does realistic exit recover OTE entry edge?** {'Yes' if candidates else 'No'}."
+    )
     if candidates:
         op_lines.append(f"**Winning structure(s):** {', '.join(candidates)}")
     return diagnostic, verdict, "\n".join(op_lines)
@@ -303,7 +322,7 @@ def main() -> None:
         v1 = next((c for c in vrep.get("checks", []) if c["check_id"] == "V1"), None)
         print(
             f"  booked={batch.setups_filled:,} V1={'PASS' if v1 and v1['passed'] else 'FAIL'} "
-            f"target_hit={100*_exit_rates(batch.trades).get('target_rate',0):.1f}%",
+            f"target_hit={100 * _exit_rates(batch.trades).get('target_rate', 0):.1f}%",
             flush=True,
         )
         results[cid] = {
@@ -335,7 +354,9 @@ def main() -> None:
         "operator_summary": operator,
     }
     OUT_STEM.parent.mkdir(parents=True, exist_ok=True)
-    OUT_STEM.with_suffix(".json").write_text(json.dumps(report, indent=2, default=str), encoding="utf-8")
+    OUT_STEM.with_suffix(".json").write_text(
+        json.dumps(report, indent=2, default=str), encoding="utf-8"
+    )
     OUT_STEM.with_suffix(".md").write_text(_render(report), encoding="utf-8")
     print(f"\nWrote {OUT_STEM.with_suffix('.md')}", flush=True)
     print(verdict, flush=True)

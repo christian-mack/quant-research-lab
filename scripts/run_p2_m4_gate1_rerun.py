@@ -21,9 +21,17 @@ if str(_REPO / "src") not in sys.path:
     sys.path.insert(0, str(_REPO / "src"))
 
 from quant_research.data.quality import split_dataframe_at_operator_export_gaps
-from quant_research.research_p2w2.data_verify import PROTOCOL_END, PROTOCOL_START, load_verified_mnq_rth
+from quant_research.research_p2w2.data_verify import (
+    PROTOCOL_END,
+    PROTOCOL_START,
+    load_verified_mnq_rth,
+)
 from quant_research.research_p2w2.hypothesis_sims import run_hypothesis_m4
-from quant_research.research_p2w2.metrics import gate1_is_screen_log, split_is_oos_log, trades_per_yr
+from quant_research.research_p2w2.metrics import (
+    gate1_is_screen_log,
+    split_is_oos_log,
+    trades_per_yr,
+)
 
 OUT_STEM = _REPO / "notebooks" / "validation" / "2026-06-08_p2_m4_gate1_rerun"
 HYPOTHESES = ("H-1", "H-2", "H-3", "H-4", "H-6", "H-7")
@@ -96,9 +104,7 @@ def _check_stop_conditions(hid: str, g1: dict[str, object]) -> list[str]:
     walker = WALKER_IS_ANCHOR[hid]
     walker_net = float(walker["net_per_trade"])
     if walker_net < 0 and net > 0:
-        stops.append(
-            f"{hid} flipped negative→positive (walker ${walker_net:.2f} → M4 ${net:.2f})"
-        )
+        stops.append(f"{hid} flipped negative→positive (walker ${walker_net:.2f} → M4 ${net:.2f})")
     return stops
 
 
@@ -106,10 +112,10 @@ def _render_md(payload: dict[str, object]) -> str:
     lines = [
         "# P2-W2/W3 Gate #1 re-run on M4 engine (IS partition)",
         "",
-        f"**Date:** 2026-06-08  ",
+        "**Date:** 2026-06-08  ",
         f"**git_sha:** `{payload['git']['git_sha']}`  ",
-        f"**Fill path:** M4 `BacktestEngine` (V7 provenance)  ",
-        f"**OOS:** sealed",
+        "**Fill path:** M4 `BacktestEngine` (V7 provenance)  ",
+        "**OOS:** sealed",
         "",
         "## Comparison — bespoke walker vs M4 engine (IS Gate #1)",
         "",

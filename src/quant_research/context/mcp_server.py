@@ -105,9 +105,7 @@ def search(query: str, top_k: int = 8, include_superseded: bool = False) -> str:
     returned.
     """
     try:
-        results = retriever_mod.search(
-            query, top_k=top_k, include_superseded=include_superseded
-        )
+        results = retriever_mod.search(query, top_k=top_k, include_superseded=include_superseded)
     except psycopg.OperationalError as exc:
         return f"search unavailable - database: {str(exc).strip().splitlines()[0]}"
     return _render_results(results)

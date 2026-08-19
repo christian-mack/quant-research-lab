@@ -222,22 +222,14 @@ class TradeLedger:
     def _finalize_round(self) -> None:
         o = self._open
         assert o is not None
-        exit_px = (
-            o.exit_vwap_numer / o.exit_qty_closed if o.exit_qty_closed > 0 else o.entry_vwap
-        )
+        exit_px = o.exit_vwap_numer / o.exit_qty_closed if o.exit_qty_closed > 0 else o.entry_vwap
         direction = "long" if o.signed_qty > 0 else "short"
         reason = o.exit_reason or "close"
         if reason == "end_of_series_flatten":
             reason = "flatten"
 
-        if (
-            self.enforce_geometry
-            and o.stop_price is not None
-            and o.target_price is not None
-        ):
-            reject = check_trade_geometry(
-                direction, o.entry_vwap, o.stop_price, o.target_price
-            )
+        if self.enforce_geometry and o.stop_price is not None and o.target_price is not None:
+            reject = check_trade_geometry(direction, o.entry_vwap, o.stop_price, o.target_price)
             if reject is not None:
                 self.geometry_rejects[reject.reason] = (
                     self.geometry_rejects.get(reject.reason, 0) + 1

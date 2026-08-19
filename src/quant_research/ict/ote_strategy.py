@@ -28,7 +28,7 @@ from zoneinfo import ZoneInfo
 
 import polars as pl
 
-from quant_research.backtest.geometry import GeometryReject, check_trade_geometry
+from quant_research.backtest.geometry import check_trade_geometry
 from quant_research.ict import fvg as fvg_mod
 from quant_research.ict import liquidity_sweep as sweep_mod
 from quant_research.ict import mss as mss_mod
@@ -44,7 +44,6 @@ from quant_research.ict.liquidity_sweep import (
 from quant_research.ict.mss import (
     DEFAULT_MAX_LOOKBACK_FALLBACK_BARS,
     MssConfig,
-    MssResult,
     confirmed_fractal_swings,
     detect_mss_after_sweep,
 )
@@ -285,9 +284,7 @@ def select_entry_fvg(
         rows = eligible.to_dicts()
         best = min(
             rows,
-            key=lambda r: abs(
-                _fvg_touch_price(r, direction, df, high=high, low=low) - ote_price
-            ),
+            key=lambda r: abs(_fvg_touch_price(r, direction, df, high=high, low=low) - ote_price),
         )
         row = best
 
@@ -346,13 +343,18 @@ def build_setup_from_sweep(
 
     disp = mss.displacement
     equilibrium = (disp.low + disp.high) / 2.0
-    ote_pct = (
-        cfg.ote_primary_level if cfg.entry_mode == ENTRY_OTE_705 else cfg.ote_variant_level
-    )
+    ote_pct = cfg.ote_primary_level if cfg.entry_mode == ENTRY_OTE_705 else cfg.ote_variant_level
     ote_price = ote_fib_price(direction, disp.low, disp.high, ote_pct)
 
-    fvg_table = fvgs if fvgs is not None else fvg_mod.detect_fvgs(
-        work, timestamp=timestamp, high=high, low=low,
+    fvg_table = (
+        fvgs
+        if fvgs is not None
+        else fvg_mod.detect_fvgs(
+            work,
+            timestamp=timestamp,
+            high=high,
+            low=low,
+        )
     )
     fvg: dict[str, float | int] | None = None
     if cfg.entry_style != ENTRY_OTE_ONLY:
@@ -740,13 +742,18 @@ def _build_setup_partial(
 
     disp = mss.displacement
     equilibrium = (disp.low + disp.high) / 2.0
-    ote_pct = (
-        cfg.ote_primary_level if cfg.entry_mode == ENTRY_OTE_705 else cfg.ote_variant_level
-    )
+    ote_pct = cfg.ote_primary_level if cfg.entry_mode == ENTRY_OTE_705 else cfg.ote_variant_level
     ote_price = ote_fib_price(direction, disp.low, disp.high, ote_pct)
 
-    fvg_table = fvgs if fvgs is not None else fvg_mod.detect_fvgs(
-        work, timestamp=timestamp, high=high, low=low,
+    fvg_table = (
+        fvgs
+        if fvgs is not None
+        else fvg_mod.detect_fvgs(
+            work,
+            timestamp=timestamp,
+            high=high,
+            low=low,
+        )
     )
     fvg: dict[str, float | int] | None = None
     if cfg.entry_style != ENTRY_OTE_ONLY:

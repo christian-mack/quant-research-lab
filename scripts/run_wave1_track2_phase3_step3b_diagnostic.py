@@ -40,7 +40,9 @@ DATA_ROOT = _REPO / "data" / "raw"
 PROTOCOL_START = dt.date(2020, 1, 1)
 PROTOCOL_END = dt.date(2026, 4, 19)
 TRADES_DIR = _REPO / "notebooks" / "validation" / "2026-06-06_wave1_track2_phase3_step3_ote_trades"
-OUT_PATH = _REPO / "notebooks" / "validation" / "2026-06-06_wave1_track2_phase3_step3b_diagnostic.md"
+OUT_PATH = (
+    _REPO / "notebooks" / "validation" / "2026-06-06_wave1_track2_phase3_step3b_diagnostic.md"
+)
 OUT_JSON = OUT_PATH.with_suffix(".json")
 
 MNQ_POINT_VALUE = 2.0
@@ -61,8 +63,12 @@ VARIANT_FILES = {
 def _git_sha() -> str:
     try:
         cp = subprocess.run(
-            ["git", "rev-parse", "HEAD"], cwd=_REPO,
-            capture_output=True, text=True, check=False, timeout=30,
+            ["git", "rev-parse", "HEAD"],
+            cwd=_REPO,
+            capture_output=True,
+            text=True,
+            check=False,
+            timeout=30,
         )
         return (cp.stdout or "").strip() or "unknown"
     except OSError:
@@ -158,7 +164,8 @@ def _trace_setup(trade: dict[str, Any], sess: pl.DataFrame) -> dict[str, Any] | 
     direction = trade["direction"]
     disp_lo = trade["entry_price_ote_705"] - 0.705 * (
         (trade["entry_price_ote_705"] - trade["entry_price_ote_62"]) / (0.705 - 0.62)
-        if direction == DIRECTION_LONG else 0
+        if direction == DIRECTION_LONG
+        else 0
     )
     # Recover displacement from tagged OTE prices
     if direction == DIRECTION_LONG:
@@ -172,29 +179,37 @@ def _trace_setup(trade: dict[str, Any], sess: pl.DataFrame) -> dict[str, Any] | 
 
     eq = (disp_low + disp_high) / 2.0
     ote_705 = trade["entry_price_ote_705"]
-    fvg_top = max(trade["entry_price_fvg_zone"], trade["entry_price_fvg_zone"] - trade["fvg_size_points"])
+    fvg_top = max(
+        trade["entry_price_fvg_zone"], trade["entry_price_fvg_zone"] - trade["fvg_size_points"]
+    )
     fvg_bottom = fvg_top - trade["fvg_size_points"]
     if direction == DIRECTION_SHORT:
         fvg_bottom = trade["entry_price_fvg_zone"]
         fvg_top = fvg_bottom + trade["fvg_size_points"]
 
     leg_ticks = (disp_high - disp_low) / TICK_SIZE
-    ote_pos_pct = (ote_705 - disp_low) / (disp_high - disp_low) if direction == DIRECTION_LONG else (
-        (disp_high - ote_705) / (disp_high - disp_low)
+    ote_pos_pct = (
+        (ote_705 - disp_low) / (disp_high - disp_low)
+        if direction == DIRECTION_LONG
+        else ((disp_high - ote_705) / (disp_high - disp_low))
     )
     fvg_mid = (fvg_top + fvg_bottom) / 2.0
     dist_ticks = trade["fvg_ote_distance_ticks"] or 0.0
 
     fvgs = fvg_mod.detect_fvgs(sess)
     elig = _eligible_fvgs_detail(
-        fvgs, disp_start=0, disp_end=mss_idx, mss_index=mss_idx,
-        direction=direction, equilibrium=eq,
+        fvgs,
+        disp_start=0,
+        disp_end=mss_idx,
+        mss_index=mss_idx,
+        direction=direction,
+        equilibrium=eq,
     )
     # Re-derive disp window from mss - use sweep from trade fields
     # Better: use tagged displacement_leg_points
     disp_range = trade["displacement_leg_points"]
     if direction == DIRECTION_LONG:
-        disp_low2 = disp_high - disp_range if 'disp_high' in dir() else disp_low
+        disp_low2 = disp_high - disp_range if "disp_high" in dir() else disp_low
     # Use tagged values directly
     disp_low = ote_705 - 0.705 * trade["displacement_leg_points"]
     disp_high = disp_low + trade["displacement_leg_points"]
@@ -287,8 +302,12 @@ def _bar_audit_fill(
         "assigned_fill_index": fill_idx,
         "assigned_bar_reachable": assigned_ok,
         "fill_index_matches_first_touch": first_touch_idx == fill_idx,
-        "bars_after_mss_to_fill": (first_touch_idx - start_index + 1) if first_touch_idx is not None else None,
-        "assigned_bar_time": times[fill_idx] if fill_idx is not None and fill_idx < len(times) else None,
+        "bars_after_mss_to_fill": (first_touch_idx - start_index + 1)
+        if first_touch_idx is not None
+        else None,
+        "assigned_bar_time": times[fill_idx]
+        if fill_idx is not None and fill_idx < len(times)
+        else None,
     }
 
 
@@ -382,8 +401,10 @@ def _diag1_coherence(primary: list[dict[str, Any]], sessions: dict) -> dict[str,
         eq = (disp_low + disp_high) / 2.0
         leg_ticks = disp_rng / TICK_SIZE
 
-        ote_premium = (t["entry_price_ote_705"] > eq) if direction == DIRECTION_LONG else (
-            t["entry_price_ote_705"] < eq
+        ote_premium = (
+            (t["entry_price_ote_705"] > eq)
+            if direction == DIRECTION_LONG
+            else (t["entry_price_ote_705"] < eq)
         )
         fvg_discount = fvg_mid < eq if direction == DIRECTION_LONG else fvg_mid > eq
 
@@ -401,19 +422,21 @@ def _diag1_coherence(primary: list[dict[str, Any]], sessions: dict) -> dict[str,
             causes.append("micro_fvg_vs_leg_fib")
             cause_counts["micro_fvg_vs_leg_fib"] += 1
 
-        traces.append({
-            "session": t["session_date"],
-            "dir": direction,
-            "leg_ticks": round(leg_ticks, 1),
-            "ote_pos_pct": round(ote_pos * 100, 1),
-            "eq": round(eq, 2),
-            "ote_705": round(t["entry_price_ote_705"], 2),
-            "fvg_zone_entry": round(t["entry_price_fvg_zone"], 2),
-            "conflict_ticks": round(t["fvg_ote_distance_ticks"] or 0, 1),
-            "ote_PD": "premium" if ote_premium else "discount",
-            "fvg_PD": "discount" if fvg_discount else "premium",
-            "causes": causes,
-        })
+        traces.append(
+            {
+                "session": t["session_date"],
+                "dir": direction,
+                "leg_ticks": round(leg_ticks, 1),
+                "ote_pos_pct": round(ote_pos * 100, 1),
+                "eq": round(eq, 2),
+                "ote_705": round(t["entry_price_ote_705"], 2),
+                "fvg_zone_entry": round(t["entry_price_fvg_zone"], 2),
+                "conflict_ticks": round(t["fvg_ote_distance_ticks"] or 0, 1),
+                "ote_PD": "premium" if ote_premium else "discount",
+                "fvg_PD": "discount" if fvg_discount else "premium",
+                "causes": causes,
+            }
+        )
 
     return {
         "n_trades": len(primary),
@@ -480,14 +503,24 @@ def _diag2_fvg_audit(primary: list[dict[str, Any]], sessions: dict) -> dict[str,
     return {
         "n_with_fvg_pnl": len(with_fvg),
         "top30_bar_reachability_ok": sum(1 for a in audits if a["assigned_bar_reachable"]),
-        "top30_fill_matches_first_touch": sum(1 for a in audits if a.get("fill_index_matches_first_touch")),
+        "top30_fill_matches_first_touch": sum(
+            1 for a in audits if a.get("fill_index_matches_first_touch")
+        ),
         "median_fill_lead_bars_vs_ote": statistics.median(lead_bars) if lead_bars else None,
         "mean_fill_lead_bars_vs_ote": statistics.mean(lead_bars) if lead_bars else None,
         "total_pnl_step3_fvg_counterfactual": sum(t["pnl_usd_fvg_zone_entry"] for t in with_fvg),
         "total_pnl_resim_orig_timing": sum(all_resim_orig),
         "total_pnl_fair_timing_from_ote_bar": sum(all_resim_fair),
-        "avg_ticks_orig": (sum(all_resim_orig) / len(all_resim_orig) / (TICK_SIZE * MNQ_POINT_VALUE)) if all_resim_orig else None,
-        "avg_ticks_fair": (sum(all_resim_fair) / len(all_resim_fair) / (TICK_SIZE * MNQ_POINT_VALUE)) if all_resim_fair else None,
+        "avg_ticks_orig": (
+            sum(all_resim_orig) / len(all_resim_orig) / (TICK_SIZE * MNQ_POINT_VALUE)
+        )
+        if all_resim_orig
+        else None,
+        "avg_ticks_fair": (
+            sum(all_resim_fair) / len(all_resim_fair) / (TICK_SIZE * MNQ_POINT_VALUE)
+        )
+        if all_resim_fair
+        else None,
         "sample_audits": audits[:5],
         "verdict": (
             "ARTIFACT_NOT_LOOKAHEAD: FVG-zone fills are bar-reachable (no peeking), but step-3 "
@@ -544,8 +577,12 @@ def _diag3_ote62_audit(
         "avg_pnl_ote62": gross_62,
         "avg_ticks_primary": gross_705 / (TICK_SIZE * MNQ_POINT_VALUE),
         "avg_ticks_ote62": gross_62 / (TICK_SIZE * MNQ_POINT_VALUE),
-        "median_fill_delta_bars_62_minus_705": statistics.median(fill_delta_bars) if fill_delta_bars else None,
-        "pct_62_fills_later": sum(1 for d in fill_delta_bars if d > 0) / len(fill_delta_bars) if fill_delta_bars else None,
+        "median_fill_delta_bars_62_minus_705": statistics.median(fill_delta_bars)
+        if fill_delta_bars
+        else None,
+        "pct_62_fills_later": sum(1 for d in fill_delta_bars if d > 0) / len(fill_delta_bars)
+        if fill_delta_bars
+        else None,
         "top30_bar_reachability_ok": sum(1 for a in audits if a["assigned_bar_reachable"]),
         "verdict": (
             "PARTIALLY_REAL_TIMING: ote_62 fills are bar-valid (no look-ahead). 62% is deeper "
@@ -709,9 +746,9 @@ def _render_md(report: dict[str, Any]) -> str:
     lines = [
         "# Wave 1 Track 2 — Phase 3 step 3b: Entry-coherence diagnostic",
         "",
-        f"**Date:** 2026-06-06  ",
+        "**Date:** 2026-06-06  ",
         f"**git_sha:** `{report['git_sha']}`  ",
-        f"**Purpose:** Forensic audit of step-3 standalone OTE economics. NOT screening.",
+        "**Purpose:** Forensic audit of step-3 standalone OTE economics. NOT screening.",
         "",
         "## Executive verdict",
         "",
@@ -721,7 +758,7 @@ def _render_md(report: dict[str, Any]) -> str:
         "",
         "## Diagnostic 1 — Why D0.1 and D0.2 disagree",
         "",
-        f"- Conflict rate: **{100*d1['conflict_fraction']:.1f}%**",
+        f"- Conflict rate: **{100 * d1['conflict_fraction']:.1f}%**",
         f"- Distance (ticks): median **{d1['distance_ticks_median']:.0f}**, "
         f"mean **{d1['distance_ticks_mean']:.0f}**, max **{d1['distance_ticks_max']:.0f}**",
         "",
@@ -740,30 +777,32 @@ def _render_md(report: dict[str, Any]) -> str:
             f"gap={tr['conflict_ticks']} ticks — {', '.join(tr['causes'])}"
         )
 
-    lines.extend([
-        "",
-        "## Diagnostic 2 — FVG-zone $220k audit",
-        "",
-        d2["verdict"],
-        "",
-        f"- Step-3 FVG counterfactual total: **${d2['total_pnl_step3_fvg_counterfactual']:,.0f}**",
-        f"- Re-sim same early timing: **${d2['total_pnl_resim_orig_timing']:,.0f}**",
-        f"- Fair timing (fill only from OTE bar): **${d2['total_pnl_fair_timing_from_ote_bar']:,.0f}**",
-        f"- Median FVG fill lead vs OTE: **{d2['median_fill_lead_bars_vs_ote']}** bars",
-        "",
-        "## Diagnostic 3 — entry_ote_62 audit",
-        "",
-        d3["verdict"],
-        "",
-        f"- Avg gross/trade: primary **{d3['avg_ticks_primary']:.2f}** ticks, "
-        f"ote_62 **{d3['avg_ticks_ote62']:.2f}** ticks",
-        f"- Median fill delay (62 vs 70.5): **{d3['median_fill_delta_bars_62_minus_705']}** bars",
-        "",
-        "## Diagnostic 4 — Cost-realistic economics",
-        "",
-        "| Config | Comm-only annual | Comm+slip annual | Avg net ticks/trade |",
-        "|---|---:|---:|---:|",
-    ])
+    lines.extend(
+        [
+            "",
+            "## Diagnostic 2 — FVG-zone $220k audit",
+            "",
+            d2["verdict"],
+            "",
+            f"- Step-3 FVG counterfactual total: **${d2['total_pnl_step3_fvg_counterfactual']:,.0f}**",
+            f"- Re-sim same early timing: **${d2['total_pnl_resim_orig_timing']:,.0f}**",
+            f"- Fair timing (fill only from OTE bar): **${d2['total_pnl_fair_timing_from_ote_bar']:,.0f}**",
+            f"- Median FVG fill lead vs OTE: **{d2['median_fill_lead_bars_vs_ote']}** bars",
+            "",
+            "## Diagnostic 3 — entry_ote_62 audit",
+            "",
+            d3["verdict"],
+            "",
+            f"- Avg gross/trade: primary **{d3['avg_ticks_primary']:.2f}** ticks, "
+            f"ote_62 **{d3['avg_ticks_ote62']:.2f}** ticks",
+            f"- Median fill delay (62 vs 70.5): **{d3['median_fill_delta_bars_62_minus_705']}** bars",
+            "",
+            "## Diagnostic 4 — Cost-realistic economics",
+            "",
+            "| Config | Comm-only annual | Comm+slip annual | Avg net ticks/trade |",
+            "|---|---:|---:|---:|",
+        ]
+    )
     for name in VARIANT_FILES:
         comm = d4[name]["commission_only"]
         slip = d4[name]["commission_plus_slippage"]
@@ -772,25 +811,27 @@ def _render_md(report: dict[str, Any]) -> str:
             f"${slip['annual_net_usd']:,.0f} | {slip['avg_net_ticks']:.2f} |"
         )
 
-    lines.extend([
-        "",
-        f"Commission: ${COMMISSION_RT}/RT. Slippage: {SLIPPAGE_TICKS} tick "
-        f"(${SLIPPAGE_USD}) on stop/time exits; half-tick on target.",
-        "",
-        "## Diagnostic 5 — Coherent entry re-run (cost-inclusive)",
-        "",
-        d5["note"],
-        "",
-        f"- **OTE-only (70.5%):** n={d5['ote_only_coherent']['n']}, "
-        f"annual net **${d5['ote_only_coherent'].get('annual_net_usd', 0):,.0f}**, "
-        f"avg **{d5['ote_only_coherent'].get('avg_net_ticks', 0):.2f}** ticks/trade",
-        f"- **FVG-only (zone touch):** n={d5['fvg_only_coherent']['n']}, "
-        f"annual net **${d5['fvg_only_coherent'].get('annual_net_usd', 0):,.0f}**, "
-        f"avg **{d5['fvg_only_coherent'].get('avg_net_ticks', 0):.2f}** ticks/trade",
-        "",
-        "## Stop conditions",
-        "",
-    ])
+    lines.extend(
+        [
+            "",
+            f"Commission: ${COMMISSION_RT}/RT. Slippage: {SLIPPAGE_TICKS} tick "
+            f"(${SLIPPAGE_USD}) on stop/time exits; half-tick on target.",
+            "",
+            "## Diagnostic 5 — Coherent entry re-run (cost-inclusive)",
+            "",
+            d5["note"],
+            "",
+            f"- **OTE-only (70.5%):** n={d5['ote_only_coherent']['n']}, "
+            f"annual net **${d5['ote_only_coherent'].get('annual_net_usd', 0):,.0f}**, "
+            f"avg **{d5['ote_only_coherent'].get('avg_net_ticks', 0):.2f}** ticks/trade",
+            f"- **FVG-only (zone touch):** n={d5['fvg_only_coherent']['n']}, "
+            f"annual net **${d5['fvg_only_coherent'].get('annual_net_usd', 0):,.0f}**, "
+            f"avg **{d5['fvg_only_coherent'].get('avg_net_ticks', 0):.2f}** ticks/trade",
+            "",
+            "## Stop conditions",
+            "",
+        ]
+    )
     for k, v in report["stop_conditions"].items():
         lines.append(f"- **{k}:** {v}")
     return "\n".join(lines)
@@ -839,7 +880,11 @@ def main() -> None:
         if d4[name]["commission_plus_slippage"]["annual_net_usd"] > 0
     ]
 
-    if not survives and ote_coherent.get("annual_net_usd", 0) <= 0 and fvg_coherent.get("annual_net_usd", 0) <= 0:
+    if (
+        not survives
+        and ote_coherent.get("annual_net_usd", 0) <= 0
+        and fvg_coherent.get("annual_net_usd", 0) <= 0
+    ):
         verdict = (
             "**NO cost-surviving, artifact-free edge found.** Primary config is net-negative "
             f"after commission+slippage (${primary_slip['annual_net_usd']:,.0f}/MNQ/yr). "

@@ -86,15 +86,13 @@ def _max_dd_abs_for_qty(
 
 
 def _git_meta(repo: Path) -> dict[str, object]:
-    sha = (
-        subprocess.run(
-            ["git", "rev-parse", "HEAD"],
-            cwd=repo,
-            capture_output=True,
-            text=True,
-            check=True,
-        ).stdout.strip()
-    )
+    sha = subprocess.run(
+        ["git", "rev-parse", "HEAD"],
+        cwd=repo,
+        capture_output=True,
+        text=True,
+        check=True,
+    ).stdout.strip()
     dirty = (
         subprocess.run(
             ["git", "status", "--porcelain"],
@@ -114,7 +112,10 @@ def _append_exit_session_columns(trade_log: pl.DataFrame) -> pl.DataFrame:
     stamp = trade_log.select(pl.col("exit_time").alias("timestamp"))
     stamped = session.assign_cme_session_date(stamp)
     ny_date = trade_log.select(
-        pl.col("exit_time").dt.convert_time_zone("America/New_York").dt.date().alias("exit_ny_date"),
+        pl.col("exit_time")
+        .dt.convert_time_zone("America/New_York")
+        .dt.date()
+        .alias("exit_ny_date"),
     )["exit_ny_date"]
     return trade_log.with_columns(
         stamped["cme_session_date"].alias("exit_cme_session_date"),
@@ -299,9 +300,7 @@ def main() -> None:
         (pl.col("timestamp") >= ts0) & (pl.col("timestamp") < ts_end_excl),
     ).sort("timestamp")
 
-    session_dates = (
-        window["cme_session_date"].drop_nulls().unique().sort().to_list()
-    )
+    session_dates = window["cme_session_date"].drop_nulls().unique().sort().to_list()
 
     segments = split_dataframe_at_operator_export_gaps(window)
     orch = OrchestrationSpec(module_ids=("orb",), one_position_at_a_time=True)
@@ -357,10 +356,9 @@ def main() -> None:
 
     dd2 = _max_dd_abs_for_qty(2, segments, cfg, orch)
     dd3 = _max_dd_abs_for_qty(3, segments, cfg, orch)
-    dd_linear_matches = (
-        math.isclose(dd2, 2.0 * dd1_mag, rel_tol=0.0, abs_tol=0.01)
-        and math.isclose(dd3, 3.0 * dd1_mag, rel_tol=0.0, abs_tol=0.01)
-    )
+    dd_linear_matches = math.isclose(
+        dd2, 2.0 * dd1_mag, rel_tol=0.0, abs_tol=0.01
+    ) and math.isclose(dd3, 3.0 * dd1_mag, rel_tol=0.0, abs_tol=0.01)
 
     if m.avg_win > 0 and m.avg_loss < 0:
         wr_breakeven = float(-m.avg_loss / (m.avg_win - m.avg_loss))
@@ -388,7 +386,9 @@ def main() -> None:
     ci_annual_pt = bc.point_pnl_total / yfrac
 
     # Graded P&L at q_max
-    ann_by_year_at_q = {str(y): round(m.years_calendar.get(y, 0.0) * q_max, 2) for y in range(2020, 2027)}
+    ann_by_year_at_q = {
+        str(y): round(m.years_calendar.get(y, 0.0) * q_max, 2) for y in range(2020, 2027)
+    }
     total_at_q = m.net_pnl_total * q_max
     avg_annual_at_q = (total_at_q / yfrac) if yfrac > 0 else 0.0
 
@@ -493,7 +493,9 @@ def main() -> None:
             "peak_trade_index": peak_trade_idx,
             "trough_trade_index": trough_trade_idx,
             "years_calendar_pnl_full_2020_2026": years_calendar_full,
-            "years_calendar_pnl_nonempty_years_only": {str(k): v for k, v in sorted(m.years_calendar.items())},
+            "years_calendar_pnl_nonempty_years_only": {
+                str(k): v for k, v in sorted(m.years_calendar.items())
+            },
             "trades_per_exit_year": {str(k): v for k, v in trades_by_exit_year.items()},
             "trades_per_year_avg": m.trade_count / yfrac if yfrac > 0 else 0.0,
             "yearly_max_dd_within_year": {str(k): v for k, v in yearly_dd.items()},
@@ -521,7 +523,9 @@ def main() -> None:
             "total_pnl_scaled": total_at_q,
             "avg_annual_pnl": avg_annual_at_q,
             "annual_by_year_scaled": ann_by_year_at_q,
-            "profitable_years": len([y for y in range(2020, 2027) if m.years_calendar.get(y, 0) * q_max > 0]),
+            "profitable_years": len(
+                [y for y in range(2020, 2027) if m.years_calendar.get(y, 0) * q_max > 0]
+            ),
             "tier_vs_36_60_100k": tier,
         },
         "eval_sim": {
@@ -604,9 +608,13 @@ def main() -> None:
         f"| Trade count | {m.trade_count} |",
         f"| Total P&L | ${m.net_pnl_total:,.2f} |",
         f"| Per-contract $/yr | ${pnl_per_contract_per_year:,.2f} |",
-        f"| Win rate | {100*m.win_rate:.2f}% |",
-        f"| Breakeven WR (i.i.d. approx) | {100*wr_breakeven:.2f}% |" if wr_breakeven == wr_breakeven else "| Breakeven WR | N/A |",
-        f"| Edge over BE (pp) | {edge_over_be_pp:.2f} |" if edge_over_be_pp == edge_over_be_pp else "| Edge over BE | N/A |",
+        f"| Win rate | {100 * m.win_rate:.2f}% |",
+        f"| Breakeven WR (i.i.d. approx) | {100 * wr_breakeven:.2f}% |"
+        if wr_breakeven == wr_breakeven
+        else "| Breakeven WR | N/A |",
+        f"| Edge over BE (pp) | {edge_over_be_pp:.2f} |"
+        if edge_over_be_pp == edge_over_be_pp
+        else "| Edge over BE | N/A |",
         f"| Avg win / avg loss | ${m.avg_win:,.2f} / ${m.avg_loss:,.2f} |",
         f"| Max drawdown | ${m.max_drawdown:,.2f} |",
         f"| Profitable calendar years (2020–2026, qty=1) | {years_profitable_qty1} / 7 |",
@@ -653,7 +661,9 @@ def main() -> None:
             ]
         )
     else:
-        md_lines.append("- No passing windows — time-to-pass and trailing-margin distributions are **N/A**.")
+        md_lines.append(
+            "- No passing windows — time-to-pass and trailing-margin distributions are **N/A**."
+        )
     md_lines.extend(
         [
             "",

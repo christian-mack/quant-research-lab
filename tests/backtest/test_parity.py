@@ -13,9 +13,6 @@ from quant_research.ict.ote_execution import execute_setup, ote_research_backtes
 from quant_research.ict.ote_strategy import (
     DIRECTION_LONG,
     OteSetup,
-    OteStrategyConfig,
-    build_setup_from_sweep,
-    detect_sweep,
 )
 
 CT = ZoneInfo("America/Chicago")

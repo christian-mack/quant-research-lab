@@ -179,9 +179,7 @@ def evaluate_gates(
         qty_design = max(1, int(round(target_annual_design_usd / avg_ann)))
         g1["qty_design"] = qty_design
         _, sess_pnl = session_pnl_arrays(trades, years_filter=years)
-        worst_scaled = (
-            float(np.min(sess_pnl) * qty_design) if sess_pnl.size else float("nan")
-        )
+        worst_scaled = float(np.min(sess_pnl) * qty_design) if sess_pnl.size else float("nan")
         g1["worst_session_loss_usd_at_qty_design"] = worst_scaled
         g1["note"] = "worst-session = min over CME-session (or ET exit date fallback) P&L sum"
         # Pass if worst per-session loss magnitude is strictly below cap (loss > -cap).
@@ -195,9 +193,7 @@ def evaluate_gates(
     # Gate 3–4 closed-trade stats on filtered years (exclude scratches at 0)
     cts = eval_closed_trade_stats(trades, years_filter=years)
     g3 = {"win_rate": cts["win_rate"], "closed_trade_count": cts["closed_trade_count"]}
-    gate3_pass = (
-        bool(cts["closed_trade_count"] > 0) and float(cts["win_rate"]) >= min_win_rate
-    )
+    gate3_pass = bool(cts["closed_trade_count"] > 0) and float(cts["win_rate"]) >= min_win_rate
 
     rr = float(cts["risk_reward_avg_win_avg_loss"])
     finite_rr = rr if np.isfinite(rr) else float("nan")
@@ -206,9 +202,7 @@ def evaluate_gates(
         "avg_loss_mag_usd": cts["avg_loss_mag_usd_qty1"],
         "rr": finite_rr,
     }
-    gate4_pass = bool(
-        np.isfinite(finite_rr) and (float(rr_low) <= finite_rr <= float(rr_high))
-    )
+    gate4_pass = bool(np.isfinite(finite_rr) and (float(rr_low) <= finite_rr <= float(rr_high)))
 
     # Gate 5: profitable strictly > 0 in >=4 years
     prof_years = sum(1 for y in years if ann.get(int(y), 0.0) > 0.0)
@@ -216,9 +210,7 @@ def evaluate_gates(
     g5["profitable_year_count_strict_gt_0"] = prof_years
     gate5_pass = bool(prof_years >= min_profitable_years)
 
-    survives = bool(
-        gate1_pass and gate2_pass and gate3_pass and gate4_pass and gate5_pass
-    )
+    survives = bool(gate1_pass and gate2_pass and gate3_pass and gate4_pass and gate5_pass)
 
     return GateResult(
         gate1_pass=gate1_pass,

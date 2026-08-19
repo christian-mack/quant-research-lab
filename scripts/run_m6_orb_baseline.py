@@ -53,9 +53,9 @@ def main() -> None:
     ts0 = dt.datetime.combine(_START, dt.time.min).replace(tzinfo=_CHI)
     ts_end_excl = dt.datetime(2026, 4, 20, 0, 0, 0, tzinfo=_CHI)
 
-    window = rth.filter(
-        (pl.col("timestamp") >= ts0) & (pl.col("timestamp") < ts_end_excl)
-    ).sort("timestamp")
+    window = rth.filter((pl.col("timestamp") >= ts0) & (pl.col("timestamp") < ts_end_excl)).sort(
+        "timestamp"
+    )
 
     segments = split_dataframe_at_operator_export_gaps(window)
     orch = OrchestrationSpec(module_ids=("orb",), one_position_at_a_time=True)
@@ -83,9 +83,7 @@ def main() -> None:
         )
         for y in range(2020, 2027)
     }
-    annual_net_by_year = {
-        str(y): float(m.years_calendar.get(y, 0.0)) for y in range(2020, 2027)
-    }
+    annual_net_by_year = {str(y): float(m.years_calendar.get(y, 0.0)) for y in range(2020, 2027)}
 
     yfrac = protocol_year_fraction(_START, _END)
     contracts = production_orb_opt3_funded_params().quantity

@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import hashlib
 import sys
 from dataclasses import dataclass
 
@@ -25,35 +24,111 @@ class Case:
 
 
 CASES = [
-    Case(1, "What is the graded ORB+Opt3 per-contract figure?", "search", None,
-         ["2026-05-13", "1,088"], ["$10,885/yr per contract"], trap=True),
-    Case(2, "Why was production cut to ORB+Opt3?", "search", None,
-         ["2026-04-28", "displacement", "tri-module"], ["flux-v1-development-roadmap"], trap=True, preserve=True),
-    Case(3, "What is the max sustainable qty rule?", "pinned", "docs/phase-2-kickoff.md",
-         ["R(q)", "max(1.5", "sustainable"], []),
-    Case(4, "What timezone is the NT8 export in?", "search", None,
-         ["2026-04-27", "UTC"], [], trap=True),
-    Case(5, "When does Phase 1b start?", "search", None,
-         ["2026-04-30", "after Phase 1", "not", "parallel"], [], trap=True),
-    Case(6, "What are the Apex EOD constraints?", "pinned", "docs/ai-project-instructions.md",
-         ["$2,000", "trailing", "DLL", "$3,000"], []),
-    Case(7, "Is the +$500 in R(q) the DLL?", "pinned", "docs/phase-2-kickoff.md",
-         ["R(q)", "$500", "DLL"], []),
-    Case(8, "What happened with M6 bracket re-arm?", "search", None,
-         ["re-arm", "2026-04-28", "M6"], [], preserve=True),
-    Case(9, "Which engine is trusted for backtests?", "search", None,
-         ["M4", "engine"], []),
-    Case(10, "What is Wave 0 and has it completed?", "pinned", "docs/current-working-plan.md",
-         ["Wave 0", "complete"], []),
-    Case(11, "What are the current pre-registered hypotheses?", "search", None,
-         ["research-log", "hypoth"], []),
-    Case(12, "Why was volume-crossover roll methodology abandoned?", "search", None,
-         ["2026-04-26", "volume", "crossover"], []),
+    Case(
+        1,
+        "What is the graded ORB+Opt3 per-contract figure?",
+        "search",
+        None,
+        ["2026-05-13", "1,088"],
+        ["$10,885/yr per contract"],
+        trap=True,
+    ),
+    Case(
+        2,
+        "Why was production cut to ORB+Opt3?",
+        "search",
+        None,
+        ["2026-04-28", "displacement", "tri-module"],
+        ["flux-v1-development-roadmap"],
+        trap=True,
+        preserve=True,
+    ),
+    Case(
+        3,
+        "What is the max sustainable qty rule?",
+        "pinned",
+        "docs/phase-2-kickoff.md",
+        ["R(q)", "max(1.5", "sustainable"],
+        [],
+    ),
+    Case(
+        4,
+        "What timezone is the NT8 export in?",
+        "search",
+        None,
+        ["2026-04-27", "UTC"],
+        [],
+        trap=True,
+    ),
+    Case(
+        5,
+        "When does Phase 1b start?",
+        "search",
+        None,
+        ["2026-04-30", "after Phase 1", "not", "parallel"],
+        [],
+        trap=True,
+    ),
+    Case(
+        6,
+        "What are the Apex EOD constraints?",
+        "pinned",
+        "docs/ai-project-instructions.md",
+        ["$2,000", "trailing", "DLL", "$3,000"],
+        [],
+    ),
+    Case(
+        7,
+        "Is the +$500 in R(q) the DLL?",
+        "pinned",
+        "docs/phase-2-kickoff.md",
+        ["R(q)", "$500", "DLL"],
+        [],
+    ),
+    Case(
+        8,
+        "What happened with M6 bracket re-arm?",
+        "search",
+        None,
+        ["re-arm", "2026-04-28", "M6"],
+        [],
+        preserve=True,
+    ),
+    Case(9, "Which engine is trusted for backtests?", "search", None, ["M4", "engine"], []),
+    Case(
+        10,
+        "What is Wave 0 and has it completed?",
+        "pinned",
+        "docs/current-working-plan.md",
+        ["Wave 0", "complete"],
+        [],
+    ),
+    Case(
+        11,
+        "What are the current pre-registered hypotheses?",
+        "search",
+        None,
+        ["research-log", "hypoth"],
+        [],
+    ),
+    Case(
+        12,
+        "Why was volume-crossover roll methodology abandoned?",
+        "search",
+        None,
+        ["2026-04-26", "volume", "crossover"],
+        [],
+    ),
 ]
 
 PRESERVE_INCOME = Case(
-    0, "per-account income gap research priority ORB Opt3", "search", None,
-    ["65", "100", "priority", "income"], ["$10,885/yr per contract"], preserve=True,
+    0,
+    "per-account income gap research priority ORB Opt3",
+    "search",
+    None,
+    ["65", "100", "priority", "income"],
+    ["$10,885/yr per contract"],
+    preserve=True,
 )
 
 
@@ -68,8 +143,15 @@ def eval_case(c: Case) -> dict:
     if c.tool == "pinned":
         ctx = get_pinned_context()
         text = _doc_text(ctx, c.pinned_doc or "")
-        top = [{"rank": 1, "file_path": c.pinned_doc, "status": "pinned", "score": 1.0,
-                "snippet": text.splitlines()[0][:100] if text else "(missing doc)"}]
+        top = [
+            {
+                "rank": 1,
+                "file_path": c.pinned_doc,
+                "status": "pinned",
+                "score": 1.0,
+                "snippet": text.splitlines()[0][:100] if text else "(missing doc)",
+            }
+        ]
         blob = text.lower()
         hit = all(m.lower() in blob for m in c.must_have) if c.must_have else bool(text)
         bad = any(m.lower() in blob for m in c.must_not)
@@ -80,15 +162,26 @@ def eval_case(c: Case) -> dict:
     blob = ""
     current_blob = ""
     for i, r in enumerate(results, 1):
-        top.append({"rank": i, "file_path": r.file_path, "status": r.status,
-                    "score": round(r.score, 4), "breadcrumb": r.breadcrumb,
-                    "snippet": (r.text.splitlines()[0][:100] if r.text else "")})
+        top.append(
+            {
+                "rank": i,
+                "file_path": r.file_path,
+                "status": r.status,
+                "score": round(r.score, 4),
+                "breadcrumb": r.breadcrumb,
+                "snippet": (r.text.splitlines()[0][:100] if r.text else ""),
+            }
+        )
         part = f"{r.file_path} {r.breadcrumb} {r.text}".lower()
         blob += part
         if r.status == "current":
             current_blob += part
 
-    hit = all(any(m.lower() in blob for m in [mh]) for mh in c.must_have) if c.must_have else bool(results)
+    hit = (
+        all(any(m.lower() in blob for m in [mh]) for mh in c.must_have)
+        if c.must_have
+        else bool(results)
+    )
     # simpler: any must_have in blob
     hit = all(m.lower() in blob for m in c.must_have) if c.must_have else bool(results)
     bad = any(m.lower() in current_blob for m in c.must_not)
@@ -107,8 +200,11 @@ def eval_case(c: Case) -> dict:
 
     # Trap #5: must not surface parallel-track-as-current framing
     if c.num == 5:
-        bad = bad or ("parallel with phase 1" in current_blob or "in parallel with it" in current_blob
-                      and "not" not in current_blob[:current_blob.find("parallel")+20])
+        bad = bad or (
+            "parallel with phase 1" in current_blob
+            or "in parallel with it" in current_blob
+            and "not" not in current_blob[: current_blob.find("parallel") + 20]
+        )
 
     return {"pass": hit and not bad and bool(results), "hit": hit, "bad": bad, "top": top}
 
@@ -148,17 +244,17 @@ def main() -> int:
         print(f"#{c.num:02d} {flag}{t} | tool={c.tool} | {c.query}")
         print(f"     hit={r['hit']} bad={r['bad']}")
         for h in r["top"]:
-            print(f"     [{h['rank']}] {h.get('score','-')} {h['status']} {h['file_path']}")
+            print(f"     [{h['rank']}] {h.get('score', '-')} {h['status']} {h['file_path']}")
             if h.get("breadcrumb"):
                 print(f"          {h['breadcrumb'][:95]}")
-            print(f"          {h.get('snippet','')[:95]}")
+            print(f"          {h.get('snippet', '')[:95]}")
 
     pr = eval_case(PRESERVE_INCOME)
     if not pr["pass"]:
         ok = False
     print(f"\nPRESERVE income-gap: {'PASS' if pr['pass'] else 'FAIL'}")
     for h in pr["top"]:
-        print(f"     [{h['rank']}] {h['file_path']} — {h.get('snippet','')[:90]}")
+        print(f"     [{h['rank']}] {h['file_path']} — {h.get('snippet', '')[:90]}")
 
     # Q11 also needs working plan (pinned)
     ctx = get_pinned_context()

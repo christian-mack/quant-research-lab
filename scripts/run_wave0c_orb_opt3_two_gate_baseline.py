@@ -93,7 +93,10 @@ def _append_exit_session_columns(trade_log: pl.DataFrame) -> pl.DataFrame:
     stamp = trade_log.select(pl.col("exit_time").alias("timestamp"))
     stamped = session.assign_cme_session_date(stamp)
     ny_date = trade_log.select(
-        pl.col("exit_time").dt.convert_time_zone("America/New_York").dt.date().alias("exit_ny_date"),
+        pl.col("exit_time")
+        .dt.convert_time_zone("America/New_York")
+        .dt.date()
+        .alias("exit_ny_date"),
     )["exit_ny_date"]
     return trade_log.with_columns(
         stamped["cme_session_date"].alias("exit_cme_session_date"),
@@ -229,9 +232,10 @@ def main() -> None:
             "fail_no_target": fail_nt,
         }
 
-    stop_eval_all_zero = all(
-        eval_by_q[str(q)]["passing_windows"] == 0 for q in _Q_RANGE
-    ) and len(session_dates) >= _WIN_LEN
+    stop_eval_all_zero = (
+        all(eval_by_q[str(q)]["passing_windows"] == 0 for q in _Q_RANGE)
+        and len(session_dates) >= _WIN_LEN
+    )
 
     bootstrap_by_q: dict[str, dict[str, object]] = {}
     stop_bootstrap_low = False
@@ -259,8 +263,7 @@ def main() -> None:
                 "margin_pre_lock_percentiles": _margin_percentile_report(min_pre),
                 "margin_post_lock_percentiles": _margin_percentile_report(post_fin),
                 "worst_tail_labels": (
-                    "p01/p05 = lower tail of min_margin (stress); "
-                    "p95/p99 = upper tail (headroom)"
+                    "p01/p05 = lower tail of min_margin (stress); p95/p99 = upper tail (headroom)"
                 ),
                 "n_iterations": _BOOT_IT,
                 "seed": _BOOT_SEED_BASE + bl + q * 1000,
@@ -268,14 +271,11 @@ def main() -> None:
             if funded_q_max is not None and q == funded_q_max and frac < _BOOT_SURVIVAL_WARN:
                 stop_bootstrap_low = True
 
-    eval_at_funded = (
-        eval_by_q[str(funded_q_max)] if funded_q_max is not None else None
-    )
+    eval_at_funded = eval_by_q[str(funded_q_max)] if funded_q_max is not None else None
 
     q_graded = funded_q_max if funded_q_max is not None else 0
     ann_by_year = {
-        str(y): round(m.years_calendar.get(y, 0.0) * q_graded, 2)
-        for y in range(2020, 2027)
+        str(y): round(m.years_calendar.get(y, 0.0) * q_graded, 2) for y in range(2020, 2027)
     }
     total_at_q = m.net_pnl_total * q_graded
     avg_annual_at_q = (total_at_q / yfrac) if yfrac > 0 else 0.0
@@ -367,8 +367,10 @@ def main() -> None:
     )
 
     lines = []
-    any_stop = stop_funded_q1 or stop_eval_all_zero or (
-        stop_bootstrap_low if funded_q_max is not None else False
+    any_stop = (
+        stop_funded_q1
+        or stop_eval_all_zero
+        or (stop_bootstrap_low if funded_q_max is not None else False)
     )
     if any_stop:
         lines += [

@@ -6,8 +6,9 @@ Results without a passing report are untrusted by project convention.
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from dataclasses import dataclass, field
-from typing import Any, Sequence
+from typing import Any
 
 import polars as pl
 
@@ -16,7 +17,7 @@ from quant_research.backtest.provenance import (
     M4_ENGINE_PROVENANCE_MARKER,
     is_m4_engine_provenance,
 )
-from quant_research.backtest.specs import BacktestConfig, SlippageMode, SlippageSpec
+from quant_research.backtest.specs import BacktestConfig, SlippageMode
 from quant_research.backtest.types import SimulatedFill
 
 MNQ_TICK = 0.25
@@ -161,8 +162,7 @@ def _check_v1_geometry_coherence(
 
     n = trade_log.height
     reject_flag = (
-        geometry_reject_rate is not None
-        and geometry_reject_rate > th.geometry_reject_surface_rate
+        geometry_reject_rate is not None and geometry_reject_rate > th.geometry_reject_surface_rate
     )
     if has_bracket_cols:
         # Hard gate: booked log must contain zero incoherent fills.
@@ -220,7 +220,9 @@ def _check_v2_causal_sequencing(trade_log: pl.DataFrame) -> CheckResult:
         "V2",
         "Causal sequencing",
         passed,
-        f"{len(violations)} sequencing violations" if violations else "All trades exit at/after entry",
+        f"{len(violations)} sequencing violations"
+        if violations
+        else "All trades exit at/after entry",
         {"violations": violations[:10], "n_trades": trade_log.height},
     )
 
@@ -229,8 +231,7 @@ def _check_v3_cost_application(trade_log: pl.DataFrame, config: BacktestConfig) 
     if trade_log.is_empty():
         return CheckResult("V3", "Cost application", True, "No trades", {})
     expect_cost = (
-        config.commission.per_contract_per_fill > 0
-        or config.slippage.mode != SlippageMode.NONE
+        config.commission.per_contract_per_fill > 0 or config.slippage.mode != SlippageMode.NONE
     )
     zero_comm = 0
     mismatch = 0

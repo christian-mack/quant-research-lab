@@ -199,7 +199,7 @@ def _render_md(report: dict[str, Any]) -> str:
     lines = [
         "# Wave 1 — Engine remediation + clean OTE re-run",
         "",
-        f"**Date:** 2026-06-07  ",
+        "**Date:** 2026-06-07  ",
         f"**git_sha:** `{report['git_sha']}`  ",
         f"**Protocol:** {report['protocol_window'][0]} → {report['protocol_window'][1]}  ",
         "",
@@ -235,28 +235,30 @@ def _render_md(report: dict[str, Any]) -> str:
     for cfg in report["configs"].values():
         fb = cfg["frame_b_economics"]
         full = cfg["full_protocol_economics"]
-        lines.extend([
-            f"### {cfg['label']}",
-            "",
-            f"- Sweep-chain attempts (pre-geometry): **{cfg['setups_detected']:,}**",
-            f"- Passed geometry scan: **{cfg.get('setups_passed_scan', 0):,}**",
-            f"- Geometry rejects: **{cfg['geometry_reject_total']:,}** "
-            f"({100 * cfg['geometry_reject_rate']:.1f}% of attempts) — {cfg['geometry_rejects']}",
-            f"- Setups filled: **{cfg['setups_filled']:,}**",
-            f"- Trades: **{cfg['n_trades']:,}**",
-            "",
-            "**Full protocol (comm+slip, engine-native):**",
-            f"- Annual net: **${full.get('annual_net_usd', 0):,.0f}/MNQ**",
-            f"- Net ticks/trade: **{full.get('avg_net_ticks', 0):.2f}**",
-            f"- WR: **{100 * full.get('win_rate', 0):.1f}%** | "
-            f"R:R **{full.get('reward_risk_ratio', 0):.2f}**",
-            "",
-            "**Frame B (2021–2025 eval years):**",
-            f"- Annual net: **${fb.get('annual_net_usd', 0):,.0f}/MNQ**",
-            f"- Net ticks/trade: **{fb.get('avg_net_ticks', 0):.2f}**",
-            "",
-            "**Year-by-year net (comm+slip):**",
-        ])
+        lines.extend(
+            [
+                f"### {cfg['label']}",
+                "",
+                f"- Sweep-chain attempts (pre-geometry): **{cfg['setups_detected']:,}**",
+                f"- Passed geometry scan: **{cfg.get('setups_passed_scan', 0):,}**",
+                f"- Geometry rejects: **{cfg['geometry_reject_total']:,}** "
+                f"({100 * cfg['geometry_reject_rate']:.1f}% of attempts) — {cfg['geometry_rejects']}",
+                f"- Setups filled: **{cfg['setups_filled']:,}**",
+                f"- Trades: **{cfg['n_trades']:,}**",
+                "",
+                "**Full protocol (comm+slip, engine-native):**",
+                f"- Annual net: **${full.get('annual_net_usd', 0):,.0f}/MNQ**",
+                f"- Net ticks/trade: **{full.get('avg_net_ticks', 0):.2f}**",
+                f"- WR: **{100 * full.get('win_rate', 0):.1f}%** | "
+                f"R:R **{full.get('reward_risk_ratio', 0):.2f}**",
+                "",
+                "**Frame B (2021–2025 eval years):**",
+                f"- Annual net: **${fb.get('annual_net_usd', 0):,.0f}/MNQ**",
+                f"- Net ticks/trade: **{fb.get('avg_net_ticks', 0):.2f}**",
+                "",
+                "**Year-by-year net (comm+slip):**",
+            ]
+        )
         for y, p in cfg["year_net_usd"].items():
             flag = " *(partial)*" if y in PARTIAL_YEARS else ""
             lines.append(f"- {y}: ${p:,.0f}{flag}")
@@ -273,12 +275,14 @@ def _render_md(report: dict[str, Any]) -> str:
     for k, v in report["stop_conditions"].items():
         lines.append(f"- **{k}:** {v}")
 
-    lines.extend([
-        "",
-        "## Operator summary",
-        "",
-        report["operator_summary"],
-    ])
+    lines.extend(
+        [
+            "",
+            "## Operator summary",
+            "",
+            report["operator_summary"],
+        ]
+    )
     return "\n".join(lines)
 
 
@@ -296,15 +300,27 @@ def main() -> None:
     print(f"  -> {mnq.height:,} bars", flush=True)
 
     configs = {
-        "OTE705": ("OTE 70.5% full RTH", OteStrategyConfig(
-            entry_style=ENTRY_OTE_ONLY, entry_mode=ENTRY_OTE_705,
-        )),
-        "OTE62": ("OTE 62% full RTH", OteStrategyConfig(
-            entry_style=ENTRY_OTE_ONLY, entry_mode=ENTRY_OTE_62,
-        )),
-        "FVG_only": ("FVG-only full RTH", OteStrategyConfig(
-            entry_style=ENTRY_FVG_ONLY, entry_mode=ENTRY_OTE_705,
-        )),
+        "OTE705": (
+            "OTE 70.5% full RTH",
+            OteStrategyConfig(
+                entry_style=ENTRY_OTE_ONLY,
+                entry_mode=ENTRY_OTE_705,
+            ),
+        ),
+        "OTE62": (
+            "OTE 62% full RTH",
+            OteStrategyConfig(
+                entry_style=ENTRY_OTE_ONLY,
+                entry_mode=ENTRY_OTE_62,
+            ),
+        ),
+        "FVG_only": (
+            "FVG-only full RTH",
+            OteStrategyConfig(
+                entry_style=ENTRY_FVG_ONLY,
+                entry_mode=ENTRY_OTE_705,
+            ),
+        ),
     }
 
     results: dict[str, dict[str, Any]] = {}

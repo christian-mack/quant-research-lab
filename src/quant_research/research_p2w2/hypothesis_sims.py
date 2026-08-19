@@ -9,7 +9,11 @@ from dataclasses import dataclass
 import polars as pl
 
 from quant_research.ict import pd_arrays as pd_mod
-from quant_research.research_p2w2.p2_execution import P2ExecutionBatch, execute_setups, session_frames
+from quant_research.research_p2w2.p2_execution import (
+    P2ExecutionBatch,
+    execute_setups,
+    session_frames,
+)
 from quant_research.research_p2w2.p2_setup import P2Setup
 
 _EASTERN = "America/New_York"
@@ -55,8 +59,7 @@ def iter_h3_h7_reclaim_signals(mnq_et: pl.DataFrame) -> Iterator[H3H7ReclaimSign
         if sdf.height < 40:
             continue
         or_bars = sdf.filter(
-            (pl.col("ts_et").dt.time() >= T_ET_OPEN)
-            & (pl.col("ts_et").dt.time() < T_ET_1000)
+            (pl.col("ts_et").dt.time() >= T_ET_OPEN) & (pl.col("ts_et").dt.time() < T_ET_1000)
         )
         if or_bars.height < 10:
             continue
@@ -195,8 +198,7 @@ def scan_h1(mnq_et: pl.DataFrame) -> list[P2Setup]:
         if sdf.height < 40:
             continue
         open_bars = sdf.filter(
-            (pl.col("ts_et").dt.time() >= T_ET_OPEN)
-            & (pl.col("ts_et").dt.time() < T_ET_1030)
+            (pl.col("ts_et").dt.time() >= T_ET_OPEN) & (pl.col("ts_et").dt.time() < T_ET_1030)
         )
         if open_bars.height < 20:
             continue
@@ -218,8 +220,7 @@ def scan_h1(mnq_et: pl.DataFrame) -> list[P2Setup]:
             continue
 
         scan = sdf.filter(
-            (pl.col("ts_et").dt.time() >= T_ET_1000)
-            & (pl.col("ts_et").dt.time() < T_ET_1200)
+            (pl.col("ts_et").dt.time() >= T_ET_1000) & (pl.col("ts_et").dt.time() < T_ET_1200)
         )
         if scan.height < 5:
             continue
@@ -358,14 +359,10 @@ def scan_h3(mnq_et: pl.DataFrame) -> list[P2Setup]:
     for sig in iter_h3_h7_reclaim_signals(mnq_et):
         entry_px = sig.entry_px
         if sig.false_dir == 1:
-            stop_px = entry_px + min(
-                H3_STOP_CAP, max(2.0, sig.false_extreme + 2.0 - entry_px)
-            )
+            stop_px = entry_px + min(H3_STOP_CAP, max(2.0, sig.false_extreme + 2.0 - entry_px))
             direction = "short"
         else:
-            stop_px = entry_px - min(
-                H3_STOP_CAP, max(2.0, entry_px - (sig.false_extreme - 2.0))
-            )
+            stop_px = entry_px - min(H3_STOP_CAP, max(2.0, entry_px - (sig.false_extreme - 2.0)))
             direction = "long"
         setups.append(
             P2Setup(
@@ -418,8 +415,7 @@ def scan_h4(mnq_et: pl.DataFrame) -> list[P2Setup]:
         if sdf.height < 30:
             continue
         opening = sdf.filter(
-            (pl.col("ts_et").dt.time() >= T_ET_OPEN)
-            & (pl.col("ts_et").dt.time() < T_ET_0945)
+            (pl.col("ts_et").dt.time() >= T_ET_OPEN) & (pl.col("ts_et").dt.time() < T_ET_0945)
         )
         after = sdf.filter(pl.col("ts_et").dt.time() >= T_ET_0945)
         if opening.height < 5 or after.height == 0:

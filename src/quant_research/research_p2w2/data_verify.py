@@ -68,11 +68,7 @@ def verify_mnq_dataset(data_root: Path) -> MnqDatasetReport:
         protocol_end_inclusive=PROTOCOL_END,
     )
     bar_count = rth.height
-    sessions = (
-        rth["cme_session_date"].drop_nulls().unique().sort().to_list()
-        if bar_count
-        else []
-    )
+    sessions = rth["cme_session_date"].drop_nulls().unique().sort().to_list() if bar_count else []
     first_bar = rth["timestamp"].min() if bar_count else None
     last_bar = rth["timestamp"].max() if bar_count else None
     first_sess = sessions[0] if sessions else None

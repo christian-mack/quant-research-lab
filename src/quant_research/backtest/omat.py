@@ -95,7 +95,6 @@ def _assert_module_ids(expected: str, orders: list[OrderRequest]) -> None:
     for req in orders:
         if req.module_id != expected:
             msg = (
-                f"OrderRequest.module_id {req.module_id!r} must match "
-                f"strategy module {expected!r}"
+                f"OrderRequest.module_id {req.module_id!r} must match strategy module {expected!r}"
             )
             raise ValueError(msg)

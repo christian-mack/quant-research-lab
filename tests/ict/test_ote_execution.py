@@ -9,7 +9,6 @@ import polars as pl
 import pytest
 
 from quant_research.backtest.geometry import GeometryReject
-from quant_research.ict.liquidity_sweep import SIDE_LOW, detect_sweep
 from quant_research.backtest.specs import (
     BacktestConfig,
     FillModelSpec,
@@ -18,6 +17,7 @@ from quant_research.backtest.specs import (
     SessionSpec,
     StopLimitIntrabarPolicy,
 )
+from quant_research.ict.liquidity_sweep import SIDE_LOW, detect_sweep
 from quant_research.ict.ote_execution import execute_setup, ote_research_backtest_config
 from quant_research.ict.ote_strategy import (
     DIRECTION_LONG,
@@ -161,9 +161,7 @@ def test_end_to_end_long_setup_via_scan() -> None:
     sweep = detect_sweep(
         df, level=100.0, side=SIDE_LOW, config=cfg.sweep_config, search_start_index=2
     )
-    setup = build_setup_from_sweep(
-        df, sweep, config=cfg, session_date=SESSION, pdh=115.0, pdl=90.0
-    )
+    setup = build_setup_from_sweep(df, sweep, config=cfg, session_date=SESSION, pdh=115.0, pdl=90.0)
     assert setup is not None
     trade = execute_setup(setup, df, config=_hand_trace_config())
     assert trade is not None

@@ -116,7 +116,10 @@ def _append_exit_ny(trade_log: pl.DataFrame) -> pl.DataFrame:
     stamp = trade_log.select(pl.col("exit_time").alias("timestamp"))
     stamped = session.assign_cme_session_date(stamp)
     ny_date = trade_log.select(
-        pl.col("exit_time").dt.convert_time_zone("America/New_York").dt.date().alias("exit_ny_date"),
+        pl.col("exit_time")
+        .dt.convert_time_zone("America/New_York")
+        .dt.date()
+        .alias("exit_ny_date"),
     )["exit_ny_date"]
     return trade_log.with_columns(
         stamped["cme_session_date"].alias("exit_cme_session_date"),
@@ -387,7 +390,7 @@ def main() -> None:
         f"- **Losing sessions:** {n_losing}",
         f"- **99th pct abs loss (MNQ=1), USD:** {mag_pct.get('p99', float('nan')):.2f}",
         f"- **$50K TDD:** {_APEX_PRELOCK['50k']['trailing_dd_tdd']:.0f}; "
-        f"half-TDD STOP reference: {0.5*_APEX_PRELOCK['50k']['trailing_dd_tdd']:.0f}",
+        f"half-TDD STOP reference: {0.5 * _APEX_PRELOCK['50k']['trailing_dd_tdd']:.0f}",
         f"- **STOP surface (p99 ≤ half $50K TDD):** {stop_surface}",
         "",
         "See `docs/orb_opt3_phase2_closeout.md` for narrative + Phase 2 reframe.",

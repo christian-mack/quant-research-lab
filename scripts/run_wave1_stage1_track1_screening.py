@@ -242,8 +242,7 @@ def main() -> None:
         )
     if blocked_rty:
         blk_map["H9"] = (
-            "H9 RTY lead: no RTY raw exports under "
-            f"`{data_loader.RTY_CONTRACT_GLOB}` (count=0)."
+            f"H9 RTY lead: no RTY raw exports under `{data_loader.RTY_CONTRACT_GLOB}` (count=0)."
         )
 
     if blk_map:
@@ -349,8 +348,7 @@ def main() -> None:
             "year_filters_gates": list(GATE_EVAL_YEARS),
             "instrument_execution": "MNQ",
             "commission_slippage": (
-                "none coarse screen ($0); exit modeling minute-bar "
-                "pessimistic dual touch."
+                "none coarse screen ($0); exit modeling minute-bar pessimistic dual touch."
             ),
         },
         "data_extensions": {"ES_raw_glob_probe": es_pat, "RTY_raw_glob_probe": rty_pat},
@@ -380,8 +378,7 @@ def main() -> None:
         f"evaluation years **{list(GATE_EVAL_YEARS)}** (Frame B excludes 2020).",
         "",
         "## Loader / ES–RTY status",
-        f"- ES glob `{data_loader.ES_CONTRACT_GLOB}`: "
-        f"**{es_pat['contract_file_count']}** files.",
+        f"- ES glob `{data_loader.ES_CONTRACT_GLOB}`: **{es_pat['contract_file_count']}** files.",
         f"- RTY glob `{data_loader.RTY_CONTRACT_GLOB}`: "
         f"**{rty_pat['contract_file_count']}** files.",
         "- Cross-instrument hypotheses **H8/H9/H10:** "
@@ -406,9 +403,7 @@ def main() -> None:
             "- **H12** passes year profile (G5) but fails **frequency**, **win rate**, "
             "**R:R**, and **session tail** vs Gate 1 sizing."
         ),
-        (
-            "- **H1/H2** fail **Gate 1** (negative mean annual at qty=1) and **win rate**."
-        ),
+        ("- **H1/H2** fail **Gate 1** (negative mean annual at qty=1) and **win rate**."),
         (
             "- **Deflated Sharpe (N=7):** wide SR spread (H1/H2 negative vs H11/H12 positive); "
             "PSR vs track null is strong for H11/H12, but **Gate 1** blocks H11 anyway here."
@@ -434,11 +429,7 @@ def main() -> None:
         lines.append(f"- Bootstrap mean-annual P&L CI95: `{bd}`")
         lines.append("")
     lines.append("## Deflated Sharpe (within-track N=7)")
-    lines.append(
-        "```json\n"
-        + json.dumps(_json_sanitize(dsr_blob), indent=2)[:18000]
-        + "\n```"
-    )
+    lines.append("```json\n" + json.dumps(_json_sanitize(dsr_blob), indent=2)[:18000] + "\n```")
 
     md_path = base.with_suffix(".md")
     md_path.write_text("\n".join(lines), encoding="utf-8")

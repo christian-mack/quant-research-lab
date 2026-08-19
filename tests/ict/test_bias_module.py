@@ -69,11 +69,11 @@ def _bars(
 # Continuation (bullish): trade lower first → sweep PDL → bullish CISD → reclaim &
 # respect EQ → expand through PDH.
 CONTINUATION_BULL = [
-    (101.0, 101.0, 99.0, 99.5),    # 0 down-close
-    (99.5, 99.5, 95.0, 95.5),      # 1 down-close
-    (95.5, 95.5, 89.5, 91.0),      # 2 sweep PDL (low 89.5 < 89.75), closes back > 90
-    (91.0, 98.0, 90.5, 97.0),      # 3 up-close, no CISD yet (97 < level 101)
-    (97.0, 103.0, 96.5, 102.0),    # 4 bullish CISD fires (102 > 101)
+    (101.0, 101.0, 99.0, 99.5),  # 0 down-close
+    (99.5, 99.5, 95.0, 95.5),  # 1 down-close
+    (95.5, 95.5, 89.5, 91.0),  # 2 sweep PDL (low 89.5 < 89.75), closes back > 90
+    (91.0, 98.0, 90.5, 97.0),  # 3 up-close, no CISD yet (97 < level 101)
+    (97.0, 103.0, 96.5, 102.0),  # 4 bullish CISD fires (102 > 101)
     (102.0, 106.0, 101.0, 105.0),  # 5 holds above EQ
     (105.0, 109.5, 104.0, 108.5),  # 6 expands toward PDH (no PDH sweep)
 ]
@@ -81,21 +81,25 @@ CONTINUATION_BULL = [
 # Reversal (bullish→bearish): trade into PDH → sweep buyside → reverse → back
 # toward EQ/PDL.
 REVERSAL_BEAR = [
-    (99.0, 101.0, 98.5, 100.5),    # 0 up-close
+    (99.0, 101.0, 98.5, 100.5),  # 0 up-close
     (100.5, 105.0, 100.0, 104.5),  # 1 up-close
     (104.5, 110.5, 104.0, 108.0),  # 2 sweep PDH (high 110.5 > 110.25), closes back < 110
     (108.0, 109.0, 102.0, 103.0),  # 3 down-close, no CISD yet (103 > level 99)
-    (103.0, 104.0, 97.0, 98.0),    # 4 bearish CISD fires (98 < 99)
-    (98.0, 99.0, 92.0, 93.0),      # 5 holds below EQ
-    (93.0, 94.0, 90.5, 91.0),      # 6 expands toward PDL (no PDL sweep)
+    (103.0, 104.0, 97.0, 98.0),  # 4 bearish CISD fires (98 < 99)
+    (98.0, 99.0, 92.0, 93.0),  # 5 holds below EQ
+    (93.0, 94.0, 90.5, 91.0),  # 6 expands toward PDL (no PDL sweep)
 ]
 
 
 def test_continuation_day_emits_long() -> None:
     """Worked example: bullish continuation → long."""
     sb = classify_session(
-        _bars(CONTINUATION_BULL), session_date=SESSION_DATE,
-        pdh=PDH, pdl=PDL, p_eq=P_EQ, config=CFG,
+        _bars(CONTINUATION_BULL),
+        session_date=SESSION_DATE,
+        pdh=PDH,
+        pdl=PDL,
+        p_eq=P_EQ,
+        config=CFG,
     )
     assert sb.bias == BIAS_LONG
     assert sb.bullish.sweep and sb.bullish.cisd and sb.bullish.eq_respected
@@ -107,8 +111,12 @@ def test_continuation_day_emits_long() -> None:
 def test_reversal_day_emits_short() -> None:
     """Worked example: bullish→bearish reversal → short."""
     sb = classify_session(
-        _bars(REVERSAL_BEAR), session_date=SESSION_DATE,
-        pdh=PDH, pdl=PDL, p_eq=P_EQ, config=CFG,
+        _bars(REVERSAL_BEAR),
+        session_date=SESSION_DATE,
+        pdh=PDH,
+        pdl=PDL,
+        p_eq=P_EQ,
+        config=CFG,
     )
     assert sb.bias == BIAS_SHORT
     assert sb.bearish.sweep and sb.bearish.cisd and sb.bearish.eq_respected
@@ -129,7 +137,12 @@ def test_consolidation_range_day_emits_no_clear_bias() -> None:
         (99.5, 101.0, 98.5, 100.0),
     ]
     sb = classify_session(
-        _bars(rng), session_date=SESSION_DATE, pdh=PDH, pdl=PDL, p_eq=P_EQ, config=CFG,
+        _bars(rng),
+        session_date=SESSION_DATE,
+        pdh=PDH,
+        pdl=PDL,
+        p_eq=P_EQ,
+        config=CFG,
     )
     assert sb.bias == BIAS_NONE
     assert not sb.bullish.sweep and not sb.bearish.sweep
@@ -140,14 +153,19 @@ def test_opposing_eq_closure_invalidates_forming_bias() -> None:
     rows = [
         (101.0, 101.0, 99.0, 99.5),
         (99.5, 99.5, 95.0, 95.5),
-        (95.5, 95.5, 89.5, 91.0),    # sweep PDL
+        (95.5, 95.5, 89.5, 91.0),  # sweep PDL
         (91.0, 98.0, 90.5, 97.0),
         (97.0, 103.0, 96.5, 102.0),  # bullish CISD fires; reclaim EQ
         (102.0, 102.5, 96.0, 97.0),  # close 97 < EQ 100 → opposing EQ closure
         (97.0, 98.0, 95.0, 96.0),
     ]
     sb = classify_session(
-        _bars(rows), session_date=SESSION_DATE, pdh=PDH, pdl=PDL, p_eq=P_EQ, config=CFG,
+        _bars(rows),
+        session_date=SESSION_DATE,
+        pdh=PDH,
+        pdl=PDL,
+        p_eq=P_EQ,
+        config=CFG,
     )
     assert sb.bullish.sweep and sb.bullish.cisd
     assert sb.bullish.eq_respected is False
@@ -157,8 +175,12 @@ def test_opposing_eq_closure_invalidates_forming_bias() -> None:
 def test_first_session_no_prior_levels_is_no_clear_bias() -> None:
     """No prior-day levels (first session) → no-clear-bias regardless of action."""
     sb = classify_session(
-        _bars(CONTINUATION_BULL), session_date=SESSION_DATE,
-        pdh=None, pdl=None, p_eq=None, config=CFG,
+        _bars(CONTINUATION_BULL),
+        session_date=SESSION_DATE,
+        pdh=None,
+        pdl=None,
+        p_eq=None,
+        config=CFG,
     )
     assert sb.bias == BIAS_NONE
     assert "first session" in sb.reason
@@ -168,21 +190,26 @@ def test_first_session_no_prior_levels_is_no_clear_bias() -> None:
 # Opening-range "recent short-term low" reference (Primitive 5).
 # ---------------------------------------------------------------------------
 
+
 def test_opening_range_low_sweep_emits_long() -> None:
     """When PDL/PDH are far away, a sweep of the opening-range low can form bias."""
     cfg_or = BiasConfig(pairing_timeframe="5m", smt_required=False, opening_range_minutes=10)
     rows = [
-        (100.0, 101.0, 98.0, 99.0),   # 0 OR
-        (99.0, 99.5, 97.0, 97.5),     # 1 OR -> OR-low = 97
-        (97.5, 97.5, 96.0, 96.5),     # 2 sweep OR-low (96 < 96.75)
-        (96.5, 98.0, 96.0, 97.8),     # 3 closes back inside (> 97)
-        (97.8, 101.0, 97.5, 100.5),   # 4 bullish CISD fires (100.5 > 100); reclaim EQ
+        (100.0, 101.0, 98.0, 99.0),  # 0 OR
+        (99.0, 99.5, 97.0, 97.5),  # 1 OR -> OR-low = 97
+        (97.5, 97.5, 96.0, 96.5),  # 2 sweep OR-low (96 < 96.75)
+        (96.5, 98.0, 96.0, 97.8),  # 3 closes back inside (> 97)
+        (97.8, 101.0, 97.5, 100.5),  # 4 bullish CISD fires (100.5 > 100); reclaim EQ
         (100.5, 104.0, 100.0, 103.0),
         (103.0, 106.0, 102.0, 105.0),
     ]
     sb = classify_session(
-        _bars(rows), session_date=SESSION_DATE,
-        pdh=130.0, pdl=70.0, p_eq=100.0, config=cfg_or,
+        _bars(rows),
+        session_date=SESSION_DATE,
+        pdh=130.0,
+        pdl=70.0,
+        p_eq=100.0,
+        config=cfg_or,
     )
     assert sb.bias == BIAS_LONG
     assert sb.bullish.swept_reference == "OR_low"
@@ -191,6 +218,7 @@ def test_opening_range_low_sweep_emits_long() -> None:
 # ---------------------------------------------------------------------------
 # SMT configurable tier.
 # ---------------------------------------------------------------------------
+
 
 def _smt_frame(lows: list[float]) -> pl.DataFrame:
     """Correlated-instrument 5m bars; only `low` matters for bullish SMT."""
@@ -206,8 +234,13 @@ def test_smt_required_fires_when_divergence_present() -> None:
     mym = _smt_frame([95.0, 95.5, 96.0, 96.2, 96.1, 97.0, 98.0])
     frames = {"MNQ": mnq, "MES": mes, "MYM": mym}
     sb = classify_session(
-        mnq, session_date=SESSION_DATE, pdh=PDH, pdl=PDL, p_eq=P_EQ,
-        config=CFG_SMT, smt_frames=frames,
+        mnq,
+        session_date=SESSION_DATE,
+        pdh=PDH,
+        pdl=PDL,
+        p_eq=P_EQ,
+        config=CFG_SMT,
+        smt_frames=frames,
     )
     assert sb.bullish.smt_evaluable is True
     assert sb.bullish.smt_present is True
@@ -222,15 +255,25 @@ def test_smt_required_blocks_when_divergence_absent() -> None:
     mym = _smt_frame([95.0, 95.5, 89.0, 89.5, 89.0, 90.0, 91.0])
     frames = {"MNQ": mnq, "MES": mes, "MYM": mym}
     sb_required = classify_session(
-        mnq, session_date=SESSION_DATE, pdh=PDH, pdl=PDL, p_eq=P_EQ,
-        config=CFG_SMT, smt_frames=frames,
+        mnq,
+        session_date=SESSION_DATE,
+        pdh=PDH,
+        pdl=PDL,
+        p_eq=P_EQ,
+        config=CFG_SMT,
+        smt_frames=frames,
     )
     assert sb_required.bullish.smt_present is False
     assert sb_required.bias == BIAS_NONE
     # Same session, smt_required=False → still long (SMT logged, not gating).
     sb_optional = classify_session(
-        mnq, session_date=SESSION_DATE, pdh=PDH, pdl=PDL, p_eq=P_EQ,
-        config=CFG, smt_frames=frames,
+        mnq,
+        session_date=SESSION_DATE,
+        pdh=PDH,
+        pdl=PDL,
+        p_eq=P_EQ,
+        config=CFG,
+        smt_frames=frames,
     )
     assert sb_optional.bias == BIAS_LONG
 
@@ -239,8 +282,13 @@ def test_smt_not_evaluable_without_frames() -> None:
     """No correlated frames → SMT not evaluable; smt_required blocks the bias."""
     mnq = _bars(CONTINUATION_BULL)
     sb = classify_session(
-        mnq, session_date=SESSION_DATE, pdh=PDH, pdl=PDL, p_eq=P_EQ,
-        config=CFG_SMT, smt_frames=None,
+        mnq,
+        session_date=SESSION_DATE,
+        pdh=PDH,
+        pdl=PDL,
+        p_eq=P_EQ,
+        config=CFG_SMT,
+        smt_frames=None,
     )
     assert sb.bullish.smt_evaluable is False
     assert sb.bias == BIAS_NONE
@@ -250,13 +298,18 @@ def test_smt_not_evaluable_without_frames() -> None:
 # Pure combinators.
 # ---------------------------------------------------------------------------
 
+
 def test_path_completed_smt_tier() -> None:
     base = PathDiagnostics(direction="bullish", sweep=True, cisd=True, eq_respected=True)
     assert path_completed(base, smt_required=False) is True
     assert path_completed(base, smt_required=True) is False
     with_smt = PathDiagnostics(
-        direction="bullish", sweep=True, cisd=True, eq_respected=True,
-        smt_evaluable=True, smt_present=True,
+        direction="bullish",
+        sweep=True,
+        cisd=True,
+        eq_respected=True,
+        smt_evaluable=True,
+        smt_present=True,
     )
     assert path_completed(with_smt, smt_required=True) is True
 
@@ -273,6 +326,7 @@ def test_emit_bias_both_complete_is_ambiguous() -> None:
 # No look-ahead: session-N bias is independent of session N+1 bars.
 # ---------------------------------------------------------------------------
 
+
 def test_no_lookahead_session_bias_independent_of_future_sessions() -> None:
     d0 = dt.date(2024, 6, 10)
     d1 = dt.date(2024, 6, 11)
@@ -284,10 +338,11 @@ def test_no_lookahead_session_bias_independent_of_future_sessions() -> None:
     # Session 0 sets prior-day levels for session 1 (day_high=110, day_low=90).
     s0 = _bars(
         [(100.0, 110.0, 100.0, 105.0), (105.0, 106.0, 90.0, 95.0), (95.0, 96.0, 92.0, 94.0)],
-        base=base0, session_date=d0,
+        base=base0,
+        session_date=d0,
     )
     s1 = _bars(CONTINUATION_BULL, base=base1, session_date=d1)  # → long
-    s2 = _bars(REVERSAL_BEAR, base=base2, session_date=d2)      # arbitrary future
+    s2 = _bars(REVERSAL_BEAR, base=base2, session_date=d2)  # arbitrary future
 
     full = pl.concat([s0, s1, s2])
     truncated = pl.concat([s0, s1])

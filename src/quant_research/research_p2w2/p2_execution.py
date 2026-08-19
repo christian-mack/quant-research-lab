@@ -30,7 +30,6 @@ from quant_research.backtest.validation import (
     ValidationThresholds,
     validate_backtest_result,
 )
-from quant_research.research_p2w2.metrics import P2_W2_V4_TICK_THRESHOLD
 from quant_research.research_p2w2.costs import (
     P2_ENTRY_TAG,
     P2_STOP_TAG,
@@ -38,6 +37,7 @@ from quant_research.research_p2w2.costs import (
     P2_TIME_TAG,
     P2_W2_BACKTEST_CONFIG,
 )
+from quant_research.research_p2w2.metrics import P2_W2_V4_TICK_THRESHOLD
 from quant_research.research_p2w2.p2_setup import P2Setup
 
 _EASTERN = ZoneInfo("America/New_York")
@@ -50,9 +50,8 @@ def _module_id(hypothesis_id: str) -> str:
 def _attach_ts_et(bars: pl.DataFrame) -> pl.DataFrame:
     if "ts_et" in bars.columns:
         return bars.sort("timestamp")
-    return (
-        bars.sort("timestamp")
-        .with_columns(pl.col("timestamp").dt.convert_time_zone(_EASTERN).alias("ts_et"))
+    return bars.sort("timestamp").with_columns(
+        pl.col("timestamp").dt.convert_time_zone(_EASTERN).alias("ts_et")
     )
 
 
@@ -243,9 +242,7 @@ def execute_setups(
 
     if frames:
         combined = pl.concat(frames).sort("entry_time")
-        combined = combined.with_columns(
-            pl.arange(1, combined.height + 1).alias("trade_id")
-        )
+        combined = combined.with_columns(pl.arange(1, combined.height + 1).alias("trade_id"))
     else:
         combined = empty_trade_log()
 

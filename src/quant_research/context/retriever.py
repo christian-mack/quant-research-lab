@@ -81,10 +81,36 @@ def _normalize_lexical_query(query: str) -> str:
     q = q.replace("(", " ").replace(")", " ")
     q = q.replace("-", " ")
     stop = {
-        "what", "is", "the", "a", "an", "are", "was", "were", "when", "why", "how",
-        "does", "do", "did", "which", "who", "where", "has", "have", "had", "and", "or",
+        "what",
+        "is",
+        "the",
+        "a",
+        "an",
+        "are",
+        "was",
+        "were",
+        "when",
+        "why",
+        "how",
+        "does",
+        "do",
+        "did",
+        "which",
+        "who",
+        "where",
+        "has",
+        "have",
+        "had",
+        "and",
+        "or",
         # query scaffolding absent from the corpus — keeps tsquery from zeroing out
-        "graded", "figure", "figures", "current", "happened", "trusted", "abandoned",
+        "graded",
+        "figure",
+        "figures",
+        "current",
+        "happened",
+        "trusted",
+        "abandoned",
     }
     tokens = [t for t in q.split() if t.lower().strip("?.,'\"") not in stop]
     return " ".join(tokens) if tokens else query
@@ -180,9 +206,7 @@ def search(
 
     with psycopg.connect(config.dsn()) as conn:
         register_vector(conn)
-        semantic = semantic_candidates(
-            conn, query_embedding, include_superseded=include_superseded
-        )
+        semantic = semantic_candidates(conn, query_embedding, include_superseded=include_superseded)
         lexical = lexical_candidates(
             conn, _normalize_lexical_query(query), include_superseded=include_superseded
         )

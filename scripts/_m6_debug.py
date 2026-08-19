@@ -50,7 +50,13 @@ def main() -> None:
     lines.append(str(er))
     fl = tl.filter(pl.col("exit_reason") == "flatten")
     if fl.height:
-        lines.append(str(fl.select("entry_time", "exit_time", "entry_price", "exit_price", "net_pnl").row(0, named=True)))
+        lines.append(
+            str(
+                fl.select("entry_time", "exit_time", "entry_price", "exit_price", "net_pnl").row(
+                    0, named=True
+                )
+            )
+        )
     Path("._m6_dbg.txt").write_text("\n".join(lines), encoding="utf-8")
 
 

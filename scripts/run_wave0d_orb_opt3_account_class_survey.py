@@ -121,7 +121,10 @@ def _append_exit_session_columns(trade_log: pl.DataFrame) -> pl.DataFrame:
     stamp = trade_log.select(pl.col("exit_time").alias("timestamp"))
     stamped = session.assign_cme_session_date(stamp)
     ny_date = trade_log.select(
-        pl.col("exit_time").dt.convert_time_zone("America/New_York").dt.date().alias("exit_ny_date"),
+        pl.col("exit_time")
+        .dt.convert_time_zone("America/New_York")
+        .dt.date()
+        .alias("exit_ny_date"),
     )["exit_ny_date"]
     return trade_log.with_columns(
         stamped["cme_session_date"].alias("exit_cme_session_date"),
@@ -217,13 +220,19 @@ def main() -> None:
             sub_p = sub_p[order]
             sub_ny = (np.array(sub_ny)[order]).tolist()
             sub_sess = (np.array(sub_sess, dtype=object)[order]).tolist()
-            if simulate_eval_window_50k_eod(sub_p, sub_ny, sub_sess, dll_terminates_run=True)[
-                "outcome"
-            ] == "pass":
+            if (
+                simulate_eval_window_50k_eod(sub_p, sub_ny, sub_sess, dll_terminates_run=True)[
+                    "outcome"
+                ]
+                == "pass"
+            ):
                 pass_t += 1
-            if simulate_eval_window_50k_eod(sub_p, sub_ny, sub_sess, dll_terminates_run=False)[
-                "outcome"
-            ] == "pass":
+            if (
+                simulate_eval_window_50k_eod(sub_p, sub_ny, sub_sess, dll_terminates_run=False)[
+                    "outcome"
+                ]
+                == "pass"
+            ):
                 pass_p += 1
     rate_t = (pass_t / total_w) if total_w else float("nan")
     rate_p = (pass_p / total_w) if total_w else float("nan")
@@ -232,9 +241,7 @@ def main() -> None:
         if total_w > 0 and pass_t == 0 and pass_p > 0
         else (abs(rate_p - rate_t) / rate_t if rate_t and rate_t > 0 else 0.0)
     )
-    wave0c_surface = (fr_term.survived != fr_pause.survived) or (
-        total_w > 0 and rel_eval > 0.20
-    )
+    wave0c_surface = (fr_term.survived != fr_pause.survived) or (total_w > 0 and rel_eval > 0.20)
 
     by_class: dict[str, dict[str, object]] = {}
     joint_candidates: list[dict[str, object]] = []
@@ -282,9 +289,7 @@ def main() -> None:
             frac = float(np.mean(b["survived"].astype(np.float64)))
             funded_rows[str(q)]["bootstrap_funded_survival_fraction_block20"] = frac
 
-        funded_passing = [
-            q for q in range(1, qb_max + 1) if funded_rows[str(q)]["survived"]
-        ]
+        funded_passing = [q for q in range(1, qb_max + 1) if funded_rows[str(q)]["survived"]]
         funded_q_max = max(funded_passing) if funded_passing else None
 
         for q in range(1, qb_max + 1):
@@ -341,9 +346,7 @@ def main() -> None:
             tier_at[str(q)] = _tier(avg_ann)
 
         fq = funded_q_max
-        ev_at_max = (
-            eval_rows[str(fq)]["pass_rate"] if fq is not None else float("nan")
-        )
+        ev_at_max = eval_rows[str(fq)]["pass_rate"] if fq is not None else float("nan")
         boot_at_max = (
             funded_rows[str(fq)]["bootstrap_funded_survival_fraction_block20"]
             if fq is not None
@@ -398,9 +401,7 @@ def main() -> None:
                     "eval_pass_rate": evr,
                     "within_eval_contract_cap": q <= acct.eval_max_contracts,
                     "meets_all_three_gates": bool(
-                        row["survived"]
-                        and boot >= _BOOT_OK
-                        and evr >= _EVAL_MEANINGFUL
+                        row["survived"] and boot >= _BOOT_OK and evr >= _EVAL_MEANINGFUL
                     ),
                     "gate_failures_if_any": fails,
                 },

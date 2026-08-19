@@ -135,9 +135,7 @@ def test_v4_fires_on_fvg_artifact_magnitude() -> None:
         )
     )
     th = ValidationThresholds(implausible_net_ticks_per_trade=15.0)
-    report = validate_backtest_result(
-        log, config=_cfg(), run_spot_checks=False, thresholds=th
-    )
+    report = validate_backtest_result(log, config=_cfg(), run_spot_checks=False, thresholds=th)
     v4 = next(c for c in report.checks if c.check_id == "V4")
     assert not v4.passed
     assert v4.details["avg_net_ticks"] > 15

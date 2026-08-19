@@ -800,7 +800,7 @@ def main() -> int:
         "e_max": float("nan"),
         "n_obs": n,
         "n_trials": MNQ_N,
-            "variance_note": f"this SR + {MNQ_N - 1} zeros (committed N={MNQ_N})",
+        "variance_note": f"this SR + {MNQ_N - 1} zeros (committed N={MNQ_N})",
     }
     if n >= 3:
         sr = _trade_sharpe(net)

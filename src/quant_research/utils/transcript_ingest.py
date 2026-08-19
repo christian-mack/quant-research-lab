@@ -985,9 +985,7 @@ def _fetch_via_yt_dlp(
                 return None
             vtt_files = sorted(out_dir.glob(f"{video_id}*.vtt"))
             if vtt_files:
-                segments = parse_vtt(
-                    vtt_files[0].read_text(encoding="utf-8", errors="replace")
-                )
+                segments = parse_vtt(vtt_files[0].read_text(encoding="utf-8", errors="replace"))
                 if segments:
                     return "auto_subs", [
                         {"text": seg["text"], "start": seg["start"], "end": seg["end"]}

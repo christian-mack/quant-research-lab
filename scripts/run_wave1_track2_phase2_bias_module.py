@@ -57,8 +57,12 @@ MIN_CLEAR_SESSIONS = 50  # surface if fewer clear-bias sessions than this
 def _git_sha() -> str:
     try:
         cp = subprocess.run(
-            ["git", "rev-parse", "HEAD"], cwd=_REPO,
-            capture_output=True, text=True, check=False, timeout=30,
+            ["git", "rev-parse", "HEAD"],
+            cwd=_REPO,
+            capture_output=True,
+            text=True,
+            check=False,
+            timeout=30,
         )
         return (cp.stdout or "").strip() or "unknown"
     except OSError:
@@ -82,8 +86,7 @@ def _distribution(biases: list[str]) -> dict[str, Any]:
         "n_sessions": n,
         "counts": {k: c.get(k, 0) for k in (bm.BIAS_LONG, bm.BIAS_SHORT, bm.BIAS_NONE)},
         "fractions": {
-            k: (c.get(k, 0) / n if n else 0.0)
-            for k in (bm.BIAS_LONG, bm.BIAS_SHORT, bm.BIAS_NONE)
+            k: (c.get(k, 0) / n if n else 0.0) for k in (bm.BIAS_LONG, bm.BIAS_SHORT, bm.BIAS_NONE)
         },
     }
 
@@ -182,18 +185,30 @@ def _worked_examples() -> dict[str, Any]:
     cfg = bm.BiasConfig(pairing_timeframe="5m", smt_required=False, opening_range_minutes=0)
     pdh, pdl, p_eq = 110.0, 90.0, 100.0
     continuation = [
-        (101.0, 101.0, 99.0, 99.5), (99.5, 99.5, 95.0, 95.5), (95.5, 95.5, 89.5, 91.0),
-        (91.0, 98.0, 90.5, 97.0), (97.0, 103.0, 96.5, 102.0), (102.0, 106.0, 101.0, 105.0),
+        (101.0, 101.0, 99.0, 99.5),
+        (99.5, 99.5, 95.0, 95.5),
+        (95.5, 95.5, 89.5, 91.0),
+        (91.0, 98.0, 90.5, 97.0),
+        (97.0, 103.0, 96.5, 102.0),
+        (102.0, 106.0, 101.0, 105.0),
         (105.0, 109.5, 104.0, 108.5),
     ]
     reversal = [
-        (99.0, 101.0, 98.5, 100.5), (100.5, 105.0, 100.0, 104.5), (104.5, 110.5, 104.0, 108.0),
-        (108.0, 109.0, 102.0, 103.0), (103.0, 104.0, 97.0, 98.0), (98.0, 99.0, 92.0, 93.0),
+        (99.0, 101.0, 98.5, 100.5),
+        (100.5, 105.0, 100.0, 104.5),
+        (104.5, 110.5, 104.0, 108.0),
+        (108.0, 109.0, 102.0, 103.0),
+        (103.0, 104.0, 97.0, 98.0),
+        (98.0, 99.0, 92.0, 93.0),
         (93.0, 94.0, 90.5, 91.0),
     ]
     consolidation = [
-        (100.0, 102.0, 98.0, 101.0), (101.0, 103.0, 99.0, 100.0), (100.0, 102.5, 98.5, 99.0),
-        (99.0, 101.0, 97.5, 100.5), (100.5, 103.0, 99.5, 101.5), (101.5, 102.0, 98.0, 99.5),
+        (100.0, 102.0, 98.0, 101.0),
+        (101.0, 103.0, 99.0, 100.0),
+        (100.0, 102.5, 98.5, 99.0),
+        (99.0, 101.0, 97.5, 100.5),
+        (100.5, 103.0, 99.5, 101.5),
+        (101.5, 102.0, 98.0, 99.5),
         (99.5, 101.0, 98.5, 100.0),
     ]
     cases = {
@@ -205,8 +220,12 @@ def _worked_examples() -> dict[str, Any]:
     all_ok = True
     for name, (rows, expected) in cases.items():
         sb = bm.classify_session(
-            bars(rows), session_date=dt.date(2024, 6, 10),
-            pdh=pdh, pdl=pdl, p_eq=p_eq, config=cfg,
+            bars(rows),
+            session_date=dt.date(2024, 6, 10),
+            pdh=pdh,
+            pdl=pdl,
+            p_eq=p_eq,
+            config=cfg,
         )
         ok = sb.bias == expected
         all_ok = all_ok and ok
@@ -225,8 +244,10 @@ def main() -> None:
         ("MYM", data_loader.MYM_CONTRACT_GLOB),
     ]:
         frames[name] = load_continuous_rth_mnq_style(
-            DATA_ROOT, pattern=pattern,
-            protocol_start=PROTOCOL_START, protocol_end_inclusive=PROTOCOL_END,
+            DATA_ROOT,
+            pattern=pattern,
+            protocol_start=PROTOCOL_START,
+            protocol_end_inclusive=PROTOCOL_END,
         )
         print(f"  {name}: {frames[name].height} RTH bars", flush=True)
 
@@ -269,9 +290,7 @@ def main() -> None:
 
     primary_dist = distributions[PRIMARY]
     no_clear_frac = primary_dist["fractions"][bm.BIAS_NONE]
-    n_clear_primary = (
-        primary_dist["counts"][bm.BIAS_LONG] + primary_dist["counts"][bm.BIAS_SHORT]
-    )
+    n_clear_primary = primary_dist["counts"][bm.BIAS_LONG] + primary_dist["counts"][bm.BIAS_SHORT]
 
     # Year-stability check: per-year share of long among clear-bias sessions.
     year_long_share = {}

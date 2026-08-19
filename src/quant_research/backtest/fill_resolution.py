@@ -140,9 +140,7 @@ def resolve_stop_limit_for_bar(
             remaining.remove(w)
 
     if fm.stop_limit_intrabar == StopLimitIntrabarPolicy.STOP_BEFORE_TARGET:
-        bar_fills, remaining = _resolve_stop_before_target_bar(
-            remaining, high, low, ts, config
-        )
+        bar_fills, remaining = _resolve_stop_before_target_bar(remaining, high, low, ts, config)
         fills.extend(bar_fills)
         return fills, remaining
 

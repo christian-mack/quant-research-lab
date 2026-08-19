@@ -22,7 +22,7 @@ _REPO = Path(__file__).resolve().parents[1]
 if str(_REPO / "src") not in sys.path:
     sys.path.insert(0, str(_REPO / "src"))
 
-from quant_research.data import continuous_contract, data_loader, session
+from quant_research.data import data_loader, session
 from quant_research.data.quality import (
     KNOWN_GAPS,
     find_missing_trading_days,
@@ -50,7 +50,9 @@ from quant_research.research_wave1.track1_metrics import (
     summarize_trade_sharpe_moments,
 )
 
-_TRACK1_JSON = _REPO / "notebooks" / "validation" / "2026-05-26_wave1_stage1_track1_quant_screen.json"
+_TRACK1_JSON = (
+    _REPO / "notebooks" / "validation" / "2026-05-26_wave1_stage1_track1_quant_screen.json"
+)
 _ARTIFACT_DATE = "2026-05-29"
 
 
@@ -342,7 +344,11 @@ def main() -> None:
     joint_trials: list[dict[str, object]] = []
     for hid in joint_ids:
         if hid == "H8b":
-            ku = float(mom["kurtosis_excess"]) + 3.0 if np.isfinite(float(mom["kurtosis_excess"])) else 3.0
+            ku = (
+                float(mom["kurtosis_excess"]) + 3.0
+                if np.isfinite(float(mom["kurtosis_excess"]))
+                else 3.0
+            )
             joint_trials.append(
                 {
                     "hypothesis_id": "H8b",
@@ -384,9 +390,7 @@ def main() -> None:
             "H8b_SURVIVES_ALL_FIVE_GATES: first Track 1/1b Stage-1 survivor — Stage 2 candidate."
         )
     elif conditional:
-        stop_surfaces.append(
-            "H8b_CONDITIONAL_STAGE2: passes G2–G5, fails G1 only (H11 pattern)."
-        )
+        stop_surfaces.append("H8b_CONDITIONAL_STAGE2: passes G2–G5, fails G1 only (H11 pattern).")
 
     artifact = {
         "wave": "Wave1_Stage1_Track1b_H8b_MES_MNQ_divergence",

@@ -161,9 +161,7 @@ def test_default_search_returns_correction_not_misread(indexed_config, fake_embe
     misread_id, _ = _misread_chunk(cfg)
     correction_id = _correction_chunk_id(cfg)
 
-    results = search(
-        "ORB Opt3 per contract", top_k=20, config=cfg, embedder=fake_embedder
-    )
+    results = search("ORB Opt3 per contract", top_k=20, config=cfg, embedder=fake_embedder)
     ids = {r.chunk_id for r in results}
     assert results, "expected at least one result"
     assert all(r.status == "current" for r in results)

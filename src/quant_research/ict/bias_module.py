@@ -320,9 +320,7 @@ def _detect_path(
         or_idx = [i for i, t in enumerate(times) if t < or_end_ts]
         if or_idx:
             or_end_index = or_idx[-1] + 1
-            or_level = (
-                min(lows[i] for i in or_idx) if is_bull else max(highs[i] for i in or_idx)
-            )
+            or_level = min(lows[i] for i in or_idx) if is_bull else max(highs[i] for i in or_idx)
 
     side = sweep_mod.SIDE_LOW if is_bull else sweep_mod.SIDE_HIGH
     prior_level = pdl if is_bull else pdh
@@ -332,15 +330,29 @@ def _detect_path(
     candidates: list[tuple[int, str, sweep_mod.SweepResult]] = []
     if prior_level is not None:
         res = sweep_mod.detect_sweep(
-            bars, level=prior_level, side=side, config=config.sweep_config,
-            search_start_index=0, timestamp=timestamp, high=high, low=low, close=close,
+            bars,
+            level=prior_level,
+            side=side,
+            config=config.sweep_config,
+            search_start_index=0,
+            timestamp=timestamp,
+            high=high,
+            low=low,
+            close=close,
         )
         if res.swept and res.penetration_index is not None:
             candidates.append((res.penetration_index, prior_label, res))
     if or_level is not None and or_end_index < n:
         res = sweep_mod.detect_sweep(
-            bars, level=or_level, side=side, config=config.sweep_config,
-            search_start_index=or_end_index, timestamp=timestamp, high=high, low=low, close=close,
+            bars,
+            level=or_level,
+            side=side,
+            config=config.sweep_config,
+            search_start_index=or_end_index,
+            timestamp=timestamp,
+            high=high,
+            low=low,
+            close=close,
         )
         if res.swept and res.penetration_index is not None:
             candidates.append((res.penetration_index, or_label, res))
@@ -351,21 +363,34 @@ def _detect_path(
     candidates.sort(key=lambda c: c[0])
     sweep_index, swept_reference, _sweep_res = candidates[0]
     diag = PathDiagnostics(
-        direction=direction, sweep=True, swept_reference=swept_reference,
+        direction=direction,
+        sweep=True,
+        swept_reference=swept_reference,
         sweep_index=sweep_index,
     )
 
     # 2. CISD in `direction` anchored at the sweep extreme; scans forward from it.
     cisd_res = cisd_mod.detect_cisd(
-        bars, direction=direction, anchor_index=sweep_index,
-        timestamp=timestamp, open_=open_, high=high, low=low, close=close,
+        bars,
+        direction=direction,
+        anchor_index=sweep_index,
+        timestamp=timestamp,
+        open_=open_,
+        high=high,
+        low=low,
+        close=close,
     )
     if not cisd_res.fired or cisd_res.fired_index is None:
         return diag
     cisd_index = cisd_res.fired_index
     diag = PathDiagnostics(
-        direction=direction, sweep=True, cisd=True, swept_reference=swept_reference,
-        sweep_index=sweep_index, cisd_index=cisd_index, cisd_level=cisd_res.cisd_level,
+        direction=direction,
+        sweep=True,
+        cisd=True,
+        swept_reference=swept_reference,
+        sweep_index=sweep_index,
+        cisd_index=cisd_index,
+        cisd_level=cisd_res.cisd_level,
     )
 
     # 3. EQ-respect from the CISD fire through session end.
@@ -374,16 +399,27 @@ def _detect_path(
     # 4. SMT over the sweep → CISD leg (always computed when possible; gates only
     #    under smt_required, applied downstream via path_completed).
     smt_evaluable, smt_present, diverged = _evaluate_smt(
-        smt_frames=smt_frames, direction=direction,
-        sweep_ts=times[sweep_index], cisd_ts=times[cisd_index],
-        timeframe=config.pairing_timeframe, timestamp=timestamp, high=high, low=low,
+        smt_frames=smt_frames,
+        direction=direction,
+        sweep_ts=times[sweep_index],
+        cisd_ts=times[cisd_index],
+        timeframe=config.pairing_timeframe,
+        timestamp=timestamp,
+        high=high,
+        low=low,
     )
 
     return PathDiagnostics(
-        direction=direction, sweep=True, cisd=True, eq_respected=eq_ok,
-        smt_evaluable=smt_evaluable, smt_present=smt_present,
-        swept_reference=swept_reference, sweep_index=sweep_index,
-        cisd_index=cisd_index, cisd_level=cisd_res.cisd_level,
+        direction=direction,
+        sweep=True,
+        cisd=True,
+        eq_respected=eq_ok,
+        smt_evaluable=smt_evaluable,
+        smt_present=smt_present,
+        swept_reference=swept_reference,
+        sweep_index=sweep_index,
+        cisd_index=cisd_index,
+        cisd_level=cisd_res.cisd_level,
         diverged_instruments=diverged,
     )
 
@@ -410,9 +446,11 @@ def _evaluate_smt(
     tf_delta = dt.timedelta(minutes=_parse_tf_minutes(timeframe))
     instruments = list(smt_frames)
     # Prior window: session open up to the sweep bar. Current: sweep bar to CISD fire.
-    session_open = min(
-        df[timestamp].min() for df in smt_frames.values() if df.height > 0
-    ) if any(df.height > 0 for df in smt_frames.values()) else None
+    session_open = (
+        min(df[timestamp].min() for df in smt_frames.values() if df.height > 0)
+        if any(df.height > 0 for df in smt_frames.values())
+        else None
+    )
     if session_open is None or session_open >= sweep_ts:
         return False, None, []
     prior_window = (session_open, sweep_ts)
@@ -470,14 +508,32 @@ def classify_session(
     """
     bars = pairing_bars.sort(timestamp) if timestamp in pairing_bars.columns else pairing_bars
     bullish = _detect_path(
-        bars, direction=DIRECTION_BULLISH, pdh=pdh, pdl=pdl, p_eq=p_eq,
-        config=config, smt_frames=smt_frames,
-        timestamp=timestamp, open_=open_, high=high, low=low, close=close,
+        bars,
+        direction=DIRECTION_BULLISH,
+        pdh=pdh,
+        pdl=pdl,
+        p_eq=p_eq,
+        config=config,
+        smt_frames=smt_frames,
+        timestamp=timestamp,
+        open_=open_,
+        high=high,
+        low=low,
+        close=close,
     )
     bearish = _detect_path(
-        bars, direction=DIRECTION_BEARISH, pdh=pdh, pdl=pdl, p_eq=p_eq,
-        config=config, smt_frames=smt_frames,
-        timestamp=timestamp, open_=open_, high=high, low=low, close=close,
+        bars,
+        direction=DIRECTION_BEARISH,
+        pdh=pdh,
+        pdl=pdl,
+        p_eq=p_eq,
+        config=config,
+        smt_frames=smt_frames,
+        timestamp=timestamp,
+        open_=open_,
+        high=high,
+        low=low,
+        close=close,
     )
     if p_eq is None:
         bias, reason = BIAS_NONE, "no prior-day levels (first session)"
@@ -543,8 +599,13 @@ def run_bias_series(
         raise ValueError(f"mnq_rth missing session-date column {session_date_col!r}")
 
     daily = pd_mod.daily_pd_arrays(
-        mnq_rth, session_date_col=session_date_col, timestamp=timestamp,
-        open_=open_, high=high, low=low, close=close,
+        mnq_rth,
+        session_date_col=session_date_col,
+        timestamp=timestamp,
+        open_=open_,
+        high=high,
+        low=low,
+        close=close,
     ).select(session_date_col, pd_mod.PDH_COL, pd_mod.PDL_COL, pd_mod.PRIOR_EQ_COL)
     levels = {
         row[session_date_col]: (row[pd_mod.PDH_COL], row[pd_mod.PDL_COL], row[pd_mod.PRIOR_EQ_COL])
@@ -562,14 +623,27 @@ def run_bias_series(
         raw = mnq_by_session[session_date]
         pairing = _resample_session(raw, timeframe=config.pairing_timeframe, timestamp=timestamp)
         smt_frames = _build_smt_frames(
-            session_date, pairing, corr_by_session, config, timestamp,
+            session_date,
+            pairing,
+            corr_by_session,
+            config,
+            timestamp,
         )
         pdh, pdl, p_eq = levels.get(session_date, (None, None, None))
         results.append(
             classify_session(
-                pairing, session_date=session_date, pdh=pdh, pdl=pdl, p_eq=p_eq,
-                config=config, smt_frames=smt_frames,
-                timestamp=timestamp, open_=open_, high=high, low=low, close=close,
+                pairing,
+                session_date=session_date,
+                pdh=pdh,
+                pdl=pdl,
+                p_eq=p_eq,
+                config=config,
+                smt_frames=smt_frames,
+                timestamp=timestamp,
+                open_=open_,
+                high=high,
+                low=low,
+                close=close,
             )
         )
     return results

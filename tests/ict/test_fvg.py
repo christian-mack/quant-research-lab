@@ -135,9 +135,7 @@ def test_fewer_than_three_bars_returns_empty() -> None:
     df = _bars([(100.0, 101.0, 99.0, 100.5), (100.5, 106.0, 100.0, 105.5)])
     out = detect_fvgs(df)
     assert out.height == 0
-    assert set(
-        ["direction", "top", "bottom", "midpoint", "gap_size"]
-    ).issubset(out.columns)
+    assert set(["direction", "top", "bottom", "midpoint", "gap_size"]).issubset(out.columns)
 
 
 def test_first_and_last_bar_cannot_be_middle_candle() -> None:

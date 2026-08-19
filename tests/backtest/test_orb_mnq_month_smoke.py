@@ -45,9 +45,7 @@ def _month_rth_slice(year: int, month: int) -> pl.DataFrame | None:
     else:
         end = dt.datetime(year, month + 1, 1, tzinfo=_CHI)
 
-    return rth.filter(
-        pl.col("timestamp").is_between(start, end, closed="left")
-    ).sort("timestamp")
+    return rth.filter(pl.col("timestamp").is_between(start, end, closed="left")).sort("timestamp")
 
 
 @pytest.fixture(scope="module")

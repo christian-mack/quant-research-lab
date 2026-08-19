@@ -33,8 +33,7 @@ from quant_research.utils.transcript_ingest import (
 def _segments(*texts: str) -> list[dict[str, float | str]]:
     """Build evenly spaced 1-second segments from text strings."""
     return [
-        {"start": float(i), "end": float(i) + 1.0, "text": text}
-        for i, text in enumerate(texts)
+        {"start": float(i), "end": float(i) + 1.0, "text": text} for i, text in enumerate(texts)
     ]
 
 
@@ -202,8 +201,7 @@ def test_read_manifest_parses_rows(tmp_path: Path) -> None:
 def test_read_manifest_invalid_era_raises(tmp_path: Path) -> None:
     manifest = tmp_path / "manifest.csv"
     manifest.write_text(
-        "video_id,title,url,era,concept_tags\n"
-        "abc123,Sample,https://youtu.be/abc123,1999,all\n",
+        "video_id,title,url,era,concept_tags\nabc123,Sample,https://youtu.be/abc123,1999,all\n",
         encoding="utf-8",
     )
     try:

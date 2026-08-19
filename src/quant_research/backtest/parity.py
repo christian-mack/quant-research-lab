@@ -15,8 +15,6 @@ from quant_research.ict.ote_execution import (
     OTE_ENTRY_TAG,
     OTE_STOP_TAG,
     OTE_TARGET_TAG,
-    SLIP_STOP_TICKS,
-    SLIP_TARGET_TICKS,
     ote_research_backtest_config,
 )
 from quant_research.ict.ote_strategy import DIRECTION_LONG, OteSetup
@@ -82,14 +80,24 @@ def hand_trace_setup(
                 exit_reason, exit_base, exit_bar, exit_tag = "stop", stop_base, i, OTE_STOP_TAG
                 break
             if highs[i] >= target_base:
-                exit_reason, exit_base, exit_bar, exit_tag = "target", target_base, i, OTE_TARGET_TAG
+                exit_reason, exit_base, exit_bar, exit_tag = (
+                    "target",
+                    target_base,
+                    i,
+                    OTE_TARGET_TAG,
+                )
                 break
         else:
             if highs[i] >= stop_base:
                 exit_reason, exit_base, exit_bar, exit_tag = "stop", stop_base, i, OTE_STOP_TAG
                 break
             if lows[i] <= target_base:
-                exit_reason, exit_base, exit_bar, exit_tag = "target", target_base, i, OTE_TARGET_TAG
+                exit_reason, exit_base, exit_bar, exit_tag = (
+                    "target",
+                    target_base,
+                    i,
+                    OTE_TARGET_TAG,
+                )
                 break
 
     exit_side = "sell" if is_long else "buy"

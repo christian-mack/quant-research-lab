@@ -59,13 +59,10 @@ class MssConfig:
 
     def __post_init__(self) -> None:
         if self.fractal_half_width < 1:
-            raise ValueError(
-                f"fractal_half_width must be >= 1; got {self.fractal_half_width}"
-            )
+            raise ValueError(f"fractal_half_width must be >= 1; got {self.fractal_half_width}")
         if self.max_lookback_fallback_bars < 1:
             raise ValueError(
-                f"max_lookback_fallback_bars must be >= 1; "
-                f"got {self.max_lookback_fallback_bars}"
+                f"max_lookback_fallback_bars must be >= 1; got {self.max_lookback_fallback_bars}"
             )
 
 
@@ -226,16 +223,10 @@ def detect_mss(
 
         if is_bull:
             broken = (
-                closes[t] > swing.level
-                if cfg.require_close_through
-                else highs[t] > swing.level
+                closes[t] > swing.level if cfg.require_close_through else highs[t] > swing.level
             )
         else:
-            broken = (
-                closes[t] < swing.level
-                if cfg.require_close_through
-                else lows[t] < swing.level
-            )
+            broken = closes[t] < swing.level if cfg.require_close_through else lows[t] < swing.level
 
         if not broken:
             continue

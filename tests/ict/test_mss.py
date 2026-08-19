@@ -15,7 +15,8 @@ from zoneinfo import ZoneInfo
 import polars as pl
 import pytest
 
-from quant_research.ict.cisd import DIRECTION_BEARISH as CISD_BEAR, detect_cisd
+from quant_research.ict.cisd import DIRECTION_BEARISH as CISD_BEAR
+from quant_research.ict.cisd import detect_cisd
 from quant_research.ict.liquidity_sweep import (
     SIDE_HIGH,
     SIDE_LOW,
@@ -73,9 +74,7 @@ def test_bullish_mss_ep6_1416_geometry() -> None:
             (103.0, 108.0, 102.0, 107.0),  # 7 MSS: close 107 > 106
         ]
     )
-    sweep = detect_sweep(
-        df, level=100.0, side=SIDE_LOW, config=_sweep_cfg(), search_start_index=2
-    )
+    sweep = detect_sweep(df, level=100.0, side=SIDE_LOW, config=_sweep_cfg(), search_start_index=2)
     assert sweep.swept is True
     assert sweep.close_back_index == 5
     assert sweep.penetration_index == 4

@@ -138,7 +138,9 @@ def prepare_et_frame(mnq_rth: pl.DataFrame) -> pl.DataFrame:
         mnq_rth.sort("timestamp")
         .filter(pl.col("cme_session_date").is_not_null())
         .filter(
-            pl.col("cme_session_date").dt.year().is_between(
+            pl.col("cme_session_date")
+            .dt.year()
+            .is_between(
                 GATE_EVAL_YEARS[0],
                 GATE_EVAL_YEARS[-1],
             )
@@ -175,9 +177,7 @@ def simulate_h1(mnq_et: pl.DataFrame, sweep_points: tuple[int, ...]) -> dict[int
             continue
 
         rth_open = float(form["open"][0])
-        drv = sdf_all.filter(
-            (tc.dt.time() >= T_ET_DRIVE_START) & (tc.dt.time() < T_ET_DRIVE_END)
-        )
+        drv = sdf_all.filter((tc.dt.time() >= T_ET_DRIVE_START) & (tc.dt.time() < T_ET_DRIVE_END))
         if drv.height == 0:
             continue
 
@@ -338,15 +338,19 @@ def simulate_h11(mnq_et: pl.DataFrame) -> list[TradeRow]:
         if rng_pts < 0.5:
             continue
 
-        bars5 = sdf.with_columns(pl.col("ts_et").dt.truncate("5m").alias("b5")).group_by(
-            "b5",
-            maintain_order=True,
-        ).agg(
-            pl.first("timestamp").alias("anchor_ts"),
-            pl.first("open").alias("o5"),
-            pl.max("high").alias("h5"),
-            pl.min("low").alias("l5"),
-            pl.last("close").alias("c5"),
+        bars5 = (
+            sdf.with_columns(pl.col("ts_et").dt.truncate("5m").alias("b5"))
+            .group_by(
+                "b5",
+                maintain_order=True,
+            )
+            .agg(
+                pl.first("timestamp").alias("anchor_ts"),
+                pl.first("open").alias("o5"),
+                pl.max("high").alias("h5"),
+                pl.min("low").alias("l5"),
+                pl.last("close").alias("c5"),
+            )
         )
         if bars5.height < 4:
             continue
@@ -620,14 +624,18 @@ def simulate_h12(mnq_et: pl.DataFrame) -> list[TradeRow]:
         if sdate.weekday() not in (2, 3):
             continue
 
-        bars5 = sdf.with_columns(pl.col("ts_et").dt.truncate("5m").alias("b5")).group_by(
-            "b5",
-            maintain_order=True,
-        ).agg(
-            pl.first("timestamp").alias("anchor_ts"),
-            pl.last("close").alias("c5"),
-            pl.max("high").alias("h5"),
-            pl.min("low").alias("l5"),
+        bars5 = (
+            sdf.with_columns(pl.col("ts_et").dt.truncate("5m").alias("b5"))
+            .group_by(
+                "b5",
+                maintain_order=True,
+            )
+            .agg(
+                pl.first("timestamp").alias("anchor_ts"),
+                pl.last("close").alias("c5"),
+                pl.max("high").alias("h5"),
+                pl.min("low").alias("l5"),
+            )
         )
         if bars5.height < 6:
             continue

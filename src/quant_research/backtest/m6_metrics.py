@@ -97,10 +97,7 @@ def compute_m6_aggregates(
     max_dd = _max_drawdown_cumulative(cum)
 
     ext = t.select(
-        pl.col("exit_time")
-        .dt.convert_time_zone(exit_year_tz)
-        .dt.year()
-        .alias("y"),
+        pl.col("exit_time").dt.convert_time_zone(exit_year_tz).dt.year().alias("y"),
         pl.col("net_pnl"),
     )
     by_year = ext.group_by("y").agg(pl.col("net_pnl").sum().alias("pnl"))

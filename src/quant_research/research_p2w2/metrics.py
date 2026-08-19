@@ -9,7 +9,6 @@ import polars as pl
 
 from quant_research.backtest.m6_metrics import protocol_year_fraction
 from quant_research.backtest.validation import ValidationThresholds
-from quant_research.research_p2w2.costs import P2_W2_BACKTEST_CONFIG
 
 P2_W2_V4_TICK_THRESHOLD = 50.0
 IS_FRACTION = 0.60
@@ -23,14 +22,18 @@ def split_is_oos_log(
     """Chronological 60/40 split by trade count."""
     if trade_log.is_empty():
         empty = trade_log
-        return empty, empty, {
-            "total_trades": 0,
-            "is_trade_count": 0,
-            "oos_trade_count": 0,
-            "is_fraction": is_fraction,
-            "is_oos_boundary_last_is_exit": None,
-            "is_oos_boundary_first_oos_entry": None,
-        }
+        return (
+            empty,
+            empty,
+            {
+                "total_trades": 0,
+                "is_trade_count": 0,
+                "oos_trade_count": 0,
+                "is_fraction": is_fraction,
+                "is_oos_boundary_last_is_exit": None,
+                "is_oos_boundary_first_oos_entry": None,
+            },
+        )
     ordered = trade_log.sort("exit_time")
     n = ordered.height
     n_is = int(n * is_fraction) if n else 0
@@ -38,14 +41,20 @@ def split_is_oos_log(
     oos_log = ordered.tail(n - n_is)
     boundary_exit = is_log["exit_time"][-1] if n_is else None
     boundary_entry = oos_log["entry_time"][0] if oos_log.height else None
-    return is_log, oos_log, {
-        "total_trades": n,
-        "is_trade_count": n_is,
-        "oos_trade_count": n - n_is,
-        "is_fraction": is_fraction,
-        "is_oos_boundary_last_is_exit": boundary_exit.isoformat() if boundary_exit else None,
-        "is_oos_boundary_first_oos_entry": boundary_entry.isoformat() if boundary_entry else None,
-    }
+    return (
+        is_log,
+        oos_log,
+        {
+            "total_trades": n,
+            "is_trade_count": n_is,
+            "oos_trade_count": n - n_is,
+            "is_fraction": is_fraction,
+            "is_oos_boundary_last_is_exit": boundary_exit.isoformat() if boundary_exit else None,
+            "is_oos_boundary_first_oos_entry": boundary_entry.isoformat()
+            if boundary_entry
+            else None,
+        },
+    )
 
 
 def gate1_is_screen_log(is_log: pl.DataFrame) -> dict[str, Any]:

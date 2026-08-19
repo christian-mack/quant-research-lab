@@ -223,16 +223,28 @@ def _enrich_trade(
     pnl_usd = pnl_pts * MNQ_POINT_VALUE
 
     _, exit_near, _, _ = _simulate_exit(
-        sess, fill_idx=fill_idx, direction=direction,
-        entry=entry, stop=setup.stop_arm_a, target=setup.target_nearest,
+        sess,
+        fill_idx=fill_idx,
+        direction=direction,
+        entry=entry,
+        stop=setup.stop_arm_a,
+        target=setup.target_nearest,
     )
     _, exit_far, _, _ = _simulate_exit(
-        sess, fill_idx=fill_idx, direction=direction,
-        entry=entry, stop=setup.stop_arm_a, target=setup.target_far,
+        sess,
+        fill_idx=fill_idx,
+        direction=direction,
+        entry=entry,
+        stop=setup.stop_arm_a,
+        target=setup.target_far,
     )
     _, exit_stop_b, _, _ = _simulate_exit(
-        sess, fill_idx=fill_idx, direction=direction,
-        entry=entry, stop=setup.stop_arm_b, target=setup.target_nearest,
+        sess,
+        fill_idx=fill_idx,
+        direction=direction,
+        entry=entry,
+        stop=setup.stop_arm_b,
+        target=setup.target_nearest,
     )
 
     r_a_near = _pnl_points(direction, entry, exit_near) / _risk_points(entry, setup.stop_arm_a)
@@ -244,14 +256,20 @@ def _enrich_trade(
     ote_62 = ote_fib_price(direction, setup.displacement_low, setup.displacement_high, 0.62)
 
     fvg_fill_idx = _entry_fill_idx(
-        sess, direction=direction, entry_price=fvg_entry,
+        sess,
+        direction=direction,
+        entry_price=fvg_entry,
         start_index=setup.mss_index + 1,
     )
     fvg_pnl_usd: float | None = None
     if fvg_fill_idx is not None:
         _, ep, _, _ = _simulate_exit(
-            sess, fill_idx=fvg_fill_idx, direction=direction,
-            entry=fvg_entry, stop=setup.stop_arm_a, target=setup.target_nearest,
+            sess,
+            fill_idx=fvg_fill_idx,
+            direction=direction,
+            entry=fvg_entry,
+            stop=setup.stop_arm_a,
+            target=setup.target_nearest,
         )
         fvg_pnl_usd = _pnl_points(direction, fvg_entry, ep) * MNQ_POINT_VALUE
 
@@ -415,14 +433,10 @@ def _conflict_diag(trades: list[dict[str, Any]]) -> dict[str, Any]:
     frac = len(conflict) / n
     ote_pnls = [t["pnl_usd_mnq"] for t in trades]
     fvg_pnls = [
-        t["pnl_usd_fvg_zone_entry"]
-        for t in trades
-        if t["pnl_usd_fvg_zone_entry"] is not None
+        t["pnl_usd_fvg_zone_entry"] for t in trades if t["pnl_usd_fvg_zone_entry"] is not None
     ]
     conflict_fvg = [
-        t["pnl_usd_fvg_zone_entry"]
-        for t in conflict
-        if t["pnl_usd_fvg_zone_entry"] is not None
+        t["pnl_usd_fvg_zone_entry"] for t in conflict if t["pnl_usd_fvg_zone_entry"] is not None
     ]
     return {
         "n_trades": n,
@@ -433,9 +447,7 @@ def _conflict_diag(trades: list[dict[str, Any]]) -> dict[str, Any]:
         "fvg_zone_n_filled": len(fvg_pnls),
         "conflict_subset_ote_pnl": sum(t["pnl_usd_mnq"] for t in conflict),
         "conflict_subset_fvg_pnl": sum(conflict_fvg) if conflict_fvg else None,
-        "pnl_delta_fvg_minus_ote": (
-            (sum(fvg_pnls) - sum(ote_pnls)) if fvg_pnls else None
-        ),
+        "pnl_delta_fvg_minus_ote": ((sum(fvg_pnls) - sum(ote_pnls)) if fvg_pnls else None),
     }
 
 
@@ -462,10 +474,12 @@ def _target_fork_diag(
 
     return {
         "nearest_counterfactual_primary_entry": _subset_stats(
-            primary, "r_multiple_stop_a_target_nearest",
+            primary,
+            "r_multiple_stop_a_target_nearest",
         ),
         "far_counterfactual_primary_entry": _subset_stats(
-            primary, "r_multiple_stop_a_target_far",
+            primary,
+            "r_multiple_stop_a_target_far",
         ),
         "far_variant_active_log": _subset_stats(far_log, "r_multiple_primary"),
         "note": (
@@ -516,10 +530,10 @@ def _render_md(report: dict[str, Any]) -> str:
     lines = [
         "# Wave 1 Track 2 — Phase 3 step 3: Standalone OTE backtest",
         "",
-        f"**Date run:** 2026-06-06  ",
+        "**Date run:** 2026-06-06  ",
         f"**git_sha:** `{report['git_sha']}`  ",
         f"**Protocol:** {report['protocol_window'][0]} → {report['protocol_window'][1]}  ",
-        f"**Mode:** Unconstrained RTH (no bias gate, multi-setup/session)  ",
+        "**Mode:** Unconstrained RTH (no bias gate, multi-setup/session)  ",
         "",
         "## (a) Trade frequency",
         "",
@@ -545,47 +559,51 @@ def _render_md(report: dict[str, Any]) -> str:
     ]
     for y, p in sorted(econ.get("year_pnl_usd", {}).items()):
         lines.append(f"- {y}: ${p:,.0f}")
-    lines.extend([
-        "",
-        "## (c) FVG/OTE conflict",
-        "",
-        f"- Conflict fraction (>4 ticks): **{100 * conflict['conflict_fraction']:.1f}%** "
-        f"({conflict['n_conflict']:,} / {conflict['n_trades']:,})",
-    ])
+    lines.extend(
+        [
+            "",
+            "## (c) FVG/OTE conflict",
+            "",
+            f"- Conflict fraction (>4 ticks): **{100 * conflict['conflict_fraction']:.1f}%** "
+            f"({conflict['n_conflict']:,} / {conflict['n_trades']:,})",
+        ]
+    )
     if conflict.get("pnl_delta_fvg_minus_ote") is not None:
         lines.append(
             f"- Total P&L OTE entry: ${conflict['ote_total_pnl_usd']:,.0f}; "
             f"FVG-zone entry: ${conflict['fvg_zone_total_pnl_usd']:,.0f} "
             f"(delta ${conflict['pnl_delta_fvg_minus_ote']:,.0f})"
         )
-    lines.extend([
-        "",
-        "## (d) Target fork preview",
-        "",
-        f"- Nearest (counterfactual on primary fills): WR "
-        f"{100 * report['target_fork']['nearest_counterfactual_primary_entry']['win_rate']:.1f}%, "
-        f"annual ${report['target_fork']['nearest_counterfactual_primary_entry']['annual_pnl_usd']:,.0f}",
-        f"- Far (counterfactual on primary fills): WR "
-        f"{100 * report['target_fork']['far_counterfactual_primary_entry']['win_rate']:.1f}%, "
-        f"annual ${report['target_fork']['far_counterfactual_primary_entry']['annual_pnl_usd']:,.0f}",
-        f"- Far (active variant log): WR "
-        f"{100 * report['target_fork']['far_variant_active_log']['win_rate']:.1f}%, "
-        f"annual ${report['target_fork']['far_variant_active_log']['annual_pnl_usd']:,.0f}",
-        "",
-        "## (e) Bias overlap preview (C1)",
-        "",
-        f"- Fraction setups on bias-agreeing sessions: "
-        f"**{100 * report['bias_overlap']['fraction_bias_agrees_c1']:.1f}%**",
-        f"- Agree subset annual P&L: "
-        f"**${report['bias_overlap']['agree_c1_economics'].get('annual_pnl_usd', 0):,.0f}** "
-        f"(WR {100 * report['bias_overlap']['agree_c1_economics'].get('win_rate', 0):.1f}%)",
-        f"- Disagree/no-bias subset annual P&L: "
-        f"**${report['bias_overlap']['disagree_or_no_bias_c1_economics'].get('annual_pnl_usd', 0):,.0f}** "
-        f"(WR {100 * report['bias_overlap']['disagree_or_no_bias_c1_economics'].get('win_rate', 0):.1f}%)",
-        "",
-        "## Stop conditions",
-        "",
-    ])
+    lines.extend(
+        [
+            "",
+            "## (d) Target fork preview",
+            "",
+            f"- Nearest (counterfactual on primary fills): WR "
+            f"{100 * report['target_fork']['nearest_counterfactual_primary_entry']['win_rate']:.1f}%, "
+            f"annual ${report['target_fork']['nearest_counterfactual_primary_entry']['annual_pnl_usd']:,.0f}",
+            f"- Far (counterfactual on primary fills): WR "
+            f"{100 * report['target_fork']['far_counterfactual_primary_entry']['win_rate']:.1f}%, "
+            f"annual ${report['target_fork']['far_counterfactual_primary_entry']['annual_pnl_usd']:,.0f}",
+            f"- Far (active variant log): WR "
+            f"{100 * report['target_fork']['far_variant_active_log']['win_rate']:.1f}%, "
+            f"annual ${report['target_fork']['far_variant_active_log']['annual_pnl_usd']:,.0f}",
+            "",
+            "## (e) Bias overlap preview (C1)",
+            "",
+            f"- Fraction setups on bias-agreeing sessions: "
+            f"**{100 * report['bias_overlap']['fraction_bias_agrees_c1']:.1f}%**",
+            f"- Agree subset annual P&L: "
+            f"**${report['bias_overlap']['agree_c1_economics'].get('annual_pnl_usd', 0):,.0f}** "
+            f"(WR {100 * report['bias_overlap']['agree_c1_economics'].get('win_rate', 0):.1f}%)",
+            f"- Disagree/no-bias subset annual P&L: "
+            f"**${report['bias_overlap']['disagree_or_no_bias_c1_economics'].get('annual_pnl_usd', 0):,.0f}** "
+            f"(WR {100 * report['bias_overlap']['disagree_or_no_bias_c1_economics'].get('win_rate', 0):.1f}%)",
+            "",
+            "## Stop conditions",
+            "",
+        ]
+    )
     for k, v in report["stop_conditions"].items():
         lines.append(f"- **{k}:** {v}")
     lines.extend(["", "## Variant economics (all 5 logs)", ""])
@@ -632,29 +650,49 @@ def main() -> None:
 
     all_logs: dict[str, list[dict[str, Any]]] = {}
     all_logs["primary"] = _setups_to_trades(
-        scanned["primary"], sessions, bias_c1, bias_c2,
+        scanned["primary"],
+        sessions,
+        bias_c1,
+        bias_c2,
         variant="primary",
-        stop_arm=STOP_SWEPT_EXTREME, target_mode=TARGET_NEAREST,
-        entry_mode=ENTRY_OTE_705, fvg_tiebreak="earliest",
+        stop_arm=STOP_SWEPT_EXTREME,
+        target_mode=TARGET_NEAREST,
+        entry_mode=ENTRY_OTE_705,
+        fvg_tiebreak="earliest",
     )
     for derived, (stop_arm, target_mode) in DERIVED_VARIANTS.items():
         all_logs[derived] = _setups_to_trades(
-            scanned["primary"], sessions, bias_c1, bias_c2,
+            scanned["primary"],
+            sessions,
+            bias_c1,
+            bias_c2,
             variant=derived,
-            stop_arm=stop_arm, target_mode=target_mode,
-            entry_mode=ENTRY_OTE_705, fvg_tiebreak="earliest",
+            stop_arm=stop_arm,
+            target_mode=target_mode,
+            entry_mode=ENTRY_OTE_705,
+            fvg_tiebreak="earliest",
         )
     all_logs["entry_ote_62"] = _setups_to_trades(
-        scanned["entry_ote_62"], sessions, bias_c1, bias_c2,
+        scanned["entry_ote_62"],
+        sessions,
+        bias_c1,
+        bias_c2,
         variant="entry_ote_62",
-        stop_arm=STOP_SWEPT_EXTREME, target_mode=TARGET_NEAREST,
-        entry_mode=ENTRY_OTE_62, fvg_tiebreak="earliest",
+        stop_arm=STOP_SWEPT_EXTREME,
+        target_mode=TARGET_NEAREST,
+        entry_mode=ENTRY_OTE_62,
+        fvg_tiebreak="earliest",
     )
     all_logs["fvg_nearest_ote"] = _setups_to_trades(
-        scanned["fvg_nearest_ote"], sessions, bias_c1, bias_c2,
+        scanned["fvg_nearest_ote"],
+        sessions,
+        bias_c1,
+        bias_c2,
         variant="fvg_nearest_ote",
-        stop_arm=STOP_SWEPT_EXTREME, target_mode=TARGET_NEAREST,
-        entry_mode=ENTRY_OTE_705, fvg_tiebreak=FVG_NEAREST_OTE,
+        stop_arm=STOP_SWEPT_EXTREME,
+        target_mode=TARGET_NEAREST,
+        entry_mode=ENTRY_OTE_705,
+        fvg_tiebreak=FVG_NEAREST_OTE,
     )
 
     primary = all_logs["primary"]
@@ -699,7 +737,8 @@ def main() -> None:
     OUT_STEM.parent.mkdir(parents=True, exist_ok=True)
     TRADES_DIR.mkdir(parents=True, exist_ok=True)
     OUT_STEM.with_suffix(".json").write_text(
-        json.dumps(report, indent=2, default=str), encoding="utf-8",
+        json.dumps(report, indent=2, default=str),
+        encoding="utf-8",
     )
     OUT_STEM.with_suffix(".md").write_text(_render_md(report), encoding="utf-8")
 

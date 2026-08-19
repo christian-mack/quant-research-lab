@@ -33,9 +33,7 @@ import yaml
 from quant_research.context.config import repo_root as default_repo_root
 
 # The four valid chunk statuses (mirror the schema CHECK constraint).
-VALID_STATUSES: frozenset[str] = frozenset(
-    {"current", "superseded", "deprecated", "historical"}
-)
+VALID_STATUSES: frozenset[str] = frozenset({"current", "superseded", "deprecated", "historical"})
 
 # Sentinel — manifest/worklist only, never a chunk status.
 UNCLASSIFIED = "UNCLASSIFIED"
@@ -107,9 +105,7 @@ def resolve_whole_file_docs(repo_root: Path) -> tuple[str, ...]:
     like any other Tier-2 file once they exist. None exist in the D2 slice.
     """
     extracts_dir = repo_root / "docs" / "chat-extracts"
-    extras = tuple(
-        sorted(p.relative_to(repo_root).as_posix() for p in extracts_dir.glob("*.md"))
-    )
+    extras = tuple(sorted(p.relative_to(repo_root).as_posix() for p in extracts_dir.glob("*.md")))
     return TIER2_WHOLE_FILE_DOCS + extras
 
 
@@ -171,10 +167,7 @@ def _validate_status_block(label: str, block: object) -> list[str]:
     if status == UNCLASSIFIED:
         return [f"{label}: still UNCLASSIFIED"]
     if status not in VALID_STATUSES:
-        return [
-            f"{label}: invalid status '{status}' "
-            f"(must be one of {sorted(VALID_STATUSES)})"
-        ]
+        return [f"{label}: invalid status '{status}' (must be one of {sorted(VALID_STATUSES)})"]
     errors: list[str] = []
     if status in NEEDS_POINTER and not block.get("superseded_by"):
         errors.append(f"{label}: status '{status}' requires a 'superseded_by' pointer")
@@ -305,9 +298,7 @@ def validate_manifest(
                 errors.append(f"{log_rel}: entry not classified in manifest: {heading}")
         for heading in manifest_by_heading:
             if heading not in actual_by_heading:
-                errors.append(
-                    f"{log_rel}: manifest entry not found in file (stale?): {heading}"
-                )
+                errors.append(f"{log_rel}: manifest entry not found in file (stale?): {heading}")
 
         for heading, item in manifest_by_heading.items():
             if heading not in actual_by_heading:
@@ -326,9 +317,7 @@ def validate_manifest(
     return errors
 
 
-def assert_manifest_valid(
-    repo_root: Path | None = None, manifest_path: Path | None = None
-) -> None:
+def assert_manifest_valid(repo_root: Path | None = None, manifest_path: Path | None = None) -> None:
     """Raise :class:`ManifestError` unless the manifest is fully classified.
 
     The indexer (D4) must call this before chunking/embedding/upsert so that no
@@ -357,9 +346,7 @@ def classification_for_document(manifest: dict, file_path: str) -> tuple[str, st
     return block.get("status"), block.get("superseded_by")
 
 
-def classification_for_entry(
-    manifest: dict, log_path: str, heading: str
-) -> tuple[str, str | None]:
+def classification_for_entry(manifest: dict, log_path: str, heading: str) -> tuple[str, str | None]:
     """Return ``(status, superseded_by)`` for a dated log entry by heading."""
     for item in (manifest.get("entries") or {}).get(log_path) or []:
         if isinstance(item, dict) and item.get("heading") == heading:
@@ -402,11 +389,7 @@ def _split_required_from(location: str, block: dict) -> SplitRequired:
 def split_for_entry(manifest: dict, log_path: str, heading: str) -> SplitRequired | None:
     """Return the :class:`SplitRequired` spec for a dated entry, or None."""
     for item in (manifest.get("entries") or {}).get(log_path) or []:
-        if (
-            isinstance(item, dict)
-            and item.get("heading") == heading
-            and item.get("split_required")
-        ):
+        if isinstance(item, dict) and item.get("heading") == heading and item.get("split_required"):
             return _split_required_from(f"{log_path} :: {heading}", item)
     return None
 
@@ -486,8 +469,7 @@ _PTR_1088 = (
     "total, not per contract; M6 closes"
 )
 _PTR_UTC = (
-    "docs/lessons-log.md :: 2026-04-27 — Source NT8 export timestamps are UTC, "
-    "not CME local time"
+    "docs/lessons-log.md :: 2026-04-27 — Source NT8 export timestamps are UTC, not CME local time"
 )
 
 # Only entries that announce their own supersession target are pre-filled, and

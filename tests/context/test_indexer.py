@@ -163,8 +163,7 @@ def test_reindex_split_entry_lands_mixed_status_in_db(test_config: PCSConfig) ->
     reindex(config=test_config, embedder=FakeEmbedder())
     with psycopg.connect(test_config.dsn()) as conn, conn.cursor() as cur:
         cur.execute(
-            "SELECT status, superseded_by, chunk_text FROM pcs_chunk "
-            "WHERE breadcrumb LIKE %s",
+            "SELECT status, superseded_by, chunk_text FROM pcs_chunk WHERE breadcrumb LIKE %s",
             (f"%{PRODUCTION_CUT}%",),
         )
         rows = cur.fetchall()

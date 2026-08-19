@@ -204,7 +204,10 @@ def _append_exit_session_columns(trade_log: pl.DataFrame) -> pl.DataFrame:
     stamp = trade_log.select(pl.col("exit_time").alias("timestamp"))
     stamped = session.assign_cme_session_date(stamp)
     ny_date = trade_log.select(
-        pl.col("exit_time").dt.convert_time_zone("America/New_York").dt.date().alias("exit_ny_date"),
+        pl.col("exit_time")
+        .dt.convert_time_zone("America/New_York")
+        .dt.date()
+        .alias("exit_ny_date"),
     )["exit_ny_date"]
     return trade_log.with_columns(
         stamped["cme_session_date"].alias("exit_cme_session_date"),
@@ -436,7 +439,9 @@ def _survey_from_artifacts(meta_git: dict[str, object]) -> dict[str, object]:
     dd1_closed = float(per["dd1_magnitude"])
     yfrac = float(per["year_fraction"])
     worst_session = float(
-        wave0h["deliverable_1_session_loss_distribution"]["max_single_session_loss_all_traded_days"],
+        wave0h["deliverable_1_session_loss_distribution"][
+            "max_single_session_loss_all_traded_days"
+        ],
     )
     # Upper bound on best NY day (mnq=1): 6 trades/day × avg_win from Wave 0.
     best_session_bound = float(per["avg_win"]) * float(
@@ -670,7 +675,9 @@ def _survey_from_artifacts(meta_git: dict[str, object]) -> dict[str, object]:
     }
 
 
-def _write_outputs(payload: dict[str, object], pnl_per_yr: float, harness_pass: bool | None) -> None:
+def _write_outputs(
+    payload: dict[str, object], pnl_per_yr: float, harness_pass: bool | None
+) -> None:
     meta_git = payload["git"]
     by_class = payload["account_classes"]
     any_deployable = payload["verdict"]["deployable_any_class"]
@@ -695,7 +702,7 @@ def _write_outputs(payload: dict[str, object], pnl_per_yr: float, harness_pass: 
     lines = [
         "# ORB+Opt3 account-class survey — floor-income fit",
         "",
-        f"**Date:** 2026-06-08  ",
+        "**Date:** 2026-06-08  ",
         f"**Git:** `{meta_git['git_sha']}` dirty={meta_git['git_dirty']}  ",
         f"**Input mode:** {input_mode}  ",
         "",
@@ -753,7 +760,9 @@ def _write_outputs(payload: dict[str, object], pnl_per_yr: float, harness_pass: 
     ]
     for acct in ACCOUNTS:
         row = by_class[acct.key]
-        ga = row.get("gate_a_funded_q_max_mnq", row["constraint_qty_limits_mnq"]["gate_a_funded_survival"])
+        ga = row.get(
+            "gate_a_funded_q_max_mnq", row["constraint_qty_limits_mnq"]["gate_a_funded_survival"]
+        )
         gross_ga = float(row["economics_at_q_max"]["per_mnq_annual_gross_usd"]) * float(ga)
         gap = _TIER_FLOOR - gross_ga
         lines.append(f"| {acct.key} | {ga} | ${gross_ga:,.0f} | ${gap:,.0f} short |")
@@ -789,8 +798,7 @@ def main() -> None:
     root_raw = _mnq_raw_root()
     if _mnq_contract_glob(root_raw) is None:
         print(
-            "No MNQ contract files under data/raw or data/raw/mnq; "
-            "using Wave 0 artifact fallback.",
+            "No MNQ contract files under data/raw or data/raw/mnq; using Wave 0 artifact fallback.",
             file=sys.stderr,
         )
         payload = _survey_from_artifacts(meta_git)
@@ -842,9 +850,13 @@ def main() -> None:
 
     worst_session = float(np.min(daily_mnq1)) if daily_mnq1.size else 0.0
     best_session = float(np.max(daily_mnq1)) if daily_mnq1.size else 0.0
-    dd1_closed = abs(float(m.max_drawdown_dollars)) if hasattr(m, "max_drawdown_dollars") else _DD1_ANCHOR
+    dd1_closed = (
+        abs(float(m.max_drawdown_dollars)) if hasattr(m, "max_drawdown_dollars") else _DD1_ANCHOR
+    )
 
-    harness_pass = all(r.get("passed", False) for r in validation_reports) if validation_reports else False
+    harness_pass = (
+        all(r.get("passed", False) for r in validation_reports) if validation_reports else False
+    )
 
     q_search_hi = 45
     by_class: dict[str, dict[str, object]] = {}
@@ -934,11 +946,7 @@ def main() -> None:
         eval_cost = acct.eval_fee_usd / pass_rate if pass_rate and pass_rate > 0 else float("inf")
         net_after_eval = net_ann - eval_cost if math.isfinite(eval_cost) else float("nan")
 
-        clears_floor = bool(
-            report_q > 0
-            and net_ann >= _TIER_FLOOR
-            and pass_rate >= _EVAL_GATE
-        )
+        clears_floor = bool(report_q > 0 and net_ann >= _TIER_FLOOR and pass_rate >= _EVAL_GATE)
 
         by_class[acct.key] = {
             "label": acct.label,
@@ -995,7 +1003,8 @@ def main() -> None:
 
     any_deployable = any(row["clears_floor_income_gate"] for row in by_class.values())
     all_dll_bind = all(
-        row["binding_constraint"] in ("worst_session_vs_tier1_dll", "R_q_closed_trade_dd", "EOD_path_dd_vs_tdd")
+        row["binding_constraint"]
+        in ("worst_session_vs_tier1_dll", "R_q_closed_trade_dd", "EOD_path_dd_vs_tdd")
         for row in by_class.values()
     )
 

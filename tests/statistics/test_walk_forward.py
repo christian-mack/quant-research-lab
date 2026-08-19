@@ -48,6 +48,4 @@ def test_synthetic_mean_shift_detected_in_walk_forward() -> None:
     cfg = WalkForwardConfig(train_size=40, test_size=15, step=20, mode=WalkForwardMode.ROLLING)
     out = run_walk_forward(n, cfg, eval_fn)
     assert len(out.windows) >= 3
-    assert any(
-        p["test_mean"] < p["train_mean"] - 0.5 for p in out.per_window
-    )
+    assert any(p["test_mean"] < p["train_mean"] - 0.5 for p in out.per_window)
