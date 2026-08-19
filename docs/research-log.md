@@ -1289,7 +1289,15 @@ Note: `fvg_nearest_ote` identical to primary on real data (tie-break did not cha
 **Artifacts:**
 - `scripts/run_wave1_track2_phase3_step3_ote_backtest.py`
 - `notebooks/validation/2026-06-06_wave1_track2_phase3_step3_ote_backtest.{md,json}`
-- `notebooks/validation/2026-06-06_wave1_track2_phase3_step3_ote_trades/{primary,target_far,stop_fvg_c2,entry_ote_62,fvg_nearest_ote}.json`
+- `notebooks/validation/2026-06-06_wave1_track2_phase3_step3_ote_trades/{primary,target_far,stop_fvg_c2,entry_ote_62,fvg_nearest_ote}.json` — **NOT tracked in git** (see availability note below)
+
+**Artifact availability (added 2026-08-18, repo cleanup):** The runner and both summary
+reports above **are** tracked. The five per-trade JSON logs in the `_ote_trades/` directory
+are **deliberately excluded** via `.gitignore` — they total ~88 MB and would have roughly
+sextupled repository history for a chapter that closed negative at step 3d. Regenerate with
+`uv run python scripts/run_wave1_track2_phase3_step3_ote_backtest.py` against
+`data/raw/mnq/`. Operator decision during the 2026-08-18 backlog reconciliation; the
+variant economics table above preserves the numbers those logs supported.
 
 **Next:** Phase 3 step 3b — entry-coherence forensic diagnostic (step 4 blocked until resolved).
 **Blocker surfaced:** resolve D0.1/D0.2 entry ambiguity (99% conflict) before interpreting
