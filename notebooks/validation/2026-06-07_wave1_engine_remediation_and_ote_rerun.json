@@ -1,0 +1,252 @@
+{
+  "git_sha": "0db224fc2bd1ef320064fb04c9a9a3d9d095e366",
+  "protocol_window": [
+    "2020-01-01",
+    "2026-04-19"
+  ],
+  "eval_years": [
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+  ],
+  "cost_model": "Commission $0.99/fill ($1.98 RT) in BacktestEngine; slippage 1 tick default (stop/time), 0 entry (limit touch), 0.5 tick target \u2014 applied once per fill in engine.",
+  "step3c_baselines_comm_slip_full": {
+    "OTE62_full": 5098.56,
+    "OTE705_full": -2409.53,
+    "FVG_only_full": 26184.55
+  },
+  "configs": {
+    "OTE705": {
+      "label": "OTE 70.5% full RTH",
+      "setups_detected": 51100,
+      "geometry_rejects": {
+        "stop_wrong_side": 18667
+      },
+      "geometry_reject_total": 18667,
+      "geometry_reject_rate": 0.36530332681017613,
+      "setups_filled": 12978,
+      "n_trades": 12978,
+      "full_protocol_economics": {
+        "n_trades": 12978,
+        "trades_per_year": 1854.0,
+        "total_net_usd": 60778.560000000005,
+        "annual_net_usd": 8682.65142857171,
+        "avg_net_per_trade_usd": 4.6831992602866395,
+        "avg_net_ticks": 9.366398520573279,
+        "win_rate": 0.5396825396825397,
+        "avg_win_usd": 35.137932609937174,
+        "avg_loss_usd": -31.022350184131234,
+        "reward_risk_ratio": 1.1326650753852676,
+        "year_net_usd": {
+          "2020": 2750.1199999999685,
+          "2021": 5295.560000000043,
+          "2022": 19169.94000000078,
+          "2023": 6327.380000000236,
+          "2024": 9561.180000000257,
+          "2025": 15422.420000000688,
+          "2026": 2251.9599999999937
+        }
+      },
+      "frame_b_economics": {
+        "n_trades": 12978,
+        "trades_per_year": 2595.6,
+        "total_net_usd": 60778.560000000005,
+        "annual_net_usd": 11155.2960000004,
+        "avg_net_per_trade_usd": 4.6831992602866395,
+        "avg_net_ticks": 9.366398520573279,
+        "win_rate": 0.5396825396825397,
+        "avg_win_usd": 35.137932609937174,
+        "avg_loss_usd": -31.022350184131234,
+        "reward_risk_ratio": 1.1326650753852676,
+        "year_net_usd": {
+          "2021": 5295.560000000043,
+          "2022": 19169.94000000078,
+          "2023": 6327.380000000236,
+          "2024": 9561.180000000257,
+          "2025": 15422.420000000688
+        }
+      },
+      "year_net_usd": {
+        "2020": 2750.1199999999685,
+        "2021": 5295.560000000043,
+        "2022": 19169.94000000078,
+        "2023": 6327.380000000236,
+        "2024": 9561.180000000257,
+        "2025": 15422.420000000688,
+        "2026": 2251.9599999999937
+      },
+      "dll_check_frame_b": {
+        "sizing_qty_for_30k_yr": 2.69,
+        "max_session_net_loss_usd_at_qty": -990.31,
+        "apex_tier1_dll_usd": 1000.0,
+        "fits_apex_tier1_dll": true,
+        "worst_session_date": "2022-05-11"
+      },
+      "dll_check_full": {
+        "sizing_qty_for_30k_yr": 3.46,
+        "max_session_net_loss_usd_at_qty": -1272.33,
+        "apex_tier1_dll_usd": 1000.0,
+        "fits_apex_tier1_dll": false,
+        "worst_session_date": "2022-05-11"
+      }
+    },
+    "OTE62": {
+      "label": "OTE 62% full RTH",
+      "setups_detected": 64815,
+      "geometry_rejects": {
+        "stop_wrong_side": 29537
+      },
+      "geometry_reject_total": 29537,
+      "geometry_reject_rate": 0.4557124122502507,
+      "setups_filled": 12198,
+      "n_trades": 12198,
+      "full_protocol_economics": {
+        "n_trades": 12198,
+        "trades_per_year": 1742.5714285714287,
+        "total_net_usd": 23624.460000000003,
+        "annual_net_usd": 3374.92285714301,
+        "avg_net_per_trade_usd": 1.9367486473192328,
+        "avg_net_ticks": 3.8734972946384656,
+        "win_rate": 0.45089358911296934,
+        "avg_win_usd": 37.55136363636364,
+        "avg_loss_usd": -27.30785906240669,
+        "reward_risk_ratio": 1.3751119613788636,
+        "year_net_usd": {
+          "2020": 135.49999999997394,
+          "2021": 1942.5199999999775,
+          "2022": 12055.020000000608,
+          "2023": 2074.619999999969,
+          "2024": 2893.879999999976,
+          "2025": 4180.540000000569,
+          "2026": 342.379999999995
+        }
+      },
+      "frame_b_economics": {
+        "n_trades": 12198,
+        "trades_per_year": 2439.6,
+        "total_net_usd": 23624.460000000003,
+        "annual_net_usd": 4629.31600000022,
+        "avg_net_per_trade_usd": 1.9367486473192328,
+        "avg_net_ticks": 3.8734972946384656,
+        "win_rate": 0.45089358911296934,
+        "avg_win_usd": 37.55136363636364,
+        "avg_loss_usd": -27.30785906240669,
+        "reward_risk_ratio": 1.3751119613788636,
+        "year_net_usd": {
+          "2021": 1942.5199999999775,
+          "2022": 12055.020000000608,
+          "2023": 2074.619999999969,
+          "2024": 2893.879999999976,
+          "2025": 4180.540000000569
+        }
+      },
+      "year_net_usd": {
+        "2020": 135.49999999997394,
+        "2021": 1942.5199999999775,
+        "2022": 12055.020000000608,
+        "2023": 2074.619999999969,
+        "2024": 2893.879999999976,
+        "2025": 4180.540000000569,
+        "2026": 342.379999999995
+      },
+      "dll_check_frame_b": {
+        "sizing_qty_for_30k_yr": 6.48,
+        "max_session_net_loss_usd_at_qty": -3854.57,
+        "apex_tier1_dll_usd": 1000.0,
+        "fits_apex_tier1_dll": false,
+        "worst_session_date": "2025-11-21"
+      },
+      "dll_check_full": {
+        "sizing_qty_for_30k_yr": 8.89,
+        "max_session_net_loss_usd_at_qty": -5287.23,
+        "apex_tier1_dll_usd": 1000.0,
+        "fits_apex_tier1_dll": false,
+        "worst_session_date": "2025-11-21"
+      }
+    },
+    "FVG_only": {
+      "label": "FVG-only full RTH",
+      "setups_detected": 252303,
+      "geometry_rejects": {
+        "stop_wrong_side": 59244
+      },
+      "geometry_reject_total": 59244,
+      "geometry_reject_rate": 0.23481290353265716,
+      "setups_filled": 6904,
+      "n_trades": 6904,
+      "full_protocol_economics": {
+        "n_trades": 6904,
+        "trades_per_year": 986.2857142857143,
+        "total_net_usd": 15789.580000000002,
+        "annual_net_usd": 2255.6542857142804,
+        "avg_net_per_trade_usd": 2.287019119351101,
+        "avg_net_ticks": 4.574038238702202,
+        "win_rate": 0.3522595596755504,
+        "avg_win_usd": 51.47847039473684,
+        "avg_loss_usd": -24.464682468694097,
+        "reward_risk_ratio": 2.1041953215869684,
+        "year_net_usd": {
+          "2020": 600.7599999999873,
+          "2021": 1611.2799999999972,
+          "2022": 3080.299999999984,
+          "2023": 1844.7999999999834,
+          "2024": 2770.059999999985,
+          "2025": 4685.240000000027,
+          "2026": 1197.1399999999976
+        }
+      },
+      "frame_b_economics": {
+        "n_trades": 6904,
+        "trades_per_year": 1380.8,
+        "total_net_usd": 15789.580000000002,
+        "annual_net_usd": 2798.3359999999952,
+        "avg_net_per_trade_usd": 2.287019119351101,
+        "avg_net_ticks": 4.574038238702202,
+        "win_rate": 0.3522595596755504,
+        "avg_win_usd": 51.47847039473684,
+        "avg_loss_usd": -24.464682468694097,
+        "reward_risk_ratio": 2.1041953215869684,
+        "year_net_usd": {
+          "2021": 1611.2799999999972,
+          "2022": 3080.299999999984,
+          "2023": 1844.7999999999834,
+          "2024": 2770.059999999985,
+          "2025": 4685.240000000027
+        }
+      },
+      "year_net_usd": {
+        "2020": 600.7599999999873,
+        "2021": 1611.2799999999972,
+        "2022": 3080.299999999984,
+        "2023": 1844.7999999999834,
+        "2024": 2770.059999999985,
+        "2025": 4685.240000000027,
+        "2026": 1197.1399999999976
+      },
+      "dll_check_frame_b": {
+        "sizing_qty_for_30k_yr": 10.72,
+        "max_session_net_loss_usd_at_qty": -8388.06,
+        "apex_tier1_dll_usd": 1000.0,
+        "fits_apex_tier1_dll": false,
+        "worst_session_date": "2025-04-07"
+      },
+      "dll_check_full": {
+        "sizing_qty_for_30k_yr": 13.3,
+        "max_session_net_loss_usd_at_qty": -10406.12,
+        "apex_tier1_dll_usd": 1000.0,
+        "fits_apex_tier1_dll": false,
+        "worst_session_date": "2025-04-07"
+      }
+    }
+  },
+  "stop_conditions": {
+    "ote62_geometry_reject_gt_30pct": "TRIGGERED \u2014 45.6% of OTE 62% setups rejected (>30% threshold)",
+    "ote62_frame_b_negative": "NOT triggered \u2014 Frame B annual net $4,629/MNQ",
+    "fvg_artifact_not_collapsed": "NOT triggered \u2014 FVG-only $2,798/yr, 4.6 ticks/trade (artifact collapsed)",
+    "dual_touch_p2": "DEFERRED \u2014 stop-first rule unchanged; uncalibrated"
+  },
+  "operator_summary": "P0 geometry guard + P1 M4 consolidation complete. Clean OTE 62% Frame B: $4,629/MNQ/yr (step 3c was $5,099). FVG-only collapsed to $2,798/yr (was $26,185 artifact). Geometry reject rate OTE 62%: 45.6%. Dual-touch (P2) unchanged.",
+  "p2_note": "Stop-first dual-touch not recalibrated; revisit only if OTE 62% within ~1 tick/trade of viability threshold."
+}

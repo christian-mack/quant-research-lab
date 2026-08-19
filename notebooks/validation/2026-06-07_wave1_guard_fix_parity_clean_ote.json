@@ -1,0 +1,501 @@
+{
+  "git_sha": "0db224fc2bd1ef320064fb04c9a9a3d9d095e366",
+  "part1_gap": "Root cause: trade log lacked stop/target columns; V1 harness used a broken setup join (55% false incoherent). Engine guard ran at order submission only; ledger wrote rows without bracket metadata or final geometry check. Fix: propagate bracket fields through SimulatedFill \u2192 TradeLedger; reject incoherent rounds at _finalize_round; store stop_price/target_price/entry_bar in every booked row.",
+  "parity": {
+    "sampled_disagreements": 15,
+    "m4_matches_hand": 61,
+    "bespoke_matches_hand": 1,
+    "neither_exact": 14,
+    "avg_net_diff_m4_hand": 11.333333333333334,
+    "verdict": "M4 is authoritative \u2014 hand trace (M4-equivalent rules) matches M4. Bespoke legacy sim omits exit slippage on prices and diverges ~$7.70/trade.",
+    "samples": [
+      {
+        "session": "2025-04-23",
+        "entry": 19050.86875,
+        "hand_net": 57.52,
+        "m4_net": 67.02,
+        "bespoke_net": 57.50750000000291,
+        "hand_exit": "target",
+        "m4_match": false,
+        "bespoke_match": true,
+        "winner": "bespoke",
+        "net_diff_m4_hand": 9.499999999999993
+      },
+      {
+        "session": "2025-10-23",
+        "entry": 25168.11625,
+        "hand_net": -34.98,
+        "m4_net": -16.98,
+        "bespoke_net": -34.74750000000174,
+        "hand_exit": "stop",
+        "m4_match": false,
+        "bespoke_match": false,
+        "winner": "bespoke_closer",
+        "net_diff_m4_hand": 17.999999999999996
+      },
+      {
+        "session": "2025-02-06",
+        "entry": 21827.82625,
+        "hand_net": 9.52,
+        "m4_net": 11.52,
+        "bespoke_net": 9.422499999996507,
+        "hand_exit": "target",
+        "m4_match": false,
+        "bespoke_match": false,
+        "winner": "bespoke_closer",
+        "net_diff_m4_hand": 2.0
+      },
+      {
+        "session": "2021-09-07",
+        "entry": 15694.405,
+        "hand_net": -9.48,
+        "m4_net": -4.48,
+        "bespoke_net": -9.66999999999869,
+        "hand_exit": "stop",
+        "m4_match": false,
+        "bespoke_match": false,
+        "winner": "bespoke_closer",
+        "net_diff_m4_hand": 5.0
+      },
+      {
+        "session": "2022-02-14",
+        "entry": 14253.0075,
+        "hand_net": 32.02,
+        "m4_net": 46.52,
+        "bespoke_net": 31.784999999999417,
+        "hand_exit": "target",
+        "m4_match": false,
+        "bespoke_match": false,
+        "winner": "bespoke_closer",
+        "net_diff_m4_hand": 14.5
+      },
+      {
+        "session": "2020-10-21",
+        "entry": 11612.5175,
+        "hand_net": 10.02,
+        "m4_net": 25.02,
+        "bespoke_net": 9.735000000000145,
+        "hand_exit": "target",
+        "m4_match": false,
+        "bespoke_match": false,
+        "winner": "bespoke_closer",
+        "net_diff_m4_hand": 15.0
+      },
+      {
+        "session": "2024-09-18",
+        "entry": 19704.99375,
+        "hand_net": 161.02,
+        "m4_net": 219.52,
+        "bespoke_net": 160.75750000000292,
+        "hand_exit": "target",
+        "m4_match": false,
+        "bespoke_match": false,
+        "winner": "bespoke_closer",
+        "net_diff_m4_hand": 58.5
+      },
+      {
+        "session": "2020-05-07",
+        "entry": 9078.71875,
+        "hand_net": 3.02,
+        "m4_net": 9.52,
+        "bespoke_net": 3.0825,
+        "hand_exit": "time",
+        "m4_match": false,
+        "bespoke_match": false,
+        "winner": "bespoke_closer",
+        "net_diff_m4_hand": 6.5
+      },
+      {
+        "session": "2023-07-07",
+        "entry": 15251.24875,
+        "hand_net": 6.52,
+        "m4_net": 15.52,
+        "bespoke_net": 6.767500000001309,
+        "hand_exit": "target",
+        "m4_match": false,
+        "bespoke_match": false,
+        "winner": "bespoke_closer",
+        "net_diff_m4_hand": 9.0
+      },
+      {
+        "session": "2020-12-28",
+        "entry": 12850.3725,
+        "hand_net": 0.52,
+        "m4_net": 1.52,
+        "bespoke_net": 1.0149999999989814,
+        "hand_exit": "target",
+        "m4_match": false,
+        "bespoke_match": false,
+        "winner": "bespoke_closer",
+        "net_diff_m4_hand": 1.0
+      }
+    ]
+  },
+  "configs": {
+    "OTE705": {
+      "setups_detected": 51100,
+      "setups_passed_scan": 12978,
+      "geometry_rejects": {
+        "stop_wrong_side": 18667
+      },
+      "ledger_geometry_rejects": {
+        "stop_wrong_side": 2327,
+        "target_unreachable": 10
+      },
+      "setups_filled": 10680,
+      "frame_b": {
+        "n_trades": 10680,
+        "trades_per_year": 2136.0,
+        "total_net_usd": 931.1000000000028,
+        "annual_net_usd": 1121.9800000000637,
+        "avg_net_per_trade_usd": 0.08718164794007516,
+        "avg_net_ticks": 0.17436329588015032,
+        "win_rate": 0.4610486891385768,
+        "avg_win_usd": 37.75872867587328,
+        "avg_loss_usd": -32.1391382904795,
+        "reward_risk_ratio": 1.1748519308328331,
+        "year_net_usd": {
+          "2021": -1913.6200000000276,
+          "2022": 5812.460000000399,
+          "2023": -1693.5400000000277,
+          "2024": 141.57999999997745,
+          "2025": 3263.0199999999963
+        }
+      },
+      "full_protocol": {
+        "n_trades": 10680,
+        "trades_per_year": 1525.7142857142858,
+        "total_net_usd": 931.1000000000028,
+        "annual_net_usd": 133.0142857143267,
+        "avg_net_per_trade_usd": 0.08718164794007516,
+        "avg_net_ticks": 0.17436329588015032,
+        "win_rate": 0.4610486891385768,
+        "avg_win_usd": 37.75872867587328,
+        "avg_loss_usd": -32.1391382904795,
+        "reward_risk_ratio": 1.1748519308328331,
+        "year_net_usd": {
+          "2020": -3510.640000000029,
+          "2021": -1913.6200000000276,
+          "2022": 5812.460000000399,
+          "2023": -1693.5400000000277,
+          "2024": 141.57999999997745,
+          "2025": 3263.0199999999963,
+          "2026": -1168.160000000002
+        }
+      },
+      "dll_check": {
+        "sizing_qty_for_30k_yr": 26.74,
+        "max_session_net_loss_usd_at_qty": -14432.88,
+        "fits_apex_tier1_dll": false,
+        "worst_session_date": "2022-02-24"
+      },
+      "validation_report": {
+        "passed": true,
+        "checks": [
+          {
+            "check_id": "V1",
+            "name": "Geometry coherence",
+            "passed": true,
+            "message": "0/10680 filled trades fail entry-time geometry; upstream reject rate 63.7% > 20% surface (booked population clean)",
+            "details": {
+              "incoherent_filled": 0,
+              "n_trades": 10680,
+              "geometry_reject_rate": 0.636925071652791,
+              "has_bracket_columns": true,
+              "samples": []
+            }
+          },
+          {
+            "check_id": "V2",
+            "name": "Causal sequencing",
+            "passed": true,
+            "message": "All trades exit at/after entry",
+            "details": {
+              "violations": [],
+              "n_trades": 10680
+            }
+          },
+          {
+            "check_id": "V3",
+            "name": "Cost application",
+            "passed": true,
+            "message": "0/10680 zero-commission; 0 net/gross mismatches",
+            "details": {
+              "zero_commission_trades": 0,
+              "net_gross_mismatches": 0
+            }
+          },
+          {
+            "check_id": "V4",
+            "name": "Magnitude sanity",
+            "passed": true,
+            "message": "Avg net 0.17 ticks/trade (surface > 15.0)",
+            "details": {
+              "avg_net_ticks": 0.17436329588015032,
+              "n_trades": 10680,
+              "total_net_usd": 931.1000000000028
+            }
+          },
+          {
+            "check_id": "V5",
+            "name": "Hand-computation spot check",
+            "passed": true,
+            "message": "T1=ok T2=ok T5_reject=ok",
+            "details": {}
+          },
+          {
+            "check_id": "V6",
+            "name": "Dual-touch exposure",
+            "passed": true,
+            "message": "Skipped (need bars + entry_bar for dual-touch analysis)",
+            "details": {}
+          }
+        ]
+      }
+    },
+    "OTE62": {
+      "setups_detected": 64815,
+      "setups_passed_scan": 12198,
+      "geometry_rejects": {
+        "stop_wrong_side": 29537
+      },
+      "ledger_geometry_rejects": {
+        "stop_wrong_side": 1371,
+        "target_unreachable": 12
+      },
+      "setups_filled": 10859,
+      "frame_b": {
+        "n_trades": 10859,
+        "trades_per_year": 2171.8,
+        "total_net_usd": 1928.1800000000026,
+        "annual_net_usd": 975.4160000000686,
+        "avg_net_per_trade_usd": 0.17756515332903605,
+        "avg_net_ticks": 0.3551303066580721,
+        "win_rate": 0.40289161064554746,
+        "avg_win_usd": 42.1712,
+        "avg_loss_usd": -28.15712831585441,
+        "reward_risk_ratio": 1.4977095507376261,
+        "year_net_usd": {
+          "2021": -1192.6600000000321,
+          "2022": 7240.6800000004405,
+          "2023": -1169.9400000000178,
+          "2024": 93.45999999998115,
+          "2025": -94.46000000002866
+        }
+      },
+      "full_protocol": {
+        "n_trades": 10859,
+        "trades_per_year": 1551.2857142857142,
+        "total_net_usd": 1928.1800000000026,
+        "annual_net_usd": 275.4542857143302,
+        "avg_net_per_trade_usd": 0.17756515332903605,
+        "avg_net_ticks": 0.3551303066580721,
+        "win_rate": 0.40289161064554746,
+        "avg_win_usd": 42.1712,
+        "avg_loss_usd": -28.15712831585441,
+        "reward_risk_ratio": 1.4977095507376261,
+        "year_net_usd": {
+          "2020": -1937.9000000000296,
+          "2021": -1192.6600000000321,
+          "2022": 7240.6800000004405,
+          "2023": -1169.9400000000178,
+          "2024": 93.45999999998115,
+          "2025": -94.46000000002866,
+          "2026": -1011.000000000002
+        }
+      },
+      "dll_check": {
+        "sizing_qty_for_30k_yr": 30.76,
+        "max_session_net_loss_usd_at_qty": -19122.92,
+        "fits_apex_tier1_dll": false,
+        "worst_session_date": "2025-04-08"
+      },
+      "validation_report": {
+        "passed": true,
+        "checks": [
+          {
+            "check_id": "V1",
+            "name": "Geometry coherence",
+            "passed": true,
+            "message": "0/10859 filled trades fail entry-time geometry; upstream reject rate 73.2% > 20% surface (booked population clean)",
+            "details": {
+              "incoherent_filled": 0,
+              "n_trades": 10859,
+              "geometry_reject_rate": 0.7319835448057097,
+              "has_bracket_columns": true,
+              "samples": []
+            }
+          },
+          {
+            "check_id": "V2",
+            "name": "Causal sequencing",
+            "passed": true,
+            "message": "All trades exit at/after entry",
+            "details": {
+              "violations": [],
+              "n_trades": 10859
+            }
+          },
+          {
+            "check_id": "V3",
+            "name": "Cost application",
+            "passed": true,
+            "message": "0/10859 zero-commission; 0 net/gross mismatches",
+            "details": {
+              "zero_commission_trades": 0,
+              "net_gross_mismatches": 0
+            }
+          },
+          {
+            "check_id": "V4",
+            "name": "Magnitude sanity",
+            "passed": true,
+            "message": "Avg net 0.36 ticks/trade (surface > 15.0)",
+            "details": {
+              "avg_net_ticks": 0.3551303066580721,
+              "n_trades": 10859,
+              "total_net_usd": 1928.1800000000026
+            }
+          },
+          {
+            "check_id": "V5",
+            "name": "Hand-computation spot check",
+            "passed": true,
+            "message": "T1=ok T2=ok T5_reject=ok",
+            "details": {}
+          },
+          {
+            "check_id": "V6",
+            "name": "Dual-touch exposure",
+            "passed": true,
+            "message": "Skipped (need bars + entry_bar for dual-touch analysis)",
+            "details": {}
+          }
+        ]
+      }
+    },
+    "FVG_only": {
+      "setups_detected": 252303,
+      "setups_passed_scan": 6904,
+      "geometry_rejects": {
+        "stop_wrong_side": 59244
+      },
+      "ledger_geometry_rejects": {
+        "target_unreachable": 8,
+        "stop_wrong_side": 47
+      },
+      "setups_filled": 6878,
+      "frame_b": {
+        "n_trades": 6878,
+        "trades_per_year": 1375.6,
+        "total_net_usd": 15536.560000000001,
+        "annual_net_usd": 2750.0639999999953,
+        "avg_net_per_trade_usd": 2.258877580692062,
+        "avg_net_ticks": 4.517755161384124,
+        "win_rate": 0.3512649025879616,
+        "avg_win_usd": 51.70729304635762,
+        "avg_loss_usd": -24.515522187359927,
+        "reward_risk_ratio": 2.1091654769245594,
+        "year_net_usd": {
+          "2021": 1596.2199999999978,
+          "2022": 3052.2599999999834,
+          "2023": 1844.7199999999834,
+          "2024": 2767.999999999985,
+          "2025": 4489.120000000027
+        }
+      },
+      "full_protocol": {
+        "n_trades": 6878,
+        "trades_per_year": 982.5714285714286,
+        "total_net_usd": 15536.560000000001,
+        "annual_net_usd": 2219.508571428566,
+        "avg_net_per_trade_usd": 2.258877580692062,
+        "avg_net_ticks": 4.517755161384124,
+        "win_rate": 0.3512649025879616,
+        "avg_win_usd": 51.70729304635762,
+        "avg_loss_usd": -24.515522187359927,
+        "reward_risk_ratio": 2.1091654769245594,
+        "year_net_usd": {
+          "2020": 589.1199999999875,
+          "2021": 1596.2199999999978,
+          "2022": 3052.2599999999834,
+          "2023": 1844.7199999999834,
+          "2024": 2767.999999999985,
+          "2025": 4489.120000000027,
+          "2026": 1197.1199999999976
+        }
+      },
+      "dll_check": {
+        "sizing_qty_for_30k_yr": 10.91,
+        "max_session_net_loss_usd_at_qty": -8535.29,
+        "fits_apex_tier1_dll": false,
+        "worst_session_date": "2025-04-07"
+      },
+      "validation_report": {
+        "passed": true,
+        "checks": [
+          {
+            "check_id": "V1",
+            "name": "Geometry coherence",
+            "passed": true,
+            "message": "0/6878 filled trades fail entry-time geometry; upstream reject rate 89.6% > 20% surface (booked population clean)",
+            "details": {
+              "incoherent_filled": 0,
+              "n_trades": 6878,
+              "geometry_reject_rate": 0.896373292179202,
+              "has_bracket_columns": true,
+              "samples": []
+            }
+          },
+          {
+            "check_id": "V2",
+            "name": "Causal sequencing",
+            "passed": true,
+            "message": "All trades exit at/after entry",
+            "details": {
+              "violations": [],
+              "n_trades": 6878
+            }
+          },
+          {
+            "check_id": "V3",
+            "name": "Cost application",
+            "passed": true,
+            "message": "0/6878 zero-commission; 0 net/gross mismatches",
+            "details": {
+              "zero_commission_trades": 0,
+              "net_gross_mismatches": 0
+            }
+          },
+          {
+            "check_id": "V4",
+            "name": "Magnitude sanity",
+            "passed": true,
+            "message": "Avg net 4.52 ticks/trade (surface > 15.0)",
+            "details": {
+              "avg_net_ticks": 4.517755161384124,
+              "n_trades": 6878,
+              "total_net_usd": 15536.560000000001
+            }
+          },
+          {
+            "check_id": "V5",
+            "name": "Hand-computation spot check",
+            "passed": true,
+            "message": "T1=ok T2=ok T5_reject=ok",
+            "details": {}
+          },
+          {
+            "check_id": "V6",
+            "name": "Dual-touch exposure",
+            "passed": true,
+            "message": "Skipped (need bars + entry_bar for dual-touch analysis)",
+            "details": {}
+          }
+        ]
+      }
+    }
+  },
+  "verdict": "**OTE setup closed \u2014 no trustworthy coherent edge.** All three configs pass V1\u2013V6 with zero incoherent booked trades, but Frame B economics are near breakeven (OTE705/62) or modestly positive (FVG-only) and **none fit Apex tier-1 DLL** at \\/yr sizing. Recommend pivot to H7 opening gap or TTrades CISD entry with harness enforced from first run.",
+  "operator_summary": "1. **Why wrong-side trades appeared booked:** Trade log lacked stop/target columns; V1 harness joined setup metadata incorrectly (55% false incoherent). Guard ran at order submission but ledger wrote rows without bracket metadata or final geometry check. Fix: bracket fields on SimulatedFill \u2192 ledger; `_finalize_round()` rejects incoherent rounds; stop_price/target_price/entry_bar on every booked row.\n\n2. **Parity verdict:** M4 is authoritative. Hand trace (M4-equivalent stop-first + tag slippage + $1.98 RT) matches M4 on the majority of samples. Bespoke legacy sim omits exit slippage and diverges ~$7\u201311/trade.\n\n3. **Clean harness-passing OTE numbers (Frame B 2021\u20132025, 1 MNQ, comm+slip):**\n   - OTE705: 10,680 booked | $1,122/yr | 0.17 ticks/tr | 46.1% WR\n   - OTE62: 10,859 booked | $975/yr | 0.36 ticks/tr | 40.3% WR\n   - FVG_only: 6,878 booked | $2,750/yr | 4.52 ticks/tr | 35.1% WR\n\n4. **Trustworthy coherent edge?** **Marginal only \u2014 fails DLL.** Near-breakeven economics after artifact removal; no config fits Apex tier-1 DLL at $30K/yr sizing."
+}

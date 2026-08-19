@@ -1,0 +1,369 @@
+{
+  "git_sha": "0db224fc2bd1ef320064fb04c9a9a3d9d095e366",
+  "a1_summary": "Code path: `check_trade_geometry(direction, entry, stop, target)` in `geometry.py` \u2014 pure comparison of four floats known at order placement. No bar index, fill outcome, or post-entry path. Unit test `test_geometry_guard_same_decision_regardless_of_future_path` confirms identical accept/reject for same entry-time inputs.",
+  "a2_populations": {
+    "kept": {
+      "label": "actual",
+      "n": 12978,
+      "total_gross_usd": -20781.060000000063,
+      "total_net_usd": -51792.500000000065,
+      "avg_gross_usd": -1.6012528895053217,
+      "avg_net_usd": -3.990792109724153,
+      "win_rate_gross": 0.3784866697488057,
+      "win_rate_net": 0.3734781938665434
+    },
+    "rejected_wrong_side": {
+      "label": "wrong_side",
+      "n": 18667,
+      "total_gross_usd": 409850.7650000007,
+      "total_net_usd": 363556.60500000074,
+      "avg_gross_usd": 21.95589891251946,
+      "avg_net_usd": 19.475898912519458,
+      "win_rate_gross": 1.0,
+      "win_rate_net": 0.9033588685916323
+    },
+    "rejected_coherent_stop": {
+      "label": "coherent",
+      "n": 18667,
+      "total_gross_usd": -397072.1300000006,
+      "total_net_usd": -443311.04000000056,
+      "avg_gross_usd": -21.271341404617804,
+      "avg_net_usd": -23.748381636042243,
+      "win_rate_gross": 0.012053356190068034,
+      "win_rate_net": 0.011999785718112176
+    },
+    "structural": {
+      "kept_avg_sweep_depth_ticks": 19.889428263214672,
+      "rejected_avg_sweep_depth_ticks": 12.93753682969947,
+      "kept_avg_entry_vs_stop_ticks": 62.40966019417476,
+      "rejected_avg_entry_vs_stop_ticks": -43.91179782503892,
+      "kept_avg_displacement_pts": 39.358028972106645
+    },
+    "counts": {
+      "kept": 12978,
+      "rejected": 18667,
+      "incomplete": 19455
+    }
+  },
+  "a3_traces": [
+    {
+      "session": "2020-01-02",
+      "direction": "short",
+      "entry": 8853.4125,
+      "stop": 8850.75,
+      "target": 8848.25,
+      "entry_vs_stop_ticks": -10.650000000001455,
+      "mechanism": "shallow_retracement_vs_swept_stop",
+      "hypothetical_wrong_side_gross": 5.325000000000728,
+      "exit_if_traded": "stop"
+    },
+    {
+      "session": "2020-01-02",
+      "direction": "short",
+      "entry": 8853.4125,
+      "stop": 8850.75,
+      "target": 8848.25,
+      "entry_vs_stop_ticks": -10.650000000001455,
+      "mechanism": "shallow_retracement_vs_swept_stop",
+      "hypothetical_wrong_side_gross": 5.325000000000728,
+      "exit_if_traded": "stop"
+    },
+    {
+      "session": "2020-01-02",
+      "direction": "short",
+      "entry": 8853.4125,
+      "stop": 8850.75,
+      "target": 8848.25,
+      "entry_vs_stop_ticks": -10.650000000001455,
+      "mechanism": "shallow_retracement_vs_swept_stop",
+      "hypothetical_wrong_side_gross": 5.325000000000728,
+      "exit_if_traded": "stop"
+    },
+    {
+      "session": "2020-01-02",
+      "direction": "long",
+      "entry": 8821.53875,
+      "stop": 8823.5,
+      "target": 8830.0,
+      "entry_vs_stop_ticks": -7.845000000001164,
+      "mechanism": "shallow_retracement_vs_swept_stop",
+      "hypothetical_wrong_side_gross": 3.922500000000582,
+      "exit_if_traded": "stop"
+    },
+    {
+      "session": "2020-01-02",
+      "direction": "long",
+      "entry": 8821.53875,
+      "stop": 8823.5,
+      "target": 8830.0,
+      "entry_vs_stop_ticks": -7.845000000001164,
+      "mechanism": "shallow_retracement_vs_swept_stop",
+      "hypothetical_wrong_side_gross": 3.922500000000582,
+      "exit_if_traded": "stop"
+    },
+    {
+      "session": "2020-01-02",
+      "direction": "long",
+      "entry": 8821.53875,
+      "stop": 8823.5,
+      "target": 8830.0,
+      "entry_vs_stop_ticks": -7.845000000001164,
+      "mechanism": "shallow_retracement_vs_swept_stop",
+      "hypothetical_wrong_side_gross": 3.922500000000582,
+      "exit_if_traded": "stop"
+    },
+    {
+      "session": "2020-01-02",
+      "direction": "long",
+      "entry": 8821.53875,
+      "stop": 8823.5,
+      "target": 8830.0,
+      "entry_vs_stop_ticks": -7.845000000001164,
+      "mechanism": "shallow_retracement_vs_swept_stop",
+      "hypothetical_wrong_side_gross": 3.922500000000582,
+      "exit_if_traded": "stop"
+    },
+    {
+      "session": "2020-01-02",
+      "direction": "long",
+      "entry": 8821.53875,
+      "stop": 8823.5,
+      "target": 8830.0,
+      "entry_vs_stop_ticks": -7.845000000001164,
+      "mechanism": "shallow_retracement_vs_swept_stop",
+      "hypothetical_wrong_side_gross": 3.922500000000582,
+      "exit_if_traded": "stop"
+    },
+    {
+      "session": "2020-01-02",
+      "direction": "long",
+      "entry": 8821.53875,
+      "stop": 8823.5,
+      "target": 8830.0,
+      "entry_vs_stop_ticks": -7.845000000001164,
+      "mechanism": "shallow_retracement_vs_swept_stop",
+      "hypothetical_wrong_side_gross": 3.922500000000582,
+      "exit_if_traded": "stop"
+    },
+    {
+      "session": "2020-01-02",
+      "direction": "long",
+      "entry": 8821.53875,
+      "stop": 8823.5,
+      "target": 8830.0,
+      "entry_vs_stop_ticks": -7.845000000001164,
+      "mechanism": "shallow_retracement_vs_swept_stop",
+      "hypothetical_wrong_side_gross": 3.922500000000582,
+      "exit_if_traded": "stop"
+    },
+    {
+      "session": "2020-01-02",
+      "direction": "long",
+      "entry": 8821.53875,
+      "stop": 8823.5,
+      "target": 8830.0,
+      "entry_vs_stop_ticks": -7.845000000001164,
+      "mechanism": "shallow_retracement_vs_swept_stop",
+      "hypothetical_wrong_side_gross": 3.922500000000582,
+      "exit_if_traded": "stop"
+    },
+    {
+      "session": "2020-01-02",
+      "direction": "long",
+      "entry": 8821.53875,
+      "stop": 8823.5,
+      "target": 8830.0,
+      "entry_vs_stop_ticks": -7.845000000001164,
+      "mechanism": "shallow_retracement_vs_swept_stop",
+      "hypothetical_wrong_side_gross": 3.922500000000582,
+      "exit_if_traded": "stop"
+    },
+    {
+      "session": "2020-01-02",
+      "direction": "long",
+      "entry": 8821.53875,
+      "stop": 8823.5,
+      "target": 8830.0,
+      "entry_vs_stop_ticks": -7.845000000001164,
+      "mechanism": "shallow_retracement_vs_swept_stop",
+      "hypothetical_wrong_side_gross": 3.922500000000582,
+      "exit_if_traded": "stop"
+    },
+    {
+      "session": "2020-01-02",
+      "direction": "long",
+      "entry": 8821.53875,
+      "stop": 8823.5,
+      "target": 8830.0,
+      "entry_vs_stop_ticks": -7.845000000001164,
+      "mechanism": "shallow_retracement_vs_swept_stop",
+      "hypothetical_wrong_side_gross": 3.922500000000582,
+      "exit_if_traded": "stop"
+    },
+    {
+      "session": "2020-01-02",
+      "direction": "short",
+      "entry": 8833.4125,
+      "stop": 8832.0,
+      "target": 8828.25,
+      "entry_vs_stop_ticks": -5.650000000001455,
+      "mechanism": "shallow_retracement_vs_swept_stop",
+      "hypothetical_wrong_side_gross": 2.8250000000007276,
+      "exit_if_traded": "stop"
+    },
+    {
+      "session": "2020-01-02",
+      "direction": "short",
+      "entry": 8832.53125,
+      "stop": 8830.75,
+      "target": 8828.25,
+      "entry_vs_stop_ticks": -7.125,
+      "mechanism": "shallow_retracement_vs_swept_stop",
+      "hypothetical_wrong_side_gross": 3.5625,
+      "exit_if_traded": "stop"
+    },
+    {
+      "session": "2020-01-02",
+      "direction": "short",
+      "entry": 8832.53125,
+      "stop": 8830.75,
+      "target": 8828.25,
+      "entry_vs_stop_ticks": -7.125,
+      "mechanism": "shallow_retracement_vs_swept_stop",
+      "hypothetical_wrong_side_gross": 3.5625,
+      "exit_if_traded": "stop"
+    },
+    {
+      "session": "2020-01-02",
+      "direction": "short",
+      "entry": 8832.0025,
+      "stop": 8829.75,
+      "target": 8828.25,
+      "entry_vs_stop_ticks": -9.010000000002037,
+      "mechanism": "shallow_retracement_vs_swept_stop",
+      "hypothetical_wrong_side_gross": 4.505000000001019,
+      "exit_if_traded": "stop"
+    },
+    {
+      "session": "2020-01-02",
+      "direction": "short",
+      "entry": 8832.0025,
+      "stop": 8829.5,
+      "target": 8828.25,
+      "entry_vs_stop_ticks": -10.010000000002037,
+      "mechanism": "shallow_retracement_vs_swept_stop",
+      "hypothetical_wrong_side_gross": 5.005000000001019,
+      "exit_if_traded": "stop"
+    },
+    {
+      "session": "2020-01-02",
+      "direction": "short",
+      "entry": 8832.0025,
+      "stop": 8829.5,
+      "target": 8828.25,
+      "entry_vs_stop_ticks": -10.010000000002037,
+      "mechanism": "shallow_retracement_vs_swept_stop",
+      "hypothetical_wrong_side_gross": 5.005000000001019,
+      "exit_if_traded": "stop"
+    }
+  ],
+  "parity": {
+    "sampled": 500,
+    "exact_gross_and_net_matches": 0,
+    "avg_net_diff_m4_minus_bespoke": 7.699185000000042,
+    "max_abs_net_diff": 218.4375
+  },
+  "a4_verdict": "**SUSPECT for account-class survey.** Guard is causally clean and rejected population is structurally losing (avg net $19.48/trade wrong-side), but M4 vs bespoke parity diverges (max net diff $218.44). The +$11,155 Frame B figure likely reflects M4 fill-path differences vs step 3c, not geometry selection alone. Resolve parity before proceeding.",
+  "harness": {
+    "passed": false,
+    "checks": [
+      {
+        "check_id": "V1",
+        "name": "Geometry coherence",
+        "passed": false,
+        "message": "7144/12978 filled trades fail entry-time geometry; reject rate 36.5% > surface threshold",
+        "details": {
+          "incoherent_filled": 7144,
+          "n_trades": 12978,
+          "geometry_reject_rate": 0.36530332681017613,
+          "has_bracket_columns": true,
+          "samples": [
+            {
+              "trade_id": 3,
+              "reason": "stop_wrong_side"
+            },
+            {
+              "trade_id": 4,
+              "reason": "stop_wrong_side"
+            },
+            {
+              "trade_id": 6,
+              "reason": "stop_wrong_side"
+            },
+            {
+              "trade_id": 7,
+              "reason": "stop_wrong_side"
+            },
+            {
+              "trade_id": 8,
+              "reason": "stop_wrong_side"
+            }
+          ]
+        }
+      },
+      {
+        "check_id": "V2",
+        "name": "Causal sequencing",
+        "passed": true,
+        "message": "All trades exit at/after entry",
+        "details": {
+          "violations": [],
+          "n_trades": 12978
+        }
+      },
+      {
+        "check_id": "V3",
+        "name": "Cost application",
+        "passed": true,
+        "message": "0/12978 zero-commission; 0 net/gross mismatches",
+        "details": {
+          "zero_commission_trades": 0,
+          "net_gross_mismatches": 0
+        }
+      },
+      {
+        "check_id": "V4",
+        "name": "Magnitude sanity",
+        "passed": true,
+        "message": "Avg net 9.37 ticks/trade (surface > 15.0)",
+        "details": {
+          "avg_net_ticks": 9.366398520573279,
+          "n_trades": 12978,
+          "total_net_usd": 60778.560000000005
+        }
+      },
+      {
+        "check_id": "V5",
+        "name": "Hand-computation spot check",
+        "passed": true,
+        "message": "T1=ok T2=ok T5_reject=ok",
+        "details": {}
+      },
+      {
+        "check_id": "V6",
+        "name": "Dual-touch exposure",
+        "passed": true,
+        "message": "Skipped (need bars + entry_bar for dual-touch analysis)",
+        "details": {}
+      }
+    ]
+  },
+  "harness_summary": "## VALIDATION REPORT\n\n**Overall:** **FAIL**\n\n- **V1 Geometry coherence:** **FAIL** \u2014 7144/12978 filled trades fail entry-time geometry; reject rate 36.5% > surface threshold\n- **V2 Causal sequencing:** PASS \u2014 All trades exit at/after entry\n- **V3 Cost application:** PASS \u2014 0/12978 zero-commission; 0 net/gross mismatches\n- **V4 Magnitude sanity:** PASS \u2014 Avg net 9.37 ticks/trade (surface > 15.0)\n- **V5 Hand-computation spot check:** PASS \u2014 T1=ok T2=ok T5_reject=ok\n- **V6 Dual-touch exposure:** PASS \u2014 Skipped (need bars + entry_bar for dual-touch analysis)",
+  "frame_b_annual_net": 11155.2960000004,
+  "stop_conditions": {
+    "guard_peek": "NOT triggered \u2014 check_trade_geometry uses entry/stop/target only",
+    "rejected_winning": "TRIGGERED \u2014 rejected WR 90.3%, avg net $19.48",
+    "stop_logic_bug": "NOT triggered \u2014 18667/18667 shallow-retracement (legitimate exclusion)",
+    "harness_fail": "TRIGGERED \u2014 V1"
+  }
+}
