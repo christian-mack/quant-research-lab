@@ -3,21 +3,45 @@
 from __future__ import annotations
 
 from datetime import date
+from typing import cast
 
 import numpy as np
 import pytest
 
 from quant_research.statistics.apex_eod_trailing import (
+    ApexBalanceTier,
+    apex_tier_index_for_equity,
     block_bootstrap_resample_trades,
     collapse_trades_to_session_streaks,
     max_drawdown_closed_trade_pnl,
     simulate_apex_50k_eod_two_phase,
     simulate_apex_eod_trailing,
     simulate_apex_eod_two_phase,
+    simulate_apex_eod_two_phase_tiered_with_trace,
     simulate_eval_window_50k_eod,
     simulate_eval_window_eod,
     trades_to_daily_pnls_chronological,
 )
+
+
+def test_apex_tier_equity_below_table_uses_bottom_band() -> None:
+    tiers = (
+        ApexBalanceTier(25_000, 25_999, 1, 500),
+        ApexBalanceTier(26_000, float("inf"), 2, 1_250),
+    )
+    idx, row = apex_tier_index_for_equity(24_150.0, tiers)
+    assert idx == 0
+    assert row.dll_limit == 500
+
+
+def test_apex_tier_gap_between_bands_uses_lower_band() -> None:
+    tiers = (
+        ApexBalanceTier(25_000, 25_999, 1, 500),
+        ApexBalanceTier(26_000, 26_999, 2, 500),
+    )
+    idx, row = apex_tier_index_for_equity(25_999.5, tiers)
+    assert idx == 0
+    assert row.max_contracts_mini == 1
 
 
 def test_simulate_pure_trailing_no_breach_flat() -> None:
@@ -164,17 +188,138 @@ def test_no_dll_hits_pause_matches_terminal_equity() -> None:
 
 
 def test_generalized_25k_lock_floor() -> None:
-    """Lock HWM = start + trail; static floor = start (25K example)."""
+    """$25K EOD: TDD $1K, lock at $26K (May 2026 operator table)."""
     ny = [date(2020, 1, 1), date(2020, 1, 2)]
     r = simulate_apex_eod_two_phase(
-        np.array([2_000.0, 0.0]),
+        np.array([1_000.0, 0.0]),
         ny,
         starting_balance=25_000.0,
-        trailing_dd=1_500.0,
+        trailing_dd=1_000.0,
         dll_limit=500.0,
+        lock_equity_threshold=26_000.0,
+        post_lock_floor=25_000.0,
     )
     assert r.locked_achieved
     assert r.starting_balance == 25_000.0
+
+
+def test_apex_50k_tiered_gain_and_demote() -> None:
+    """PA tier change on balance; DLL tier from day-open tier."""
+    tiers = (
+        ApexBalanceTier(50_000, 51_499, 2, 1_000),
+        ApexBalanceTier(51_500, 52_999, 3, 1_000),
+        ApexBalanceTier(53_000, 55_999, 4, 2_000),
+        ApexBalanceTier(56_000, float("inf"), 4, 3_000),
+    )
+    ny = [date(2020, 1, 1), date(2020, 1, 2), date(2020, 1, 3)]
+    # Target 30 MNQ: tier0 cap 20 → +1500 on day1 at eff 20 → equity 51_500 (tier1 open day2)
+    pnl = np.array([75.0, (-500.0 / 30.0), 0.0])
+    r = simulate_apex_eod_two_phase(
+        pnl,
+        ny,
+        starting_balance=50_000.0,
+        trailing_dd=2_000.0,
+        dll_limit=0.0,
+        balance_tiers=tiers,
+        target_qty_mnq=30.0,
+        mnq_per_mini=10.0,
+    )
+    assert r.tier_summary is not None
+    tr = r.tier_summary["tier_transitions"]
+    assert len(cast(list, tr)) >= 1
+    assert r.survived
+
+
+def test_apex_50k_post_lock_floor_breach() -> None:
+    """HWM ≥ 52K then equity < 50K fails post-lock."""
+    ny = [date(2020, 1, d) for d in range(1, 5)]
+    pnl = np.array([100.0, -130.0, 0.0, 0.0])
+    tiers = (ApexBalanceTier(0.0, float("inf"), 50, 100_000.0),)
+    r = simulate_apex_eod_two_phase(
+        pnl,
+        ny,
+        starting_balance=50_000.0,
+        trailing_dd=2_000.0,
+        dll_limit=0.0,
+        balance_tiers=tiers,
+        target_qty_mnq=20.0,
+    )
+    assert r.locked_achieved
+    assert not r.survived
+
+
+def test_apex_50k_effective_qty_cap_40_mnq() -> None:
+    tiers = (
+        ApexBalanceTier(50_000, 51_499, 2, 1_000),
+        ApexBalanceTier(51_500, 52_999, 3, 1_000),
+        ApexBalanceTier(53_000, 55_999, 4, 2_000),
+        ApexBalanceTier(56_000, float("inf"), 4, 3_000),
+    )
+    ny = [date(2020, 1, k) for k in range(1, 5)]
+    pnl = np.array([75.0, 50.0, 10.0, 10.0])
+    r = simulate_apex_eod_two_phase(
+        pnl,
+        ny,
+        starting_balance=50_000.0,
+        trailing_dd=2_000.0,
+        dll_limit=0.0,
+        balance_tiers=tiers,
+        target_qty_mnq=40.0,
+    )
+    exp = 75.0 * 20 + 50.0 * 30 + 10.0 * 40 + 10.0 * 40
+    assert r.final_equity == pytest.approx(50_000.0 + exp)
+    assert r.tier_summary is not None
+
+
+def test_tiered_session_trace_matches_plain_two_phase() -> None:
+    tiers = (
+        ApexBalanceTier(50_000, 51_499, 2, 1_000),
+        ApexBalanceTier(51_500, 52_999, 3, 1_000),
+        ApexBalanceTier(53_000, 55_999, 4, 2_000),
+        ApexBalanceTier(56_000, float("inf"), 4, 3_000),
+    )
+    ny = [date(2020, 1, k) for k in range(1, 5)]
+    pnl = np.array([75.0, 50.0, 10.0, 10.0])
+    a, tr = simulate_apex_eod_two_phase_tiered_with_trace(
+        pnl,
+        ny,
+        starting_balance=50_000.0,
+        trailing_dd=2_000.0,
+        balance_tiers=tiers,
+        target_qty_mnq=40.0,
+    )
+    b = simulate_apex_eod_two_phase(
+        pnl,
+        ny,
+        starting_balance=50_000.0,
+        trailing_dd=2_000.0,
+        dll_limit=0.0,
+        balance_tiers=tiers,
+        target_qty_mnq=40.0,
+    )
+    assert a.final_equity == pytest.approx(b.final_equity)
+    assert a.survived == b.survived
+    assert len(tr) == 4
+    assert all("margin_to_floor_open" in row for row in tr)
+
+
+def test_wave0c_regression_flat_matches_single_tier_mnq1() -> None:
+    ny = [date(2020, 1, 1), date(2020, 1, 2)]
+    daily = np.array([-400.0, 200.0])
+    mega = (ApexBalanceTier(0.0, 1e24, 100_000, 1_000.0),)
+    a = simulate_apex_eod_two_phase(
+        daily,
+        ny,
+        starting_balance=50_000.0,
+        trailing_dd=2_000.0,
+        dll_limit=1_000.0,
+        balance_tiers=mega,
+        target_qty_mnq=1.0,
+        mnq_per_mini=10.0,
+    )
+    b = simulate_apex_50k_eod_two_phase(daily, ny)
+    assert a.final_equity == pytest.approx(b.final_equity)
+    assert a.survived == b.survived
 
 
 def test_eval_window_generalized_matches_50k_shorthand() -> None:

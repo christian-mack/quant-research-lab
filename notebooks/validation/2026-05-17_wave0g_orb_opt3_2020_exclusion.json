@@ -1,0 +1,1081 @@
+{
+  "wave": "0g",
+  "git": {
+    "git_sha": "75c84e5ae8ce1edc1d19e4c0788144dc5f6dff7d",
+    "git_dirty": true
+  },
+  "deliverable_1_data_sanity": {
+    "trades_by_calendar_year_exit_cme": {
+      "2020": 165,
+      "2022": 86,
+      "2023": 223,
+      "2024": 166,
+      "2025": 138,
+      "2026": 21
+    },
+    "unique_cme_session_dates_by_year_rth_bars": {
+      "2020": 258,
+      "2021": 258,
+      "2022": 258,
+      "2023": 257,
+      "2024": 226,
+      "2025": 257,
+      "2026": 47
+    },
+    "trades_per_session_ratio_by_year": {
+      "2020": 0.6395348837209303,
+      "2021": 0.0,
+      "2022": 0.3333333333333333,
+      "2023": 0.867704280155642,
+      "2024": 0.7345132743362832,
+      "2025": 0.5369649805447471,
+      "2026": 0.44680851063829785
+    },
+    "ratio_2020": 0.6395348837209303,
+    "median_ratio_other_years": 0.49188674559152246,
+    "ratio_anomaly_2020_vs_others": false,
+    "unexpected_missing_days_calendar_2020": [],
+    "known_gaps_calendar_intersection_2020": [],
+    "monthly_trade_counts_exit_ny_2020": {
+      "11": 1,
+      "7": 17,
+      "4": 17,
+      "6": 19,
+      "3": 6,
+      "9": 18,
+      "8": 18,
+      "1": 16,
+      "5": 21,
+      "10": 17,
+      "2": 15
+    },
+    "calendar_year_2021_trade_count_note": "2021 shows **0** closed trades in this ORB+Opt3 log (exit_cme_session_date year) while RTH bars exist \u2014 strategy/entry gating, not a documented raw gap. Excluded from 'ratio anomaly' test focused on 2020.",
+    "stop_wave0g_do_not_proceed_d2_d4": false,
+    "d1_notes": "Trades/year keyed by exit_cme_session_date.year; sessions/year = unique cme_session_date on RTH minute bars in protocol window."
+  },
+  "deliverable_2_breach_characterization": {
+    "sessions": [
+      {
+        "breach_exit_ny_date": "2020-01-14",
+        "exit_cme_session_date": "2020-01-14",
+        "n_trades_this_session": 1,
+        "session_net_pnl_mnq1": -94.0,
+        "path_context_wave0e_pairs_on_date": [
+          {
+            "account_class": "100k",
+            "target_qty_mnq": 40.0,
+            "session_pnl_usd_wave0f_note": -3760.0,
+            "equity_open": 102115.0,
+            "margin_to_floor_open": 3000.0
+          },
+          {
+            "account_class": "100k",
+            "target_qty_mnq": 50.0,
+            "session_pnl_usd_wave0f_note": -3760.0,
+            "equity_open": 102115.0,
+            "margin_to_floor_open": 3000.0
+          },
+          {
+            "account_class": "100k",
+            "target_qty_mnq": 60.0,
+            "session_pnl_usd_wave0f_note": -3760.0,
+            "equity_open": 102115.0,
+            "margin_to_floor_open": 3000.0
+          },
+          {
+            "account_class": "150k",
+            "target_qty_mnq": 50.0,
+            "session_pnl_usd_wave0f_note": -4700.0,
+            "equity_open": 152820.0,
+            "margin_to_floor_open": 4000.0
+          },
+          {
+            "account_class": "150k",
+            "target_qty_mnq": 60.0,
+            "session_pnl_usd_wave0f_note": -4700.0,
+            "equity_open": 152820.0,
+            "margin_to_floor_open": 4000.0
+          },
+          {
+            "account_class": "150k",
+            "target_qty_mnq": 70.0,
+            "session_pnl_usd_wave0f_note": -4700.0,
+            "equity_open": 152820.0,
+            "margin_to_floor_open": 4000.0
+          },
+          {
+            "account_class": "150k",
+            "target_qty_mnq": 80.0,
+            "session_pnl_usd_wave0f_note": -4700.0,
+            "equity_open": 152820.0,
+            "margin_to_floor_open": 4000.0
+          },
+          {
+            "account_class": "150k",
+            "target_qty_mnq": 90.0,
+            "session_pnl_usd_wave0f_note": -4700.0,
+            "equity_open": 152820.0,
+            "margin_to_floor_open": 4000.0
+          },
+          {
+            "account_class": "150k",
+            "target_qty_mnq": 100.0,
+            "session_pnl_usd_wave0f_note": -4700.0,
+            "equity_open": 152820.0,
+            "margin_to_floor_open": 4000.0
+          }
+        ],
+        "orb_high": 9086.25,
+        "orb_low": 9052.0,
+        "orb_range_points": 34.25,
+        "orb_range_usd_mnq1": 68.5,
+        "rth_day_high": 9095.0,
+        "rth_day_low": 9035.0,
+        "intraday_range_points": 60.0,
+        "atr14_prior_rth_sessions": 98.375,
+        "range_over_atr_prior": 0.6099110546378653,
+        "overnight_gap_points_open_vs_prior_close": -7.25,
+        "day_of_week_0mon": 1,
+        "day_of_year": 14,
+        "rth_first_bar_et_hhmm": "09:30",
+        "exit_events_et": [
+          {
+            "exit_reason": "orb_exit_stop",
+            "net_pnl_mnq1": -94.0,
+            "exit_local_iso": "2020-01-14T12:41:00-05:00"
+          }
+        ]
+      },
+      {
+        "breach_exit_ny_date": "2020-01-15",
+        "exit_cme_session_date": "2020-01-15",
+        "n_trades_this_session": 1,
+        "session_net_pnl_mnq1": -70.0,
+        "path_context_wave0e_pairs_on_date": [
+          {
+            "account_class": "25k",
+            "target_qty_mnq": 10.0,
+            "session_pnl_usd_wave0f_note": -700.0,
+            "equity_open": 24765.0,
+            "margin_to_floor_open": 60.0
+          },
+          {
+            "account_class": "25k",
+            "target_qty_mnq": 15.0,
+            "session_pnl_usd_wave0f_note": -700.0,
+            "equity_open": 24765.0,
+            "margin_to_floor_open": 60.0
+          },
+          {
+            "account_class": "25k",
+            "target_qty_mnq": 20.0,
+            "session_pnl_usd_wave0f_note": -700.0,
+            "equity_open": 24765.0,
+            "margin_to_floor_open": 60.0
+          },
+          {
+            "account_class": "50k",
+            "target_qty_mnq": 20.0,
+            "session_pnl_usd_wave0f_note": -1400.0,
+            "equity_open": 49530.0,
+            "margin_to_floor_open": 120.0
+          },
+          {
+            "account_class": "50k",
+            "target_qty_mnq": 25.0,
+            "session_pnl_usd_wave0f_note": -1400.0,
+            "equity_open": 49530.0,
+            "margin_to_floor_open": 120.0
+          },
+          {
+            "account_class": "50k",
+            "target_qty_mnq": 30.0,
+            "session_pnl_usd_wave0f_note": -1400.0,
+            "equity_open": 49530.0,
+            "margin_to_floor_open": 120.0
+          },
+          {
+            "account_class": "50k",
+            "target_qty_mnq": 35.0,
+            "session_pnl_usd_wave0f_note": -1400.0,
+            "equity_open": 49530.0,
+            "margin_to_floor_open": 120.0
+          },
+          {
+            "account_class": "50k",
+            "target_qty_mnq": 40.0,
+            "session_pnl_usd_wave0f_note": -1400.0,
+            "equity_open": 49530.0,
+            "margin_to_floor_open": 120.0
+          },
+          {
+            "account_class": "100k",
+            "target_qty_mnq": 30.0,
+            "session_pnl_usd_wave0f_note": -2100.0,
+            "equity_open": 99295.0,
+            "margin_to_floor_open": 180.0
+          },
+          {
+            "account_class": "150k",
+            "target_qty_mnq": 40.0,
+            "session_pnl_usd_wave0f_note": -2800.0,
+            "equity_open": 149060.0,
+            "margin_to_floor_open": 240.0
+          }
+        ],
+        "orb_high": 9079.25,
+        "orb_low": 9051.0,
+        "orb_range_points": 28.25,
+        "orb_range_usd_mnq1": 56.5,
+        "rth_day_high": 9096.0,
+        "rth_day_low": 9023.0,
+        "intraday_range_points": 73.0,
+        "atr14_prior_rth_sessions": 94.11111111111111,
+        "range_over_atr_prior": 0.7756788665879575,
+        "overnight_gap_points_open_vs_prior_close": 7.25,
+        "day_of_week_0mon": 2,
+        "day_of_year": 15,
+        "rth_first_bar_et_hhmm": "09:30",
+        "exit_events_et": [
+          {
+            "exit_reason": "orb_exit_stop",
+            "net_pnl_mnq1": -70.0,
+            "exit_local_iso": "2020-01-15T13:55:00-05:00"
+          }
+        ]
+      }
+    ],
+    "aggregate": {
+      "unique_breach_ny_dates": [
+        "2020-01-14",
+        "2020-01-15"
+      ],
+      "n_unique": 2,
+      "month_distribution_within_2020": {
+        "1": 2
+      },
+      "covid_window_feb_apr": false,
+      "coarse_signature": "Early-Jan-2020 (two NY dates); not Feb\u2013Apr COVID window. Sampled days: intraday range / prior ATR \u2248 0.6\u20130.9 (not extreme range>>ATR); stops `orb_exit_stop`; exits mid-day ET. Regime overlay deferred to Phase 3."
+    }
+  },
+  "deliverable_3_regrade_2020_excluded": {
+    "exclusion_rule": "drop trades where exit_ny_date calendar year == 2020",
+    "trade_count_full_qty1": 799,
+    "trade_count_after_exclusion": 634,
+    "expected_approx_share_removed": 0.2065081351689612,
+    "actual_share_removed": 0.2065081351689612,
+    "yfrac_full_6y_protocol": 6.299794661190965,
+    "yfrac_excl_2021_04_19_protocol": 5.297741273100616,
+    "daily_sessions_after_exclude": 615,
+    "regrade_rows": [
+      {
+        "source": "wave0e_grid",
+        "account_class": "100k",
+        "target_qty_mnq": 30.0,
+        "funded_survived": false,
+        "bootstrap_funded_survival_block20": 0.0765,
+        "eval_pass_rate": 0.3583208395802099,
+        "avg_annual_pnl_est": 30298.76,
+        "gates": {
+          "funded": false,
+          "bootstrap_ge_80": false,
+          "eval_ge_50pct": false,
+          "joint_all_three": false
+        },
+        "tier_vs_36_60_100k": "below_floor",
+        "dll_pause_days": 151,
+        "comparison_6y_wave0e": {
+          "funded_survived_6y": false,
+          "bootstrap_6y": 0.1212,
+          "eval_rate_6y": 0.35230677052127024,
+          "joint_6y": false
+        }
+      },
+      {
+        "source": "wave0e_grid",
+        "account_class": "100k",
+        "target_qty_mnq": 40.0,
+        "funded_survived": false,
+        "bootstrap_funded_survival_block20": 0.0529,
+        "eval_pass_rate": 0.37631184407796103,
+        "avg_annual_pnl_est": 39004.36,
+        "gates": {
+          "funded": false,
+          "bootstrap_ge_80": false,
+          "eval_ge_50pct": false,
+          "joint_all_three": false
+        },
+        "tier_vs_36_60_100k": "floor_band",
+        "dll_pause_days": 181,
+        "comparison_6y_wave0e": {
+          "funded_survived_6y": false,
+          "bootstrap_6y": 0.1146,
+          "eval_rate_6y": 0.37567405632115036,
+          "joint_6y": false
+        }
+      },
+      {
+        "source": "wave0e_grid",
+        "account_class": "100k",
+        "target_qty_mnq": 50.0,
+        "funded_survived": false,
+        "bootstrap_funded_survival_block20": 0.0431,
+        "eval_pass_rate": 0.4160419790104948,
+        "avg_annual_pnl_est": 45304.21,
+        "gates": {
+          "funded": false,
+          "bootstrap_ge_80": false,
+          "eval_ge_50pct": false,
+          "joint_all_three": false
+        },
+        "tier_vs_36_60_100k": "floor_band",
+        "dll_pause_days": 189,
+        "comparison_6y_wave0e": {
+          "funded_survived_6y": false,
+          "bootstrap_6y": 0.096,
+          "eval_rate_6y": 0.4110245656081486,
+          "joint_6y": false
+        }
+      },
+      {
+        "source": "wave0e_grid",
+        "account_class": "100k",
+        "target_qty_mnq": 60.0,
+        "funded_survived": false,
+        "bootstrap_funded_survival_block20": 0.0343,
+        "eval_pass_rate": 0.44677661169415295,
+        "avg_annual_pnl_est": 49403.13,
+        "gates": {
+          "funded": false,
+          "bootstrap_ge_80": false,
+          "eval_ge_50pct": false,
+          "joint_all_three": false
+        },
+        "tier_vs_36_60_100k": "floor_band",
+        "dll_pause_days": 195,
+        "comparison_6y_wave0e": {
+          "funded_survived_6y": false,
+          "bootstrap_6y": 0.0839,
+          "eval_rate_6y": 0.4445775913720791,
+          "joint_6y": false
+        }
+      },
+      {
+        "source": "wave0e_grid",
+        "account_class": "150k",
+        "target_qty_mnq": 40.0,
+        "funded_survived": false,
+        "bootstrap_funded_survival_block20": 0.0762,
+        "eval_pass_rate": 0.335832083958021,
+        "avg_annual_pnl_est": 40398.35,
+        "gates": {
+          "funded": false,
+          "bootstrap_ge_80": false,
+          "eval_ge_50pct": false,
+          "joint_all_three": false
+        },
+        "tier_vs_36_60_100k": "floor_band",
+        "dll_pause_days": 170,
+        "comparison_6y_wave0e": {
+          "funded_survived_6y": false,
+          "bootstrap_6y": 0.1183,
+          "eval_rate_6y": 0.33193529059316956,
+          "joint_6y": false
+        }
+      },
+      {
+        "source": "wave0e_grid",
+        "account_class": "150k",
+        "target_qty_mnq": 50.0,
+        "funded_survived": false,
+        "bootstrap_funded_survival_block20": 0.0739,
+        "eval_pass_rate": 0.3598200899550225,
+        "avg_annual_pnl_est": 48688.67,
+        "gates": {
+          "funded": false,
+          "bootstrap_ge_80": false,
+          "eval_ge_50pct": false,
+          "joint_all_three": false
+        },
+        "tier_vs_36_60_100k": "floor_band",
+        "dll_pause_days": 183,
+        "comparison_6y_wave0e": {
+          "funded_survived_6y": false,
+          "bootstrap_6y": 0.1213,
+          "eval_rate_6y": 0.3588975434391851,
+          "joint_6y": false
+        }
+      },
+      {
+        "source": "wave0e_grid",
+        "account_class": "150k",
+        "target_qty_mnq": 60.0,
+        "funded_survived": false,
+        "bootstrap_funded_survival_block20": 0.0531,
+        "eval_pass_rate": 0.37631184407796103,
+        "avg_annual_pnl_est": 57071.49,
+        "gates": {
+          "funded": false,
+          "bootstrap_ge_80": false,
+          "eval_ge_50pct": false,
+          "joint_all_three": false
+        },
+        "tier_vs_36_60_100k": "floor_band",
+        "dll_pause_days": 190,
+        "comparison_6y_wave0e": {
+          "funded_survived_6y": false,
+          "bootstrap_6y": 0.1101,
+          "eval_rate_6y": 0.3744757339724386,
+          "joint_6y": false
+        }
+      },
+      {
+        "source": "wave0e_grid",
+        "account_class": "150k",
+        "target_qty_mnq": 70.0,
+        "funded_survived": false,
+        "bootstrap_funded_survival_block20": 0.0464,
+        "eval_pass_rate": 0.4032983508245877,
+        "avg_annual_pnl_est": 57452.79,
+        "gates": {
+          "funded": false,
+          "bootstrap_ge_80": false,
+          "eval_ge_50pct": false,
+          "joint_all_three": false
+        },
+        "tier_vs_36_60_100k": "floor_band",
+        "dll_pause_days": 193,
+        "comparison_6y_wave0e": {
+          "funded_survived_6y": false,
+          "bootstrap_6y": 0.1063,
+          "eval_rate_6y": 0.39544637507489516,
+          "joint_6y": false
+        }
+      },
+      {
+        "source": "wave0e_grid",
+        "account_class": "150k",
+        "target_qty_mnq": 80.0,
+        "funded_survived": false,
+        "bootstrap_funded_survival_block20": 0.0446,
+        "eval_pass_rate": 0.4235382308845577,
+        "avg_annual_pnl_est": 65518.49,
+        "gates": {
+          "funded": false,
+          "bootstrap_ge_80": false,
+          "eval_ge_50pct": false,
+          "joint_all_three": false
+        },
+        "tier_vs_36_60_100k": "target_band",
+        "dll_pause_days": 195,
+        "comparison_6y_wave0e": {
+          "funded_survived_6y": false,
+          "bootstrap_6y": 0.0982,
+          "eval_rate_6y": 0.4194128220491312,
+          "joint_6y": false
+        }
+      },
+      {
+        "source": "wave0e_grid",
+        "account_class": "150k",
+        "target_qty_mnq": 90.0,
+        "funded_survived": false,
+        "bootstrap_funded_survival_block20": 0.0319,
+        "eval_pass_rate": 0.44302848575712145,
+        "avg_annual_pnl_est": 73082.09,
+        "gates": {
+          "funded": false,
+          "bootstrap_ge_80": false,
+          "eval_ge_50pct": false,
+          "joint_all_three": false
+        },
+        "tier_vs_36_60_100k": "target_band",
+        "dll_pause_days": 196,
+        "comparison_6y_wave0e": {
+          "funded_survived_6y": false,
+          "bootstrap_6y": 0.086,
+          "eval_rate_6y": 0.4415817855002996,
+          "joint_6y": false
+        }
+      },
+      {
+        "source": "wave0e_grid",
+        "account_class": "150k",
+        "target_qty_mnq": 100.0,
+        "funded_survived": false,
+        "bootstrap_funded_survival_block20": 0.0327,
+        "eval_pass_rate": 0.45952023988005997,
+        "avg_annual_pnl_est": 79921.8,
+        "gates": {
+          "funded": false,
+          "bootstrap_ge_80": false,
+          "eval_ge_50pct": false,
+          "joint_all_three": false
+        },
+        "tier_vs_36_60_100k": "target_band",
+        "dll_pause_days": 196,
+        "comparison_6y_wave0e": {
+          "funded_survived_6y": false,
+          "bootstrap_6y": 0.0814,
+          "eval_rate_6y": 0.46375074895146795,
+          "joint_6y": false
+        }
+      },
+      {
+        "source": "wave0e_grid",
+        "account_class": "25k",
+        "target_qty_mnq": 10.0,
+        "funded_survived": false,
+        "bootstrap_funded_survival_block20": 0.0742,
+        "eval_pass_rate": 0.38830584707646176,
+        "avg_annual_pnl_est": 10099.59,
+        "gates": {
+          "funded": false,
+          "bootstrap_ge_80": false,
+          "eval_ge_50pct": false,
+          "joint_all_three": false
+        },
+        "tier_vs_36_60_100k": "below_floor",
+        "dll_pause_days": 135,
+        "comparison_6y_wave0e": {
+          "funded_survived_6y": false,
+          "bootstrap_6y": 0.1264,
+          "eval_rate_6y": 0.39125224685440385,
+          "joint_6y": false
+        }
+      },
+      {
+        "source": "wave0e_grid",
+        "account_class": "25k",
+        "target_qty_mnq": 15.0,
+        "funded_survived": false,
+        "bootstrap_funded_survival_block20": 0.0467,
+        "eval_pass_rate": 0.4527736131934033,
+        "avg_annual_pnl_est": 14188.59,
+        "gates": {
+          "funded": false,
+          "bootstrap_ge_80": false,
+          "eval_ge_50pct": false,
+          "joint_all_three": false
+        },
+        "tier_vs_36_60_100k": "below_floor",
+        "dll_pause_days": 182,
+        "comparison_6y_wave0e": {
+          "funded_survived_6y": false,
+          "bootstrap_6y": 0.1016,
+          "eval_rate_6y": 0.4547633313361294,
+          "joint_6y": false
+        }
+      },
+      {
+        "source": "wave0e_grid",
+        "account_class": "25k",
+        "target_qty_mnq": 20.0,
+        "funded_survived": false,
+        "bootstrap_funded_survival_block20": 0.0356,
+        "eval_pass_rate": 0.4955022488755622,
+        "avg_annual_pnl_est": 15574.56,
+        "gates": {
+          "funded": false,
+          "bootstrap_ge_80": false,
+          "eval_ge_50pct": false,
+          "joint_all_three": false
+        },
+        "tier_vs_36_60_100k": "below_floor",
+        "dll_pause_days": 193,
+        "comparison_6y_wave0e": {
+          "funded_survived_6y": false,
+          "bootstrap_6y": 0.0704,
+          "eval_rate_6y": 0.5044937088076693,
+          "joint_6y": false
+        }
+      },
+      {
+        "source": "wave0e_grid",
+        "account_class": "50k",
+        "target_qty_mnq": 20.0,
+        "funded_survived": false,
+        "bootstrap_funded_survival_block20": 0.0746,
+        "eval_pass_rate": 0.38830584707646176,
+        "avg_annual_pnl_est": 20199.17,
+        "gates": {
+          "funded": false,
+          "bootstrap_ge_80": false,
+          "eval_ge_50pct": false,
+          "joint_all_three": false
+        },
+        "tier_vs_36_60_100k": "below_floor",
+        "dll_pause_days": 109,
+        "comparison_6y_wave0e": {
+          "funded_survived_6y": false,
+          "bootstrap_6y": 0.1248,
+          "eval_rate_6y": 0.39125224685440385,
+          "joint_6y": false
+        }
+      },
+      {
+        "source": "wave0e_grid",
+        "account_class": "50k",
+        "target_qty_mnq": 25.0,
+        "funded_survived": false,
+        "bootstrap_funded_survival_block20": 0.0673,
+        "eval_pass_rate": 0.4235382308845577,
+        "avg_annual_pnl_est": 24551.97,
+        "gates": {
+          "funded": false,
+          "bootstrap_ge_80": false,
+          "eval_ge_50pct": false,
+          "joint_all_three": false
+        },
+        "tier_vs_36_60_100k": "below_floor",
+        "dll_pause_days": 143,
+        "comparison_6y_wave0e": {
+          "funded_survived_6y": false,
+          "bootstrap_6y": 0.112,
+          "eval_rate_6y": 0.4242061114439784,
+          "joint_6y": false
+        }
+      },
+      {
+        "source": "wave0e_grid",
+        "account_class": "50k",
+        "target_qty_mnq": 30.0,
+        "funded_survived": false,
+        "bootstrap_funded_survival_block20": 0.0483,
+        "eval_pass_rate": 0.4527736131934033,
+        "avg_annual_pnl_est": 28713.18,
+        "gates": {
+          "funded": false,
+          "bootstrap_ge_80": false,
+          "eval_ge_50pct": false,
+          "joint_all_three": false
+        },
+        "tier_vs_36_60_100k": "below_floor",
+        "dll_pause_days": 171,
+        "comparison_6y_wave0e": {
+          "funded_survived_6y": false,
+          "bootstrap_6y": 0.1097,
+          "eval_rate_6y": 0.4547633313361294,
+          "joint_6y": false
+        }
+      },
+      {
+        "source": "wave0e_grid",
+        "account_class": "50k",
+        "target_qty_mnq": 35.0,
+        "funded_survived": false,
+        "bootstrap_funded_survival_block20": 0.0403,
+        "eval_pass_rate": 0.46776611694152925,
+        "avg_annual_pnl_est": 33248.6,
+        "gates": {
+          "funded": false,
+          "bootstrap_ge_80": false,
+          "eval_ge_50pct": false,
+          "joint_all_three": false
+        },
+        "tier_vs_36_60_100k": "below_floor",
+        "dll_pause_days": 182,
+        "comparison_6y_wave0e": {
+          "funded_survived_6y": false,
+          "bootstrap_6y": 0.1097,
+          "eval_rate_6y": 0.4733373277411624,
+          "joint_6y": false
+        }
+      },
+      {
+        "source": "wave0e_grid",
+        "account_class": "50k",
+        "target_qty_mnq": 40.0,
+        "funded_survived": false,
+        "bootstrap_funded_survival_block20": 0.0332,
+        "eval_pass_rate": 0.4955022488755622,
+        "avg_annual_pnl_est": 37609.42,
+        "gates": {
+          "funded": false,
+          "bootstrap_ge_80": false,
+          "eval_ge_50pct": false,
+          "joint_all_three": false
+        },
+        "tier_vs_36_60_100k": "floor_band",
+        "dll_pause_days": 183,
+        "comparison_6y_wave0e": {
+          "funded_survived_6y": false,
+          "bootstrap_6y": 0.093,
+          "eval_rate_6y": 0.5044937088076693,
+          "joint_6y": false
+        }
+      },
+      {
+        "source": "wave0f_low_qty",
+        "account_class": "25k",
+        "target_qty_mnq": 1.0,
+        "funded_survived": false,
+        "bootstrap_funded_survival_block20": 0.3344,
+        "eval_pass_rate": 0.022488755622188907,
+        "avg_annual_pnl_est": 1009.96,
+        "gates": {
+          "funded": false,
+          "bootstrap_ge_80": false,
+          "eval_ge_50pct": false,
+          "joint_all_three": false
+        },
+        "tier_vs_36_60_100k": "below_floor",
+        "dll_pause_days": 1
+      },
+      {
+        "source": "wave0f_low_qty",
+        "account_class": "25k",
+        "target_qty_mnq": 2.0,
+        "funded_survived": false,
+        "bootstrap_funded_survival_block20": 0.1677,
+        "eval_pass_rate": 0.07871064467766117,
+        "avg_annual_pnl_est": 2019.92,
+        "gates": {
+          "funded": false,
+          "bootstrap_ge_80": false,
+          "eval_ge_50pct": false,
+          "joint_all_three": false
+        },
+        "tier_vs_36_60_100k": "below_floor",
+        "dll_pause_days": 2
+      },
+      {
+        "source": "wave0f_low_qty",
+        "account_class": "25k",
+        "target_qty_mnq": 3.0,
+        "funded_survived": false,
+        "bootstrap_funded_survival_block20": 0.1177,
+        "eval_pass_rate": 0.2128935532233883,
+        "avg_annual_pnl_est": 3029.88,
+        "gates": {
+          "funded": false,
+          "bootstrap_ge_80": false,
+          "eval_ge_50pct": false,
+          "joint_all_three": false
+        },
+        "tier_vs_36_60_100k": "below_floor",
+        "dll_pause_days": 4
+      },
+      {
+        "source": "wave0f_low_qty",
+        "account_class": "25k",
+        "target_qty_mnq": 5.0,
+        "funded_survived": false,
+        "bootstrap_funded_survival_block20": 0.0872,
+        "eval_pass_rate": 0.37106446776611696,
+        "avg_annual_pnl_est": 5049.79,
+        "gates": {
+          "funded": false,
+          "bootstrap_ge_80": false,
+          "eval_ge_50pct": false,
+          "joint_all_three": false
+        },
+        "tier_vs_36_60_100k": "below_floor",
+        "dll_pause_days": 27
+      },
+      {
+        "source": "wave0f_low_qty",
+        "account_class": "25k",
+        "target_qty_mnq": 7.0,
+        "funded_survived": false,
+        "bootstrap_funded_survival_block20": 0.0726,
+        "eval_pass_rate": 0.3785607196401799,
+        "avg_annual_pnl_est": 7069.71,
+        "gates": {
+          "funded": false,
+          "bootstrap_ge_80": false,
+          "eval_ge_50pct": false,
+          "joint_all_three": false
+        },
+        "tier_vs_36_60_100k": "below_floor",
+        "dll_pause_days": 22
+      },
+      {
+        "source": "wave0f_low_qty",
+        "account_class": "50k",
+        "target_qty_mnq": 1.0,
+        "funded_survived": false,
+        "bootstrap_funded_survival_block20": 0.6256,
+        "eval_pass_rate": 0.022488755622188907,
+        "avg_annual_pnl_est": 1009.96,
+        "gates": {
+          "funded": false,
+          "bootstrap_ge_80": false,
+          "eval_ge_50pct": false,
+          "joint_all_three": false
+        },
+        "tier_vs_36_60_100k": "below_floor",
+        "dll_pause_days": 0
+      },
+      {
+        "source": "wave0f_low_qty",
+        "account_class": "50k",
+        "target_qty_mnq": 2.0,
+        "funded_survived": false,
+        "bootstrap_funded_survival_block20": 0.3393,
+        "eval_pass_rate": 0.022488755622188907,
+        "avg_annual_pnl_est": 2019.92,
+        "gates": {
+          "funded": false,
+          "bootstrap_ge_80": false,
+          "eval_ge_50pct": false,
+          "joint_all_three": false
+        },
+        "tier_vs_36_60_100k": "below_floor",
+        "dll_pause_days": 0
+      },
+      {
+        "source": "wave0f_low_qty",
+        "account_class": "50k",
+        "target_qty_mnq": 5.0,
+        "funded_survived": false,
+        "bootstrap_funded_survival_block20": 0.153,
+        "eval_pass_rate": 0.15142428785607195,
+        "avg_annual_pnl_est": 5049.79,
+        "gates": {
+          "funded": false,
+          "bootstrap_ge_80": false,
+          "eval_ge_50pct": false,
+          "joint_all_three": false
+        },
+        "tier_vs_36_60_100k": "below_floor",
+        "dll_pause_days": 2
+      },
+      {
+        "source": "wave0f_low_qty",
+        "account_class": "50k",
+        "target_qty_mnq": 10.0,
+        "funded_survived": false,
+        "bootstrap_funded_survival_block20": 0.0929,
+        "eval_pass_rate": 0.37106446776611696,
+        "avg_annual_pnl_est": 10099.59,
+        "gates": {
+          "funded": false,
+          "bootstrap_ge_80": false,
+          "eval_ge_50pct": false,
+          "joint_all_three": false
+        },
+        "tier_vs_36_60_100k": "below_floor",
+        "dll_pause_days": 22
+      },
+      {
+        "source": "wave0f_low_qty",
+        "account_class": "50k",
+        "target_qty_mnq": 15.0,
+        "funded_survived": false,
+        "bootstrap_funded_survival_block20": 0.0726,
+        "eval_pass_rate": 0.3815592203898051,
+        "avg_annual_pnl_est": 15149.38,
+        "gates": {
+          "funded": false,
+          "bootstrap_ge_80": false,
+          "eval_ge_50pct": false,
+          "joint_all_three": false
+        },
+        "tier_vs_36_60_100k": "below_floor",
+        "dll_pause_days": 27
+      },
+      {
+        "source": "wave0f_low_qty",
+        "account_class": "100k",
+        "target_qty_mnq": 5.0,
+        "funded_survived": false,
+        "bootstrap_funded_survival_block20": 0.1923,
+        "eval_pass_rate": 0.022488755622188907,
+        "avg_annual_pnl_est": 5049.79,
+        "gates": {
+          "funded": false,
+          "bootstrap_ge_80": false,
+          "eval_ge_50pct": false,
+          "joint_all_three": false
+        },
+        "tier_vs_36_60_100k": "below_floor",
+        "dll_pause_days": 3
+      },
+      {
+        "source": "wave0f_low_qty",
+        "account_class": "100k",
+        "target_qty_mnq": 10.0,
+        "funded_survived": false,
+        "bootstrap_funded_survival_block20": 0.1047,
+        "eval_pass_rate": 0.14767616191904048,
+        "avg_annual_pnl_est": 10099.59,
+        "gates": {
+          "funded": false,
+          "bootstrap_ge_80": false,
+          "eval_ge_50pct": false,
+          "joint_all_three": false
+        },
+        "tier_vs_36_60_100k": "below_floor",
+        "dll_pause_days": 5
+      },
+      {
+        "source": "wave0f_low_qty",
+        "account_class": "100k",
+        "target_qty_mnq": 15.0,
+        "funded_survived": false,
+        "bootstrap_funded_survival_block20": 0.09,
+        "eval_pass_rate": 0.272863568215892,
+        "avg_annual_pnl_est": 15149.38,
+        "gates": {
+          "funded": false,
+          "bootstrap_ge_80": false,
+          "eval_ge_50pct": false,
+          "joint_all_three": false
+        },
+        "tier_vs_36_60_100k": "below_floor",
+        "dll_pause_days": 20
+      },
+      {
+        "source": "wave0f_low_qty",
+        "account_class": "100k",
+        "target_qty_mnq": 20.0,
+        "funded_survived": false,
+        "bootstrap_funded_survival_block20": 0.0734,
+        "eval_pass_rate": 0.3020989505247376,
+        "avg_annual_pnl_est": 20199.17,
+        "gates": {
+          "funded": false,
+          "bootstrap_ge_80": false,
+          "eval_ge_50pct": false,
+          "joint_all_three": false
+        },
+        "tier_vs_36_60_100k": "below_floor",
+        "dll_pause_days": 30
+      },
+      {
+        "source": "wave0f_low_qty",
+        "account_class": "100k",
+        "target_qty_mnq": 25.0,
+        "funded_survived": false,
+        "bootstrap_funded_survival_block20": 0.0767,
+        "eval_pass_rate": 0.33808095952023987,
+        "avg_annual_pnl_est": 25248.97,
+        "gates": {
+          "funded": false,
+          "bootstrap_ge_80": false,
+          "eval_ge_50pct": false,
+          "joint_all_three": false
+        },
+        "tier_vs_36_60_100k": "below_floor",
+        "dll_pause_days": 121
+      },
+      {
+        "source": "wave0f_low_qty",
+        "account_class": "150k",
+        "target_qty_mnq": 10.0,
+        "funded_survived": false,
+        "bootstrap_funded_survival_block20": 0.1431,
+        "eval_pass_rate": 0.029985007496251874,
+        "avg_annual_pnl_est": 10099.59,
+        "gates": {
+          "funded": false,
+          "bootstrap_ge_80": false,
+          "eval_ge_50pct": false,
+          "joint_all_three": false
+        },
+        "tier_vs_36_60_100k": "below_floor",
+        "dll_pause_days": 4
+      },
+      {
+        "source": "wave0f_low_qty",
+        "account_class": "150k",
+        "target_qty_mnq": 15.0,
+        "funded_survived": false,
+        "bootstrap_funded_survival_block20": 0.0882,
+        "eval_pass_rate": 0.14767616191904048,
+        "avg_annual_pnl_est": 15149.38,
+        "gates": {
+          "funded": false,
+          "bootstrap_ge_80": false,
+          "eval_ge_50pct": false,
+          "joint_all_three": false
+        },
+        "tier_vs_36_60_100k": "below_floor",
+        "dll_pause_days": 6
+      },
+      {
+        "source": "wave0f_low_qty",
+        "account_class": "150k",
+        "target_qty_mnq": 20.0,
+        "funded_survived": false,
+        "bootstrap_funded_survival_block20": 0.0888,
+        "eval_pass_rate": 0.23238380809595202,
+        "avg_annual_pnl_est": 20199.17,
+        "gates": {
+          "funded": false,
+          "bootstrap_ge_80": false,
+          "eval_ge_50pct": false,
+          "joint_all_three": false
+        },
+        "tier_vs_36_60_100k": "below_floor",
+        "dll_pause_days": 23
+      },
+      {
+        "source": "wave0f_low_qty",
+        "account_class": "150k",
+        "target_qty_mnq": 25.0,
+        "funded_survived": false,
+        "bootstrap_funded_survival_block20": 0.0895,
+        "eval_pass_rate": 0.3065967016491754,
+        "avg_annual_pnl_est": 25248.97,
+        "gates": {
+          "funded": false,
+          "bootstrap_ge_80": false,
+          "eval_ge_50pct": false,
+          "joint_all_three": false
+        },
+        "tier_vs_36_60_100k": "below_floor",
+        "dll_pause_days": 27
+      },
+      {
+        "source": "wave0f_low_qty",
+        "account_class": "150k",
+        "target_qty_mnq": 30.0,
+        "funded_survived": false,
+        "bootstrap_funded_survival_block20": 0.0772,
+        "eval_pass_rate": 0.2901049475262369,
+        "avg_annual_pnl_est": 30298.76,
+        "gates": {
+          "funded": false,
+          "bootstrap_ge_80": false,
+          "eval_ge_50pct": false,
+          "joint_all_three": false
+        },
+        "tier_vs_36_60_100k": "below_floor",
+        "dll_pause_days": 126
+      },
+      {
+        "source": "wave0f_low_qty",
+        "account_class": "150k",
+        "target_qty_mnq": 35.0,
+        "funded_survived": false,
+        "bootstrap_funded_survival_block20": 0.0723,
+        "eval_pass_rate": 0.3148425787106447,
+        "avg_annual_pnl_est": 35348.56,
+        "gates": {
+          "funded": false,
+          "bootstrap_ge_80": false,
+          "eval_ge_50pct": false,
+          "joint_all_three": false
+        },
+        "tier_vs_36_60_100k": "below_floor",
+        "dll_pause_days": 153
+      }
+    ],
+    "joint_gate_passing_configs": [],
+    "configs_newly_passing_joint_vs_6y_wave0e": [],
+    "any_funded_survival_excl": false,
+    "first_fail_gate_counts_excl_sweep": {
+      "funded": 40
+    },
+    "stop_every_configuration_fails_funded_survival": true
+  },
+  "deliverable_4_diagnosis": {
+    "log_integrity_2020": true,
+    "breach_regime_signature": "Early-Jan-2020 (two NY dates); not Feb\u2013Apr COVID window. Sampled days: intraday range / prior ATR \u2248 0.6\u20130.9 (not extreme range>>ATR); stops `orb_exit_stop`; exits mid-day ET. Regime overlay deferred to Phase 3.",
+    "joint_pass_meaningful_pnl": false,
+    "best_joint_if_any": null,
+    "operator_framing": "If no joint pass: bootstrap/funded likely still bind after 2020 removal \u2014 strategy fragile beyond COVID Feb\u2013Mar alone. If joint pass but P&L below floor tier: Frame B technical pass vs economics."
+  }
+}

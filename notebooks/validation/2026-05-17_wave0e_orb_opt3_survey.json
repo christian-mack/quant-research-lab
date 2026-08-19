@@ -1,0 +1,3812 @@
+{
+  "wave": "0e",
+  "git": {
+    "git_sha": "75c84e5ae8ce1edc1d19e4c0788144dc5f6dff7d",
+    "git_dirty": true
+  },
+  "apex_rules_note": "May 2026 operator-confirmed PA tier DLL/MNQ caps; 1 mini = 10 MNQ.",
+  "protocol": {
+    "start": "2020-01-01",
+    "end_inclusive": "2026-04-19",
+    "trade_count_qty1": 799,
+    "daily_sessions": 779,
+    "yfrac": 6.299794661190965
+  },
+  "deliverable_2_bootstrap_diagnosis": {
+    "block20": {
+      "year": 2023,
+      "block_len": 20,
+      "n_trades_source": 799,
+      "n_trades_year_source": 223,
+      "p_year_in_source": 0.27909887359199,
+      "expected_year_trade_count": 223.0,
+      "count_mean": 223.004,
+      "count_std": 55.71220498239143,
+      "count_p05": 134.0,
+      "count_p95": 318.0,
+      "unconditional_survival_fraction": 0.5791,
+      "conditional_survival_within_10pct_expected_count": 0.5817711700064642,
+      "n_resamples_near_expected_count": 3094,
+      "mean_count_failing_resamples": 223.03793802490588,
+      "mean_count_passing_resamples": 222.92824822236588,
+      "interpretation_hint": "Compare conditional vs unconditional survival; compare count distribution to expected_count under Bernoulli(p_year) \u00d7 n_target (block bootstrap alters variance vs iid).",
+      "max_dd_mean": -2953.9369,
+      "max_dd_p95": -1494.0,
+      "annual_pnl_mean": 998.6687643578878
+    },
+    "block1_iid_trades": {
+      "year": 2023,
+      "block_len": 1,
+      "n_trades_source": 799,
+      "n_trades_year_source": 223,
+      "p_year_in_source": 0.27909887359199,
+      "expected_year_trade_count": 223.0,
+      "count_mean": 222.7851,
+      "count_std": 12.51130360873718,
+      "count_p05": 202.0,
+      "count_p95": 243.0,
+      "unconditional_survival_fraction": 0.5878,
+      "conditional_survival_within_10pct_expected_count": 0.5900774860094705,
+      "n_resamples_near_expected_count": 9292,
+      "mean_count_failing_resamples": 222.54237288135593,
+      "mean_count_passing_resamples": 222.80359448988378,
+      "interpretation_hint": "Compare conditional vs unconditional survival; compare count distribution to expected_count under Bernoulli(p_year) \u00d7 n_target (block bootstrap alters variance vs iid).",
+      "max_dd_mean": -2863.5745,
+      "max_dd_p95": -1495.0,
+      "annual_pnl_mean": 1024.871515221643
+    },
+    "survival_gap_block20_minus_block1": -0.008700000000000041,
+    "methodology_bias_flag": false,
+    "bias_reason": "no_strong_artifact_flag",
+    "diagnosis_class": "Low unconditional survival may reflect path fragility; year-bias not dominant by coarse flags.",
+    "proposed_bootstrap_revision": "Stratified resampling: partition trade indices by calendar year of exit_ny; resample blocks within each stratum so bootstrap paths match source year fractions; or circular block bootstrap without replacement across years. **Not implemented in Wave 0e \u2014 operator approval required.**",
+    "stop_recommendation_strict_reading": "If diagnosis_class implies resampling artifact, pause before trusting unconditional block-20 survival; conditional rates and block-1 baseline are diagnostic only."
+  },
+  "deliverable_3_survey": [
+    {
+      "account_class": "25k",
+      "target_qty_mnq": 10.0,
+      "funded_survived": false,
+      "final_equity": 88890.0,
+      "total_pnl": 63890.0,
+      "avg_annual_pnl_est": 10141.6,
+      "max_peak_to_trough_dd": 26750.0,
+      "dll_pause_days": 165,
+      "tier_payload": {
+        "target_qty_mnq": 10.0,
+        "mnq_per_mini": 10.0,
+        "tier_transitions": [
+          {
+            "session_index": 29,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 26080.0
+          },
+          {
+            "session_index": 30,
+            "from_tier": 1,
+            "to_tier": 2,
+            "direction": "up",
+            "equity_before_session": 27480.0
+          },
+          {
+            "session_index": 31,
+            "from_tier": 2,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 25880.0
+          },
+          {
+            "session_index": 32,
+            "from_tier": 0,
+            "to_tier": 2,
+            "direction": "up",
+            "equity_before_session": 27140.0
+          }
+        ],
+        "sessions_per_tier_index": {
+          "0": 30,
+          "1": 1,
+          "2": 748
+        },
+        "dll_pause_days_per_tier_index": {
+          "0": 11,
+          "1": 0,
+          "2": 154
+        },
+        "pre_lock_sessions": 28,
+        "post_lock_sessions": 751,
+        "effective_mnq_cap_by_tier_index": {
+          "0": 10.0,
+          "1": 10.0,
+          "2": 10.0
+        }
+      },
+      "eval": {
+        "total_windows": 1669,
+        "passing_windows": 653,
+        "pass_rate": 0.39125224685440385,
+        "fail_trailing": 976,
+        "fail_no_target": 40,
+        "window_calendar_days": 30
+      },
+      "bootstrap_funded_survival_block20": 0.1264,
+      "gates": {
+        "funded": false,
+        "bootstrap_ge_80": false,
+        "eval_ge_50pct": false
+      },
+      "tier_vs_36_60_100k": "below_floor"
+    },
+    {
+      "account_class": "25k",
+      "target_qty_mnq": 15.0,
+      "funded_survived": false,
+      "final_equity": 119665.0,
+      "total_pnl": 94665.0,
+      "avg_annual_pnl_est": 15026.68,
+      "max_peak_to_trough_dd": 40125.0,
+      "dll_pause_days": 230,
+      "tier_payload": {
+        "target_qty_mnq": 15.0,
+        "mnq_per_mini": 10.0,
+        "tier_transitions": [
+          {
+            "session_index": 29,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 26080.0
+          },
+          {
+            "session_index": 30,
+            "from_tier": 1,
+            "to_tier": 2,
+            "direction": "up",
+            "equity_before_session": 28180.0
+          },
+          {
+            "session_index": 31,
+            "from_tier": 2,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 25780.0
+          },
+          {
+            "session_index": 32,
+            "from_tier": 0,
+            "to_tier": 2,
+            "direction": "up",
+            "equity_before_session": 27040.0
+          }
+        ],
+        "sessions_per_tier_index": {
+          "0": 30,
+          "1": 1,
+          "2": 748
+        },
+        "dll_pause_days_per_tier_index": {
+          "0": 11,
+          "1": 0,
+          "2": 219
+        },
+        "pre_lock_sessions": 28,
+        "post_lock_sessions": 751,
+        "effective_mnq_cap_by_tier_index": {
+          "0": 10.0,
+          "1": 15.0,
+          "2": 15.0
+        }
+      },
+      "eval": {
+        "total_windows": 1669,
+        "passing_windows": 759,
+        "pass_rate": 0.4547633313361294,
+        "fail_trailing": 881,
+        "fail_no_target": 29,
+        "window_calendar_days": 30
+      },
+      "bootstrap_funded_survival_block20": 0.1016,
+      "gates": {
+        "funded": false,
+        "bootstrap_ge_80": false,
+        "eval_ge_50pct": false
+      },
+      "tier_vs_36_60_100k": "below_floor"
+    },
+    {
+      "account_class": "25k",
+      "target_qty_mnq": 20.0,
+      "funded_survived": false,
+      "final_equity": 150440.0,
+      "total_pnl": 125440.0,
+      "avg_annual_pnl_est": 19911.76,
+      "max_peak_to_trough_dd": 53500.0,
+      "dll_pause_days": 241,
+      "tier_payload": {
+        "target_qty_mnq": 20.0,
+        "mnq_per_mini": 10.0,
+        "tier_transitions": [
+          {
+            "session_index": 29,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 26080.0
+          },
+          {
+            "session_index": 30,
+            "from_tier": 1,
+            "to_tier": 2,
+            "direction": "up",
+            "equity_before_session": 28880.0
+          },
+          {
+            "session_index": 31,
+            "from_tier": 2,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 25680.0
+          },
+          {
+            "session_index": 32,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 26940.0
+          },
+          {
+            "session_index": 33,
+            "from_tier": 1,
+            "to_tier": 2,
+            "direction": "up",
+            "equity_before_session": 29650.0
+          }
+        ],
+        "sessions_per_tier_index": {
+          "0": 30,
+          "1": 2,
+          "2": 747
+        },
+        "dll_pause_days_per_tier_index": {
+          "0": 11,
+          "1": 0,
+          "2": 230
+        },
+        "pre_lock_sessions": 28,
+        "post_lock_sessions": 751,
+        "effective_mnq_cap_by_tier_index": {
+          "0": 10.0,
+          "1": 20.0,
+          "2": 20.0
+        }
+      },
+      "eval": {
+        "total_windows": 1669,
+        "passing_windows": 842,
+        "pass_rate": 0.5044937088076693,
+        "fail_trailing": 806,
+        "fail_no_target": 21,
+        "window_calendar_days": 30
+      },
+      "bootstrap_funded_survival_block20": 0.0704,
+      "gates": {
+        "funded": false,
+        "bootstrap_ge_80": false,
+        "eval_ge_50pct": true
+      },
+      "tier_vs_36_60_100k": "below_floor"
+    },
+    {
+      "account_class": "50k",
+      "target_qty_mnq": 20.0,
+      "funded_survived": false,
+      "final_equity": 177780.0,
+      "total_pnl": 127780.0,
+      "avg_annual_pnl_est": 20283.2,
+      "max_peak_to_trough_dd": 53500.0,
+      "dll_pause_days": 124,
+      "tier_payload": {
+        "target_qty_mnq": 20.0,
+        "mnq_per_mini": 10.0,
+        "tier_transitions": [
+          {
+            "session_index": 29,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 52160.0
+          },
+          {
+            "session_index": 30,
+            "from_tier": 1,
+            "to_tier": 2,
+            "direction": "up",
+            "equity_before_session": 54960.0
+          },
+          {
+            "session_index": 31,
+            "from_tier": 2,
+            "to_tier": 1,
+            "direction": "down",
+            "equity_before_session": 51760.0
+          },
+          {
+            "session_index": 32,
+            "from_tier": 1,
+            "to_tier": 2,
+            "direction": "up",
+            "equity_before_session": 54280.0
+          },
+          {
+            "session_index": 33,
+            "from_tier": 2,
+            "to_tier": 3,
+            "direction": "up",
+            "equity_before_session": 56990.0
+          }
+        ],
+        "sessions_per_tier_index": {
+          "0": 29,
+          "1": 2,
+          "2": 2,
+          "3": 746
+        },
+        "dll_pause_days_per_tier_index": {
+          "0": 11,
+          "1": 0,
+          "2": 1,
+          "3": 112
+        },
+        "pre_lock_sessions": 28,
+        "post_lock_sessions": 751,
+        "effective_mnq_cap_by_tier_index": {
+          "0": 20.0,
+          "1": 20.0,
+          "2": 20.0,
+          "3": 20.0
+        }
+      },
+      "eval": {
+        "total_windows": 1669,
+        "passing_windows": 653,
+        "pass_rate": 0.39125224685440385,
+        "fail_trailing": 976,
+        "fail_no_target": 40,
+        "window_calendar_days": 30
+      },
+      "bootstrap_funded_survival_block20": 0.1248,
+      "gates": {
+        "funded": false,
+        "bootstrap_ge_80": false,
+        "eval_ge_50pct": false
+      },
+      "tier_vs_36_60_100k": "below_floor"
+    },
+    {
+      "account_class": "50k",
+      "target_qty_mnq": 25.0,
+      "funded_survived": false,
+      "final_equity": 209185.0,
+      "total_pnl": 159185.0,
+      "avg_annual_pnl_est": 25268.28,
+      "max_peak_to_trough_dd": 66875.0,
+      "dll_pause_days": 173,
+      "tier_payload": {
+        "target_qty_mnq": 25.0,
+        "mnq_per_mini": 10.0,
+        "tier_transitions": [
+          {
+            "session_index": 29,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 52160.0
+          },
+          {
+            "session_index": 30,
+            "from_tier": 1,
+            "to_tier": 2,
+            "direction": "up",
+            "equity_before_session": 55660.0
+          },
+          {
+            "session_index": 31,
+            "from_tier": 2,
+            "to_tier": 1,
+            "direction": "down",
+            "equity_before_session": 51660.0
+          },
+          {
+            "session_index": 32,
+            "from_tier": 1,
+            "to_tier": 2,
+            "direction": "up",
+            "equity_before_session": 54810.0
+          },
+          {
+            "session_index": 33,
+            "from_tier": 2,
+            "to_tier": 3,
+            "direction": "up",
+            "equity_before_session": 58197.5
+          }
+        ],
+        "sessions_per_tier_index": {
+          "0": 29,
+          "1": 2,
+          "2": 2,
+          "3": 746
+        },
+        "dll_pause_days_per_tier_index": {
+          "0": 11,
+          "1": 0,
+          "2": 1,
+          "3": 161
+        },
+        "pre_lock_sessions": 28,
+        "post_lock_sessions": 751,
+        "effective_mnq_cap_by_tier_index": {
+          "0": 20.0,
+          "1": 25.0,
+          "2": 25.0,
+          "3": 25.0
+        }
+      },
+      "eval": {
+        "total_windows": 1669,
+        "passing_windows": 708,
+        "pass_rate": 0.4242061114439784,
+        "fail_trailing": 929,
+        "fail_no_target": 32,
+        "window_calendar_days": 30
+      },
+      "bootstrap_funded_survival_block20": 0.112,
+      "gates": {
+        "funded": false,
+        "bootstrap_ge_80": false,
+        "eval_ge_50pct": false
+      },
+      "tier_vs_36_60_100k": "below_floor"
+    },
+    {
+      "account_class": "50k",
+      "target_qty_mnq": 30.0,
+      "funded_survived": false,
+      "final_equity": 240590.0,
+      "total_pnl": 190590.0,
+      "avg_annual_pnl_est": 30253.37,
+      "max_peak_to_trough_dd": 80250.0,
+      "dll_pause_days": 212,
+      "tier_payload": {
+        "target_qty_mnq": 30.0,
+        "mnq_per_mini": 10.0,
+        "tier_transitions": [
+          {
+            "session_index": 29,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 52160.0
+          },
+          {
+            "session_index": 30,
+            "from_tier": 1,
+            "to_tier": 3,
+            "direction": "up",
+            "equity_before_session": 56360.0
+          },
+          {
+            "session_index": 31,
+            "from_tier": 3,
+            "to_tier": 1,
+            "direction": "down",
+            "equity_before_session": 51560.0
+          },
+          {
+            "session_index": 32,
+            "from_tier": 1,
+            "to_tier": 2,
+            "direction": "up",
+            "equity_before_session": 55340.0
+          },
+          {
+            "session_index": 33,
+            "from_tier": 2,
+            "to_tier": 3,
+            "direction": "up",
+            "equity_before_session": 59405.0
+          }
+        ],
+        "sessions_per_tier_index": {
+          "0": 29,
+          "1": 2,
+          "2": 1,
+          "3": 747
+        },
+        "dll_pause_days_per_tier_index": {
+          "0": 11,
+          "1": 0,
+          "2": 0,
+          "3": 201
+        },
+        "pre_lock_sessions": 28,
+        "post_lock_sessions": 751,
+        "effective_mnq_cap_by_tier_index": {
+          "0": 20.0,
+          "1": 30.0,
+          "2": 30.0,
+          "3": 30.0
+        }
+      },
+      "eval": {
+        "total_windows": 1669,
+        "passing_windows": 759,
+        "pass_rate": 0.4547633313361294,
+        "fail_trailing": 881,
+        "fail_no_target": 29,
+        "window_calendar_days": 30
+      },
+      "bootstrap_funded_survival_block20": 0.1097,
+      "gates": {
+        "funded": false,
+        "bootstrap_ge_80": false,
+        "eval_ge_50pct": false
+      },
+      "tier_vs_36_60_100k": "below_floor"
+    },
+    {
+      "account_class": "50k",
+      "target_qty_mnq": 35.0,
+      "funded_survived": false,
+      "final_equity": 269405.0,
+      "total_pnl": 219405.0,
+      "avg_annual_pnl_est": 34827.33,
+      "max_peak_to_trough_dd": 93625.0,
+      "dll_pause_days": 230,
+      "tier_payload": {
+        "target_qty_mnq": 35.0,
+        "mnq_per_mini": 10.0,
+        "tier_transitions": [
+          {
+            "session_index": 29,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 52160.0
+          },
+          {
+            "session_index": 30,
+            "from_tier": 1,
+            "to_tier": 3,
+            "direction": "up",
+            "equity_before_session": 56360.0
+          },
+          {
+            "session_index": 31,
+            "from_tier": 3,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 50760.0
+          },
+          {
+            "session_index": 32,
+            "from_tier": 0,
+            "to_tier": 2,
+            "direction": "up",
+            "equity_before_session": 53280.0
+          },
+          {
+            "session_index": 33,
+            "from_tier": 2,
+            "to_tier": 3,
+            "direction": "up",
+            "equity_before_session": 58022.5
+          }
+        ],
+        "sessions_per_tier_index": {
+          "0": 30,
+          "1": 1,
+          "2": 1,
+          "3": 747
+        },
+        "dll_pause_days_per_tier_index": {
+          "0": 11,
+          "1": 0,
+          "2": 0,
+          "3": 219
+        },
+        "pre_lock_sessions": 28,
+        "post_lock_sessions": 751,
+        "effective_mnq_cap_by_tier_index": {
+          "0": 20.0,
+          "1": 30.0,
+          "2": 35.0,
+          "3": 35.0
+        }
+      },
+      "eval": {
+        "total_windows": 1669,
+        "passing_windows": 790,
+        "pass_rate": 0.4733373277411624,
+        "fail_trailing": 858,
+        "fail_no_target": 21,
+        "window_calendar_days": 30
+      },
+      "bootstrap_funded_survival_block20": 0.1097,
+      "gates": {
+        "funded": false,
+        "bootstrap_ge_80": false,
+        "eval_ge_50pct": false
+      },
+      "tier_vs_36_60_100k": "below_floor"
+    },
+    {
+      "account_class": "50k",
+      "target_qty_mnq": 40.0,
+      "funded_survived": false,
+      "final_equity": 298125.0,
+      "total_pnl": 248125.0,
+      "avg_annual_pnl_est": 39386.2,
+      "max_peak_to_trough_dd": 107000.0,
+      "dll_pause_days": 232,
+      "tier_payload": {
+        "target_qty_mnq": 40.0,
+        "mnq_per_mini": 10.0,
+        "tier_transitions": [
+          {
+            "session_index": 29,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 52160.0
+          },
+          {
+            "session_index": 30,
+            "from_tier": 1,
+            "to_tier": 3,
+            "direction": "up",
+            "equity_before_session": 56360.0
+          },
+          {
+            "session_index": 31,
+            "from_tier": 3,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 49960.0
+          },
+          {
+            "session_index": 32,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 52480.0
+          },
+          {
+            "session_index": 33,
+            "from_tier": 1,
+            "to_tier": 3,
+            "direction": "up",
+            "equity_before_session": 56545.0
+          }
+        ],
+        "sessions_per_tier_index": {
+          "0": 30,
+          "1": 2,
+          "2": 0,
+          "3": 747
+        },
+        "dll_pause_days_per_tier_index": {
+          "0": 11,
+          "1": 0,
+          "2": 0,
+          "3": 221
+        },
+        "pre_lock_sessions": 28,
+        "post_lock_sessions": 751,
+        "effective_mnq_cap_by_tier_index": {
+          "0": 20.0,
+          "1": 30.0,
+          "2": 40.0,
+          "3": 40.0
+        }
+      },
+      "eval": {
+        "total_windows": 1669,
+        "passing_windows": 842,
+        "pass_rate": 0.5044937088076693,
+        "fail_trailing": 806,
+        "fail_no_target": 21,
+        "window_calendar_days": 30
+      },
+      "bootstrap_funded_survival_block20": 0.093,
+      "gates": {
+        "funded": false,
+        "bootstrap_ge_80": false,
+        "eval_ge_50pct": true
+      },
+      "tier_vs_36_60_100k": "floor_band"
+    },
+    {
+      "account_class": "100k",
+      "target_qty_mnq": 30.0,
+      "funded_survived": false,
+      "final_equity": 291670.0,
+      "total_pnl": 191670.0,
+      "avg_annual_pnl_est": 30424.8,
+      "max_peak_to_trough_dd": 80250.0,
+      "dll_pause_days": 183,
+      "tier_payload": {
+        "target_qty_mnq": 30.0,
+        "mnq_per_mini": 10.0,
+        "tier_transitions": [
+          {
+            "session_index": 5,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 102115.0
+          },
+          {
+            "session_index": 6,
+            "from_tier": 1,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 99295.0
+          },
+          {
+            "session_index": 12,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 102055.0
+          },
+          {
+            "session_index": 13,
+            "from_tier": 1,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 101275.0
+          },
+          {
+            "session_index": 17,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 102145.0
+          },
+          {
+            "session_index": 18,
+            "from_tier": 1,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 97345.0
+          },
+          {
+            "session_index": 29,
+            "from_tier": 0,
+            "to_tier": 2,
+            "direction": "up",
+            "equity_before_session": 103240.0
+          },
+          {
+            "session_index": 30,
+            "from_tier": 2,
+            "to_tier": 3,
+            "direction": "up",
+            "equity_before_session": 107440.0
+          },
+          {
+            "session_index": 31,
+            "from_tier": 3,
+            "to_tier": 1,
+            "direction": "down",
+            "equity_before_session": 102640.0
+          },
+          {
+            "session_index": 32,
+            "from_tier": 1,
+            "to_tier": 3,
+            "direction": "up",
+            "equity_before_session": 106420.0
+          },
+          {
+            "session_index": 33,
+            "from_tier": 3,
+            "to_tier": 4,
+            "direction": "up",
+            "equity_before_session": 110485.0
+          }
+        ],
+        "sessions_per_tier_index": {
+          "0": 26,
+          "1": 4,
+          "2": 1,
+          "3": 2,
+          "4": 746
+        },
+        "dll_pause_days_per_tier_index": {
+          "0": 9,
+          "1": 2,
+          "2": 0,
+          "3": 1,
+          "4": 171
+        },
+        "pre_lock_sessions": 28,
+        "post_lock_sessions": 751,
+        "effective_mnq_cap_by_tier_index": {
+          "0": 30.0,
+          "1": 30.0,
+          "2": 30.0,
+          "3": 30.0,
+          "4": 30.0
+        }
+      },
+      "eval": {
+        "total_windows": 1669,
+        "passing_windows": 588,
+        "pass_rate": 0.35230677052127024,
+        "fail_trailing": 1038,
+        "fail_no_target": 43,
+        "window_calendar_days": 30
+      },
+      "bootstrap_funded_survival_block20": 0.1212,
+      "gates": {
+        "funded": false,
+        "bootstrap_ge_80": false,
+        "eval_ge_50pct": false
+      },
+      "tier_vs_36_60_100k": "below_floor"
+    },
+    {
+      "account_class": "100k",
+      "target_qty_mnq": 40.0,
+      "funded_survived": false,
+      "final_equity": 352280.0,
+      "total_pnl": 252280.0,
+      "avg_annual_pnl_est": 40045.75,
+      "max_peak_to_trough_dd": 107000.0,
+      "dll_pause_days": 229,
+      "tier_payload": {
+        "target_qty_mnq": 40.0,
+        "mnq_per_mini": 10.0,
+        "tier_transitions": [
+          {
+            "session_index": 5,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 102115.0
+          },
+          {
+            "session_index": 6,
+            "from_tier": 1,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 98355.0
+          },
+          {
+            "session_index": 29,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 102300.0
+          },
+          {
+            "session_index": 30,
+            "from_tier": 1,
+            "to_tier": 3,
+            "direction": "up",
+            "equity_before_session": 107900.0
+          },
+          {
+            "session_index": 31,
+            "from_tier": 3,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 101500.0
+          },
+          {
+            "session_index": 32,
+            "from_tier": 0,
+            "to_tier": 3,
+            "direction": "up",
+            "equity_before_session": 105280.0
+          },
+          {
+            "session_index": 33,
+            "from_tier": 3,
+            "to_tier": 4,
+            "direction": "up",
+            "equity_before_session": 110700.0
+          }
+        ],
+        "sessions_per_tier_index": {
+          "0": 29,
+          "1": 2,
+          "2": 0,
+          "3": 2,
+          "4": 746
+        },
+        "dll_pause_days_per_tier_index": {
+          "0": 10,
+          "1": 1,
+          "2": 0,
+          "3": 1,
+          "4": 217
+        },
+        "pre_lock_sessions": 29,
+        "post_lock_sessions": 750,
+        "effective_mnq_cap_by_tier_index": {
+          "0": 30.0,
+          "1": 40.0,
+          "2": 40.0,
+          "3": 40.0,
+          "4": 40.0
+        }
+      },
+      "eval": {
+        "total_windows": 1669,
+        "passing_windows": 627,
+        "pass_rate": 0.37567405632115036,
+        "fail_trailing": 1002,
+        "fail_no_target": 40,
+        "window_calendar_days": 30
+      },
+      "bootstrap_funded_survival_block20": 0.1146,
+      "gates": {
+        "funded": false,
+        "bootstrap_ge_80": false,
+        "eval_ge_50pct": false
+      },
+      "tier_vs_36_60_100k": "floor_band"
+    },
+    {
+      "account_class": "100k",
+      "target_qty_mnq": 50.0,
+      "funded_survived": false,
+      "final_equity": 412430.0,
+      "total_pnl": 312430.0,
+      "avg_annual_pnl_est": 49593.68,
+      "max_peak_to_trough_dd": 133750.0,
+      "dll_pause_days": 237,
+      "tier_payload": {
+        "target_qty_mnq": 50.0,
+        "mnq_per_mini": 10.0,
+        "tier_transitions": [
+          {
+            "session_index": 5,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 102115.0
+          },
+          {
+            "session_index": 6,
+            "from_tier": 1,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 98355.0
+          },
+          {
+            "session_index": 29,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 102300.0
+          },
+          {
+            "session_index": 30,
+            "from_tier": 1,
+            "to_tier": 3,
+            "direction": "up",
+            "equity_before_session": 107900.0
+          },
+          {
+            "session_index": 31,
+            "from_tier": 3,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 99900.0
+          },
+          {
+            "session_index": 32,
+            "from_tier": 0,
+            "to_tier": 2,
+            "direction": "up",
+            "equity_before_session": 103680.0
+          },
+          {
+            "session_index": 33,
+            "from_tier": 2,
+            "to_tier": 4,
+            "direction": "up",
+            "equity_before_session": 110455.0
+          }
+        ],
+        "sessions_per_tier_index": {
+          "0": 29,
+          "1": 2,
+          "2": 1,
+          "3": 1,
+          "4": 746
+        },
+        "dll_pause_days_per_tier_index": {
+          "0": 10,
+          "1": 1,
+          "2": 0,
+          "3": 1,
+          "4": 225
+        },
+        "pre_lock_sessions": 29,
+        "post_lock_sessions": 750,
+        "effective_mnq_cap_by_tier_index": {
+          "0": 30.0,
+          "1": 40.0,
+          "2": 50.0,
+          "3": 50.0,
+          "4": 50.0
+        }
+      },
+      "eval": {
+        "total_windows": 1669,
+        "passing_windows": 686,
+        "pass_rate": 0.4110245656081486,
+        "fail_trailing": 951,
+        "fail_no_target": 32,
+        "window_calendar_days": 30
+      },
+      "bootstrap_funded_survival_block20": 0.096,
+      "gates": {
+        "funded": false,
+        "bootstrap_ge_80": false,
+        "eval_ge_50pct": false
+      },
+      "tier_vs_36_60_100k": "floor_band"
+    },
+    {
+      "account_class": "100k",
+      "target_qty_mnq": 60.0,
+      "funded_survived": false,
+      "final_equity": 469870.0,
+      "total_pnl": 369870.0,
+      "avg_annual_pnl_est": 58711.44,
+      "max_peak_to_trough_dd": 160500.0,
+      "dll_pause_days": 246,
+      "tier_payload": {
+        "target_qty_mnq": 60.0,
+        "mnq_per_mini": 10.0,
+        "tier_transitions": [
+          {
+            "session_index": 5,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 102115.0
+          },
+          {
+            "session_index": 6,
+            "from_tier": 1,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 98355.0
+          },
+          {
+            "session_index": 29,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 102300.0
+          },
+          {
+            "session_index": 30,
+            "from_tier": 1,
+            "to_tier": 3,
+            "direction": "up",
+            "equity_before_session": 107900.0
+          },
+          {
+            "session_index": 31,
+            "from_tier": 3,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 98300.0
+          },
+          {
+            "session_index": 32,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 102080.0
+          },
+          {
+            "session_index": 33,
+            "from_tier": 1,
+            "to_tier": 3,
+            "direction": "up",
+            "equity_before_session": 107500.0
+          },
+          {
+            "session_index": 34,
+            "from_tier": 3,
+            "to_tier": 4,
+            "direction": "up",
+            "equity_before_session": 115330.0
+          }
+        ],
+        "sessions_per_tier_index": {
+          "0": 29,
+          "1": 3,
+          "2": 0,
+          "3": 2,
+          "4": 745
+        },
+        "dll_pause_days_per_tier_index": {
+          "0": 10,
+          "1": 1,
+          "2": 0,
+          "3": 1,
+          "4": 234
+        },
+        "pre_lock_sessions": 29,
+        "post_lock_sessions": 750,
+        "effective_mnq_cap_by_tier_index": {
+          "0": 30.0,
+          "1": 40.0,
+          "2": 50.0,
+          "3": 60.0,
+          "4": 60.0
+        }
+      },
+      "eval": {
+        "total_windows": 1669,
+        "passing_windows": 742,
+        "pass_rate": 0.4445775913720791,
+        "fail_trailing": 906,
+        "fail_no_target": 21,
+        "window_calendar_days": 30
+      },
+      "bootstrap_funded_survival_block20": 0.0839,
+      "gates": {
+        "funded": false,
+        "bootstrap_ge_80": false,
+        "eval_ge_50pct": false
+      },
+      "tier_vs_36_60_100k": "floor_band"
+    },
+    {
+      "account_class": "150k",
+      "target_qty_mnq": 40.0,
+      "funded_survived": false,
+      "final_equity": 405560.0,
+      "total_pnl": 255560.0,
+      "avg_annual_pnl_est": 40566.4,
+      "max_peak_to_trough_dd": 107000.0,
+      "dll_pause_days": 210,
+      "tier_payload": {
+        "target_qty_mnq": 40.0,
+        "mnq_per_mini": 10.0,
+        "tier_transitions": [
+          {
+            "session_index": 5,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 152820.0
+          },
+          {
+            "session_index": 6,
+            "from_tier": 1,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 149060.0
+          },
+          {
+            "session_index": 12,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 152740.0
+          },
+          {
+            "session_index": 13,
+            "from_tier": 1,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 151700.0
+          },
+          {
+            "session_index": 17,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 152860.0
+          },
+          {
+            "session_index": 18,
+            "from_tier": 1,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 146460.0
+          },
+          {
+            "session_index": 29,
+            "from_tier": 0,
+            "to_tier": 2,
+            "direction": "up",
+            "equity_before_session": 154320.0
+          },
+          {
+            "session_index": 30,
+            "from_tier": 2,
+            "to_tier": 3,
+            "direction": "up",
+            "equity_before_session": 159920.0
+          },
+          {
+            "session_index": 31,
+            "from_tier": 3,
+            "to_tier": 2,
+            "direction": "down",
+            "equity_before_session": 153520.0
+          },
+          {
+            "session_index": 32,
+            "from_tier": 2,
+            "to_tier": 3,
+            "direction": "up",
+            "equity_before_session": 158560.0
+          },
+          {
+            "session_index": 33,
+            "from_tier": 3,
+            "to_tier": 4,
+            "direction": "up",
+            "equity_before_session": 163980.0
+          }
+        ],
+        "sessions_per_tier_index": {
+          "0": 26,
+          "1": 3,
+          "2": 2,
+          "3": 2,
+          "4": 746
+        },
+        "dll_pause_days_per_tier_index": {
+          "0": 7,
+          "1": 2,
+          "2": 0,
+          "3": 1,
+          "4": 200
+        },
+        "pre_lock_sessions": 28,
+        "post_lock_sessions": 751,
+        "effective_mnq_cap_by_tier_index": {
+          "0": 40.0,
+          "1": 40.0,
+          "2": 40.0,
+          "3": 40.0,
+          "4": 40.0
+        }
+      },
+      "eval": {
+        "total_windows": 1669,
+        "passing_windows": 554,
+        "pass_rate": 0.33193529059316956,
+        "fail_trailing": 1060,
+        "fail_no_target": 55,
+        "window_calendar_days": 30
+      },
+      "bootstrap_funded_survival_block20": 0.1183,
+      "gates": {
+        "funded": false,
+        "bootstrap_ge_80": false,
+        "eval_ge_50pct": false
+      },
+      "tier_vs_36_60_100k": "floor_band"
+    },
+    {
+      "account_class": "150k",
+      "target_qty_mnq": 50.0,
+      "funded_survived": false,
+      "final_equity": 467430.0,
+      "total_pnl": 317430.0,
+      "avg_annual_pnl_est": 50387.36,
+      "max_peak_to_trough_dd": 133750.0,
+      "dll_pause_days": 230,
+      "tier_payload": {
+        "target_qty_mnq": 50.0,
+        "mnq_per_mini": 10.0,
+        "tier_transitions": [
+          {
+            "session_index": 5,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 152820.0
+          },
+          {
+            "session_index": 6,
+            "from_tier": 1,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 148120.0
+          },
+          {
+            "session_index": 29,
+            "from_tier": 0,
+            "to_tier": 2,
+            "direction": "up",
+            "equity_before_session": 153380.0
+          },
+          {
+            "session_index": 30,
+            "from_tier": 2,
+            "to_tier": 4,
+            "direction": "up",
+            "equity_before_session": 160380.0
+          },
+          {
+            "session_index": 31,
+            "from_tier": 4,
+            "to_tier": 1,
+            "direction": "down",
+            "equity_before_session": 152380.0
+          },
+          {
+            "session_index": 32,
+            "from_tier": 1,
+            "to_tier": 3,
+            "direction": "up",
+            "equity_before_session": 158680.0
+          },
+          {
+            "session_index": 33,
+            "from_tier": 3,
+            "to_tier": 4,
+            "direction": "up",
+            "equity_before_session": 165455.0
+          }
+        ],
+        "sessions_per_tier_index": {
+          "0": 28,
+          "1": 2,
+          "2": 1,
+          "3": 1,
+          "4": 747
+        },
+        "dll_pause_days_per_tier_index": {
+          "0": 8,
+          "1": 1,
+          "2": 0,
+          "3": 0,
+          "4": 221
+        },
+        "pre_lock_sessions": 29,
+        "post_lock_sessions": 750,
+        "effective_mnq_cap_by_tier_index": {
+          "0": 40.0,
+          "1": 50.0,
+          "2": 50.0,
+          "3": 50.0,
+          "4": 50.0
+        }
+      },
+      "eval": {
+        "total_windows": 1669,
+        "passing_windows": 599,
+        "pass_rate": 0.3588975434391851,
+        "fail_trailing": 1030,
+        "fail_no_target": 40,
+        "window_calendar_days": 30
+      },
+      "bootstrap_funded_survival_block20": 0.1213,
+      "gates": {
+        "funded": false,
+        "bootstrap_ge_80": false,
+        "eval_ge_50pct": false
+      },
+      "tier_vs_36_60_100k": "floor_band"
+    },
+    {
+      "account_class": "150k",
+      "target_qty_mnq": 60.0,
+      "funded_survived": false,
+      "final_equity": 528980.0,
+      "total_pnl": 378980.0,
+      "avg_annual_pnl_est": 60157.52,
+      "max_peak_to_trough_dd": 160500.0,
+      "dll_pause_days": 238,
+      "tier_payload": {
+        "target_qty_mnq": 60.0,
+        "mnq_per_mini": 10.0,
+        "tier_transitions": [
+          {
+            "session_index": 5,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 152820.0
+          },
+          {
+            "session_index": 6,
+            "from_tier": 1,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 148120.0
+          },
+          {
+            "session_index": 29,
+            "from_tier": 0,
+            "to_tier": 2,
+            "direction": "up",
+            "equity_before_session": 153380.0
+          },
+          {
+            "session_index": 30,
+            "from_tier": 2,
+            "to_tier": 4,
+            "direction": "up",
+            "equity_before_session": 161780.0
+          },
+          {
+            "session_index": 31,
+            "from_tier": 4,
+            "to_tier": 1,
+            "direction": "down",
+            "equity_before_session": 152180.0
+          },
+          {
+            "session_index": 32,
+            "from_tier": 1,
+            "to_tier": 3,
+            "direction": "up",
+            "equity_before_session": 158480.0
+          },
+          {
+            "session_index": 33,
+            "from_tier": 3,
+            "to_tier": 4,
+            "direction": "up",
+            "equity_before_session": 166610.0
+          }
+        ],
+        "sessions_per_tier_index": {
+          "0": 28,
+          "1": 2,
+          "2": 1,
+          "3": 1,
+          "4": 747
+        },
+        "dll_pause_days_per_tier_index": {
+          "0": 8,
+          "1": 1,
+          "2": 0,
+          "3": 0,
+          "4": 229
+        },
+        "pre_lock_sessions": 29,
+        "post_lock_sessions": 750,
+        "effective_mnq_cap_by_tier_index": {
+          "0": 40.0,
+          "1": 50.0,
+          "2": 60.0,
+          "3": 60.0,
+          "4": 60.0
+        }
+      },
+      "eval": {
+        "total_windows": 1669,
+        "passing_windows": 625,
+        "pass_rate": 0.3744757339724386,
+        "fail_trailing": 1005,
+        "fail_no_target": 39,
+        "window_calendar_days": 30
+      },
+      "bootstrap_funded_survival_block20": 0.1101,
+      "gates": {
+        "funded": false,
+        "bootstrap_ge_80": false,
+        "eval_ge_50pct": false
+      },
+      "tier_vs_36_60_100k": "target_band"
+    },
+    {
+      "account_class": "150k",
+      "target_qty_mnq": 70.0,
+      "funded_survived": false,
+      "final_equity": 589270.0,
+      "total_pnl": 439270.0,
+      "avg_annual_pnl_est": 69727.67,
+      "max_peak_to_trough_dd": 187250.0,
+      "dll_pause_days": 244,
+      "tier_payload": {
+        "target_qty_mnq": 70.0,
+        "mnq_per_mini": 10.0,
+        "tier_transitions": [
+          {
+            "session_index": 5,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 152820.0
+          },
+          {
+            "session_index": 6,
+            "from_tier": 1,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 148120.0
+          },
+          {
+            "session_index": 29,
+            "from_tier": 0,
+            "to_tier": 2,
+            "direction": "up",
+            "equity_before_session": 153380.0
+          },
+          {
+            "session_index": 30,
+            "from_tier": 2,
+            "to_tier": 4,
+            "direction": "up",
+            "equity_before_session": 163180.0
+          },
+          {
+            "session_index": 31,
+            "from_tier": 4,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 151980.0
+          },
+          {
+            "session_index": 32,
+            "from_tier": 0,
+            "to_tier": 3,
+            "direction": "up",
+            "equity_before_session": 157020.0
+          },
+          {
+            "session_index": 33,
+            "from_tier": 3,
+            "to_tier": 4,
+            "direction": "up",
+            "equity_before_session": 166505.0
+          }
+        ],
+        "sessions_per_tier_index": {
+          "0": 29,
+          "1": 1,
+          "2": 1,
+          "3": 1,
+          "4": 747
+        },
+        "dll_pause_days_per_tier_index": {
+          "0": 8,
+          "1": 1,
+          "2": 0,
+          "3": 0,
+          "4": 235
+        },
+        "pre_lock_sessions": 29,
+        "post_lock_sessions": 750,
+        "effective_mnq_cap_by_tier_index": {
+          "0": 40.0,
+          "1": 50.0,
+          "2": 70.0,
+          "3": 70.0,
+          "4": 70.0
+        }
+      },
+      "eval": {
+        "total_windows": 1669,
+        "passing_windows": 660,
+        "pass_rate": 0.39544637507489516,
+        "fail_trailing": 988,
+        "fail_no_target": 21,
+        "window_calendar_days": 30
+      },
+      "bootstrap_funded_survival_block20": 0.1063,
+      "gates": {
+        "funded": false,
+        "bootstrap_ge_80": false,
+        "eval_ge_50pct": false
+      },
+      "tier_vs_36_60_100k": "target_band"
+    },
+    {
+      "account_class": "150k",
+      "target_qty_mnq": 80.0,
+      "funded_survived": false,
+      "final_equity": 649420.0,
+      "total_pnl": 499420.0,
+      "avg_annual_pnl_est": 79275.6,
+      "max_peak_to_trough_dd": 214000.0,
+      "dll_pause_days": 246,
+      "tier_payload": {
+        "target_qty_mnq": 80.0,
+        "mnq_per_mini": 10.0,
+        "tier_transitions": [
+          {
+            "session_index": 5,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 152820.0
+          },
+          {
+            "session_index": 6,
+            "from_tier": 1,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 148120.0
+          },
+          {
+            "session_index": 29,
+            "from_tier": 0,
+            "to_tier": 2,
+            "direction": "up",
+            "equity_before_session": 153380.0
+          },
+          {
+            "session_index": 30,
+            "from_tier": 2,
+            "to_tier": 4,
+            "direction": "up",
+            "equity_before_session": 163180.0
+          },
+          {
+            "session_index": 31,
+            "from_tier": 4,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 150380.0
+          },
+          {
+            "session_index": 32,
+            "from_tier": 0,
+            "to_tier": 3,
+            "direction": "up",
+            "equity_before_session": 155420.0
+          },
+          {
+            "session_index": 33,
+            "from_tier": 3,
+            "to_tier": 4,
+            "direction": "up",
+            "equity_before_session": 166260.0
+          }
+        ],
+        "sessions_per_tier_index": {
+          "0": 29,
+          "1": 1,
+          "2": 1,
+          "3": 1,
+          "4": 747
+        },
+        "dll_pause_days_per_tier_index": {
+          "0": 8,
+          "1": 1,
+          "2": 0,
+          "3": 0,
+          "4": 237
+        },
+        "pre_lock_sessions": 29,
+        "post_lock_sessions": 750,
+        "effective_mnq_cap_by_tier_index": {
+          "0": 40.0,
+          "1": 50.0,
+          "2": 70.0,
+          "3": 80.0,
+          "4": 80.0
+        }
+      },
+      "eval": {
+        "total_windows": 1669,
+        "passing_windows": 700,
+        "pass_rate": 0.4194128220491312,
+        "fail_trailing": 948,
+        "fail_no_target": 21,
+        "window_calendar_days": 30
+      },
+      "bootstrap_funded_survival_block20": 0.0982,
+      "gates": {
+        "funded": false,
+        "bootstrap_ge_80": false,
+        "eval_ge_50pct": false
+      },
+      "tier_vs_36_60_100k": "target_band"
+    },
+    {
+      "account_class": "150k",
+      "target_qty_mnq": 90.0,
+      "funded_survived": false,
+      "final_equity": 706860.0,
+      "total_pnl": 556860.0,
+      "avg_annual_pnl_est": 88393.36,
+      "max_peak_to_trough_dd": 240750.0,
+      "dll_pause_days": 248,
+      "tier_payload": {
+        "target_qty_mnq": 90.0,
+        "mnq_per_mini": 10.0,
+        "tier_transitions": [
+          {
+            "session_index": 5,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 152820.0
+          },
+          {
+            "session_index": 6,
+            "from_tier": 1,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 148120.0
+          },
+          {
+            "session_index": 29,
+            "from_tier": 0,
+            "to_tier": 2,
+            "direction": "up",
+            "equity_before_session": 153380.0
+          },
+          {
+            "session_index": 30,
+            "from_tier": 2,
+            "to_tier": 4,
+            "direction": "up",
+            "equity_before_session": 163180.0
+          },
+          {
+            "session_index": 31,
+            "from_tier": 4,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 148780.0
+          },
+          {
+            "session_index": 32,
+            "from_tier": 0,
+            "to_tier": 2,
+            "direction": "up",
+            "equity_before_session": 153820.0
+          },
+          {
+            "session_index": 33,
+            "from_tier": 2,
+            "to_tier": 4,
+            "direction": "up",
+            "equity_before_session": 163305.0
+          }
+        ],
+        "sessions_per_tier_index": {
+          "0": 29,
+          "1": 1,
+          "2": 2,
+          "3": 0,
+          "4": 747
+        },
+        "dll_pause_days_per_tier_index": {
+          "0": 8,
+          "1": 1,
+          "2": 0,
+          "3": 0,
+          "4": 239
+        },
+        "pre_lock_sessions": 29,
+        "post_lock_sessions": 750,
+        "effective_mnq_cap_by_tier_index": {
+          "0": 40.0,
+          "1": 50.0,
+          "2": 70.0,
+          "3": 90.0,
+          "4": 90.0
+        }
+      },
+      "eval": {
+        "total_windows": 1669,
+        "passing_windows": 737,
+        "pass_rate": 0.4415817855002996,
+        "fail_trailing": 911,
+        "fail_no_target": 21,
+        "window_calendar_days": 30
+      },
+      "bootstrap_funded_survival_block20": 0.086,
+      "gates": {
+        "funded": false,
+        "bootstrap_ge_80": false,
+        "eval_ge_50pct": false
+      },
+      "tier_vs_36_60_100k": "target_band"
+    },
+    {
+      "account_class": "150k",
+      "target_qty_mnq": 100.0,
+      "funded_survived": false,
+      "final_equity": 762945.0,
+      "total_pnl": 612945.0,
+      "avg_annual_pnl_est": 97296.03,
+      "max_peak_to_trough_dd": 267500.0,
+      "dll_pause_days": 249,
+      "tier_payload": {
+        "target_qty_mnq": 100.0,
+        "mnq_per_mini": 10.0,
+        "tier_transitions": [
+          {
+            "session_index": 5,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 152820.0
+          },
+          {
+            "session_index": 6,
+            "from_tier": 1,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 148120.0
+          },
+          {
+            "session_index": 29,
+            "from_tier": 0,
+            "to_tier": 2,
+            "direction": "up",
+            "equity_before_session": 153380.0
+          },
+          {
+            "session_index": 30,
+            "from_tier": 2,
+            "to_tier": 4,
+            "direction": "up",
+            "equity_before_session": 163180.0
+          },
+          {
+            "session_index": 31,
+            "from_tier": 4,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 147180.0
+          },
+          {
+            "session_index": 32,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 152220.0
+          },
+          {
+            "session_index": 33,
+            "from_tier": 1,
+            "to_tier": 3,
+            "direction": "up",
+            "equity_before_session": 158995.0
+          },
+          {
+            "session_index": 34,
+            "from_tier": 3,
+            "to_tier": 4,
+            "direction": "up",
+            "equity_before_session": 172045.0
+          }
+        ],
+        "sessions_per_tier_index": {
+          "0": 29,
+          "1": 2,
+          "2": 1,
+          "3": 1,
+          "4": 746
+        },
+        "dll_pause_days_per_tier_index": {
+          "0": 8,
+          "1": 1,
+          "2": 0,
+          "3": 0,
+          "4": 240
+        },
+        "pre_lock_sessions": 29,
+        "post_lock_sessions": 750,
+        "effective_mnq_cap_by_tier_index": {
+          "0": 40.0,
+          "1": 50.0,
+          "2": 70.0,
+          "3": 100.0,
+          "4": 100.0
+        }
+      },
+      "eval": {
+        "total_windows": 1669,
+        "passing_windows": 774,
+        "pass_rate": 0.46375074895146795,
+        "fail_trailing": 874,
+        "fail_no_target": 21,
+        "window_calendar_days": 30
+      },
+      "bootstrap_funded_survival_block20": 0.0814,
+      "gates": {
+        "funded": false,
+        "bootstrap_ge_80": false,
+        "eval_ge_50pct": false
+      },
+      "tier_vs_36_60_100k": "target_band"
+    }
+  ],
+  "joint_gates_passing": [],
+  "closest_by_pnl_sample": [
+    {
+      "account_class": "150k",
+      "target_qty_mnq": 100.0,
+      "funded_survived": false,
+      "final_equity": 762945.0,
+      "total_pnl": 612945.0,
+      "avg_annual_pnl_est": 97296.03,
+      "max_peak_to_trough_dd": 267500.0,
+      "dll_pause_days": 249,
+      "tier_payload": {
+        "target_qty_mnq": 100.0,
+        "mnq_per_mini": 10.0,
+        "tier_transitions": [
+          {
+            "session_index": 5,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 152820.0
+          },
+          {
+            "session_index": 6,
+            "from_tier": 1,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 148120.0
+          },
+          {
+            "session_index": 29,
+            "from_tier": 0,
+            "to_tier": 2,
+            "direction": "up",
+            "equity_before_session": 153380.0
+          },
+          {
+            "session_index": 30,
+            "from_tier": 2,
+            "to_tier": 4,
+            "direction": "up",
+            "equity_before_session": 163180.0
+          },
+          {
+            "session_index": 31,
+            "from_tier": 4,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 147180.0
+          },
+          {
+            "session_index": 32,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 152220.0
+          },
+          {
+            "session_index": 33,
+            "from_tier": 1,
+            "to_tier": 3,
+            "direction": "up",
+            "equity_before_session": 158995.0
+          },
+          {
+            "session_index": 34,
+            "from_tier": 3,
+            "to_tier": 4,
+            "direction": "up",
+            "equity_before_session": 172045.0
+          }
+        ],
+        "sessions_per_tier_index": {
+          "0": 29,
+          "1": 2,
+          "2": 1,
+          "3": 1,
+          "4": 746
+        },
+        "dll_pause_days_per_tier_index": {
+          "0": 8,
+          "1": 1,
+          "2": 0,
+          "3": 0,
+          "4": 240
+        },
+        "pre_lock_sessions": 29,
+        "post_lock_sessions": 750,
+        "effective_mnq_cap_by_tier_index": {
+          "0": 40.0,
+          "1": 50.0,
+          "2": 70.0,
+          "3": 100.0,
+          "4": 100.0
+        }
+      },
+      "eval": {
+        "total_windows": 1669,
+        "passing_windows": 774,
+        "pass_rate": 0.46375074895146795,
+        "fail_trailing": 874,
+        "fail_no_target": 21,
+        "window_calendar_days": 30
+      },
+      "bootstrap_funded_survival_block20": 0.0814,
+      "gates": {
+        "funded": false,
+        "bootstrap_ge_80": false,
+        "eval_ge_50pct": false
+      },
+      "tier_vs_36_60_100k": "target_band"
+    },
+    {
+      "account_class": "150k",
+      "target_qty_mnq": 90.0,
+      "funded_survived": false,
+      "final_equity": 706860.0,
+      "total_pnl": 556860.0,
+      "avg_annual_pnl_est": 88393.36,
+      "max_peak_to_trough_dd": 240750.0,
+      "dll_pause_days": 248,
+      "tier_payload": {
+        "target_qty_mnq": 90.0,
+        "mnq_per_mini": 10.0,
+        "tier_transitions": [
+          {
+            "session_index": 5,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 152820.0
+          },
+          {
+            "session_index": 6,
+            "from_tier": 1,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 148120.0
+          },
+          {
+            "session_index": 29,
+            "from_tier": 0,
+            "to_tier": 2,
+            "direction": "up",
+            "equity_before_session": 153380.0
+          },
+          {
+            "session_index": 30,
+            "from_tier": 2,
+            "to_tier": 4,
+            "direction": "up",
+            "equity_before_session": 163180.0
+          },
+          {
+            "session_index": 31,
+            "from_tier": 4,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 148780.0
+          },
+          {
+            "session_index": 32,
+            "from_tier": 0,
+            "to_tier": 2,
+            "direction": "up",
+            "equity_before_session": 153820.0
+          },
+          {
+            "session_index": 33,
+            "from_tier": 2,
+            "to_tier": 4,
+            "direction": "up",
+            "equity_before_session": 163305.0
+          }
+        ],
+        "sessions_per_tier_index": {
+          "0": 29,
+          "1": 1,
+          "2": 2,
+          "3": 0,
+          "4": 747
+        },
+        "dll_pause_days_per_tier_index": {
+          "0": 8,
+          "1": 1,
+          "2": 0,
+          "3": 0,
+          "4": 239
+        },
+        "pre_lock_sessions": 29,
+        "post_lock_sessions": 750,
+        "effective_mnq_cap_by_tier_index": {
+          "0": 40.0,
+          "1": 50.0,
+          "2": 70.0,
+          "3": 90.0,
+          "4": 90.0
+        }
+      },
+      "eval": {
+        "total_windows": 1669,
+        "passing_windows": 737,
+        "pass_rate": 0.4415817855002996,
+        "fail_trailing": 911,
+        "fail_no_target": 21,
+        "window_calendar_days": 30
+      },
+      "bootstrap_funded_survival_block20": 0.086,
+      "gates": {
+        "funded": false,
+        "bootstrap_ge_80": false,
+        "eval_ge_50pct": false
+      },
+      "tier_vs_36_60_100k": "target_band"
+    },
+    {
+      "account_class": "150k",
+      "target_qty_mnq": 80.0,
+      "funded_survived": false,
+      "final_equity": 649420.0,
+      "total_pnl": 499420.0,
+      "avg_annual_pnl_est": 79275.6,
+      "max_peak_to_trough_dd": 214000.0,
+      "dll_pause_days": 246,
+      "tier_payload": {
+        "target_qty_mnq": 80.0,
+        "mnq_per_mini": 10.0,
+        "tier_transitions": [
+          {
+            "session_index": 5,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 152820.0
+          },
+          {
+            "session_index": 6,
+            "from_tier": 1,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 148120.0
+          },
+          {
+            "session_index": 29,
+            "from_tier": 0,
+            "to_tier": 2,
+            "direction": "up",
+            "equity_before_session": 153380.0
+          },
+          {
+            "session_index": 30,
+            "from_tier": 2,
+            "to_tier": 4,
+            "direction": "up",
+            "equity_before_session": 163180.0
+          },
+          {
+            "session_index": 31,
+            "from_tier": 4,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 150380.0
+          },
+          {
+            "session_index": 32,
+            "from_tier": 0,
+            "to_tier": 3,
+            "direction": "up",
+            "equity_before_session": 155420.0
+          },
+          {
+            "session_index": 33,
+            "from_tier": 3,
+            "to_tier": 4,
+            "direction": "up",
+            "equity_before_session": 166260.0
+          }
+        ],
+        "sessions_per_tier_index": {
+          "0": 29,
+          "1": 1,
+          "2": 1,
+          "3": 1,
+          "4": 747
+        },
+        "dll_pause_days_per_tier_index": {
+          "0": 8,
+          "1": 1,
+          "2": 0,
+          "3": 0,
+          "4": 237
+        },
+        "pre_lock_sessions": 29,
+        "post_lock_sessions": 750,
+        "effective_mnq_cap_by_tier_index": {
+          "0": 40.0,
+          "1": 50.0,
+          "2": 70.0,
+          "3": 80.0,
+          "4": 80.0
+        }
+      },
+      "eval": {
+        "total_windows": 1669,
+        "passing_windows": 700,
+        "pass_rate": 0.4194128220491312,
+        "fail_trailing": 948,
+        "fail_no_target": 21,
+        "window_calendar_days": 30
+      },
+      "bootstrap_funded_survival_block20": 0.0982,
+      "gates": {
+        "funded": false,
+        "bootstrap_ge_80": false,
+        "eval_ge_50pct": false
+      },
+      "tier_vs_36_60_100k": "target_band"
+    },
+    {
+      "account_class": "150k",
+      "target_qty_mnq": 70.0,
+      "funded_survived": false,
+      "final_equity": 589270.0,
+      "total_pnl": 439270.0,
+      "avg_annual_pnl_est": 69727.67,
+      "max_peak_to_trough_dd": 187250.0,
+      "dll_pause_days": 244,
+      "tier_payload": {
+        "target_qty_mnq": 70.0,
+        "mnq_per_mini": 10.0,
+        "tier_transitions": [
+          {
+            "session_index": 5,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 152820.0
+          },
+          {
+            "session_index": 6,
+            "from_tier": 1,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 148120.0
+          },
+          {
+            "session_index": 29,
+            "from_tier": 0,
+            "to_tier": 2,
+            "direction": "up",
+            "equity_before_session": 153380.0
+          },
+          {
+            "session_index": 30,
+            "from_tier": 2,
+            "to_tier": 4,
+            "direction": "up",
+            "equity_before_session": 163180.0
+          },
+          {
+            "session_index": 31,
+            "from_tier": 4,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 151980.0
+          },
+          {
+            "session_index": 32,
+            "from_tier": 0,
+            "to_tier": 3,
+            "direction": "up",
+            "equity_before_session": 157020.0
+          },
+          {
+            "session_index": 33,
+            "from_tier": 3,
+            "to_tier": 4,
+            "direction": "up",
+            "equity_before_session": 166505.0
+          }
+        ],
+        "sessions_per_tier_index": {
+          "0": 29,
+          "1": 1,
+          "2": 1,
+          "3": 1,
+          "4": 747
+        },
+        "dll_pause_days_per_tier_index": {
+          "0": 8,
+          "1": 1,
+          "2": 0,
+          "3": 0,
+          "4": 235
+        },
+        "pre_lock_sessions": 29,
+        "post_lock_sessions": 750,
+        "effective_mnq_cap_by_tier_index": {
+          "0": 40.0,
+          "1": 50.0,
+          "2": 70.0,
+          "3": 70.0,
+          "4": 70.0
+        }
+      },
+      "eval": {
+        "total_windows": 1669,
+        "passing_windows": 660,
+        "pass_rate": 0.39544637507489516,
+        "fail_trailing": 988,
+        "fail_no_target": 21,
+        "window_calendar_days": 30
+      },
+      "bootstrap_funded_survival_block20": 0.1063,
+      "gates": {
+        "funded": false,
+        "bootstrap_ge_80": false,
+        "eval_ge_50pct": false
+      },
+      "tier_vs_36_60_100k": "target_band"
+    },
+    {
+      "account_class": "150k",
+      "target_qty_mnq": 60.0,
+      "funded_survived": false,
+      "final_equity": 528980.0,
+      "total_pnl": 378980.0,
+      "avg_annual_pnl_est": 60157.52,
+      "max_peak_to_trough_dd": 160500.0,
+      "dll_pause_days": 238,
+      "tier_payload": {
+        "target_qty_mnq": 60.0,
+        "mnq_per_mini": 10.0,
+        "tier_transitions": [
+          {
+            "session_index": 5,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 152820.0
+          },
+          {
+            "session_index": 6,
+            "from_tier": 1,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 148120.0
+          },
+          {
+            "session_index": 29,
+            "from_tier": 0,
+            "to_tier": 2,
+            "direction": "up",
+            "equity_before_session": 153380.0
+          },
+          {
+            "session_index": 30,
+            "from_tier": 2,
+            "to_tier": 4,
+            "direction": "up",
+            "equity_before_session": 161780.0
+          },
+          {
+            "session_index": 31,
+            "from_tier": 4,
+            "to_tier": 1,
+            "direction": "down",
+            "equity_before_session": 152180.0
+          },
+          {
+            "session_index": 32,
+            "from_tier": 1,
+            "to_tier": 3,
+            "direction": "up",
+            "equity_before_session": 158480.0
+          },
+          {
+            "session_index": 33,
+            "from_tier": 3,
+            "to_tier": 4,
+            "direction": "up",
+            "equity_before_session": 166610.0
+          }
+        ],
+        "sessions_per_tier_index": {
+          "0": 28,
+          "1": 2,
+          "2": 1,
+          "3": 1,
+          "4": 747
+        },
+        "dll_pause_days_per_tier_index": {
+          "0": 8,
+          "1": 1,
+          "2": 0,
+          "3": 0,
+          "4": 229
+        },
+        "pre_lock_sessions": 29,
+        "post_lock_sessions": 750,
+        "effective_mnq_cap_by_tier_index": {
+          "0": 40.0,
+          "1": 50.0,
+          "2": 60.0,
+          "3": 60.0,
+          "4": 60.0
+        }
+      },
+      "eval": {
+        "total_windows": 1669,
+        "passing_windows": 625,
+        "pass_rate": 0.3744757339724386,
+        "fail_trailing": 1005,
+        "fail_no_target": 39,
+        "window_calendar_days": 30
+      },
+      "bootstrap_funded_survival_block20": 0.1101,
+      "gates": {
+        "funded": false,
+        "bootstrap_ge_80": false,
+        "eval_ge_50pct": false
+      },
+      "tier_vs_36_60_100k": "target_band"
+    },
+    {
+      "account_class": "100k",
+      "target_qty_mnq": 60.0,
+      "funded_survived": false,
+      "final_equity": 469870.0,
+      "total_pnl": 369870.0,
+      "avg_annual_pnl_est": 58711.44,
+      "max_peak_to_trough_dd": 160500.0,
+      "dll_pause_days": 246,
+      "tier_payload": {
+        "target_qty_mnq": 60.0,
+        "mnq_per_mini": 10.0,
+        "tier_transitions": [
+          {
+            "session_index": 5,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 102115.0
+          },
+          {
+            "session_index": 6,
+            "from_tier": 1,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 98355.0
+          },
+          {
+            "session_index": 29,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 102300.0
+          },
+          {
+            "session_index": 30,
+            "from_tier": 1,
+            "to_tier": 3,
+            "direction": "up",
+            "equity_before_session": 107900.0
+          },
+          {
+            "session_index": 31,
+            "from_tier": 3,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 98300.0
+          },
+          {
+            "session_index": 32,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 102080.0
+          },
+          {
+            "session_index": 33,
+            "from_tier": 1,
+            "to_tier": 3,
+            "direction": "up",
+            "equity_before_session": 107500.0
+          },
+          {
+            "session_index": 34,
+            "from_tier": 3,
+            "to_tier": 4,
+            "direction": "up",
+            "equity_before_session": 115330.0
+          }
+        ],
+        "sessions_per_tier_index": {
+          "0": 29,
+          "1": 3,
+          "2": 0,
+          "3": 2,
+          "4": 745
+        },
+        "dll_pause_days_per_tier_index": {
+          "0": 10,
+          "1": 1,
+          "2": 0,
+          "3": 1,
+          "4": 234
+        },
+        "pre_lock_sessions": 29,
+        "post_lock_sessions": 750,
+        "effective_mnq_cap_by_tier_index": {
+          "0": 30.0,
+          "1": 40.0,
+          "2": 50.0,
+          "3": 60.0,
+          "4": 60.0
+        }
+      },
+      "eval": {
+        "total_windows": 1669,
+        "passing_windows": 742,
+        "pass_rate": 0.4445775913720791,
+        "fail_trailing": 906,
+        "fail_no_target": 21,
+        "window_calendar_days": 30
+      },
+      "bootstrap_funded_survival_block20": 0.0839,
+      "gates": {
+        "funded": false,
+        "bootstrap_ge_80": false,
+        "eval_ge_50pct": false
+      },
+      "tier_vs_36_60_100k": "floor_band"
+    },
+    {
+      "account_class": "150k",
+      "target_qty_mnq": 50.0,
+      "funded_survived": false,
+      "final_equity": 467430.0,
+      "total_pnl": 317430.0,
+      "avg_annual_pnl_est": 50387.36,
+      "max_peak_to_trough_dd": 133750.0,
+      "dll_pause_days": 230,
+      "tier_payload": {
+        "target_qty_mnq": 50.0,
+        "mnq_per_mini": 10.0,
+        "tier_transitions": [
+          {
+            "session_index": 5,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 152820.0
+          },
+          {
+            "session_index": 6,
+            "from_tier": 1,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 148120.0
+          },
+          {
+            "session_index": 29,
+            "from_tier": 0,
+            "to_tier": 2,
+            "direction": "up",
+            "equity_before_session": 153380.0
+          },
+          {
+            "session_index": 30,
+            "from_tier": 2,
+            "to_tier": 4,
+            "direction": "up",
+            "equity_before_session": 160380.0
+          },
+          {
+            "session_index": 31,
+            "from_tier": 4,
+            "to_tier": 1,
+            "direction": "down",
+            "equity_before_session": 152380.0
+          },
+          {
+            "session_index": 32,
+            "from_tier": 1,
+            "to_tier": 3,
+            "direction": "up",
+            "equity_before_session": 158680.0
+          },
+          {
+            "session_index": 33,
+            "from_tier": 3,
+            "to_tier": 4,
+            "direction": "up",
+            "equity_before_session": 165455.0
+          }
+        ],
+        "sessions_per_tier_index": {
+          "0": 28,
+          "1": 2,
+          "2": 1,
+          "3": 1,
+          "4": 747
+        },
+        "dll_pause_days_per_tier_index": {
+          "0": 8,
+          "1": 1,
+          "2": 0,
+          "3": 0,
+          "4": 221
+        },
+        "pre_lock_sessions": 29,
+        "post_lock_sessions": 750,
+        "effective_mnq_cap_by_tier_index": {
+          "0": 40.0,
+          "1": 50.0,
+          "2": 50.0,
+          "3": 50.0,
+          "4": 50.0
+        }
+      },
+      "eval": {
+        "total_windows": 1669,
+        "passing_windows": 599,
+        "pass_rate": 0.3588975434391851,
+        "fail_trailing": 1030,
+        "fail_no_target": 40,
+        "window_calendar_days": 30
+      },
+      "bootstrap_funded_survival_block20": 0.1213,
+      "gates": {
+        "funded": false,
+        "bootstrap_ge_80": false,
+        "eval_ge_50pct": false
+      },
+      "tier_vs_36_60_100k": "floor_band"
+    },
+    {
+      "account_class": "100k",
+      "target_qty_mnq": 50.0,
+      "funded_survived": false,
+      "final_equity": 412430.0,
+      "total_pnl": 312430.0,
+      "avg_annual_pnl_est": 49593.68,
+      "max_peak_to_trough_dd": 133750.0,
+      "dll_pause_days": 237,
+      "tier_payload": {
+        "target_qty_mnq": 50.0,
+        "mnq_per_mini": 10.0,
+        "tier_transitions": [
+          {
+            "session_index": 5,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 102115.0
+          },
+          {
+            "session_index": 6,
+            "from_tier": 1,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 98355.0
+          },
+          {
+            "session_index": 29,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 102300.0
+          },
+          {
+            "session_index": 30,
+            "from_tier": 1,
+            "to_tier": 3,
+            "direction": "up",
+            "equity_before_session": 107900.0
+          },
+          {
+            "session_index": 31,
+            "from_tier": 3,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 99900.0
+          },
+          {
+            "session_index": 32,
+            "from_tier": 0,
+            "to_tier": 2,
+            "direction": "up",
+            "equity_before_session": 103680.0
+          },
+          {
+            "session_index": 33,
+            "from_tier": 2,
+            "to_tier": 4,
+            "direction": "up",
+            "equity_before_session": 110455.0
+          }
+        ],
+        "sessions_per_tier_index": {
+          "0": 29,
+          "1": 2,
+          "2": 1,
+          "3": 1,
+          "4": 746
+        },
+        "dll_pause_days_per_tier_index": {
+          "0": 10,
+          "1": 1,
+          "2": 0,
+          "3": 1,
+          "4": 225
+        },
+        "pre_lock_sessions": 29,
+        "post_lock_sessions": 750,
+        "effective_mnq_cap_by_tier_index": {
+          "0": 30.0,
+          "1": 40.0,
+          "2": 50.0,
+          "3": 50.0,
+          "4": 50.0
+        }
+      },
+      "eval": {
+        "total_windows": 1669,
+        "passing_windows": 686,
+        "pass_rate": 0.4110245656081486,
+        "fail_trailing": 951,
+        "fail_no_target": 32,
+        "window_calendar_days": 30
+      },
+      "bootstrap_funded_survival_block20": 0.096,
+      "gates": {
+        "funded": false,
+        "bootstrap_ge_80": false,
+        "eval_ge_50pct": false
+      },
+      "tier_vs_36_60_100k": "floor_band"
+    },
+    {
+      "account_class": "150k",
+      "target_qty_mnq": 40.0,
+      "funded_survived": false,
+      "final_equity": 405560.0,
+      "total_pnl": 255560.0,
+      "avg_annual_pnl_est": 40566.4,
+      "max_peak_to_trough_dd": 107000.0,
+      "dll_pause_days": 210,
+      "tier_payload": {
+        "target_qty_mnq": 40.0,
+        "mnq_per_mini": 10.0,
+        "tier_transitions": [
+          {
+            "session_index": 5,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 152820.0
+          },
+          {
+            "session_index": 6,
+            "from_tier": 1,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 149060.0
+          },
+          {
+            "session_index": 12,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 152740.0
+          },
+          {
+            "session_index": 13,
+            "from_tier": 1,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 151700.0
+          },
+          {
+            "session_index": 17,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 152860.0
+          },
+          {
+            "session_index": 18,
+            "from_tier": 1,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 146460.0
+          },
+          {
+            "session_index": 29,
+            "from_tier": 0,
+            "to_tier": 2,
+            "direction": "up",
+            "equity_before_session": 154320.0
+          },
+          {
+            "session_index": 30,
+            "from_tier": 2,
+            "to_tier": 3,
+            "direction": "up",
+            "equity_before_session": 159920.0
+          },
+          {
+            "session_index": 31,
+            "from_tier": 3,
+            "to_tier": 2,
+            "direction": "down",
+            "equity_before_session": 153520.0
+          },
+          {
+            "session_index": 32,
+            "from_tier": 2,
+            "to_tier": 3,
+            "direction": "up",
+            "equity_before_session": 158560.0
+          },
+          {
+            "session_index": 33,
+            "from_tier": 3,
+            "to_tier": 4,
+            "direction": "up",
+            "equity_before_session": 163980.0
+          }
+        ],
+        "sessions_per_tier_index": {
+          "0": 26,
+          "1": 3,
+          "2": 2,
+          "3": 2,
+          "4": 746
+        },
+        "dll_pause_days_per_tier_index": {
+          "0": 7,
+          "1": 2,
+          "2": 0,
+          "3": 1,
+          "4": 200
+        },
+        "pre_lock_sessions": 28,
+        "post_lock_sessions": 751,
+        "effective_mnq_cap_by_tier_index": {
+          "0": 40.0,
+          "1": 40.0,
+          "2": 40.0,
+          "3": 40.0,
+          "4": 40.0
+        }
+      },
+      "eval": {
+        "total_windows": 1669,
+        "passing_windows": 554,
+        "pass_rate": 0.33193529059316956,
+        "fail_trailing": 1060,
+        "fail_no_target": 55,
+        "window_calendar_days": 30
+      },
+      "bootstrap_funded_survival_block20": 0.1183,
+      "gates": {
+        "funded": false,
+        "bootstrap_ge_80": false,
+        "eval_ge_50pct": false
+      },
+      "tier_vs_36_60_100k": "floor_band"
+    },
+    {
+      "account_class": "100k",
+      "target_qty_mnq": 40.0,
+      "funded_survived": false,
+      "final_equity": 352280.0,
+      "total_pnl": 252280.0,
+      "avg_annual_pnl_est": 40045.75,
+      "max_peak_to_trough_dd": 107000.0,
+      "dll_pause_days": 229,
+      "tier_payload": {
+        "target_qty_mnq": 40.0,
+        "mnq_per_mini": 10.0,
+        "tier_transitions": [
+          {
+            "session_index": 5,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 102115.0
+          },
+          {
+            "session_index": 6,
+            "from_tier": 1,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 98355.0
+          },
+          {
+            "session_index": 29,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 102300.0
+          },
+          {
+            "session_index": 30,
+            "from_tier": 1,
+            "to_tier": 3,
+            "direction": "up",
+            "equity_before_session": 107900.0
+          },
+          {
+            "session_index": 31,
+            "from_tier": 3,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 101500.0
+          },
+          {
+            "session_index": 32,
+            "from_tier": 0,
+            "to_tier": 3,
+            "direction": "up",
+            "equity_before_session": 105280.0
+          },
+          {
+            "session_index": 33,
+            "from_tier": 3,
+            "to_tier": 4,
+            "direction": "up",
+            "equity_before_session": 110700.0
+          }
+        ],
+        "sessions_per_tier_index": {
+          "0": 29,
+          "1": 2,
+          "2": 0,
+          "3": 2,
+          "4": 746
+        },
+        "dll_pause_days_per_tier_index": {
+          "0": 10,
+          "1": 1,
+          "2": 0,
+          "3": 1,
+          "4": 217
+        },
+        "pre_lock_sessions": 29,
+        "post_lock_sessions": 750,
+        "effective_mnq_cap_by_tier_index": {
+          "0": 30.0,
+          "1": 40.0,
+          "2": 40.0,
+          "3": 40.0,
+          "4": 40.0
+        }
+      },
+      "eval": {
+        "total_windows": 1669,
+        "passing_windows": 627,
+        "pass_rate": 0.37567405632115036,
+        "fail_trailing": 1002,
+        "fail_no_target": 40,
+        "window_calendar_days": 30
+      },
+      "bootstrap_funded_survival_block20": 0.1146,
+      "gates": {
+        "funded": false,
+        "bootstrap_ge_80": false,
+        "eval_ge_50pct": false
+      },
+      "tier_vs_36_60_100k": "floor_band"
+    },
+    {
+      "account_class": "50k",
+      "target_qty_mnq": 40.0,
+      "funded_survived": false,
+      "final_equity": 298125.0,
+      "total_pnl": 248125.0,
+      "avg_annual_pnl_est": 39386.2,
+      "max_peak_to_trough_dd": 107000.0,
+      "dll_pause_days": 232,
+      "tier_payload": {
+        "target_qty_mnq": 40.0,
+        "mnq_per_mini": 10.0,
+        "tier_transitions": [
+          {
+            "session_index": 29,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 52160.0
+          },
+          {
+            "session_index": 30,
+            "from_tier": 1,
+            "to_tier": 3,
+            "direction": "up",
+            "equity_before_session": 56360.0
+          },
+          {
+            "session_index": 31,
+            "from_tier": 3,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 49960.0
+          },
+          {
+            "session_index": 32,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 52480.0
+          },
+          {
+            "session_index": 33,
+            "from_tier": 1,
+            "to_tier": 3,
+            "direction": "up",
+            "equity_before_session": 56545.0
+          }
+        ],
+        "sessions_per_tier_index": {
+          "0": 30,
+          "1": 2,
+          "2": 0,
+          "3": 747
+        },
+        "dll_pause_days_per_tier_index": {
+          "0": 11,
+          "1": 0,
+          "2": 0,
+          "3": 221
+        },
+        "pre_lock_sessions": 28,
+        "post_lock_sessions": 751,
+        "effective_mnq_cap_by_tier_index": {
+          "0": 20.0,
+          "1": 30.0,
+          "2": 40.0,
+          "3": 40.0
+        }
+      },
+      "eval": {
+        "total_windows": 1669,
+        "passing_windows": 842,
+        "pass_rate": 0.5044937088076693,
+        "fail_trailing": 806,
+        "fail_no_target": 21,
+        "window_calendar_days": 30
+      },
+      "bootstrap_funded_survival_block20": 0.093,
+      "gates": {
+        "funded": false,
+        "bootstrap_ge_80": false,
+        "eval_ge_50pct": true
+      },
+      "tier_vs_36_60_100k": "floor_band"
+    },
+    {
+      "account_class": "50k",
+      "target_qty_mnq": 35.0,
+      "funded_survived": false,
+      "final_equity": 269405.0,
+      "total_pnl": 219405.0,
+      "avg_annual_pnl_est": 34827.33,
+      "max_peak_to_trough_dd": 93625.0,
+      "dll_pause_days": 230,
+      "tier_payload": {
+        "target_qty_mnq": 35.0,
+        "mnq_per_mini": 10.0,
+        "tier_transitions": [
+          {
+            "session_index": 29,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 52160.0
+          },
+          {
+            "session_index": 30,
+            "from_tier": 1,
+            "to_tier": 3,
+            "direction": "up",
+            "equity_before_session": 56360.0
+          },
+          {
+            "session_index": 31,
+            "from_tier": 3,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 50760.0
+          },
+          {
+            "session_index": 32,
+            "from_tier": 0,
+            "to_tier": 2,
+            "direction": "up",
+            "equity_before_session": 53280.0
+          },
+          {
+            "session_index": 33,
+            "from_tier": 2,
+            "to_tier": 3,
+            "direction": "up",
+            "equity_before_session": 58022.5
+          }
+        ],
+        "sessions_per_tier_index": {
+          "0": 30,
+          "1": 1,
+          "2": 1,
+          "3": 747
+        },
+        "dll_pause_days_per_tier_index": {
+          "0": 11,
+          "1": 0,
+          "2": 0,
+          "3": 219
+        },
+        "pre_lock_sessions": 28,
+        "post_lock_sessions": 751,
+        "effective_mnq_cap_by_tier_index": {
+          "0": 20.0,
+          "1": 30.0,
+          "2": 35.0,
+          "3": 35.0
+        }
+      },
+      "eval": {
+        "total_windows": 1669,
+        "passing_windows": 790,
+        "pass_rate": 0.4733373277411624,
+        "fail_trailing": 858,
+        "fail_no_target": 21,
+        "window_calendar_days": 30
+      },
+      "bootstrap_funded_survival_block20": 0.1097,
+      "gates": {
+        "funded": false,
+        "bootstrap_ge_80": false,
+        "eval_ge_50pct": false
+      },
+      "tier_vs_36_60_100k": "below_floor"
+    },
+    {
+      "account_class": "100k",
+      "target_qty_mnq": 30.0,
+      "funded_survived": false,
+      "final_equity": 291670.0,
+      "total_pnl": 191670.0,
+      "avg_annual_pnl_est": 30424.8,
+      "max_peak_to_trough_dd": 80250.0,
+      "dll_pause_days": 183,
+      "tier_payload": {
+        "target_qty_mnq": 30.0,
+        "mnq_per_mini": 10.0,
+        "tier_transitions": [
+          {
+            "session_index": 5,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 102115.0
+          },
+          {
+            "session_index": 6,
+            "from_tier": 1,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 99295.0
+          },
+          {
+            "session_index": 12,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 102055.0
+          },
+          {
+            "session_index": 13,
+            "from_tier": 1,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 101275.0
+          },
+          {
+            "session_index": 17,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 102145.0
+          },
+          {
+            "session_index": 18,
+            "from_tier": 1,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 97345.0
+          },
+          {
+            "session_index": 29,
+            "from_tier": 0,
+            "to_tier": 2,
+            "direction": "up",
+            "equity_before_session": 103240.0
+          },
+          {
+            "session_index": 30,
+            "from_tier": 2,
+            "to_tier": 3,
+            "direction": "up",
+            "equity_before_session": 107440.0
+          },
+          {
+            "session_index": 31,
+            "from_tier": 3,
+            "to_tier": 1,
+            "direction": "down",
+            "equity_before_session": 102640.0
+          },
+          {
+            "session_index": 32,
+            "from_tier": 1,
+            "to_tier": 3,
+            "direction": "up",
+            "equity_before_session": 106420.0
+          },
+          {
+            "session_index": 33,
+            "from_tier": 3,
+            "to_tier": 4,
+            "direction": "up",
+            "equity_before_session": 110485.0
+          }
+        ],
+        "sessions_per_tier_index": {
+          "0": 26,
+          "1": 4,
+          "2": 1,
+          "3": 2,
+          "4": 746
+        },
+        "dll_pause_days_per_tier_index": {
+          "0": 9,
+          "1": 2,
+          "2": 0,
+          "3": 1,
+          "4": 171
+        },
+        "pre_lock_sessions": 28,
+        "post_lock_sessions": 751,
+        "effective_mnq_cap_by_tier_index": {
+          "0": 30.0,
+          "1": 30.0,
+          "2": 30.0,
+          "3": 30.0,
+          "4": 30.0
+        }
+      },
+      "eval": {
+        "total_windows": 1669,
+        "passing_windows": 588,
+        "pass_rate": 0.35230677052127024,
+        "fail_trailing": 1038,
+        "fail_no_target": 43,
+        "window_calendar_days": 30
+      },
+      "bootstrap_funded_survival_block20": 0.1212,
+      "gates": {
+        "funded": false,
+        "bootstrap_ge_80": false,
+        "eval_ge_50pct": false
+      },
+      "tier_vs_36_60_100k": "below_floor"
+    },
+    {
+      "account_class": "50k",
+      "target_qty_mnq": 30.0,
+      "funded_survived": false,
+      "final_equity": 240590.0,
+      "total_pnl": 190590.0,
+      "avg_annual_pnl_est": 30253.37,
+      "max_peak_to_trough_dd": 80250.0,
+      "dll_pause_days": 212,
+      "tier_payload": {
+        "target_qty_mnq": 30.0,
+        "mnq_per_mini": 10.0,
+        "tier_transitions": [
+          {
+            "session_index": 29,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 52160.0
+          },
+          {
+            "session_index": 30,
+            "from_tier": 1,
+            "to_tier": 3,
+            "direction": "up",
+            "equity_before_session": 56360.0
+          },
+          {
+            "session_index": 31,
+            "from_tier": 3,
+            "to_tier": 1,
+            "direction": "down",
+            "equity_before_session": 51560.0
+          },
+          {
+            "session_index": 32,
+            "from_tier": 1,
+            "to_tier": 2,
+            "direction": "up",
+            "equity_before_session": 55340.0
+          },
+          {
+            "session_index": 33,
+            "from_tier": 2,
+            "to_tier": 3,
+            "direction": "up",
+            "equity_before_session": 59405.0
+          }
+        ],
+        "sessions_per_tier_index": {
+          "0": 29,
+          "1": 2,
+          "2": 1,
+          "3": 747
+        },
+        "dll_pause_days_per_tier_index": {
+          "0": 11,
+          "1": 0,
+          "2": 0,
+          "3": 201
+        },
+        "pre_lock_sessions": 28,
+        "post_lock_sessions": 751,
+        "effective_mnq_cap_by_tier_index": {
+          "0": 20.0,
+          "1": 30.0,
+          "2": 30.0,
+          "3": 30.0
+        }
+      },
+      "eval": {
+        "total_windows": 1669,
+        "passing_windows": 759,
+        "pass_rate": 0.4547633313361294,
+        "fail_trailing": 881,
+        "fail_no_target": 29,
+        "window_calendar_days": 30
+      },
+      "bootstrap_funded_survival_block20": 0.1097,
+      "gates": {
+        "funded": false,
+        "bootstrap_ge_80": false,
+        "eval_ge_50pct": false
+      },
+      "tier_vs_36_60_100k": "below_floor"
+    },
+    {
+      "account_class": "50k",
+      "target_qty_mnq": 25.0,
+      "funded_survived": false,
+      "final_equity": 209185.0,
+      "total_pnl": 159185.0,
+      "avg_annual_pnl_est": 25268.28,
+      "max_peak_to_trough_dd": 66875.0,
+      "dll_pause_days": 173,
+      "tier_payload": {
+        "target_qty_mnq": 25.0,
+        "mnq_per_mini": 10.0,
+        "tier_transitions": [
+          {
+            "session_index": 29,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 52160.0
+          },
+          {
+            "session_index": 30,
+            "from_tier": 1,
+            "to_tier": 2,
+            "direction": "up",
+            "equity_before_session": 55660.0
+          },
+          {
+            "session_index": 31,
+            "from_tier": 2,
+            "to_tier": 1,
+            "direction": "down",
+            "equity_before_session": 51660.0
+          },
+          {
+            "session_index": 32,
+            "from_tier": 1,
+            "to_tier": 2,
+            "direction": "up",
+            "equity_before_session": 54810.0
+          },
+          {
+            "session_index": 33,
+            "from_tier": 2,
+            "to_tier": 3,
+            "direction": "up",
+            "equity_before_session": 58197.5
+          }
+        ],
+        "sessions_per_tier_index": {
+          "0": 29,
+          "1": 2,
+          "2": 2,
+          "3": 746
+        },
+        "dll_pause_days_per_tier_index": {
+          "0": 11,
+          "1": 0,
+          "2": 1,
+          "3": 161
+        },
+        "pre_lock_sessions": 28,
+        "post_lock_sessions": 751,
+        "effective_mnq_cap_by_tier_index": {
+          "0": 20.0,
+          "1": 25.0,
+          "2": 25.0,
+          "3": 25.0
+        }
+      },
+      "eval": {
+        "total_windows": 1669,
+        "passing_windows": 708,
+        "pass_rate": 0.4242061114439784,
+        "fail_trailing": 929,
+        "fail_no_target": 32,
+        "window_calendar_days": 30
+      },
+      "bootstrap_funded_survival_block20": 0.112,
+      "gates": {
+        "funded": false,
+        "bootstrap_ge_80": false,
+        "eval_ge_50pct": false
+      },
+      "tier_vs_36_60_100k": "below_floor"
+    },
+    {
+      "account_class": "50k",
+      "target_qty_mnq": 20.0,
+      "funded_survived": false,
+      "final_equity": 177780.0,
+      "total_pnl": 127780.0,
+      "avg_annual_pnl_est": 20283.2,
+      "max_peak_to_trough_dd": 53500.0,
+      "dll_pause_days": 124,
+      "tier_payload": {
+        "target_qty_mnq": 20.0,
+        "mnq_per_mini": 10.0,
+        "tier_transitions": [
+          {
+            "session_index": 29,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 52160.0
+          },
+          {
+            "session_index": 30,
+            "from_tier": 1,
+            "to_tier": 2,
+            "direction": "up",
+            "equity_before_session": 54960.0
+          },
+          {
+            "session_index": 31,
+            "from_tier": 2,
+            "to_tier": 1,
+            "direction": "down",
+            "equity_before_session": 51760.0
+          },
+          {
+            "session_index": 32,
+            "from_tier": 1,
+            "to_tier": 2,
+            "direction": "up",
+            "equity_before_session": 54280.0
+          },
+          {
+            "session_index": 33,
+            "from_tier": 2,
+            "to_tier": 3,
+            "direction": "up",
+            "equity_before_session": 56990.0
+          }
+        ],
+        "sessions_per_tier_index": {
+          "0": 29,
+          "1": 2,
+          "2": 2,
+          "3": 746
+        },
+        "dll_pause_days_per_tier_index": {
+          "0": 11,
+          "1": 0,
+          "2": 1,
+          "3": 112
+        },
+        "pre_lock_sessions": 28,
+        "post_lock_sessions": 751,
+        "effective_mnq_cap_by_tier_index": {
+          "0": 20.0,
+          "1": 20.0,
+          "2": 20.0,
+          "3": 20.0
+        }
+      },
+      "eval": {
+        "total_windows": 1669,
+        "passing_windows": 653,
+        "pass_rate": 0.39125224685440385,
+        "fail_trailing": 976,
+        "fail_no_target": 40,
+        "window_calendar_days": 30
+      },
+      "bootstrap_funded_survival_block20": 0.1248,
+      "gates": {
+        "funded": false,
+        "bootstrap_ge_80": false,
+        "eval_ge_50pct": false
+      },
+      "tier_vs_36_60_100k": "below_floor"
+    },
+    {
+      "account_class": "25k",
+      "target_qty_mnq": 20.0,
+      "funded_survived": false,
+      "final_equity": 150440.0,
+      "total_pnl": 125440.0,
+      "avg_annual_pnl_est": 19911.76,
+      "max_peak_to_trough_dd": 53500.0,
+      "dll_pause_days": 241,
+      "tier_payload": {
+        "target_qty_mnq": 20.0,
+        "mnq_per_mini": 10.0,
+        "tier_transitions": [
+          {
+            "session_index": 29,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 26080.0
+          },
+          {
+            "session_index": 30,
+            "from_tier": 1,
+            "to_tier": 2,
+            "direction": "up",
+            "equity_before_session": 28880.0
+          },
+          {
+            "session_index": 31,
+            "from_tier": 2,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 25680.0
+          },
+          {
+            "session_index": 32,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 26940.0
+          },
+          {
+            "session_index": 33,
+            "from_tier": 1,
+            "to_tier": 2,
+            "direction": "up",
+            "equity_before_session": 29650.0
+          }
+        ],
+        "sessions_per_tier_index": {
+          "0": 30,
+          "1": 2,
+          "2": 747
+        },
+        "dll_pause_days_per_tier_index": {
+          "0": 11,
+          "1": 0,
+          "2": 230
+        },
+        "pre_lock_sessions": 28,
+        "post_lock_sessions": 751,
+        "effective_mnq_cap_by_tier_index": {
+          "0": 10.0,
+          "1": 20.0,
+          "2": 20.0
+        }
+      },
+      "eval": {
+        "total_windows": 1669,
+        "passing_windows": 842,
+        "pass_rate": 0.5044937088076693,
+        "fail_trailing": 806,
+        "fail_no_target": 21,
+        "window_calendar_days": 30
+      },
+      "bootstrap_funded_survival_block20": 0.0704,
+      "gates": {
+        "funded": false,
+        "bootstrap_ge_80": false,
+        "eval_ge_50pct": true
+      },
+      "tier_vs_36_60_100k": "below_floor"
+    },
+    {
+      "account_class": "25k",
+      "target_qty_mnq": 15.0,
+      "funded_survived": false,
+      "final_equity": 119665.0,
+      "total_pnl": 94665.0,
+      "avg_annual_pnl_est": 15026.68,
+      "max_peak_to_trough_dd": 40125.0,
+      "dll_pause_days": 230,
+      "tier_payload": {
+        "target_qty_mnq": 15.0,
+        "mnq_per_mini": 10.0,
+        "tier_transitions": [
+          {
+            "session_index": 29,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 26080.0
+          },
+          {
+            "session_index": 30,
+            "from_tier": 1,
+            "to_tier": 2,
+            "direction": "up",
+            "equity_before_session": 28180.0
+          },
+          {
+            "session_index": 31,
+            "from_tier": 2,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 25780.0
+          },
+          {
+            "session_index": 32,
+            "from_tier": 0,
+            "to_tier": 2,
+            "direction": "up",
+            "equity_before_session": 27040.0
+          }
+        ],
+        "sessions_per_tier_index": {
+          "0": 30,
+          "1": 1,
+          "2": 748
+        },
+        "dll_pause_days_per_tier_index": {
+          "0": 11,
+          "1": 0,
+          "2": 219
+        },
+        "pre_lock_sessions": 28,
+        "post_lock_sessions": 751,
+        "effective_mnq_cap_by_tier_index": {
+          "0": 10.0,
+          "1": 15.0,
+          "2": 15.0
+        }
+      },
+      "eval": {
+        "total_windows": 1669,
+        "passing_windows": 759,
+        "pass_rate": 0.4547633313361294,
+        "fail_trailing": 881,
+        "fail_no_target": 29,
+        "window_calendar_days": 30
+      },
+      "bootstrap_funded_survival_block20": 0.1016,
+      "gates": {
+        "funded": false,
+        "bootstrap_ge_80": false,
+        "eval_ge_50pct": false
+      },
+      "tier_vs_36_60_100k": "below_floor"
+    },
+    {
+      "account_class": "25k",
+      "target_qty_mnq": 10.0,
+      "funded_survived": false,
+      "final_equity": 88890.0,
+      "total_pnl": 63890.0,
+      "avg_annual_pnl_est": 10141.6,
+      "max_peak_to_trough_dd": 26750.0,
+      "dll_pause_days": 165,
+      "tier_payload": {
+        "target_qty_mnq": 10.0,
+        "mnq_per_mini": 10.0,
+        "tier_transitions": [
+          {
+            "session_index": 29,
+            "from_tier": 0,
+            "to_tier": 1,
+            "direction": "up",
+            "equity_before_session": 26080.0
+          },
+          {
+            "session_index": 30,
+            "from_tier": 1,
+            "to_tier": 2,
+            "direction": "up",
+            "equity_before_session": 27480.0
+          },
+          {
+            "session_index": 31,
+            "from_tier": 2,
+            "to_tier": 0,
+            "direction": "down",
+            "equity_before_session": 25880.0
+          },
+          {
+            "session_index": 32,
+            "from_tier": 0,
+            "to_tier": 2,
+            "direction": "up",
+            "equity_before_session": 27140.0
+          }
+        ],
+        "sessions_per_tier_index": {
+          "0": 30,
+          "1": 1,
+          "2": 748
+        },
+        "dll_pause_days_per_tier_index": {
+          "0": 11,
+          "1": 0,
+          "2": 154
+        },
+        "pre_lock_sessions": 28,
+        "post_lock_sessions": 751,
+        "effective_mnq_cap_by_tier_index": {
+          "0": 10.0,
+          "1": 10.0,
+          "2": 10.0
+        }
+      },
+      "eval": {
+        "total_windows": 1669,
+        "passing_windows": 653,
+        "pass_rate": 0.39125224685440385,
+        "fail_trailing": 976,
+        "fail_no_target": 40,
+        "window_calendar_days": 30
+      },
+      "bootstrap_funded_survival_block20": 0.1264,
+      "gates": {
+        "funded": false,
+        "bootstrap_ge_80": false,
+        "eval_ge_50pct": false
+      },
+      "tier_vs_36_60_100k": "below_floor"
+    }
+  ],
+  "stop_conditions": {
+    "bootstrap_methodology_bias_suggested": false,
+    "funded_survival_any_pair": false,
+    "joint_all_three_gates_any": false,
+    "material_change_vs_wave0d_expected": true
+  }
+}

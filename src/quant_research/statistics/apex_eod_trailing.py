@@ -32,6 +32,8 @@ terminal semantics.
 from __future__ import annotations
 
 import datetime as dt
+import math
+from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Literal
 
@@ -56,6 +58,16 @@ class EodTrailingSimResult:
 
 
 @dataclass(frozen=True, slots=True)
+class ApexBalanceTier:
+    """PA balance band: **max_contracts_mini** caps mini size (1 mini = 10 MNQ)."""
+
+    min_balance: float
+    max_balance: float
+    max_contracts_mini: int
+    dll_limit: float
+
+
+@dataclass(frozen=True, slots=True)
 class ApexEodTwoPhaseSimResult:
     """Result of :func:`simulate_apex_eod_two_phase` (pre-lock + post-lock + DLL pause)."""
 
@@ -71,10 +83,56 @@ class ApexEodTwoPhaseSimResult:
     max_peak_to_trough_dd: float
     binding_session_index: int
     n_sessions: int
+    tier_summary: dict[str, object] | None = None
 
 
 # Backward-compatible alias
 Apex50kEodSimResult = ApexEodTwoPhaseSimResult
+
+
+def apex_tier_index_for_equity(
+    equity: float,
+    tiers: tuple[ApexBalanceTier, ...],
+) -> tuple[int, ApexBalanceTier]:
+    """Return tier index and row for **prior EOD** equity before a session opens.
+
+    Tiers are **sorted by** ``min_balance``. If equity sits **below** the
+    published bottom band (stress path before trailing breach is recorded), use
+    the **lowest** tier — same caps/DLL as the bottom band (conservative).
+    If equity falls in a **gap** between adjacent published bands, use the
+    **lower** band until equity reaches the next ``min_balance``.
+    """
+    if not tiers:
+        msg = "balance_tiers must be non-empty"
+        raise ValueError(msg)
+    ts = tuple(sorted(tiers, key=lambda t: t.min_balance))
+    e = float(equity)
+    bottom = ts[0]
+    if e < bottom.min_balance:
+        return 0, bottom
+    last_i = len(ts) - 1
+    for i, t in enumerate(ts):
+        if t.min_balance <= e <= t.max_balance:
+            return i, t
+    for i in range(last_i):
+        lo, hi = ts[i], ts[i + 1]
+        if lo.max_balance < e < hi.min_balance:
+            return i, lo
+    top = ts[last_i]
+    if e > top.max_balance and math.isfinite(top.max_balance):
+        return last_i, top
+    msg = f"equity {equity} outside tier table"
+    raise ValueError(msg)
+
+
+def effective_mnq_qty(
+    target_qty_mnq: float,
+    tier: ApexBalanceTier,
+    *,
+    mnq_per_mini: float,
+) -> float:
+    cap = float(tier.max_contracts_mini) * float(mnq_per_mini)
+    return float(min(float(target_qty_mnq), cap))
 
 
 def simulate_apex_eod_two_phase(
@@ -88,24 +146,43 @@ def simulate_apex_eod_two_phase(
     post_lock_floor: float | None = None,
     enforce_dll: bool = True,
     dll_terminates_run: bool = False,
+    balance_tiers: tuple[ApexBalanceTier, ...] | None = None,
+    target_qty_mnq: float | None = None,
+    mnq_per_mini: float = 10.0,
 ) -> ApexEodTwoPhaseSimResult:
     """
-    Walk **session-close** scaled P&amp;L with Apex-style two-phase floor rules.
+    Walk **session-close** P&amp;L with Apex-style two-phase floor rules.
 
-    **Pre-lock:** ``allowed_min = high_water_equity - trailing_dd`` (initially
-    ``starting_balance - trailing_dd``).
+    **Flat mode (default):** ``session_pnls`` are **already scaled** dollars; use
+    ``dll_limit`` constant; ``balance_tiers`` and ``target_qty_mnq`` must be **None**.
 
-    **Lock:** when ``high_water_equity >= lock_equity_threshold`` (default
-    ``starting_balance + trailing_dd``), use **post-lock**
-    ``allowed_min = post_lock_floor`` (default ``starting_balance``) permanently.
+    **Tiered PA mode (Wave 0e+):** pass ``balance_tiers`` and ``target_qty_mnq``.
+    Then ``session_pnls`` are **per 1 MNQ**; each session applies
+    ``pnl[i] * effective_mnq`` where ``effective_mnq = min(target_qty_mnq,
+    tier.max_contracts_mini * mnq_per_mini)``. Tier and DLL are fixed at **session
+    open** from **prior** session EOD equity (session **0** uses ``starting_balance``).
+    Same **NY calendar day** uses the DLL limit from the **first** session row of
+    that day (tier at that row's open). For **per-session diagnostic rows**, use
+    :func:`simulate_apex_eod_two_phase_tiered_with_trace`.
 
-    **DLL (default):** same-day cumulative P&amp;L; first cross strictly below
-    ``-dll_limit`` pauses further same-day application; counts toward
-    ``dll_failure_days``; **does not** set ``survived`` false.
-
-    **Legacy:** ``dll_terminates_run=True`` reproduces pre–Wave 0d behavior
-    (any DLL day fails the run).
+    **Pre-lock:** ``allowed_min = HWM - trailing_dd``. **Post-lock:** static floor.
+    **DLL:** session pause (unless ``dll_terminates_run``).
     """
+    if balance_tiers is not None and target_qty_mnq is not None:
+        return _simulate_apex_eod_two_phase_tiered(
+            session_pnls,
+            ny_calendar_dates,
+            starting_balance=starting_balance,
+            trailing_dd=trailing_dd,
+            lock_equity_threshold=lock_equity_threshold,
+            post_lock_floor=post_lock_floor,
+            enforce_dll=enforce_dll,
+            dll_terminates_run=dll_terminates_run,
+            balance_tiers=balance_tiers,
+            target_qty_mnq=float(target_qty_mnq),
+            mnq_per_mini=float(mnq_per_mini),
+        )
+
     pnl = np.asarray(session_pnls, dtype=np.float64).ravel()
     n = int(pnl.size)
     if len(ny_calendar_dates) != n:
@@ -246,7 +323,289 @@ def simulate_apex_eod_two_phase(
         max_peak_to_trough_dd=max_pt_dd,
         binding_session_index=int(bind_i),
         n_sessions=n,
+        tier_summary=None,
     )
+
+
+def _simulate_apex_eod_two_phase_tiered(
+    session_pnls_per_mnq: np.ndarray,
+    ny_calendar_dates: list[dt.date],
+    *,
+    starting_balance: float,
+    trailing_dd: float,
+    lock_equity_threshold: float | None,
+    post_lock_floor: float | None,
+    enforce_dll: bool,
+    dll_terminates_run: bool,
+    balance_tiers: tuple[ApexBalanceTier, ...],
+    target_qty_mnq: float,
+    mnq_per_mini: float,
+    session_trace_out: list[dict[str, object]] | None = None,
+) -> ApexEodTwoPhaseSimResult:
+    tiers = tuple(sorted(balance_tiers, key=lambda t: t.min_balance))
+    pnl1 = np.asarray(session_pnls_per_mnq, dtype=np.float64).ravel()
+    n = int(pnl1.size)
+    if len(ny_calendar_dates) != n:
+        msg = "ny_calendar_dates must match session_pnls length"
+        raise ValueError(msg)
+
+    lock_at = (
+        float(lock_equity_threshold)
+        if lock_equity_threshold is not None
+        else float(starting_balance) + float(trailing_dd)
+    )
+    floor_after = (
+        float(post_lock_floor)
+        if post_lock_floor is not None
+        else float(starting_balance)
+    )
+    trail = float(trailing_dd)
+
+    equity = float(starting_balance)
+    hwm = float(starting_balance)
+    locked = False
+    peak_eq = float(starting_balance)
+    max_pt_dd = 0.0
+    max_pt_dd_i = 0
+    min_pre = float("inf")
+    min_post = float("inf")
+    max_violation = 0.0
+    bind_i = 0
+    trail_breaches = 0
+    dll_fail = False
+    dll_day_hits = 0
+
+    current_day: dt.date | None = None
+    day_accum = 0.0
+    day_dll_paused = False
+    dll_hit_counted_for_day = False
+    day_fixed_dll: float | None = None
+
+    n_tiers = len(tiers)
+    sessions_per_tier = [0] * n_tiers
+    dll_pause_days_per_tier = [0] * n_tiers
+    transitions: list[dict[str, object]] = []
+    prev_tier_idx: int | None = None
+    pre_lock_sessions = 0
+    post_lock_sessions = 0
+
+    tier_idx_for_dll_charge: int = 0
+
+    for i in range(n):
+        d_ny = ny_calendar_dates[i]
+        eod_prior = equity
+        locked_open = locked
+        hwm_open = hwm
+        allowed_min_open = floor_after if locked_open else hwm_open - trail
+        margin_open = eod_prior - allowed_min_open
+
+        t_idx, tier_open = apex_tier_index_for_equity(eod_prior, tiers)
+        eff = effective_mnq_qty(target_qty_mnq, tier_open, mnq_per_mini=mnq_per_mini)
+        session_dll = float(tier_open.dll_limit)
+        s_pnl = float(pnl1[i]) * eff
+        dll_new_pause = False
+
+        if current_day is None:
+            current_day = d_ny
+            day_accum = 0.0
+            day_dll_paused = False
+            dll_hit_counted_for_day = False
+            day_fixed_dll = session_dll
+            tier_idx_for_dll_charge = t_idx
+        elif d_ny != current_day:
+            if (
+                dll_terminates_run
+                and enforce_dll
+                and day_fixed_dll is not None
+                and day_accum < -day_fixed_dll
+            ):
+                dll_fail = True
+                dll_day_hits += 1
+            current_day = d_ny
+            day_accum = 0.0
+            day_dll_paused = False
+            dll_hit_counted_for_day = False
+            day_fixed_dll = session_dll
+            tier_idx_for_dll_charge = t_idx
+
+        if prev_tier_idx is None:
+            prev_tier_idx = t_idx
+        elif t_idx != prev_tier_idx:
+            transitions.append(
+                {
+                    "session_index": i,
+                    "from_tier": prev_tier_idx,
+                    "to_tier": t_idx,
+                    "direction": "up" if t_idx > prev_tier_idx else "down",
+                    "equity_before_session": eod_prior,
+                },
+            )
+            prev_tier_idx = t_idx
+
+        sessions_per_tier[t_idx] += 1
+
+        dll_lim_row = day_fixed_dll if day_fixed_dll is not None else session_dll
+
+        if dll_terminates_run or not enforce_dll:
+            day_accum += s_pnl
+            equity += s_pnl
+        elif day_dll_paused:
+            pass
+        else:
+            cand = day_accum + s_pnl
+            if cand < -dll_lim_row:
+                day_accum = cand
+                equity += s_pnl
+                if not dll_hit_counted_for_day:
+                    dll_day_hits += 1
+                    dll_pause_days_per_tier[tier_idx_for_dll_charge] += 1
+                    dll_hit_counted_for_day = True
+                    dll_new_pause = True
+                day_dll_paused = True
+            else:
+                day_accum = cand
+                equity += s_pnl
+
+        if equity > hwm:
+            hwm = equity
+        if not locked and hwm >= lock_at:
+            locked = True
+
+        if locked:
+            allowed_min = floor_after
+            min_post = min(min_post, equity - floor_after)
+            post_lock_sessions += 1
+        else:
+            allowed_min = hwm - trail
+            min_pre = min(min_pre, equity - allowed_min)
+            pre_lock_sessions += 1
+
+        viol = allowed_min - equity
+        if viol > max_violation:
+            max_violation = viol
+            bind_i = i
+        breach_close = equity < allowed_min
+        if breach_close:
+            trail_breaches += 1
+
+        if equity > peak_eq:
+            peak_eq = equity
+        pt_dd = peak_eq - equity
+        if pt_dd > max_pt_dd:
+            max_pt_dd = pt_dd
+            max_pt_dd_i = i
+
+        if session_trace_out is not None:
+            margin_close = equity - allowed_min
+            session_trace_out.append(
+                {
+                    "session_index": i,
+                    "ny_date": d_ny,
+                    "tier_index_open": t_idx,
+                    "effective_mnq": eff,
+                    "session_dll_limit": session_dll,
+                    "session_pnl": float(s_pnl),
+                    "equity_open": float(eod_prior),
+                    "equity_close": float(equity),
+                    "locked_open": bool(locked_open),
+                    "locked_close": bool(locked),
+                    "allowed_min_open": float(allowed_min_open),
+                    "allowed_min_close": float(allowed_min),
+                    "margin_to_floor_open": float(margin_open),
+                    "margin_to_floor_close": float(margin_close),
+                    "trail_breach_after_session": bool(breach_close),
+                    "dll_new_pause_this_session": bool(dll_new_pause),
+                },
+            )
+
+    if (
+        current_day is not None
+        and dll_terminates_run
+        and enforce_dll
+        and day_fixed_dll is not None
+        and day_accum < -day_fixed_dll
+    ):
+        dll_fail = True
+        dll_day_hits += 1
+
+    if max_violation <= 0.0:
+        bind_i = max_pt_dd_i
+
+    trail_fail = trail_breaches > 0
+    if dll_terminates_run and enforce_dll:
+        survived = not trail_fail and not dll_fail
+        out_dll_fail = bool(dll_fail)
+    else:
+        survived = not trail_fail
+        out_dll_fail = False
+
+    if not np.isfinite(min_pre):
+        min_pre = float("nan")
+    if not locked or not np.isfinite(min_post):
+        min_post = float("nan") if not locked else min_post
+
+    eff_series = [effective_mnq_qty(target_qty_mnq, t, mnq_per_mini=mnq_per_mini) for t in tiers]
+    tier_summary: dict[str, object] = {
+        "target_qty_mnq": target_qty_mnq,
+        "mnq_per_mini": mnq_per_mini,
+        "tier_transitions": transitions,
+        "sessions_per_tier_index": {str(k): sessions_per_tier[k] for k in range(n_tiers)},
+        "dll_pause_days_per_tier_index": {
+            str(k): dll_pause_days_per_tier[k] for k in range(n_tiers)
+        },
+        "pre_lock_sessions": pre_lock_sessions,
+        "post_lock_sessions": post_lock_sessions,
+        "effective_mnq_cap_by_tier_index": {str(k): eff_series[k] for k in range(n_tiers)},
+    }
+
+    return ApexEodTwoPhaseSimResult(
+        starting_balance=float(starting_balance),
+        final_equity=equity,
+        survived=bool(survived),
+        trail_breach_sessions=int(trail_breaches),
+        dll_fail=out_dll_fail,
+        dll_failure_days=int(dll_day_hits),
+        locked_achieved=bool(locked),
+        min_margin_pre_lock=float(min_pre) if np.isfinite(min_pre) else float("nan"),
+        min_margin_post_lock=float(min_post) if locked and np.isfinite(min_post) else float("nan"),
+        max_peak_to_trough_dd=max_pt_dd,
+        binding_session_index=int(bind_i),
+        n_sessions=n,
+        tier_summary=tier_summary,
+    )
+
+
+def simulate_apex_eod_two_phase_tiered_with_trace(
+    session_pnls_per_mnq: np.ndarray,
+    ny_calendar_dates: list[dt.date],
+    *,
+    starting_balance: float,
+    trailing_dd: float,
+    lock_equity_threshold: float | None = None,
+    post_lock_floor: float | None = None,
+    enforce_dll: bool = True,
+    dll_terminates_run: bool = False,
+    balance_tiers: tuple[ApexBalanceTier, ...],
+    target_qty_mnq: float,
+    mnq_per_mini: float = 10.0,
+) -> tuple[ApexEodTwoPhaseSimResult, list[dict[str, object]]]:
+    """Tiered funded walk with one dict per session (Wave 0f failure profiling)."""
+    trace: list[dict[str, object]] = []
+    res = _simulate_apex_eod_two_phase_tiered(
+        session_pnls_per_mnq,
+        ny_calendar_dates,
+        starting_balance=starting_balance,
+        trailing_dd=trailing_dd,
+        lock_equity_threshold=lock_equity_threshold,
+        post_lock_floor=post_lock_floor,
+        enforce_dll=enforce_dll,
+        dll_terminates_run=dll_terminates_run,
+        balance_tiers=balance_tiers,
+        target_qty_mnq=float(target_qty_mnq),
+        mnq_per_mini=float(mnq_per_mini),
+        session_trace_out=trace,
+    )
+    return res, trace
 
 
 def simulate_apex_50k_eod_two_phase(
@@ -442,6 +801,271 @@ def simulate_eval_window_50k_eod(
         post_lock_floor=post_lock_floor,
         dll_terminates_run=dll_terminates_run,
     )
+
+
+def eval_pass_rate_calendar_days(
+    pnls_per_eval_mnq: np.ndarray,
+    exit_ny_dates: list[dt.date],
+    exit_session_dates: list[object],
+    exit_times: list[object],
+    *,
+    starting_balance: float,
+    trailing_dd: float,
+    profit_target: float,
+    dll_limit: float,
+    lock_equity_threshold: float | None = None,
+    post_lock_floor: float | None = None,
+    window_calendar_days: int = 30,
+    dll_terminates_run: bool = False,
+) -> dict[str, object]:
+    """
+    Rolling **calendar-day** windows of length ``window_calendar_days`` (inclusive span).
+
+    Each window ``[d0, d0 + window_calendar_days - 1]`` includes trades with
+    ``exit_ny_dates`` in that inclusive range. Trades are **pre-scaled** to eval MNQ
+    (caller applies ``min(target_mnq, eval_cap_mnq)`` per trade row).
+    """
+    if pnls_per_eval_mnq.size != len(exit_ny_dates):
+        msg = "pnls length must match exit_ny_dates"
+        raise ValueError(msg)
+    if window_calendar_days < 1:
+        msg = "window_calendar_days must be >= 1"
+        raise ValueError(msg)
+
+    mn = min(exit_ny_dates)
+    mx = max(exit_ny_dates)
+    pass_c = 0
+    fail_tr = 0
+    fail_nt = 0
+    total_w = 0
+    d0 = mn
+    span = dt.timedelta(days=window_calendar_days - 1)
+    while d0 <= mx - span:
+        d1 = d0 + span
+        mask = np.array([(d0 <= d <= d1) for d in exit_ny_dates], dtype=bool)
+        if not np.any(mask):
+            d0 += dt.timedelta(days=1)
+            continue
+        total_w += 1
+        idx = np.flatnonzero(mask)
+        order = np.argsort([exit_times[int(i)] for i in idx])
+        idx2 = idx[order]
+        sub_p = pnls_per_eval_mnq[idx2]
+        sub_ny = [exit_ny_dates[int(i)] for i in idx2]
+        sub_sess = [exit_session_dates[int(i)] for i in idx2]
+        r = simulate_eval_window_eod(
+            sub_p,
+            sub_ny,
+            sub_sess,
+            starting_balance=starting_balance,
+            trailing_dd=trailing_dd,
+            profit_target=profit_target,
+            dll_limit=dll_limit,
+            lock_equity_threshold=lock_equity_threshold,
+            post_lock_floor=post_lock_floor,
+            dll_terminates_run=dll_terminates_run,
+        )
+        if r["outcome"] == "pass":
+            pass_c += 1
+        elif r["mode"] == "trailing_dd":
+            fail_tr += 1
+        else:
+            fail_nt += 1
+        d0 += dt.timedelta(days=1)
+
+    return {
+        "total_windows": total_w,
+        "passing_windows": pass_c,
+        "pass_rate": (pass_c / total_w) if total_w > 0 else float("nan"),
+        "fail_trailing": fail_tr,
+        "fail_no_target": fail_nt,
+        "window_calendar_days": window_calendar_days,
+    }
+
+
+def block_bootstrap_apex_eod_tiered_funded(
+    trades_pnl_per_mnq: np.ndarray,
+    trade_dates: list[object],
+    trade_ny_dates: list[dt.date],
+    *,
+    target_qty_mnq: float,
+    block_len: int,
+    n_target_trades: int,
+    n_iterations: int,
+    rng: np.random.Generator,
+    starting_balance: float,
+    trailing_dd: float,
+    balance_tiers: tuple[ApexBalanceTier, ...],
+    lock_equity_threshold: float | None = None,
+    post_lock_floor: float | None = None,
+    mnq_per_mini: float = 10.0,
+    enforce_dll: bool = True,
+    dll_terminates_run: bool = False,
+) -> dict[str, np.ndarray]:
+    """Block-bootstrap **per-MNQ** trades through tiered PA funded path."""
+    n = int(trades_pnl_per_mnq.size)
+    if n != len(trade_dates) or n != len(trade_ny_dates):
+        msg = "trades_pnl, trade_dates, trade_ny_dates length mismatch"
+        raise ValueError(msg)
+    if block_len < 1 or n_target_trades < 1:
+        msg = "block_len and n_target_trades must be >= 1"
+        raise ValueError(msg)
+
+    blocks_pnl: list[np.ndarray] = []
+    blocks_dates: list[list[object]] = []
+    blocks_ny: list[list[dt.date]] = []
+    for start in range(0, n, block_len):
+        sl = slice(start, min(start + block_len, n))
+        blocks_pnl.append(trades_pnl_per_mnq[sl].copy())
+        blocks_dates.append(list(trade_dates[sl]))
+        blocks_ny.append(list(trade_ny_dates[sl]))
+
+    n_blocks = len(blocks_pnl)
+    survived = np.empty(n_iterations, dtype=bool)
+
+    for it in range(n_iterations):
+        buf_pnl: list[float] = []
+        buf_d: list[object] = []
+        buf_ny: list[dt.date] = []
+        while len(buf_pnl) < n_target_trades:
+            j = int(rng.integers(0, n_blocks))
+            buf_pnl.extend(float(p) for p in blocks_pnl[j].tolist())
+            buf_d.extend(blocks_dates[j])
+            buf_ny.extend(blocks_ny[j])
+        buf_pnl = buf_pnl[:n_target_trades]
+        buf_d = buf_d[:n_target_trades]
+        buf_ny = buf_ny[:n_target_trades]
+
+        arr = np.array(buf_pnl, dtype=np.float64)
+        _, daily, dny = collapse_trades_with_ny_to_session_streaks(buf_d, buf_ny, arr)
+        r = simulate_apex_eod_two_phase(
+            daily,
+            dny,
+            starting_balance=starting_balance,
+            trailing_dd=trailing_dd,
+            dll_limit=0.0,
+            lock_equity_threshold=lock_equity_threshold,
+            post_lock_floor=post_lock_floor,
+            enforce_dll=enforce_dll,
+            dll_terminates_run=dll_terminates_run,
+            balance_tiers=balance_tiers,
+            target_qty_mnq=target_qty_mnq,
+            mnq_per_mini=mnq_per_mini,
+        )
+        survived[it] = r.survived
+
+    return {"survived": survived}
+
+
+def diagnose_block_bootstrap_flat_funded_path(
+    trades_pnl_scaled: np.ndarray,
+    trade_dates: list[object],
+    trade_ny_dates: list[dt.date],
+    *,
+    year: int,
+    block_len: int,
+    n_target_trades: int,
+    n_iterations: int,
+    rng: np.random.Generator,
+    protocol_yfrac: float,
+    funded_sim: Callable[
+        [np.ndarray, list[dt.date]],
+        ApexEodTwoPhaseSimResult,
+    ],
+) -> dict[str, object]:
+    """
+    Trade-series bootstrap diagnostics: per-resample **count of trades** with
+    ``exit_ny_dates.year == year``, closed-trade **max DD**, **annualized** scaled
+    P&amp;L on the path, and **funded survival** from ``funded_sim`` on collapsed
+    session streaks.
+    """
+    n = int(trades_pnl_scaled.size)
+    if n != len(trade_dates) or n != len(trade_ny_dates):
+        msg = "length mismatch"
+        raise ValueError(msg)
+    n_y = sum(1 for d in trade_ny_dates if d.year == year)
+    p_year = n_y / n if n else 0.0
+    expected_count = float(n_target_trades) * p_year
+
+    blocks_pnl: list[np.ndarray] = []
+    blocks_dates: list[list[object]] = []
+    blocks_ny: list[list[dt.date]] = []
+    for start in range(0, n, block_len):
+        sl = slice(start, min(start + block_len, n))
+        blocks_pnl.append(trades_pnl_scaled[sl].copy())
+        blocks_dates.append(list(trade_dates[sl]))
+        blocks_ny.append(list(trade_ny_dates[sl]))
+
+    n_blocks = len(blocks_pnl)
+    counts = np.empty(n_iterations, dtype=np.int32)
+    survived = np.empty(n_iterations, dtype=bool)
+    max_dd = np.empty(n_iterations, dtype=np.float64)
+    ann_pnl = np.empty(n_iterations, dtype=np.float64)
+
+    for it in range(n_iterations):
+        buf_pnl: list[float] = []
+        buf_d: list[object] = []
+        buf_ny: list[dt.date] = []
+        while len(buf_pnl) < n_target_trades:
+            j = int(rng.integers(0, n_blocks))
+            for p, d, ny in zip(
+                blocks_pnl[j].tolist(),
+                blocks_dates[j],
+                blocks_ny[j],
+                strict=True,
+            ):
+                buf_pnl.append(float(p))
+                buf_d.append(d)
+                buf_ny.append(ny)
+        buf_pnl = buf_pnl[:n_target_trades]
+        buf_d = buf_d[:n_target_trades]
+        buf_ny = buf_ny[:n_target_trades]
+
+        arr = np.array(buf_pnl, dtype=np.float64)
+        counts[it] = int(sum(1 for ny in buf_ny if ny.year == year))
+        max_dd[it] = max_drawdown_closed_trade_pnl(arr)
+        ann_pnl[it] = float(np.sum(arr)) / protocol_yfrac if protocol_yfrac > 0 else 0.0
+
+        _, daily, dny = collapse_trades_with_ny_to_session_streaks(buf_d, buf_ny, arr)
+        survived[it] = funded_sim(daily, dny).survived
+
+    tol = 0.10 * expected_count if expected_count > 0 else 0.0
+    near_expected = np.abs(counts.astype(np.float64) - expected_count) <= max(tol, 1.0)
+    cond_frac = (
+        float(np.mean(survived[near_expected].astype(np.float64)))
+        if np.any(near_expected)
+        else float("nan")
+    )
+    uncond_frac = float(np.mean(survived.astype(np.float64)))
+
+    c_fail = counts[~near_expected] if np.any(~near_expected) else np.array([], dtype=np.int32)
+    c_pass = counts[near_expected] if np.any(near_expected) else np.array([], dtype=np.int32)
+
+    return {
+        "year": year,
+        "block_len": block_len,
+        "n_trades_source": n,
+        "n_trades_year_source": n_y,
+        "p_year_in_source": p_year,
+        "expected_year_trade_count": expected_count,
+        "count_mean": float(np.mean(counts)),
+        "count_std": float(np.std(counts)),
+        "count_p05": float(np.percentile(counts, 5)),
+        "count_p95": float(np.percentile(counts, 95)),
+        "unconditional_survival_fraction": uncond_frac,
+        "conditional_survival_within_10pct_expected_count": cond_frac,
+        "n_resamples_near_expected_count": int(np.sum(near_expected)),
+        "mean_count_failing_resamples": float(np.mean(c_fail)) if c_fail.size else None,
+        "mean_count_passing_resamples": float(np.mean(c_pass)) if c_pass.size else None,
+        "interpretation_hint": (
+            "Compare conditional vs unconditional survival; compare count distribution "
+            "to expected_count under Bernoulli(p_year) × n_target (block bootstrap "
+            "alters variance vs iid)."
+        ),
+        "max_dd_mean": float(np.mean(max_dd)),
+        "max_dd_p95": float(np.percentile(max_dd, 95)),
+        "annual_pnl_mean": float(np.mean(ann_pnl)),
+    }
 
 
 def trades_to_daily_pnls_with_ny(

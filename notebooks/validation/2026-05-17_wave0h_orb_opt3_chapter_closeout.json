@@ -1,0 +1,533 @@
+{
+  "wave": "0h",
+  "git": {
+    "git_sha": "75c84e5ae8ce1edc1d19e4c0788144dc5f6dff7d",
+    "git_dirty": true
+  },
+  "protocol": {
+    "start": "2020-01-01",
+    "end_inclusive": "2026-04-19",
+    "trade_log_closed_trades": 799,
+    "unique_exit_ny_dates_with_trades": 779,
+    "max_trades_on_single_exit_ny_date": 6,
+    "n_exit_ny_dates_with_multiple_trades": 15
+  },
+  "deliverable_1_session_loss_distribution": {
+    "aggregation": "sum(net_pnl) by exit_ny_date (America/New_York calendar), qty=1 MNQ",
+    "n_losing_sessions": 272,
+    "mean_session_pnl_losing_only": -131.07720588235293,
+    "median_session_pnl_losing_only": -136.5,
+    "median_abs_session_loss_losing_only": 136.5,
+    "max_single_session_loss_all_traded_days": -789.5,
+    "abs_loss_percentiles_among_losing_sessions_usd": {
+      "p75": 160.0,
+      "p90": 160.0,
+      "p95": 160.0,
+      "p99": 519.8150000000005
+    },
+    "tail_multiple_abs_percentile_over_median_abs": {
+      "p75_over_median_abs": 1.1721611721611722,
+      "p90_over_median_abs": 1.1721611721611722,
+      "p95_over_median_abs": 1.1721611721611722,
+      "p99_over_median_abs": 3.808168498168502
+    },
+    "histogram_losing_sessions": {
+      "n_bins": 40,
+      "range": [
+        -789.5,
+        0.0
+      ],
+      "counts": [
+        1.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        97.0,
+        31.0,
+        35.0,
+        34.0,
+        23.0,
+        19.0,
+        6.0,
+        10.0,
+        11.0
+      ],
+      "bin_edges": [
+        -789.5,
+        -769.7625,
+        -750.025,
+        -730.2875,
+        -710.55,
+        -690.8125,
+        -671.075,
+        -651.3375,
+        -631.6,
+        -611.8625,
+        -592.125,
+        -572.3875,
+        -552.65,
+        -532.9124999999999,
+        -513.175,
+        -493.4375,
+        -473.7,
+        -453.9625,
+        -434.22499999999997,
+        -414.4875,
+        -394.75,
+        -375.0125,
+        -355.275,
+        -335.53749999999997,
+        -315.79999999999995,
+        -296.0625,
+        -276.32499999999993,
+        -256.5875,
+        -236.85000000000002,
+        -217.11249999999995,
+        -197.375,
+        -177.63749999999993,
+        -157.89999999999998,
+        -138.16250000000002,
+        -118.42499999999995,
+        -98.6875,
+        -78.94999999999993,
+        -59.21249999999998,
+        -39.47500000000002,
+        -19.737499999999955,
+        0.0
+      ]
+    }
+  },
+  "deliverable_1_apex_prelock_buffer_comparison": [
+    {
+      "account_class": "100k",
+      "starting_balance": 100000.0,
+      "pre_lock_trailing_drawdown_tdd_usd": 3000.0,
+      "profit_target_usd": 6000.0,
+      "lock_equity_threshold": 103000.0,
+      "post_lock_floor": 100000.0,
+      "margin_to_trailing_floor_at_open_assumes_hwm_equals_start_usd": 3000.0,
+      "margin_to_trailing_floor_just_below_lock_threshold_hwm_equals_lock_eq_usd": 3000.0,
+      "notes": "Under two-phase pre-lock rules, margin to the **trailing** floor equals **TDD** whenever equity and HWM are equal (including at open and when HWM reaches the lock threshold). **profit_target_usd** is the eval profit-target **dollars**, distinct from trailing margin.",
+      "equity_gain_from_start_to_lock_threshold_usd": 3000.0,
+      "percentile_abs_loss_mnq1_usd": {
+        "p75": 160.0,
+        "p90": 160.0,
+        "p95": 160.0,
+        "p99": 519.8150000000005
+      },
+      "percentile_abs_loss_mnq1_pct_of_tdd": {
+        "p75": 5.333333333333333,
+        "p90": 5.333333333333333,
+        "p95": 5.333333333333333,
+        "p99": 17.327166666666685
+      },
+      "scaled_qty_comparison": [
+        {
+          "qty_mnq": 1,
+          "abs_loss_percentiles_usd": {
+            "p75": 160.0,
+            "p90": 160.0,
+            "p95": 160.0,
+            "p99": 519.8150000000005
+          },
+          "abs_loss_percentiles_pct_of_tdd": {
+            "p75": 5.333333333333333,
+            "p90": 5.333333333333333,
+            "p95": 5.333333333333333,
+            "p99": 17.327166666666685
+          }
+        },
+        {
+          "qty_mnq": 2,
+          "abs_loss_percentiles_usd": {
+            "p75": 320.0,
+            "p90": 320.0,
+            "p95": 320.0,
+            "p99": 1039.630000000001
+          },
+          "abs_loss_percentiles_pct_of_tdd": {
+            "p75": 10.666666666666666,
+            "p90": 10.666666666666666,
+            "p95": 10.666666666666666,
+            "p99": 34.65433333333337
+          }
+        },
+        {
+          "qty_mnq": 5,
+          "abs_loss_percentiles_usd": {
+            "p75": 800.0,
+            "p90": 800.0,
+            "p95": 800.0,
+            "p99": 2599.0750000000025
+          },
+          "abs_loss_percentiles_pct_of_tdd": {
+            "p75": 26.666666666666668,
+            "p90": 26.666666666666668,
+            "p95": 26.666666666666668,
+            "p99": 86.63583333333342
+          }
+        },
+        {
+          "qty_mnq": 10,
+          "abs_loss_percentiles_usd": {
+            "p75": 1600.0,
+            "p90": 1600.0,
+            "p95": 1600.0,
+            "p99": 5198.150000000005
+          },
+          "abs_loss_percentiles_pct_of_tdd": {
+            "p75": 53.333333333333336,
+            "p90": 53.333333333333336,
+            "p95": 53.333333333333336,
+            "p99": 173.27166666666685
+          }
+        }
+      ],
+      "back_of_envelope_linear_stop_model": {
+        "assumption": "Proportional scaling: narrowing stop distance scales all session losses by the same factor. **Does not** model win-rate, fill quality, or exit-type mix.",
+        "target_cap": "99th-percentile **absolute** session loss \u2264 50% of class TDD (pre-lock).",
+        "linear_scale_factor_to_hit_cap_on_p99": 2.8856420072525775,
+        "implied_stop_distance_reduction_pct_if_factor_lt_1": 0.0
+      }
+    },
+    {
+      "account_class": "150k",
+      "starting_balance": 150000.0,
+      "pre_lock_trailing_drawdown_tdd_usd": 4000.0,
+      "profit_target_usd": 9000.0,
+      "lock_equity_threshold": 154000.0,
+      "post_lock_floor": 150000.0,
+      "margin_to_trailing_floor_at_open_assumes_hwm_equals_start_usd": 4000.0,
+      "margin_to_trailing_floor_just_below_lock_threshold_hwm_equals_lock_eq_usd": 4000.0,
+      "notes": "Under two-phase pre-lock rules, margin to the **trailing** floor equals **TDD** whenever equity and HWM are equal (including at open and when HWM reaches the lock threshold). **profit_target_usd** is the eval profit-target **dollars**, distinct from trailing margin.",
+      "equity_gain_from_start_to_lock_threshold_usd": 4000.0,
+      "percentile_abs_loss_mnq1_usd": {
+        "p75": 160.0,
+        "p90": 160.0,
+        "p95": 160.0,
+        "p99": 519.8150000000005
+      },
+      "percentile_abs_loss_mnq1_pct_of_tdd": {
+        "p75": 4.0,
+        "p90": 4.0,
+        "p95": 4.0,
+        "p99": 12.995375000000013
+      },
+      "scaled_qty_comparison": [
+        {
+          "qty_mnq": 1,
+          "abs_loss_percentiles_usd": {
+            "p75": 160.0,
+            "p90": 160.0,
+            "p95": 160.0,
+            "p99": 519.8150000000005
+          },
+          "abs_loss_percentiles_pct_of_tdd": {
+            "p75": 4.0,
+            "p90": 4.0,
+            "p95": 4.0,
+            "p99": 12.995375000000013
+          }
+        },
+        {
+          "qty_mnq": 2,
+          "abs_loss_percentiles_usd": {
+            "p75": 320.0,
+            "p90": 320.0,
+            "p95": 320.0,
+            "p99": 1039.630000000001
+          },
+          "abs_loss_percentiles_pct_of_tdd": {
+            "p75": 8.0,
+            "p90": 8.0,
+            "p95": 8.0,
+            "p99": 25.990750000000027
+          }
+        },
+        {
+          "qty_mnq": 5,
+          "abs_loss_percentiles_usd": {
+            "p75": 800.0,
+            "p90": 800.0,
+            "p95": 800.0,
+            "p99": 2599.0750000000025
+          },
+          "abs_loss_percentiles_pct_of_tdd": {
+            "p75": 20.0,
+            "p90": 20.0,
+            "p95": 20.0,
+            "p99": 64.97687500000006
+          }
+        },
+        {
+          "qty_mnq": 10,
+          "abs_loss_percentiles_usd": {
+            "p75": 1600.0,
+            "p90": 1600.0,
+            "p95": 1600.0,
+            "p99": 5198.150000000005
+          },
+          "abs_loss_percentiles_pct_of_tdd": {
+            "p75": 40.0,
+            "p90": 40.0,
+            "p95": 40.0,
+            "p99": 129.95375000000013
+          }
+        }
+      ],
+      "back_of_envelope_linear_stop_model": {
+        "assumption": "Proportional scaling: narrowing stop distance scales all session losses by the same factor. **Does not** model win-rate, fill quality, or exit-type mix.",
+        "target_cap": "99th-percentile **absolute** session loss \u2264 50% of class TDD (pre-lock).",
+        "linear_scale_factor_to_hit_cap_on_p99": 3.84752267633677,
+        "implied_stop_distance_reduction_pct_if_factor_lt_1": 0.0
+      }
+    },
+    {
+      "account_class": "25k",
+      "starting_balance": 25000.0,
+      "pre_lock_trailing_drawdown_tdd_usd": 1000.0,
+      "profit_target_usd": 1500.0,
+      "lock_equity_threshold": 26000.0,
+      "post_lock_floor": 25000.0,
+      "margin_to_trailing_floor_at_open_assumes_hwm_equals_start_usd": 1000.0,
+      "margin_to_trailing_floor_just_below_lock_threshold_hwm_equals_lock_eq_usd": 1000.0,
+      "notes": "Under two-phase pre-lock rules, margin to the **trailing** floor equals **TDD** whenever equity and HWM are equal (including at open and when HWM reaches the lock threshold). **profit_target_usd** is the eval profit-target **dollars**, distinct from trailing margin.",
+      "equity_gain_from_start_to_lock_threshold_usd": 1000.0,
+      "percentile_abs_loss_mnq1_usd": {
+        "p75": 160.0,
+        "p90": 160.0,
+        "p95": 160.0,
+        "p99": 519.8150000000005
+      },
+      "percentile_abs_loss_mnq1_pct_of_tdd": {
+        "p75": 16.0,
+        "p90": 16.0,
+        "p95": 16.0,
+        "p99": 51.981500000000054
+      },
+      "scaled_qty_comparison": [
+        {
+          "qty_mnq": 1,
+          "abs_loss_percentiles_usd": {
+            "p75": 160.0,
+            "p90": 160.0,
+            "p95": 160.0,
+            "p99": 519.8150000000005
+          },
+          "abs_loss_percentiles_pct_of_tdd": {
+            "p75": 16.0,
+            "p90": 16.0,
+            "p95": 16.0,
+            "p99": 51.981500000000054
+          }
+        },
+        {
+          "qty_mnq": 2,
+          "abs_loss_percentiles_usd": {
+            "p75": 320.0,
+            "p90": 320.0,
+            "p95": 320.0,
+            "p99": 1039.630000000001
+          },
+          "abs_loss_percentiles_pct_of_tdd": {
+            "p75": 32.0,
+            "p90": 32.0,
+            "p95": 32.0,
+            "p99": 103.96300000000011
+          }
+        },
+        {
+          "qty_mnq": 5,
+          "abs_loss_percentiles_usd": {
+            "p75": 800.0,
+            "p90": 800.0,
+            "p95": 800.0,
+            "p99": 2599.0750000000025
+          },
+          "abs_loss_percentiles_pct_of_tdd": {
+            "p75": 80.0,
+            "p90": 80.0,
+            "p95": 80.0,
+            "p99": 259.90750000000025
+          }
+        },
+        {
+          "qty_mnq": 10,
+          "abs_loss_percentiles_usd": {
+            "p75": 1600.0,
+            "p90": 1600.0,
+            "p95": 1600.0,
+            "p99": 5198.150000000005
+          },
+          "abs_loss_percentiles_pct_of_tdd": {
+            "p75": 160.0,
+            "p90": 160.0,
+            "p95": 160.0,
+            "p99": 519.8150000000005
+          }
+        }
+      ],
+      "back_of_envelope_linear_stop_model": {
+        "assumption": "Proportional scaling: narrowing stop distance scales all session losses by the same factor. **Does not** model win-rate, fill quality, or exit-type mix.",
+        "target_cap": "99th-percentile **absolute** session loss \u2264 50% of class TDD (pre-lock).",
+        "linear_scale_factor_to_hit_cap_on_p99": 0.9618806690841925,
+        "implied_stop_distance_reduction_pct_if_factor_lt_1": 3.8119330915807548
+      }
+    },
+    {
+      "account_class": "50k",
+      "starting_balance": 50000.0,
+      "pre_lock_trailing_drawdown_tdd_usd": 2000.0,
+      "profit_target_usd": 3000.0,
+      "lock_equity_threshold": 52000.0,
+      "post_lock_floor": 50000.0,
+      "margin_to_trailing_floor_at_open_assumes_hwm_equals_start_usd": 2000.0,
+      "margin_to_trailing_floor_just_below_lock_threshold_hwm_equals_lock_eq_usd": 2000.0,
+      "notes": "Under two-phase pre-lock rules, margin to the **trailing** floor equals **TDD** whenever equity and HWM are equal (including at open and when HWM reaches the lock threshold). **profit_target_usd** is the eval profit-target **dollars**, distinct from trailing margin.",
+      "equity_gain_from_start_to_lock_threshold_usd": 2000.0,
+      "percentile_abs_loss_mnq1_usd": {
+        "p75": 160.0,
+        "p90": 160.0,
+        "p95": 160.0,
+        "p99": 519.8150000000005
+      },
+      "percentile_abs_loss_mnq1_pct_of_tdd": {
+        "p75": 8.0,
+        "p90": 8.0,
+        "p95": 8.0,
+        "p99": 25.990750000000027
+      },
+      "scaled_qty_comparison": [
+        {
+          "qty_mnq": 1,
+          "abs_loss_percentiles_usd": {
+            "p75": 160.0,
+            "p90": 160.0,
+            "p95": 160.0,
+            "p99": 519.8150000000005
+          },
+          "abs_loss_percentiles_pct_of_tdd": {
+            "p75": 8.0,
+            "p90": 8.0,
+            "p95": 8.0,
+            "p99": 25.990750000000027
+          }
+        },
+        {
+          "qty_mnq": 2,
+          "abs_loss_percentiles_usd": {
+            "p75": 320.0,
+            "p90": 320.0,
+            "p95": 320.0,
+            "p99": 1039.630000000001
+          },
+          "abs_loss_percentiles_pct_of_tdd": {
+            "p75": 16.0,
+            "p90": 16.0,
+            "p95": 16.0,
+            "p99": 51.981500000000054
+          }
+        },
+        {
+          "qty_mnq": 5,
+          "abs_loss_percentiles_usd": {
+            "p75": 800.0,
+            "p90": 800.0,
+            "p95": 800.0,
+            "p99": 2599.0750000000025
+          },
+          "abs_loss_percentiles_pct_of_tdd": {
+            "p75": 40.0,
+            "p90": 40.0,
+            "p95": 40.0,
+            "p99": 129.95375000000013
+          }
+        },
+        {
+          "qty_mnq": 10,
+          "abs_loss_percentiles_usd": {
+            "p75": 1600.0,
+            "p90": 1600.0,
+            "p95": 1600.0,
+            "p99": 5198.150000000005
+          },
+          "abs_loss_percentiles_pct_of_tdd": {
+            "p75": 80.0,
+            "p90": 80.0,
+            "p95": 80.0,
+            "p99": 259.90750000000025
+          }
+        }
+      ],
+      "back_of_envelope_linear_stop_model": {
+        "assumption": "Proportional scaling: narrowing stop distance scales all session losses by the same factor. **Does not** model win-rate, fill quality, or exit-type mix.",
+        "target_cap": "99th-percentile **absolute** session loss \u2264 50% of class TDD (pre-lock).",
+        "linear_scale_factor_to_hit_cap_on_p99": 1.923761338168385,
+        "implied_stop_distance_reduction_pct_if_factor_lt_1": 0.0
+      }
+    }
+  ],
+  "stop_conditions": {
+    "surface_if_p99_abs_session_loss_le_half_tdd_at_qty1_reference_50k": true,
+    "interpretation_if_true": "Tail at MNQ=1 is mild vs **$50K** pre-lock TDD \u2014 would contradict the usual single-session tail narrative; worth reconciling vs prior funded-sim path dependence before declaring close-out.",
+    "per_class_p99_abs_le_half_class_tdd": {
+      "p99_abs_le_half_tdd_100k": true,
+      "p99_abs_le_half_tdd_150k": true,
+      "p99_abs_le_half_tdd_25k": false,
+      "p99_abs_le_half_tdd_50k": true
+    }
+  },
+  "deliverable_4_wave1_operator_agenda": {
+    "a_candidate_strategy_families": [
+      "Mean-reversion intraday (timeframe / trigger distinct from legacy AfternoonMR-style stacks)",
+      "Short-horizon trend continuation with deliberately tight risk (stop-first design)",
+      "Cross-instrument relative-value or basket hedges on correlated index products",
+      "Options-based vol / premium strategies (if execution stack and PA rules allow)",
+      "Scheduled event or macro-release windows with bounded risk",
+      "Microstructure-informed scalp / queue-position ideas (latency and fee sensitive)",
+      "Session/regime-conditional breakout or fade with explicit tail caps",
+      "Statistical pairs on index vs sector ETF micro (scope vs MNQ-only kickoff)",
+      "Overnight / globex edge with DLL-aware day boundaries",
+      "Hybrid: reduced-size ORB-like structure with modified exit (explicitly **not** pursued as ORB+Opt3 repair per operator close-out \u2014 listed only as a family)"
+    ],
+    "b_apex_hard_constraints_screening": [
+      "Pre-register **per-session realized loss** distribution vs **pre-lock TDD** at candidate **starting** qty before scaling \u2014 e.g. flag if empirical p99 session loss approaches 50\u2013100% of TDD under the same simulation semantics as Wave 0e\u20130g.",
+      "Maintain **DLL** (session pause) and **tier cap** fidelity when grading.",
+      "Keep **joint gates** (funded survival + block bootstrap + eval pass rate) unless operator revises thresholds."
+    ],
+    "c_trade_frequency_floor": "Kickoff treats frequency as a first-class constraint. After ORB+Opt3 findings, does the operator want a **higher minimum trades/year** for new hypotheses to reduce DD-window variance \u2014 or keep MV-edge **\u226580 trades/yr** as the isolation screen and relax only after tail diagnostics pass?",
+    "d_instruments_wave1": "Phase 2 default is **MNQ-only** (M8 deferred). Should Wave 1 hypothesis generation stay **MNQ-only** until one candidate clears gates, or expand to **ES/MES/RTY** (or options) earlier for diversification of tail behavior?"
+  },
+  "references": [
+    "notebooks/validation/2026-05-17_wave0g_orb_opt3_2020_exclusion.md",
+    "notebooks/validation/2026-05-17_wave0f_orb_opt3_failure_profile.json",
+    "docs/orb_opt3_phase2_closeout.md"
+  ]
+}

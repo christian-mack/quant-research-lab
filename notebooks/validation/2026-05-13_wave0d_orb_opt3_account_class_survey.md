@@ -1,5 +1,7 @@
 # Wave 0d — DLL session-pause + Apex EOD account-class survey (ORB+Opt3)
 
+**Status: OBSOLETE as of Wave 0e (2026-05-17).** Operator-verified May 2026 Apex EOD parameters differ (PA contract limits, TDD, **PA balance tiers** with tiered DLL and **max** contracts per band). Wave 0d assumed static DLL/qty caps and did not model tier progression. Use `notebooks/validation/2026-05-17_wave0e_orb_opt3_survey.{md,json}` and `research-log.md` Wave **0e** for current research conclusions.
+
 **Git SHA:** `17dde52f3421bc7dcf4cde8e6cfbe7d062b69c7f`  
 **Dirty tree:** True  
 **Generated:** 2026-05-17T07:47:36.281937+00:00  
