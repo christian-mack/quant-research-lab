@@ -2208,6 +2208,32 @@ Reversion/fade family dead on MNQ intraday at realistic cost. Note: original wal
 
 ---
 
+## 2026-08-18 — Backlog disposition update: Wave 0e–1 / ICT landed on `main`
+
+**Wave:** n/a (repo hygiene / provenance)
+**Status:** CORRECTION (append-only). Supersedes the **Backlog disposition** line in the
+2026-08-18 *MNQ running-N ledger correction* entry above, which stated the Wave 0e–1 / ICT
+working tree was parked on `wip/wave0e-ict-backlog` and **not on `main`**.
+
+**What changed:** That backlog is now **committed on `main`** — Waves 0e–0h (including the
+tiered PA/DLL simulator), Wave 1 Track 1/1b screens, the Track 2 ICT chain (bias module, MSS,
+OTE assembly through step 3d), the geometry/parity guard work, and the 2026-06-08 ORB
+account-class survey. Every artifact path cited by this log now resolves from a clean clone.
+Test suite moved **387 → 455 passed** because 57 previously-unlanded tests came with it.
+
+**Deliberate exclusion:** the five per-trade JSON logs under
+`notebooks/validation/2026-06-06_wave1_track2_phase3_step3_ote_trades/` (~88 MB) remain
+untracked by `.gitignore` — see the availability note on the 2026-06-06 step-3 entry. The
+branch `wip/wave0e-ict-backlog` is retained as the **only surviving copy** of those five
+files; do not delete it without exporting them first.
+
+**No result is restated or revised by this entry.** All verdicts, N counts, and DSR figures
+stand exactly as logged. This records *where the code and artifacts live*, nothing else.
+
+**Artifact:** commits `33cb321` (ignore rule) through `ac95213` on `main`; this entry.
+
+---
+
 ## Entry template
 
 Copy from `## YYYY-MM-DD` through **`Artifact:`** for each new hypothesis or baseline record.
