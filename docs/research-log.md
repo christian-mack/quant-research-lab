@@ -2151,6 +2151,29 @@ Reversion/fade family dead on MNQ intraday at realistic cost. Note: original wal
 
 ---
 
+## 2026-08-18 — MNQ running-N ledger correction (H-W4-7; do not fabricate H-W4-1…6)
+
+**Wave:** Wave 4 (ledger hygiene)
+**Status:** CORRECTION (append-only). Does **not** rewrite the 2026-08-18 H-W4-7 PRE-REGISTERED or RESULT-LOGGED blocks above.
+
+**Committed MNQ running N (repo-authoritative):**
+
+- Through W2: **N = 13** (Track 1: 7 + W2: 6).
+- W3 H-7 registered as **N = 14**.
+- **H-W4-1 … H-W4-6** were discussed in chat but **never registered** in this ledger and **never run**. Per the **2026-08-11** audit they are unrecoverable. Because they were neither registered nor executed, they exerted **no selection pressure** on reported results; excluding them is honest counting, not leniency. Inventing six phantom registrations to match chat-state N would corrupt the ledger in the opposite direction.
+- Therefore: **H-W4-7 primary = N = 15** once its RESULT is on the ledger (the RESULT-LOGGED block above is that result; **N = 15** is the corrected count).
+- Sensitivity cells A–C do **not** increment N unless later promoted to graded specs.
+- If any of the six discussed directions are pursued later, they are registered **fresh** at whatever N is then true.
+
+**DSR:** All DSR outputs from this session forward use the corrected committed N. Recompute/report H-W4-7 primary DSR at **N = 15** (immaterial to outcome — PF 1.004 is dead at any N — but the ledger must be consistent). Session 1 DSR used operator-stated **N = 19**; that figure is superseded for counting and is **not** silently edited in the original RESULT block.
+
+**Provenance SHA (H-W4-7 Session 1 code + artifacts):** `1ae71e8ca46fb307e64c160e9f44ae6d22ca4329`
+**Backlog disposition:** Wave 0e–1 / ICT working tree parked on `wip/wave0e-ict-backlog` (not on `main`).
+
+**Artifact:** this correction entry.
+
+---
+
 ## Entry template
 
 Copy from `## YYYY-MM-DD` through **`Artifact:`** for each new hypothesis or baseline record.
