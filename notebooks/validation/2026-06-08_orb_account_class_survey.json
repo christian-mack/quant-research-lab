@@ -1,0 +1,607 @@
+{
+  "survey": "orb_opt3_account_class_floor_income",
+  "date": "2026-06-08",
+  "input_mode": "fresh_backtest",
+  "git": {
+    "git_sha": "0db224fc2bd1ef320064fb04c9a9a3d9d095e366",
+    "git_dirty": true
+  },
+  "protocol": {
+    "start": "2020-01-01",
+    "end_inclusive": "2026-04-19",
+    "trade_count_qty1": 799,
+    "daily_sessions": 779,
+    "yfrac": 6.299794661190965,
+    "wave0_log_reference": "2026-05-14_wave0_orb_opt3_graded_baseline.json"
+  },
+  "per_mnq_anchor": {
+    "python_pnl_per_yr": 1014.16,
+    "anchor_expected": 1014.16,
+    "divergence_pct": 0.0,
+    "reproduction_ok": true
+  },
+  "harness": {
+    "segment_runs": 5,
+    "all_segments_passed": false,
+    "reports": [
+      {
+        "passed": false,
+        "checks": [
+          {
+            "check_id": "V1",
+            "name": "Geometry coherence",
+            "passed": false,
+            "message": "528/528 filled trades fail entry-time geometry",
+            "details": {
+              "incoherent_filled": 528,
+              "n_trades": 528,
+              "geometry_reject_rate": null,
+              "has_bracket_columns": true,
+              "samples": []
+            }
+          },
+          {
+            "check_id": "V2",
+            "name": "Causal sequencing",
+            "passed": true,
+            "message": "All trades exit at/after entry",
+            "details": {
+              "violations": [],
+              "n_trades": 528
+            }
+          },
+          {
+            "check_id": "V3",
+            "name": "Cost application",
+            "passed": true,
+            "message": "Cost-free config; 0 net/gross mismatches",
+            "details": {
+              "zero_commission_trades": 528,
+              "net_gross_mismatches": 0
+            }
+          },
+          {
+            "check_id": "V4",
+            "name": "Magnitude sanity",
+            "passed": true,
+            "message": "Avg net 7.21 ticks/trade (surface > 15.0)",
+            "details": {
+              "avg_net_ticks": 7.214015151515151,
+              "n_trades": 528,
+              "total_net_usd": 1904.5
+            }
+          },
+          {
+            "check_id": "V5",
+            "name": "Hand-computation spot check",
+            "passed": true,
+            "message": "T1=ok T2=ok T5_reject=ok",
+            "details": {}
+          },
+          {
+            "check_id": "V6",
+            "name": "Dual-touch exposure",
+            "passed": true,
+            "message": "0.0% dual-touch on 0 bracket exits",
+            "details": {
+              "dual_touch_count": 0,
+              "resolved_exits": 0,
+              "dual_touch_rate": 0.0
+            }
+          }
+        ]
+      },
+      {
+        "passed": false,
+        "checks": [
+          {
+            "check_id": "V1",
+            "name": "Geometry coherence",
+            "passed": false,
+            "message": "51/51 filled trades fail entry-time geometry",
+            "details": {
+              "incoherent_filled": 51,
+              "n_trades": 51,
+              "geometry_reject_rate": null,
+              "has_bracket_columns": true,
+              "samples": []
+            }
+          },
+          {
+            "check_id": "V2",
+            "name": "Causal sequencing",
+            "passed": true,
+            "message": "All trades exit at/after entry",
+            "details": {
+              "violations": [],
+              "n_trades": 51
+            }
+          },
+          {
+            "check_id": "V3",
+            "name": "Cost application",
+            "passed": true,
+            "message": "Cost-free config; 0 net/gross mismatches",
+            "details": {
+              "zero_commission_trades": 51,
+              "net_gross_mismatches": 0
+            }
+          },
+          {
+            "check_id": "V4",
+            "name": "Magnitude sanity",
+            "passed": false,
+            "message": "Avg net 26.59 ticks/trade (surface > 15.0)",
+            "details": {
+              "avg_net_ticks": 26.58823529411765,
+              "n_trades": 51,
+              "total_net_usd": 678.0
+            }
+          },
+          {
+            "check_id": "V5",
+            "name": "Hand-computation spot check",
+            "passed": true,
+            "message": "T1=ok T2=ok T5_reject=ok",
+            "details": {}
+          },
+          {
+            "check_id": "V6",
+            "name": "Dual-touch exposure",
+            "passed": true,
+            "message": "0.0% dual-touch on 0 bracket exits",
+            "details": {
+              "dual_touch_count": 0,
+              "resolved_exits": 0,
+              "dual_touch_rate": 0.0
+            }
+          }
+        ]
+      },
+      {
+        "passed": false,
+        "checks": [
+          {
+            "check_id": "V1",
+            "name": "Geometry coherence",
+            "passed": false,
+            "message": "86/86 filled trades fail entry-time geometry",
+            "details": {
+              "incoherent_filled": 86,
+              "n_trades": 86,
+              "geometry_reject_rate": null,
+              "has_bracket_columns": true,
+              "samples": []
+            }
+          },
+          {
+            "check_id": "V2",
+            "name": "Causal sequencing",
+            "passed": true,
+            "message": "All trades exit at/after entry",
+            "details": {
+              "violations": [],
+              "n_trades": 86
+            }
+          },
+          {
+            "check_id": "V3",
+            "name": "Cost application",
+            "passed": true,
+            "message": "Cost-free config; 0 net/gross mismatches",
+            "details": {
+              "zero_commission_trades": 86,
+              "net_gross_mismatches": 0
+            }
+          },
+          {
+            "check_id": "V4",
+            "name": "Magnitude sanity",
+            "passed": false,
+            "message": "Avg net 106.84 ticks/trade (surface > 15.0)",
+            "details": {
+              "avg_net_ticks": 106.83720930232558,
+              "n_trades": 86,
+              "total_net_usd": 4594.0
+            }
+          },
+          {
+            "check_id": "V5",
+            "name": "Hand-computation spot check",
+            "passed": true,
+            "message": "T1=ok T2=ok T5_reject=ok",
+            "details": {}
+          },
+          {
+            "check_id": "V6",
+            "name": "Dual-touch exposure",
+            "passed": true,
+            "message": "0.0% dual-touch on 0 bracket exits",
+            "details": {
+              "dual_touch_count": 0,
+              "resolved_exits": 0,
+              "dual_touch_rate": 0.0
+            }
+          }
+        ]
+      },
+      {
+        "passed": false,
+        "checks": [
+          {
+            "check_id": "V1",
+            "name": "Geometry coherence",
+            "passed": false,
+            "message": "124/124 filled trades fail entry-time geometry",
+            "details": {
+              "incoherent_filled": 124,
+              "n_trades": 124,
+              "geometry_reject_rate": null,
+              "has_bracket_columns": true,
+              "samples": []
+            }
+          },
+          {
+            "check_id": "V2",
+            "name": "Causal sequencing",
+            "passed": true,
+            "message": "All trades exit at/after entry",
+            "details": {
+              "violations": [],
+              "n_trades": 124
+            }
+          },
+          {
+            "check_id": "V3",
+            "name": "Cost application",
+            "passed": true,
+            "message": "Cost-free config; 0 net/gross mismatches",
+            "details": {
+              "zero_commission_trades": 124,
+              "net_gross_mismatches": 0
+            }
+          },
+          {
+            "check_id": "V4",
+            "name": "Magnitude sanity",
+            "passed": true,
+            "message": "Avg net -7.19 ticks/trade (surface > 15.0)",
+            "details": {
+              "avg_net_ticks": -7.193548387096774,
+              "n_trades": 124,
+              "total_net_usd": -446.0
+            }
+          },
+          {
+            "check_id": "V5",
+            "name": "Hand-computation spot check",
+            "passed": true,
+            "message": "T1=ok T2=ok T5_reject=ok",
+            "details": {}
+          },
+          {
+            "check_id": "V6",
+            "name": "Dual-touch exposure",
+            "passed": true,
+            "message": "0.0% dual-touch on 0 bracket exits",
+            "details": {
+              "dual_touch_count": 0,
+              "resolved_exits": 0,
+              "dual_touch_rate": 0.0
+            }
+          }
+        ]
+      },
+      {
+        "passed": false,
+        "checks": [
+          {
+            "check_id": "V1",
+            "name": "Geometry coherence",
+            "passed": false,
+            "message": "10/10 filled trades fail entry-time geometry",
+            "details": {
+              "incoherent_filled": 10,
+              "n_trades": 10,
+              "geometry_reject_rate": null,
+              "has_bracket_columns": true,
+              "samples": []
+            }
+          },
+          {
+            "check_id": "V2",
+            "name": "Causal sequencing",
+            "passed": true,
+            "message": "All trades exit at/after entry",
+            "details": {
+              "violations": [],
+              "n_trades": 10
+            }
+          },
+          {
+            "check_id": "V3",
+            "name": "Cost application",
+            "passed": true,
+            "message": "Cost-free config; 0 net/gross mismatches",
+            "details": {
+              "zero_commission_trades": 10,
+              "net_gross_mismatches": 0
+            }
+          },
+          {
+            "check_id": "V4",
+            "name": "Magnitude sanity",
+            "passed": false,
+            "message": "Avg net -68.30 ticks/trade (surface > 15.0)",
+            "details": {
+              "avg_net_ticks": -68.3,
+              "n_trades": 10,
+              "total_net_usd": -341.5
+            }
+          },
+          {
+            "check_id": "V5",
+            "name": "Hand-computation spot check",
+            "passed": true,
+            "message": "T1=ok T2=ok T5_reject=ok",
+            "details": {}
+          },
+          {
+            "check_id": "V6",
+            "name": "Dual-touch exposure",
+            "passed": true,
+            "message": "0.0% dual-touch on 0 bracket exits",
+            "details": {
+              "dual_touch_count": 0,
+              "resolved_exits": 0,
+              "dual_touch_rate": 0.0
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "payout_model": {
+    "first_usd_100pct": 25000.0,
+    "remainder_split_to_trader": 0.9,
+    "note": "Annual gross simplified to one payout cycle per year."
+  },
+  "account_classes": {
+    "50k": {
+      "label": "$50K EOD",
+      "apex_params": {
+        "starting_balance": 50000,
+        "trailing_dd": 2000,
+        "profit_target": 3000,
+        "lock_equity": 52000,
+        "tier1_dll": 1000.0,
+        "tier1_max_mini": 2,
+        "tier1_cap_mnq": 20,
+        "eval_max_mini": 6,
+        "eval_fee_usd": 167.0,
+        "eval_fee_source": "operator_table_flagged_confirm_help_center"
+      },
+      "constraint_qty_limits_mnq": {
+        "R_q_closed_trade_dd": 0,
+        "EOD_path_R_q_screen": 0,
+        "worst_session_vs_tier1_dll": 1,
+        "consistency_30pct": 0,
+        "tier1_contract_cap_mnq": 20,
+        "gate_a_funded_survival": 7
+      },
+      "max_sustainable_qty_mnq": 0,
+      "max_sustainable_qty_ex_consistency_mnq": 1,
+      "economics_eval_qty_mnq": 1,
+      "gate_a_funded_q_max_mnq": 7,
+      "R_q_stress_screen_binds_at_zero": true,
+      "consistency_fails_at_mnq1": true,
+      "binding_constraint": "consistency_30pct",
+      "dd_linearity_eod_path": true,
+      "dd1_closed_trade_usd": 2675.0,
+      "worst_session_pnl_mnq1_usd": -789.5,
+      "best_session_pnl_mnq1_usd": 3896.0,
+      "consistency_ratio_mnq1": 0.6097980904679918,
+      "funded_at_q_max": {
+        "survived": true,
+        "max_peak_to_trough_dd": 2675.0,
+        "dll_pause_days": 0,
+        "final_equity": 56389.0
+      },
+      "economics_at_q_max": {
+        "per_mnq_annual_gross_usd": 1014.16,
+        "gross_annual_usd": 1014.16,
+        "net_payout_annual_usd": 1014.16,
+        "net_after_eval_amortized_usd": -7513.97,
+        "tier": "below_floor",
+        "yearly_gross_usd": {
+          "2020": 1038.5,
+          "2022": 2038.0,
+          "2023": -1386.5,
+          "2024": 1375.0,
+          "2025": 3912.0,
+          "2026": -588.0
+        },
+        "yearly_net_payout_usd": {
+          "2020": 1038.5,
+          "2022": 2038.0,
+          "2023": -1386.5,
+          "2024": 1375.0,
+          "2025": 3912.0,
+          "2026": -588.0
+        }
+      },
+      "eval_at_q_max": {
+        "total_windows": 1532,
+        "passing_windows": 30,
+        "pass_rate": 0.0195822454308094,
+        "eval_qty_mnq": 1.0,
+        "eval_dll_tier1": 1000.0,
+        "fail_trailing": 0,
+        "fail_no_target": 1502,
+        "window_trading_sessions": 30
+      },
+      "eval_cost_per_funded_account_usd": 8528.13,
+      "clears_floor_income_gate": false
+    },
+    "100k": {
+      "label": "$100K EOD",
+      "apex_params": {
+        "starting_balance": 100000,
+        "trailing_dd": 3000,
+        "profit_target": 6000,
+        "lock_equity": 103000,
+        "tier1_dll": 1750.0,
+        "tier1_max_mini": 3,
+        "tier1_cap_mnq": 30,
+        "eval_max_mini": 8,
+        "eval_fee_usd": 207.0,
+        "eval_fee_source": "operator_table_flagged_confirm_help_center"
+      },
+      "constraint_qty_limits_mnq": {
+        "R_q_closed_trade_dd": 0,
+        "EOD_path_R_q_screen": 0,
+        "worst_session_vs_tier1_dll": 2,
+        "consistency_30pct": 0,
+        "tier1_contract_cap_mnq": 30,
+        "gate_a_funded_survival": 11
+      },
+      "max_sustainable_qty_mnq": 0,
+      "max_sustainable_qty_ex_consistency_mnq": 2,
+      "economics_eval_qty_mnq": 2,
+      "gate_a_funded_q_max_mnq": 11,
+      "R_q_stress_screen_binds_at_zero": true,
+      "consistency_fails_at_mnq1": true,
+      "binding_constraint": "consistency_30pct",
+      "dd_linearity_eod_path": true,
+      "dd1_closed_trade_usd": 2675.0,
+      "worst_session_pnl_mnq1_usd": -789.5,
+      "best_session_pnl_mnq1_usd": 3896.0,
+      "consistency_ratio_mnq1": 0.6097980904679918,
+      "funded_at_q_max": {
+        "survived": true,
+        "max_peak_to_trough_dd": 5350.0,
+        "dll_pause_days": 0,
+        "final_equity": 112778.0
+      },
+      "economics_at_q_max": {
+        "per_mnq_annual_gross_usd": 1014.16,
+        "gross_annual_usd": 2028.32,
+        "net_payout_annual_usd": 2028.32,
+        "net_after_eval_amortized_usd": -8542.48,
+        "tier": "below_floor",
+        "yearly_gross_usd": {
+          "2020": 2077.0,
+          "2022": 4076.0,
+          "2023": -2773.0,
+          "2024": 2750.0,
+          "2025": 7824.0,
+          "2026": -1176.0
+        },
+        "yearly_net_payout_usd": {
+          "2020": 2077.0,
+          "2022": 4076.0,
+          "2023": -2773.0,
+          "2024": 2750.0,
+          "2025": 7824.0,
+          "2026": -1176.0
+        }
+      },
+      "eval_at_q_max": {
+        "total_windows": 1532,
+        "passing_windows": 30,
+        "pass_rate": 0.0195822454308094,
+        "eval_qty_mnq": 2.0,
+        "eval_dll_tier1": 1750.0,
+        "fail_trailing": 0,
+        "fail_no_target": 1502,
+        "window_trading_sessions": 30
+      },
+      "eval_cost_per_funded_account_usd": 10570.8,
+      "clears_floor_income_gate": false
+    },
+    "150k": {
+      "label": "$150K EOD",
+      "apex_params": {
+        "starting_balance": 150000,
+        "trailing_dd": 4000,
+        "profit_target": 9000,
+        "lock_equity": 154000,
+        "tier1_dll": 2500.0,
+        "tier1_max_mini": 4,
+        "tier1_cap_mnq": 40,
+        "eval_max_mini": 12,
+        "eval_fee_usd": 297.0,
+        "eval_fee_source": "operator_table_flagged_confirm_help_center"
+      },
+      "constraint_qty_limits_mnq": {
+        "R_q_closed_trade_dd": 0,
+        "EOD_path_R_q_screen": 0,
+        "worst_session_vs_tier1_dll": 3,
+        "consistency_30pct": 0,
+        "tier1_contract_cap_mnq": 40,
+        "gate_a_funded_survival": 15
+      },
+      "max_sustainable_qty_mnq": 0,
+      "max_sustainable_qty_ex_consistency_mnq": 3,
+      "economics_eval_qty_mnq": 3,
+      "gate_a_funded_q_max_mnq": 15,
+      "R_q_stress_screen_binds_at_zero": true,
+      "consistency_fails_at_mnq1": true,
+      "binding_constraint": "consistency_30pct",
+      "dd_linearity_eod_path": true,
+      "dd1_closed_trade_usd": 2675.0,
+      "worst_session_pnl_mnq1_usd": -789.5,
+      "best_session_pnl_mnq1_usd": 3896.0,
+      "consistency_ratio_mnq1": 0.6097980904679918,
+      "funded_at_q_max": {
+        "survived": true,
+        "max_peak_to_trough_dd": 8025.0,
+        "dll_pause_days": 0,
+        "final_equity": 169167.0
+      },
+      "economics_at_q_max": {
+        "per_mnq_annual_gross_usd": 1014.16,
+        "gross_annual_usd": 3042.48,
+        "net_payout_annual_usd": 3042.48,
+        "net_after_eval_amortized_usd": -12124.32,
+        "tier": "below_floor",
+        "yearly_gross_usd": {
+          "2020": 3115.5,
+          "2022": 6114.0,
+          "2023": -4159.5,
+          "2024": 4125.0,
+          "2025": 11736.0,
+          "2026": -1764.0
+        },
+        "yearly_net_payout_usd": {
+          "2020": 3115.5,
+          "2022": 6114.0,
+          "2023": -4159.5,
+          "2024": 4125.0,
+          "2025": 11736.0,
+          "2026": -1764.0
+        }
+      },
+      "eval_at_q_max": {
+        "total_windows": 1532,
+        "passing_windows": 30,
+        "pass_rate": 0.0195822454308094,
+        "eval_qty_mnq": 3.0,
+        "eval_dll_tier1": 2500.0,
+        "fail_trailing": 18,
+        "fail_no_target": 1484,
+        "window_trading_sessions": 30
+      },
+      "eval_cost_per_funded_account_usd": 15166.8,
+      "clears_floor_income_gate": false
+    }
+  },
+  "verdict": {
+    "deployable_any_class": false,
+    "structural_dll_tdd_wall": false,
+    "summary": "NO class clears floor + eval gate \u2014 loss-tail / sizing wall structural"
+  },
+  "stop_conditions": {
+    "reproduction_divergence_gt_10pct": false
+  }
+}
