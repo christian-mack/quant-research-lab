@@ -1,0 +1,331 @@
+{
+  "hypothesis": "H-W4-7",
+  "git": {
+    "git_sha": "ae2fa83edc6f1940a841b92e99caff381b9f8839",
+    "git_dirty": true
+  },
+  "dst": {
+    "checks": {
+      "spring_reopen_2020_03_08_1800": "18:00-22:00",
+      "fall_reopen_2020_11_01_1800": "18:00-22:00",
+      "jan_2200": "22:00-02:00",
+      "jan_0200": "02:00-06:00",
+      "jun_2200": "22:00-02:00",
+      "jun_0200": "02:00-06:00"
+    },
+    "spring_ok": true,
+    "fall_ok": true,
+    "overnight_ok": true,
+    "passed": true,
+    "note": "US DST is Sunday 02:00 ET during the CME weekend close; no 15-min bars exist at the transition instant."
+  },
+  "range_distribution": [
+    {
+      "year": 2020,
+      "n": 1540,
+      "p10": 34.75,
+      "p25": 53.25,
+      "median": 83.5,
+      "p75": 128.8125,
+      "p90": 206.77500000000003,
+      "frac_range_lt_50": 0.22337662337662337,
+      "frac_50_vs_median": 0.5988023952095808
+    },
+    {
+      "year": 2021,
+      "n": 1545,
+      "p10": 30.0,
+      "p25": 46.5,
+      "median": 71.5,
+      "p75": 115.75,
+      "p90": 169.90000000000003,
+      "frac_range_lt_50": 0.2867313915857605,
+      "frac_50_vs_median": 0.6993006993006993
+    },
+    {
+      "year": 2022,
+      "n": 1539,
+      "p10": 48.0,
+      "p25": 72.25,
+      "median": 120.5,
+      "p75": 180.75,
+      "p90": 253.75,
+      "frac_range_lt_50": 0.10916179337231968,
+      "frac_50_vs_median": 0.4149377593360996
+    },
+    {
+      "year": 2023,
+      "n": 1537,
+      "p10": 27.75,
+      "p25": 43.25,
+      "median": 71.5,
+      "p75": 116.5,
+      "p90": 161.35000000000002,
+      "frac_range_lt_50": 0.3116460637605725,
+      "frac_50_vs_median": 0.6993006993006993
+    },
+    {
+      "year": 2024,
+      "n": 1350,
+      "p10": 34.225,
+      "p25": 54.5,
+      "median": 86.75,
+      "p75": 140.5,
+      "p90": 210.05000000000007,
+      "frac_range_lt_50": 0.21259259259259258,
+      "frac_50_vs_median": 0.5763688760806917
+    },
+    {
+      "year": 2025,
+      "n": 1530,
+      "p10": 50.0,
+      "p25": 72.5625,
+      "median": 117.625,
+      "p75": 194.6875,
+      "p90": 291.8250000000001,
+      "frac_range_lt_50": 0.09869281045751634,
+      "frac_50_vs_median": 0.4250797024442083
+    },
+    {
+      "year": 2026,
+      "n": 286,
+      "p10": 65.125,
+      "p25": 102.75,
+      "median": 153.0,
+      "p75": 213.25,
+      "p90": 297.5,
+      "frac_range_lt_50": 0.024475524475524476,
+      "frac_50_vs_median": 0.32679738562091504
+    }
+  ],
+  "range_chart": "C:\\Users\\chris\\Documents\\Trading\\quant-research-lab\\notebooks\\validation\\2026-08-18_hw4_7_quarter_continuation.png",
+  "frequency": {
+    "n_signals": 9309,
+    "n_quarters": 9330,
+    "n_no_trade": 21,
+    "signals_per_year": 1477.6672099087352,
+    "signals_per_session_day": 5.940650925335035,
+    "by_block": {
+      "18:00-22:00": 1560,
+      "22:00-02:00": 1559,
+      "02:00-06:00": 1559,
+      "06:00-10:00": 1564,
+      "10:00-14:00": 1559,
+      "14:00-17:00": 1508
+    },
+    "by_tier": {
+      "ge_0.75": 2966,
+      "0.50_to_0.75": 2190,
+      "0.25_to_0.50": 2132,
+      "le_0.25": 2021,
+      "eq_0.50": 0
+    },
+    "by_block_tier": {
+      "18:00-22:00": {
+        "ge_0.75": 484,
+        "0.50_to_0.75": 378,
+        "0.25_to_0.50": 355,
+        "le_0.25": 343,
+        "eq_0.50": 0
+      },
+      "22:00-02:00": {
+        "ge_0.75": 462,
+        "0.50_to_0.75": 389,
+        "0.25_to_0.50": 378,
+        "le_0.25": 330,
+        "eq_0.50": 0
+      },
+      "02:00-06:00": {
+        "ge_0.75": 473,
+        "0.50_to_0.75": 410,
+        "0.25_to_0.50": 360,
+        "le_0.25": 316,
+        "eq_0.50": 0
+      },
+      "06:00-10:00": {
+        "ge_0.75": 498,
+        "0.50_to_0.75": 327,
+        "0.25_to_0.50": 369,
+        "le_0.25": 370,
+        "eq_0.50": 0
+      },
+      "10:00-14:00": {
+        "ge_0.75": 551,
+        "0.50_to_0.75": 347,
+        "0.25_to_0.50": 340,
+        "le_0.25": 321,
+        "eq_0.50": 0
+      },
+      "14:00-17:00": {
+        "ge_0.75": 498,
+        "0.50_to_0.75": 339,
+        "0.25_to_0.50": 330,
+        "le_0.25": 341,
+        "eq_0.50": 0
+      }
+    },
+    "clears_200_yr_floor": true
+  },
+  "engine": {
+    "n_segments": 5,
+    "skip_count": 2894,
+    "signal_count_engine": 9304,
+    "suppress_skip_count": 0,
+    "geometry_rejects": {
+      "target_unreachable": 3
+    },
+    "maintenance_flatten_exits": 0,
+    "holds_crossing_maintenance": 405
+  },
+  "validation": {
+    "passed": true,
+    "checks": [
+      {
+        "check_id": "V1",
+        "name": "Geometry coherence",
+        "passed": true,
+        "message": "0/6410 filled trades fail entry-time geometry",
+        "details": {
+          "incoherent_filled": 0,
+          "n_trades": 6410,
+          "geometry_reject_rate": null,
+          "has_bracket_columns": true,
+          "samples": []
+        }
+      },
+      {
+        "check_id": "V2",
+        "name": "Causal sequencing",
+        "passed": true,
+        "message": "All trades exit at/after entry",
+        "details": {
+          "violations": [],
+          "n_trades": 6410
+        }
+      },
+      {
+        "check_id": "V3",
+        "name": "Cost application",
+        "passed": true,
+        "message": "0/6410 zero-commission; 0 net/gross mismatches",
+        "details": {
+          "zero_commission_trades": 0,
+          "net_gross_mismatches": 0
+        }
+      },
+      {
+        "check_id": "V4",
+        "name": "Magnitude sanity",
+        "passed": true,
+        "message": "Avg net 0.42 ticks/trade (surface > 250.0)",
+        "details": {
+          "avg_net_ticks": 0.4239313572542826,
+          "n_trades": 6410,
+          "total_net_usd": 1358.6999999999757
+        }
+      },
+      {
+        "check_id": "V5",
+        "name": "Hand-computation spot check",
+        "passed": true,
+        "message": "T1=ok T2=ok T5_reject=ok",
+        "details": {}
+      },
+      {
+        "check_id": "V6",
+        "name": "Dual-touch exposure",
+        "passed": true,
+        "message": "0.4% dual-touch on 6408 bracket exits",
+        "details": {
+          "dual_touch_count": 27,
+          "resolved_exits": 6408,
+          "dual_touch_rate": 0.004213483146067416
+        }
+      },
+      {
+        "check_id": "V7",
+        "name": "Engine provenance",
+        "passed": true,
+        "message": "All 6410 trades carry M4 engine provenance",
+        "details": {
+          "n_trades": 6410,
+          "offending_trade_ids": [],
+          "expected_marker": "m4_backtest_engine@v1",
+          "foreign_samples": []
+        }
+      }
+    ]
+  },
+  "grading": {
+    "n_trades": 6410,
+    "trades_per_year": 1017.493481095176,
+    "win_rate": 0.5046801872074883,
+    "profit_factor": 1.0041657404866622,
+    "net_pnl": 1358.6999999999757,
+    "pnl_per_year": 215.67369621903134,
+    "max_dd": 6769.840000000014,
+    "mar_q1": 0.031858019719672975,
+    "years": {
+      "2025": -289.360000000019,
+      "2026": 417.1599999999959,
+      "2024": 4574.459999999997,
+      "2020": -2660.5400000000154,
+      "2021": 2757.3999999999855,
+      "2022": -314.1000000000202,
+      "2023": -3126.320000000015
+    },
+    "years_positive": 3,
+    "q_max_rq": 0,
+    "r_at_qmax_rq": 10154.76000000002,
+    "q_max_dll_correct": 4,
+    "q_max_dll_spec_text": 2,
+    "dll_friction_per_loss": 2.48,
+    "q_max": 0,
+    "binding": "R(q) (no positive q)",
+    "graded_pnl_per_year": 0.0,
+    "graded_mar": null,
+    "graded_mar_display": "n/a",
+    "eval": {
+      "pass_rate": 0.0,
+      "pass_count": 0,
+      "total_windows": 1538,
+      "fail_trailing": 0,
+      "fail_no_target": 0,
+      "note": "degenerate q_max=0 (Wave 0 convention)",
+      "qty1_diagnostic": {
+        "pass_rate": 0.010403120936280884,
+        "pass_count": 16,
+        "total_windows": 1538,
+        "fail_trailing": 117,
+        "fail_no_target": 1405
+      }
+    },
+    "dsr": {
+      "observed_sharpe": 0.16441404911282761,
+      "psr": 0.999999999999972,
+      "e_max": 0.07083720081433866,
+      "n_obs": 6410,
+      "n_trials": 19,
+      "variance_across_trials": 0.0014227357655618575,
+      "skew": 0.05950806424777674,
+      "kurtosis_pearson": 1.441437319093328
+    },
+    "yfrac": 6.299794661190965
+  },
+  "deviations": [
+    "M4 implements OPEN_OF_NEXT_BAR only: entry order is submitted on the closed first 15-min bar of the following quarter and fills at the **open of the next** 15-min bar (~15 min after the spec's 'close of first bar'). No CLOSE_OF_SIGNAL_BAR; no bespoke walker.",
+    "V4 implausible-tick surface raised 15 \u2192 250 because the pre-registered 50-pt target is 200 MNQ ticks gross (default 15 is ORB-scale and would false-fail).",
+    "15-min left-labeled bars never timestamp at 16:59 ET, so engine hygiene flatten does not fire on this grid; holds may cross the 17:00 ET maintenance break (counted below). Deadzone [17:00, 18:00) still suppresses entries if those bars exist.",
+    "DLL spec text said '$200/contract per loss' for a 50-pt MNQ stop; 50\u00d7$2/pt=$100. Binding q uses $100; the $200 figure is reported as a side calculation.",
+    "Committed research-log MNQ N last snapshot is 13 (W3 would be 14); DSR uses operator-stated N=19. H-W4-1\u20266 are not in this repo's research-log.",
+    "Repo was not a clean clone (dirty working tree at HEAD ae2fa83).",
+    "Eval windows use 30 CME session dates (kickoff Gate B default), not 30 calendar days.",
+    "Full-protocol graded path (not 60/40 IS as the pass/fail split). 60/40 is not the primary metric for this spec."
+  ],
+  "data": {
+    "minute_bars": 2133530,
+    "bars_15m": 142881,
+    "first": "2020-01-01 17:01:00-06:00",
+    "last": "2026-04-17 15:59:00-05:00"
+  }
+}

@@ -2052,6 +2052,105 @@ Reversion/fade family dead on MNQ intraday at realistic cost. Note: original wal
 
 ---
 
+## 2026-08-18 — H-W4-7 Quarterly Close-Location Continuation (MNQ) — PRE-REGISTERED
+
+**Wave:** Wave 4 (H-W4-7)
+**Status:** PRE-REGISTERED
+**Hypothesis ID:** H-W4-7
+**Instrument:** MNQ only (MES loader gate not applicable)
+**MNQ running quant-search N:** **18 → 19** (operator-stated Wave 4 join). *Reconciliation flag:* last **committed** running-N snapshot in this log (2026-06-08 convention) is **MNQ N = 13** (Track 1: 7 + W2: 6); P2-W3 H-7 was registered as incrementing to **14**. **H-W4-1 … H-W4-6 are not present** in this research-log. DSR for this run uses the operator-stated **N = 19**. Do not silently backfill missing Wave 4 ids.
+
+**Hypothesis:** MNQ exhibits 4-hour-quarter momentum continuation: when a clock-anchored 4h quarter closes in the upper half of its own high-low range, the following period continues higher (and vice versa for lower-half closes), sufficiently to support a fixed-bracket intraday strategy at 2+ trades/day.
+
+**Origin:** Reverse-engineered from a TradingView "Quarterly Range" indicator; operator manually validated the close-location signal logic against ~30-40 live-chart trades on MNQ 15-min ($2,500 net at 5 micros, $500/$500 brackets). **Manual sample is motivating evidence only; it carries zero weight in grading.**
+
+**Structural rationale:** Session-block momentum persistence in index futures; close location within a completed session range proxies for directional order flow imbalance carrying into the next block. On-thesis for W4's frequency mandate (~2-6 trades/day → 500-1,500/yr, attacking the DLL wall via frequency).
+
+**Specification (primary / graded spec):**
+
+- **Instrument / bars:** MNQ continuous, **15-min** bars, full 6-year protocol window (2020-01-01 through 2026-04-19 inclusive, Chicago date slice; ETH+RTH in-session bars).
+- **Quarters:** six clock-anchored blocks from **18:00 ET** — 18:00-22:00, 22:00-02:00, 02:00-06:00, 06:00-10:00, 10:00-14:00, 14:00-17:00 (truncated at CME close). ET wall-clock; convert from the CT store with tz-aware conversion (DST automatic). Spot-check one spring-forward and one fall-back boundary before the grading run.
+- **Signal at quarter close:** close location = (close − quarter low) / (quarter high − quarter low). **> 0.50 → long; < 0.50 → short; exactly 0.50 or degenerate range (high == low) → no trade.**
+- **Entry:** at the close of the first 15-min bar of the following quarter; **market fill per M4 conventions** (engine implements **OPEN_OF_NEXT_BAR only** — any mapping to that fill model is a forced deviation, listed in the harness report). **No bespoke fill walker.**
+- **Bracket:** fixed **50 pts stop / 50 pts target** per contract (fidelity to operator's manual $500/$500 at 5 micros). Geometry guard on: stop on loss side, target on profit side, validated at entry time.
+- **Position:** one at a time; a new quarter's signal is **skipped** if a position is still open (log skip count). **No overnight-vs-intraday exemption** — position resolves by bracket only. Flag holds that cross the maintenance break; session hygiene (16:59 ET flatten) may force time exits — report how many.
+- **Quantity:** **1** for edge measurement. Sizing derived afterward per max-sustainable-qty grading (R(q), DLL two-loss constraint).
+- **Costs (mandatory on every number):** $1.98 round-turn commission + slippage (1 tick on stop/time exits, 0.5 tick on target exits). No cost-free numbers.
+- **Engine:** vetted M4 `BacktestEngine`; V1–V7 harness required. Geometry guard active.
+- **IS/OOS:** full-protocol graded run (primary metric is MAR at max sustainable qty on the six-year path). 60/40 trade-count split reported as secondary, not as the pass/fail split for this spec.
+
+**Primary metric:** MAR (annualized return / max DD) at max sustainable qty, subject to the Apex/Tradeify envelope: two full losses + friction must clear the **$1K DLL**. Secondary: trades/yr, WR, PF, year-by-year P&L, deflated Sharpe at wave **N = 19**.
+
+**Max sustainable qty (binding = stricter of):**
+
+1. **R(q)** per phase-2-kickoff methodology: \(R(q) = \max(1.5 \times \mathrm{DD}(q), \mathrm{DD}(q) + \$500)\) with **DD(q)** in dollars. Ceiling = Apex **$50K EOD TDD $2,000** (Wave 0c-corrected; early Wave 0 **$3,000** trail is superseded — **resolved**, not waived).
+2. **DLL two-loss constraint:** two 50-pt losses at $2/pt/contract = **$200/contract per loss**, plus friction; max qty such that \(2 \times \text{loss} + \text{friction} < \$1{,}000\).
+
+**W4 pre-conditions (checked at registration; grading must not proceed if unresolved):**
+
+| Gate | Status at pre-registration |
+|------|----------------------------|
+| Repo state verified from **clean clone** | **NOT MET** — HEAD `ae2fa83`; working tree dirty (Wave 0e–0h / Wave 1 / ICT artifacts untracked; same class as lessons-log 2026-04-28). Operator did not waive. **Grading SHA will be recorded as dirty.** |
+| TDD $2K vs $3K Apex 4.0 | **RESOLVED** (not waived) — $2,000 pre-lock trail per lessons-log 2026-05-16 / `phase-2-kickoff.md` / `ai-project-instructions.md`. |
+| MES loader | **N/A** — MNQ-only hypothesis. |
+
+**Pre-analysis (after this registration, before the backtest):** per calendar year 2020-2026, distribution (p10/p25/median/p75/p90) of the 4h-quarter high-low range in points. Descriptive only; does **not** modify the primary spec.
+
+**Cheap frequency screen (signal counts, no P&L; before grading):** trades/yr under the primary spec, split by quarter block and by tier bucket (0.50-0.75, ≥0.75, 0.25-0.50, ≤0.25). If under ~200 trades/yr, stop — quarter classification is suspect.
+
+**Known reconciliation flag:** The live indicator does **NOT** trade every quarter (operator observed 2-3 trades/day, not 5-6), but >50%/<50% signals every quarter by construction. The indicator likely gates on the ≥75%/≤25% quartile tiers or an additional condition. **If backtest frequency lands at 5-6/day, the manual sample corresponds to a filtered spec.** Reconcile via the tier-restricted sensitivity cell **when approved**; do **not** silently change the primary spec.
+
+**Pre-registered sensitivity grid (named, NOT separately graded, NOT run until the primary spec is graded and the operator approves):** entry at next-bar open vs close; tier restriction to ≥0.75 / ≤0.25; R:R sweep 0.5:1 → 2:1 in 0.25R steps; daytime-quarters-only subset (06:00-14:00 blocks); ATR- or quarter-range-normalized bracket. Selection metric for any later grid analysis is fixed now: **MAR subject to the DLL constraint** — not visual equity-curve smoothness.
+
+**Pass/fail criteria:** This session does **not** issue a kill/promote verdict. Produce the V1–V7 harness report and stop. Operator verdict in a fresh context.
+
+**Date pre-registered:** 2026-08-18
+
+**Date run completed:** *(pending)*
+
+**Result:** *(pending)*
+
+**Artifact:** *(pending)*
+
+**Codebase SHA (pre-registration):** `ae2fa83edc6f1940a841b92e99caff381b9f8839` (**dirty** working tree)
+
+---
+
+## 2026-08-18 — H-W4-7 Quarterly Close-Location Continuation (MNQ) — RESULT-LOGGED
+
+**Wave:** Wave 4 (H-W4-7)
+**Date run completed:** 2026-08-18
+**Execution `git` metadata:** `git_sha` = `ae2fa83edc6f1940a841b92e99caff381b9f8839`, **`git_dirty`: true**
+**Harness:** V1–V7 **PASS** (M4 `BacktestEngine`; V4 surface 250 ticks for the pre-registered 50-pt bracket)
+
+**Kill/promote:** **not issued** (this session produces the harness report only).
+
+**Headline (qty=1, net of $1.98 RT + tagged slippage):**
+
+| Metric | Value |
+|--------|-------|
+| Trades / trades/yr | **6410** / **1017.5** |
+| WR / PF | **50.5%** / **1.004** |
+| Net P&L / $/yr | **$1,358.70** / **$215.67** |
+| Max DD (closed path) | **$6,769.84** |
+| MAR qty=1 | **0.032** |
+| q_max | **0** (R(q)=$10,154.76 vs $2,000 TDD; DLL two-loss would allow q=4 at $100/contract) |
+| Graded $/yr at q_max | **$0** (below_floor) |
+| Eval 30-session at q_max | **0%** (degenerate). Qty=1 diagnostic: **1.04%** (16/1538) |
+| Deflated Sharpe N=19 | trade SR **0.164**; PSR vs E[max SR] **1.00** is an **artifact** of 18-zero variance fill — not edge |
+
+**Year-by-year (qty=1):** 2020 −$2,661; 2021 +$2,757; 2022 −$314; 2023 −$3,126; 2024 +$4,574; 2025 −$289; 2026 +$417. Profitable **3 / 7** calendar years.
+
+**Frequency screen (pre-grade):** 9309 signals, **1477.7**/yr, **5.94**/session — clears the 200/yr floor. Matches the pre-registered tell: unfiltered >50%/<50% fires every quarter (~5–6/day). Extreme tiers ≥0.75/≤0.25 = **4987** signals (~3.18/session) — **not graded**. Engine skipped **2894** signals (position still open); **405** holds crossed 17:00 ET; hygiene flatten exits **0** (16:59 never hits a 15-min left-edge timestamp).
+
+**Quarter-range distribution:** 2022 median **120.5** pts (peak, not trough); 2023 median **71.5** (trough). Hypothesized U-shape with 2022–2023 as the trough is **not** what the tape shows. 50-pt bracket is 41–70% of that year's median range.
+
+**Forced deviations:** listed in the harness report (M4 next-bar-open fill; V4 threshold; 15-min hygiene clock; DLL $100 vs spec-text $200; dirty tree; N=19 vs committed N=13/14).
+
+**Artifact:** `notebooks/validation/2026-08-18_hw4_7_quarter_continuation.{md,json,png}`; runner `scripts/run_hw4_7_quarter_continuation.py`; module `src/quant_research/modules/quarter_continuation.py`
+
+---
+
 ## Entry template
 
 Copy from `## YYYY-MM-DD` through **`Artifact:`** for each new hypothesis or baseline record.
